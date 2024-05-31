@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script type="module" src="./js/index.js"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <title>Index</title>
+</head>
+<body>
+    <main class="align-content-center min-height-100vh">
+        <div  class="container" id="login">
+            <form action="#" method="post" class="border rounded p-3  m-auto">
+                <h2>Login</h2>
+                <div class="form-group py-3">
+                    <label for="loginEmail">Email</label>
+                    <input type="text" name="loginEmail" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group py-3">
+                    <label for="login-password">Password</label>
+                    <input type="password" name="loginPassword" id="loginPassword" class="form-control" required>
+                </div>
+                <div class="form-group py-4">
+                    <button type="submit" class="btn btn-primary d-block w-100">Login</button>
+                </div>
+                <div class="form-group text-center py-1">
+                    <small><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></small>
+                </div>
+            </form>
+        </div>
+        <div class="container hidden" id="signup">
+            <form action="#" method="post" class="border rounded p-3 m-auto">
+                <h2>Sign Up</h2>
+                <div class="form-group py-3">
+                    <label for="signUpEmail">Email</label>
+                    <input type="text" name="signUpEmail" id="signUpEmail" class="form-control" required>
+                </div>
+                <div class="form-group py-3">
+                    <label for="signUpPassword">Password</label>
+                    <input type="password" name="signUpPassword" id="signUpPassword" class="form-control" required>
+                </div>
+                <div class="py-3">
+                    <span>Role</span>
+                    <div>
+                        <div class="custom-control custom-radio d-inline w-auto">
+                            <input type="radio" id="elderRole" name="userrole" class="custom-control-input" value="elder" checked>
+                            <label class="custom-control-label" for="elderRole">Elder</label>
+                        </div>
+                        <div class="custom-control custom-radio d-inline w-auto">
+                            <input type="radio" id="volunteerRole" name="userrole" class="custom-control-input" value="volunteer">
+                            <label class="custom-control-label" for="volunteerRole">Volunteer</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group py-4">
+                    <button type="submit" class="btn btn-primary d-block w-100">Create Account</button>
+                </div>
+                <div class="form-group text-center py-1">
+                    <small><a href="#login" id="switchSignIn" rel="noopener noreferrer">Login</a></small>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
