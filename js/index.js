@@ -87,16 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 role: userRole
             }
             createDocument("users", newUser).then(()=>redirect(`/${userRole}/home.html`) )
-            /*
-            getDocument("users",userDocumentID)
-            .then((userDataFromDatabase)=> {
-                if(userDataFromDatabase){
-                    redirect(`/${userDataFromDatabase.role}/home.html`) //redirecting depending on the role of the user
-                }else{
-                    throw new Error("Unable to find user");
-                }
-            }); 
-            */       
         }catch(error){
             console.log(error);
         }

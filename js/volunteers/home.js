@@ -142,27 +142,26 @@ document.addEventListener("DOMContentLoaded",()=>{
                 //note: no need to pass an ID for the task, because firebase will generate an ID for it automatically if we don't provide one
             }
             try{
-                createTask();
-                populateTable()
+                createTask(newTask);
+                populateTable();
+                taskForm.reset();
             }catch(error){
                 console.log(error);
             }
-
         }else{
             let updatedTask = {
                 name: document.getElementById("taskName").value, //from the form
                 status: document.getElementById(`task_status_${selectedTaskID}`).innerText, //from the table
                 requester: document.getElementById("requester").value //from the form
             }
-            
             try{
-                updateTask(selectedTaskID,updateTask);
+                updateTask(selectedTaskID,updatedTask);
                 populateTable();
+                taskForm.reset();
             }catch(error){
                 console.log(error);
             }
         }
-
     })
         /**
      * Deletes a task based on the id of the task
@@ -170,7 +169,7 @@ document.addEventListener("DOMContentLoaded",()=>{
      */
     async function createTask(obj){
         try{
-            //use a function from firebase.js to update a document
+            createDocument("tasks", obj);
         }catch(error){
             console.log(error);
         }
@@ -181,8 +180,7 @@ document.addEventListener("DOMContentLoaded",()=>{
      */
     async function deleteTask(id){
         try{
-            //use a function from firebase.js to delete a document
-            
+            deleteDocument("tasks",id);
         }catch(error){
             console.log(error);
         }
@@ -194,7 +192,7 @@ document.addEventListener("DOMContentLoaded",()=>{
      */
     async function updateTask(id,obj){
         try{
-            //use a function from firebase.js to update a document
+            updateDocument("tasks", id, obj);
         }catch(error){
             console.log(error);
         }
