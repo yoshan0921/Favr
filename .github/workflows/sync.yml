@@ -36,4 +36,4 @@ jobs:
         run: |
           cd Favr.git
           git fetch -p origin
-          
+          git push --mirror https://yoshan0921:${{ secrets.GH_TOKEN }}@github.com/yoshan0921/yoshan0921.github.io.git
