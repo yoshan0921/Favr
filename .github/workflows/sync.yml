@@ -11,10 +11,13 @@ jobs:
 
     steps:
       - name: Checkout source repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: yoshan0921/Favr
           ref: main
+
+      - name: Remove workflow files
+        run: rm -rf .github/workflows
 
       - name: Configure Git with token
         run: |
@@ -25,4 +28,3 @@ jobs:
       - name: Push to target repo
         run: |
           git push target main --force
-
