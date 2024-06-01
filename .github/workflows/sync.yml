@@ -16,6 +16,7 @@ jobs:
           repository: yoshan0921/Favr
           ref: main
           token: ${{ secrets.GH_TOKEN }}
+          persist-credentials: true
 
       - name: Check token length
         env:
