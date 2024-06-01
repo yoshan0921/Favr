@@ -1,9 +1,9 @@
-name: Sync Main Branch
+name: Sync with Target Repository
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    # Every hour
+    - cron: '0 * * * *'
 
 jobs:
   sync:
@@ -16,31 +16,24 @@ jobs:
           repository: yoshan0921/Favr
           ref: main
           token: ${{ secrets.GH_TOKEN }}
-          persist-credentials: true
+          persist-credentials: false
 
-      - name: Check token length
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: echo -n $GH_TOKEN | wc -c
-
-      - name: Remove workflow files
-        run: rm -rf .github/workflows
-
-      - name: Configure Git with token
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Create bare mirror clone
         run: |
-          git config --global user.name "yoshan0921"
-          git config --global user.email "yhana0921@gmail.com"
-          git remote add target https://yoshan0921:${GH_TOKEN}@github.com/yoshan0921/yoshan0921.github.io.git
-          git remote -v
-          git branch
-          git status
+          git clone --mirror https://github.com/yoshan0921/Favr.git
+          cd Favr.git
+          git remote set-url --push origin https://github.com/yoshan0921/yoshan0921.github.io.git
 
-      - name: Verify the current directory
-        run: ls -la
+      - name: Verify remote settings
+        run: |
+          cd Favr.git
+          ls -la
+          git remote -v
 
       - name: Push to target repo
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: git push target main --force
+        run: |
+          cd Favr.git
+          git fetch -p origin
+          
