@@ -16,10 +16,10 @@ jobs:
           repository: yoshan0921/Favr
           ref: main
 
-      - name: Check token
+      - name: Check token length
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: echo $GH_TOKEN | wc -c
+        run: echo -n $GH_TOKEN | wc -c
 
       - name: Remove workflow files
         run: rm -rf .github/workflows
