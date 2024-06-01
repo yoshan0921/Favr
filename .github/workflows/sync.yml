@@ -1,0 +1,28 @@
+name: Sync Main Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v2
+        with:
+          repository: yoshan0921/Favr
+          ref: main
+
+      - name: Configure Git with token
+        run: |
+          git config --global user.name "yoshan0921"
+          git config --global user.email "yhana0921@gmail.com"
+          git remote add target https://yoshan0921:${{ secrets.GH_TOKEN }}@github.com/yoshan0921/yoshan0921.github.io.git
+
+      - name: Push to target repo
+        run: |
+          git push target main --force
+
