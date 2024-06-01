@@ -33,6 +33,9 @@ jobs:
           git config --global user.email "yhana0921@gmail.com"
           git remote add target https://yoshan0921:${GH_TOKEN}@github.com/yoshan0921/yoshan0921.github.io.git
 
+      - name: Verify the current directory
+        run: ls -la
+
       - name: Push to target repo
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
