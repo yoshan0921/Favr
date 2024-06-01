@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                 //note: no need to pass an ID for the task, because firebase will generate an ID for it automatically if we don't provide one
             }
             try{
-                createTask();
+                createTask(newTask);
                 populateTable()
             }catch(error){
                 console.log(error);
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded",()=>{
             }
             
             try{
-                updateTask(selectedTaskID,updateTask);
+                updateTask(selectedTaskID,updatedTask);
                 populateTable();
             }catch(error){
                 console.log(error);
@@ -170,7 +170,8 @@ document.addEventListener("DOMContentLoaded",()=>{
      */
     async function createTask(obj){
         try{
-            //use a function from firebase.js to update a document
+            //use a function from firebase.js to create a document
+            createDocument("tasks", obj);
         }catch(error){
             console.log(error);
         }
@@ -182,7 +183,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     async function deleteTask(id){
         try{
             //use a function from firebase.js to delete a document
-            
+            //Cocoy: I didn't add anything because delete button is already working!
         }catch(error){
             console.log(error);
         }
@@ -195,6 +196,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     async function updateTask(id,obj){
         try{
             //use a function from firebase.js to update a document
+            updateDocument("tasks", id, obj);
         }catch(error){
             console.log(error);
         }
