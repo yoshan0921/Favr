@@ -16,15 +16,23 @@ jobs:
           repository: yoshan0921/Favr
           ref: main
 
+      - name: Check token
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: echo $GH_TOKEN | wc -c
+
       - name: Remove workflow files
         run: rm -rf .github/workflows
 
       - name: Configure Git with token
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config --global user.name "yoshan0921"
           git config --global user.email "yhana0921@gmail.com"
-          git remote add target https://yoshan0921:${{ secrets.GH_TOKEN }}@github.com/yoshan0921/yoshan0921.github.io.git
+          git remote add target https://yoshan0921:${GH_TOKEN}@github.com/yoshan0921/yoshan0921.github.io.git
 
       - name: Push to target repo
-        run: |
-          git push target main --force
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: git push target main --force
