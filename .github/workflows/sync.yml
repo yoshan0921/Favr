@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout source repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: yoshan0921/Favr
           ref: main
