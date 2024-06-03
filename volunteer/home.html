@@ -1,20 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="../js/volunteers/home.js"></script>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="shortcut icon" href=".././favicon.ico" type="image/x-icon">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    <title>Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="../js/volunteers/common.js"></script>
+  <script type="module" src="../js/volunteers/home.js"></script>
+  <link rel="stylesheet" href="../css/volunteer/home.css">
+  <link rel="shortcut icon" href=".././favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <title>Home | Volunteer</title>
 </head>
+
 <body>
-    <header>
+  <!-- Left Column -->
+  <div id="leftside-column"></div>
+  <script>
+    fetch("./partials/_sidebar.html")
+      .then((response) => response.text())
+      .then((data) => document.getElementById("leftside-column").outerHTML = data);
+  </script>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <!-- Home -->
+    <div id="home-content">
+      <h2>Home page</h2>
+
+      <!-- Tab Menu --->
+      <ul class="tab4">
+        <li class="tab4__item"><span class="tab4__link on" data-tab-body="1">Explorer Tasks</span></li>
+        <li class="tab4__item"><span class="tab4__link" data-tab-body="2">Ongoing</span></li>
+        <li class="tab4__item"><span class="tab4__link" data-tab-body="3">History</span></li>
+      </ul>
+
+      <!-- Tab Contents --->
+      <div class="tab4-body">
+        <div class="explorer tab4-body__item tab4-body__item--1 on">
+          <!-- Radio button for switching list and map -->
+          <input type="radio" id="listView" name="view" checked>
+          <label for="listView">List View</label>
+          <input type="radio" id="mapView" name="view">
+          <label for="mapView">Map View</label>
+
+          <!-- taskinfo containers (List) -->
+          <div id="listSection">
+          </div>
+
+          <!-- taskinfo containers (Map) -->
+          <div id="mapSection" class="hide">
+            <div id="map"></div>
+            <div id="taskinfo"></div>
+          </div>
+        </div>
+        <div class="ongoing tab4-body__item tab4-body__item--2">
+          <div>
+            Ongoing Tasks
+          </div>
+        </div>
+        <div class="history tab4-body__item tab4-body__item--3">
+          History
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p><small>&copy; Favr2024</small></p>
+  </footer>
+
+  <!-- <header>
         <div class="container text-end w-100">
             <button id="logoutBtn" type="button" class="btn btn-secondary">Logout</button>
         </div>
@@ -29,14 +86,14 @@
                     <div class="row">
                         <h2 id="taskFormTitle">Add Task</h2>
                     </div>
-                        <div class="form-group">
-                            <label for="taskName">Name</label>
-                            <input type="text" id="taskName" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="requester">Requester</label>
-                            <input type="text" id="requester" class="form-control"required>
-                        </div>
+                    <div class="form-group">
+                        <label for="taskName">Name</label>
+                        <input type="text" id="taskName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="requester">Requester</label>
+                        <input type="text" id="requester" class="form-control" required>
+                    </div>
                     <input type="hidden" name="operationType" id="operationType" value="add">
                     <div class="form-group row p-2 justify-content-end" style="gap:1rem;">
                         <button class="btn btn-secondary w-auto mr-2" id="cancelBtn">Cancel</button>
@@ -57,7 +114,8 @@
                 <tbody>
                 </tbody>
             </table>
-         </div>
-    </main>
+        </div>
+    </main>-->
 </body>
+
 </html>
