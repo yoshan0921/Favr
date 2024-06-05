@@ -1,13 +1,17 @@
 import{
     authenticateUser,
-    createUserWithEmail
+    createUserWithEmail,
+    getCurrentUserID,
+    getCurrentUserRole
 } from "./firebase/authentication.js";
 import{
     createDocument,
-    getDocument
+    getDocument,
+    updateDocument
 } from "./firebase/firestore.js"
 import {
     redirect,
+    resetLocalStorage,
     handleError
 } from "./utils.js";
 
@@ -18,6 +22,7 @@ import {
  * 
  */
 document.addEventListener('DOMContentLoaded', function() {
+    resetLocalStorage();
     /*Getting all the important HTML elements */
     const signInForm = document.getElementById("login");
     const signUpForm = document.getElementById("signup");
@@ -53,16 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let password = document.getElementById("loginPassword").value;
 
         try{
-            let userCredential = await authenticateUser(email,password);
-        
-            getDocument("users",userCredential.user.uid)
-            .then((userDataFromDatabase)=> {
-                if(userDataFromDatabase){
-                    redirect(`/dashboard.html`)
-                }else{
-                    throw new Error("User has no registered role");
-                }
-            });   
+            await authenticateUser(email,password);
+            redirect(`/dashboard.html`);
         }catch(error){
             errorsContainer.classList.remove("hidden");
             errorsContainer.innerText = error.message;
@@ -78,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         if(!errorsContainer.classList.contains("hidden")) errorsContainer.classList.add("hidden");
 
+        let firstName = document.getElementById("signUpFirstName").value;
+        let lastName = document.getElementById("signUpLastName").value;
+        let age = Number(document.getElementById("signUpAge").value);
         let email = document.getElementById("signUpEmail").value;
         let password = document.getElementById("signUpPassword").value;
         let rolesOptions = document.getElementsByName("userrole");
@@ -89,9 +89,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const newUser = {
                 id: userCredential.user.uid,
                 email: email,
-                role: userRole
+                role: userRole,
+                firstName: firstName,
+                lastName: lastName,
+                age: age
             }
-            createDocument("users", newUser).then(()=>redirect(`/dashboard.html`) )
+            updateDocument("users", newUser.id,newUser)
+            .then(()=>{
+                getCurrentUserID();
+                getCurrentUserRole();
+            })
+            .then(()=>{
+                redirect(`/dashboard.html`);
+            })
         }catch(error){
             errorsContainer.classList.remove("hidden");
             errorsContainer.innerText = error.message;

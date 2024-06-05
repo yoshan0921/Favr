@@ -2,6 +2,10 @@ import {
     auth
 } from "./firebase/firebase.js";
 
+let localStorageItems = [
+    "currentUserID",
+    "currentUserRole"
+]
 /**
  * Redirects to the page specified on the path
  * @param {String} path - path to the requested page
@@ -33,8 +37,15 @@ function signOut(){
 function handleError(error){
     console.log(error);
 }
+
+function resetLocalStorage(){
+    for(let item of localStorageItems){
+        window.localStorage.removeItem(item);
+    }
+}
 export {
     signOut,
     redirect,
-    handleError
+    handleError,
+    resetLocalStorage
 }

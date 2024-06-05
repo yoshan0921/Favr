@@ -103,7 +103,16 @@ footer {
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
-
+.sidebar ul{
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  justify-content: space-around;
+  flex-grow: 1;
+}
+.sidebar ul li{
+  display: flex;
+}
 .sidebar a,
 #logoutBtn {
   flex: 1;
@@ -165,7 +174,9 @@ header,
     /* transition: left 0.5s ease; */
     padding: 10px 0px;
   }
-
+  .sidebar ul{
+    flex-flow: column nowrap;
+  }
   .content {
     padding: 0 20px;
     width: 100%;

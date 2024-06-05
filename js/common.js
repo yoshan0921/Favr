@@ -6,6 +6,7 @@ import { signOut } from "./utils.js";
 window.addEventListener("load", async function (event) {
     await loadCommonContent();
     // Open and close sidebar
+    /*
     const check = document.getElementById("check");
     if (check) {
       check.addEventListener("click", () => {
@@ -16,6 +17,7 @@ window.addEventListener("load", async function (event) {
         }
       });
     }
+    */
 })
 
 /**

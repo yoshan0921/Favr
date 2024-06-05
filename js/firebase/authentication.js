@@ -108,6 +108,7 @@ async function getCurrentUserRole(){
         if(!currentUserRole){
             let currentUserID = localStorage.getItem("currentUserID");
             if(!currentUserID) getCurrentUserID();
+            console.log(currentUserID);
             await getDocument("users",currentUserID)
             .then((userInfo)=>{
                 currentUserRole = userInfo.role;

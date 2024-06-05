@@ -4,6 +4,7 @@ import {
 import {
     getCurrentUserRole
 } from "./firebase/authentication.js";
+import { redirect } from "./utils.js";
 
 
 /* -------------------------------------------------- */
@@ -30,8 +31,11 @@ if (document.readyState === "loading") {
  * 
  */
 async function runFunction() {
-  let currentUserRole = await getCurrentUserRole();
-  loadPartial(`dashboard/_${currentUserRole}Dashboard`,"dashboard-content");
+  getCurrentUserRole().then((currentUserRole)=>{
+    //if(!currentUserRole || currentUserRole == "undefined") redirect("500.html");
+    loadPartial(`dashboard/_${currentUserRole}Dashboard`,"dashboard-content");
+  });
+  
       
   /* -------------------------------------------------- */
   /* Home Tab Menu                                      */
