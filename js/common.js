@@ -43,7 +43,7 @@ async function loadCommonContent(){
 async function loadPartial(partial,destination){
     fetch(`../partials/${partial}.html`)
     .then((response) => response.text())
-    .then((data) => document.getElementById(destination).outerHTML = data);
+    .then((data) => document.getElementById(destination).innerHTML = data);
 }
 export {
     loadPartial

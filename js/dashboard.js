@@ -14,10 +14,11 @@ import { redirect } from "./utils.js";
 window.addEventListener("load", function (event) {
   //Give "active" class to a tag under nav#sidebar based on the current html file name
   const filename = window.location.pathname.split("/").pop();
-  if (filename === "index.html") {
+  if (filename === "dashboard.html") {
     document.getElementById("home-menu").classList.add("active");
   }
 });
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", runFunction);
 } else {
@@ -101,6 +102,6 @@ async function runFunction() {
       requester: "Teru",
     },
   };
-  //createMapView(tasks);
+  createMapView(tasks);
 
 }

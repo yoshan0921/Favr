@@ -168,7 +168,6 @@ header,
     display: block;
     position: fixed;
     width: 240px;
-    left: -240px;
     height: 100%;
     background: #1e1e1e;
     /* transition: left 0.5s ease; */
@@ -178,8 +177,10 @@ header,
     flex-flow: column nowrap;
   }
   .content {
+    position: relative;
     padding: 0 20px;
-    width: 100%;
+    width: calc(100% - 240px);
+    left:240px;
     height: 100%;
     /* transition: all 0.5s ease; */
   }
