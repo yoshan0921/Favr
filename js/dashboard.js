@@ -32,7 +32,6 @@ if (document.readyState === "loading") {
 async function runFunction() {
   let currentUserRole = await getCurrentUserRole();
   loadPartial(`dashboard/_${currentUserRole}Dashboard`,"dashboard-content");
-  //loadPartial(`dashboard/_volunteerDashboard`,"dashboard-content");
       
   /* -------------------------------------------------- */
   /* Home Tab Menu                                      */

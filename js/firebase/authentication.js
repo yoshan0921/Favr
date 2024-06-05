@@ -45,7 +45,7 @@ async function authenticateUser(email,password){
 
 /**
  * Checks if the user is authenticated or not
- * @returns 
+ * @returns Promise
  */
 async function monitorAuthenticationState() {
     return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ async function monitorAuthenticationState() {
 }
 
 /**
- * Checks if the user is authenticated and has permission to view the current page
+ * Checks if the user is authenticated
  */
 async function checkUserAuthorization(){
     monitorAuthenticationState()
@@ -87,6 +87,10 @@ async function checkUserAuthorization(){
         redirect("/403.html");
     });
 }
+/**
+ * 
+ * @returns 
+ */
 function getCurrentUserID(){
     let currentUserID = localStorage.getItem("currentUserID");
     if(!currentUserID){

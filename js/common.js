@@ -18,13 +18,26 @@ window.addEventListener("load", async function (event) {
     }
 })
 
+/**
+ * 
+ */
 async function loadCommonContent(){
     await loadPartial("_sidebar","leftside-column");
-    const logoutBtn = document.getElementById("logoutBtn");
 
-    if(logoutBtn)logoutBtn.addEventListener("click",signOut);
+    //adding event listener to dynamically loaded logout button
+    document.addEventListener("click", function(e){
+      const target = e.target.closest("#logoutBtn"); // Or any other selector.
+      if(target){
+        signOut();
+      }
+    });
 }
 
+/**
+ * 
+ * @param {string} partial - the name of the partial file (without .html)
+ * @param {string} destination - the unique id of the HTML element where the partial will be loaded
+ */
 async function loadPartial(partial,destination){
     fetch(`../partials/${partial}.html`)
     .then((response) => response.text())

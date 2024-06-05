@@ -116,6 +116,9 @@ footer {
   padding: 10px;
   font-size: 14px;
 }
+.sidebar button{
+  border: none;
+}
 
 .sidebar a .fa-fw,
 #logoutBtn .fa-fw {
