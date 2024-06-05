@@ -2,7 +2,6 @@ import {
     loadPartial
 } from "./common.js"
 import {
-    currentUserRole,
     getCurrentUserRole
 } from "./firebase/authentication.js";
 
@@ -30,10 +29,10 @@ if (document.readyState === "loading") {
  * rendered there
  * 
  */
-function runFunction() {
-  if(!currentUserRole) getCurrentUserRole();
-  //loadPartial(`dashboard/_${currentUserRole}Dashboard`,"dashboard-content");
-  loadPartial(`dashboard/_volunteerDashboard`,"dashboard-content");
+async function runFunction() {
+  let currentUserRole = await getCurrentUserRole();
+  loadPartial(`dashboard/_${currentUserRole}Dashboard`,"dashboard-content");
+  //loadPartial(`dashboard/_volunteerDashboard`,"dashboard-content");
       
   /* -------------------------------------------------- */
   /* Home Tab Menu                                      */

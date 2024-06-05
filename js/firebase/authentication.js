@@ -9,8 +9,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDocument } from "./firestore.js";
 
-let currentUserID = null;
-let currentUserRole = null;
 /**
  * Creates user based on provided email and password
  * @param {string} email 
@@ -90,23 +88,30 @@ async function checkUserAuthorization(){
     });
 }
 function getCurrentUserID(){
-    if(currentUserID){
+    let currentUserID = localStorage.getItem("currentUserID");
+    if(!currentUserID){
         let user = auth.currentUser;
         if(user){
             currentUserID = user.uid;
+            localStorage.setItem("currentUserID",currentUserID);
         }
     }
     return currentUserID;
 }
-function getCurrentUserRole(){
+async function getCurrentUserRole(){
     try{
-        if(!currentUserID) getCurrentUserID();
-        getDocument("users",currentUserID)
-        .then((userInfo)=>{
-            currentUserRole = userInfo.role;
-            return currentUserRole
+        let currentUserRole = localStorage.getItem("currentUserRole");
+        if(!currentUserRole){
+            let currentUserID = localStorage.getItem("currentUserID");
+            if(!currentUserID) getCurrentUserID();
+            await getDocument("users",currentUserID)
+            .then((userInfo)=>{
+                currentUserRole = userInfo.role;
+                localStorage.setItem("currentUserRole",currentUserRole);
+            }
+            )
         }
-        )
+        return currentUserRole;
     }catch(error){
         console.log(error);
     }
@@ -117,7 +122,5 @@ export {
     monitorAuthenticationState,
     checkUserAuthorization,
     getCurrentUserID,
-    getCurrentUserRole,
-    currentUserID,
-    currentUserRole
+    getCurrentUserRole
 }
