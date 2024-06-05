@@ -1,4 +1,5 @@
-form{
+form,
+.error-messages{
     max-width: 400px;
 }
 form span{

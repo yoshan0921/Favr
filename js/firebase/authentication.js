@@ -1,3 +1,4 @@
+import { redirect } from "../utils.js";
 import {
     auth
 } from "./firebase.js";
@@ -5,8 +6,11 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDocument } from "./firestore.js";
 
+let currentUserID = null;
+let currentUserRole = null;
 /**
  * Creates user based on provided email and password
  * @param {string} email 
@@ -33,6 +37,8 @@ async function authenticateUser(email,password){
     try{
         let userCredential = await signInWithEmailAndPassword(auth, email,password)
         // Signed in
+        getCurrentUserID();
+        getCurrentUserRole();
         return userCredential;
     }catch(error){
         throw error;
@@ -51,7 +57,7 @@ async function monitorAuthenticationState() {
                 resolve(user);
             } else {
                 // Not logged
-                reject((window.location.pathname = "403.html"));
+                reject((redirect("/403.html")));
             }
         })
     });
@@ -62,19 +68,56 @@ async function monitorAuthenticationState() {
  */
 async function checkUserAuthorization(){
     monitorAuthenticationState()
-    .then((result)=>{
-        console.log(result);
+    .then((user)=>{
+        if(user.uid) currentUserID = user.uid;
+        console.log("Current user ID: "+ currentUserID);
+        return getDocument("users",currentUserID);
+    })
+    .then((userInfo)=>{
+        console.log(userInfo);
+        if(userInfo){
+            let currentUserRole = userInfo.role;
+            let currentPathName = window.location.pathname;
+            if((currentUserRole == "elder" && currentPathName.includes("volunteer"))
+                ||(currentUserRole == "volunteer" && currentPathName.includes("elder")) ){
+                throw new Error("User unauthorized to view page");
+            }
+        }
+    })
+    .catch((error)=>{
+        console.log(error);
+        redirect("/403.html");
     });
-    /*
-        TODO: check if the user has authorization to see the page based 
-        on their role (ex.: redirecting to 403.html if they are a volunteer
-            trying to access and elder interface)
+}
+function getCurrentUserID(){
+    if(currentUserID){
+        let user = auth.currentUser;
+        if(user){
+            currentUserID = user.uid;
+        }
+    }
+    return currentUserID;
+}
+function getCurrentUserRole(){
+    try{
+        if(!currentUserID) getCurrentUserID();
+        getDocument("users",currentUserID)
+        .then((userInfo)=>{
+            currentUserRole = userInfo.role;
+            return currentUserRole
+        }
         )
-    */
+    }catch(error){
+        console.log(error);
+    }
 }
 export {
     createUserWithEmail,
     authenticateUser,
     monitorAuthenticationState,
-    checkUserAuthorization
+    checkUserAuthorization,
+    getCurrentUserID,
+    getCurrentUserRole,
+    currentUserID,
+    currentUserRole
 }

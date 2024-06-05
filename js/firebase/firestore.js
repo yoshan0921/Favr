@@ -7,55 +7,77 @@ import {
     getDoc,
     deleteDoc,
     collection
-} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /**
- * Class that represents an user (still not used)
+ * Class that represents an user document (still not used)
  */
 class User{
     constructor(obj){
         this.id = obj.id;
-        this.name = obj.name;
+        this.firstName = obj.firstName;
+        this.lastName = obj.lastName;
         this.email = obj.email;
         this.role = obj.role;
         this.age = obj.age;
-        this.volunteerHours = obj.volunteerHours;
+    }
+}
+/**
+ * Class that represents a task document (still not used)
+ */
+class Task {
+    constructor(obj){
+        this.id = obj.id;
+        this.name = obj.name;
+        this.status = obj.status;
+        this.requester = obj.requester;
+        this.volunteer = obj.volunteer;
     }
 }
 
 /***=========== Firestore data converters ===========***/
 // Reference: https://firebase.google.com/docs/reference/js/v8/firebase.firestore.FirestoreDataConverter
-// Still not used, but might be useful in the future
+//  They are used to make sure every document within a collection of the database have the same structure (fields)
 const userConverter = {
     toFirestore: (user) => {
         return {
             id: user.id,
-            name: user.name ? user.name : null,
+            firstName: user.firstName ? user.firstName : null,
+            lastName: user.lastName ? user.lastName : null,
             email: user.email ? user.email : null,
             role: user.role ? user.role : null,
-            age:user.age ? user.age : null,
-            volunteerHours: user.volunteerHours ? user.volunteerHours : 0
+            age:user.age ? user.age : null
         };
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
         return new User({
             id:data.id,
-            name:data.name,
+            firstName:data.firstName,
+            lastName:data.lastName,
             email:data.email,
             role:data.role,
-            age:data.age,
-            volunteerHours: data.volunteerHours
+            age:data.age
         });
     },
 };
 const taskConverter = {
     toFirestore: (obj) => {
+        console.log(
+            new Task({
+                id: obj.id,
+                name: obj.name ? obj.name : null,
+                status: obj.status ? obj.status : null,
+                requester: obj.requester ? obj.requester : null,
+                volunteer: obj.volunteer ? obj.volunteer : null
+            })
+        )
         return {
             id: obj.id,
             name: obj.name ? obj.name : null,
-            status: task.status ? task.status : null,
-            requesterID: task.requesterID ? task.requesterID : null
+            status: obj.status ? obj.status : null,
+            requester: obj.requester ? obj.requester : null,
+            volunteer: obj.volunteer ? obj.volunteer : null
         };
     },
     fromFirestore: (snapshot, options) => {
@@ -64,7 +86,8 @@ const taskConverter = {
             id: data.id,
             name: data.name,
             status: data.status,
-            requesterID: data.requesterID
+            requester: data.requester,
+            volunteer: data.volunteer
         });
     },
 };
@@ -74,12 +97,18 @@ const taskConverter = {
  * @param {string} collection 
  * @returns reference to a converter
  */
-function selectDataConverter(collection){
-    switch(collection){
+function selectDataConverter(collectionPath){
+    let collectionName = "";
+    for(let part of collectionPath.split("/")){
+        collectionName = part;
+    }
+    switch(collectionName){
         case "users":
             return userConverter;
-        default:
+        case "tasks":
             return taskConverter;
+        default:
+            return (obj) => obj; //a function that does nothing to the given object
     }
 }
 /**
@@ -90,11 +119,12 @@ function selectDataConverter(collection){
  * @return Promise
  */
 async function createDocument(collectionPath,object){
+    let converter = selectDataConverter(collectionPath);
+    let convertedObject = converter.toFirestore(object);
     try {
-        // Add a new document with a generated id.
-        return addDoc(collection(firestore, collectionPath), object);
+        return addDoc(collection(firestore, collectionPath), convertedObject);
     } catch (error) {
-        throw(error);
+        console.log(error);
     }
 }
 
@@ -108,7 +138,7 @@ async function createDocument(collectionPath,object){
  */
 async function updateDocument(collectionPath, id, object){
     try {
-        const documentReference = doc(firestore, collectionPath, id);
+        const documentReference = doc(firestore, collectionPath, id).withConverter(selectDataConverter(collectionPath));
         return setDoc(documentReference, object);
     } catch (error) {
         throw(error);
@@ -122,7 +152,7 @@ async function updateDocument(collectionPath, id, object){
  * @returns Promise
  */
 async function deleteDocument(collectionPath, id){
-    const documentReference = doc(firestore, `${collectionPath}/${id}`);
+    const documentReference = doc(firestore, `${collectionPath}/${id}`).withConverter(selectDataConverter(collectionPath));
     try {
         return deleteDoc(documentReference);
     } catch (error) {
@@ -136,7 +166,7 @@ async function deleteDocument(collectionPath, id){
  * @returns Object containing the document data
  */
 async function getDocument(collectionPath,id){
-    const documentReference = doc(firestore, `${collectionPath}/${id}`);
+    const documentReference = doc(firestore, `${collectionPath}/${id}`).withConverter(selectDataConverter(collectionPath));
     try {
         const docSnap = await getDoc(documentReference);
         if (docSnap.exists()) {

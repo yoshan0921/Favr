@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const formHeader = document.querySelector("#taskForm h2");
   const formButton = document.querySelector("#taskForm button[type=submit]");
   const cancelEditingButton = document.getElementById("cancelBtn");
-
+ 
   //default styling
   cancelEditingButton.style.display = "none";
 

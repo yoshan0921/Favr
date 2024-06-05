@@ -7,7 +7,8 @@ import{
     getDocument
 } from "./firebase/firestore.js"
 import {
-    redirect
+    redirect,
+    handleError
 } from "./utils.js";
 
 /**
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const signUpForm = document.getElementById("signup");
     const switchSignInBtn = document.getElementById("switchSignIn");
     const switchSignUpBtn = document.getElementById("switchSignUp");
+    const errorsContainer = document.getElementById("errorsContainer");
 
     /**
      * Adding the functionality of switching forms
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     async function signIn(e){
         e.preventDefault();
+        if(!errorsContainer.classList.contains("hidden")) errorsContainer.classList.add("hidden");
 
         let email = document.getElementById("loginEmail").value;
         let password = document.getElementById("loginPassword").value;
@@ -55,13 +58,14 @@ document.addEventListener('DOMContentLoaded', function() {
             getDocument("users",userCredential.user.uid)
             .then((userDataFromDatabase)=> {
                 if(userDataFromDatabase){
-                    redirect(`/${userDataFromDatabase.role}/home.html`)
+                    redirect(`/dashboard.html`)
                 }else{
                     throw new Error("User has no registered role");
                 }
             });   
         }catch(error){
-            console.log(error.message);
+            errorsContainer.classList.remove("hidden");
+            errorsContainer.innerText = error.message;
         }
     }
     
@@ -72,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     async function signUp(e){
         e.preventDefault();
+        if(!errorsContainer.classList.contains("hidden")) errorsContainer.classList.add("hidden");
 
         let email = document.getElementById("signUpEmail").value;
         let password = document.getElementById("signUpPassword").value;
@@ -86,9 +91,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 email: email,
                 role: userRole
             }
-            createDocument("users", newUser).then(()=>redirect(`/${userRole}/home.html`) )
+            createDocument("users", newUser).then(()=>redirect(`/dashboard.html`) )
         }catch(error){
-            console.log(error);
+            errorsContainer.classList.remove("hidden");
+            errorsContainer.innerText = error.message;
         }
     }
 });

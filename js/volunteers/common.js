@@ -1,9 +1,5 @@
 import { checkUserAuthorization } from "../firebase/authentication.js";
 import { signOut } from "../utils.js";
-import { getAll, deleteDocument, updateDocument, createDocument } from "../firebase/firestore.js";
-import { createMapView } from "../map.js";
-
-checkUserAuthorization();
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
@@ -23,6 +19,11 @@ if (document.readyState === "loading") {
 }
 
 function runFunction() {
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", (e)=>{
+    e.preventDefault();
+    signOut();
+  });
   /**
    * Open and close sidebar
    */

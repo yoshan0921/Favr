@@ -15,13 +15,26 @@ function redirect(path){
 function signOut(){
     auth.signOut().then(() => {
         // Sign-out successful.
-        redirect("index.html");
+        redirect("/index.html");
       }).catch((error) => {
         // An error happened.
         console.log("Error while trying to logout")
       });
 }
+/**
+ * Function that will display an error message for the user.
+ * Every page that might throw an error should call this function
+ * 
+ * Obs.: In the future it should be rewritten to trigger a
+ * visual response (i.e a modal or redirect to an error page)
+ * 
+ * @param {Error} error object
+ */
+function handleError(error){
+    console.log(error);
+}
 export {
     signOut,
-    redirect
+    redirect,
+    handleError
 }
