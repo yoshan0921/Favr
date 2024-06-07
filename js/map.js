@@ -62,6 +62,8 @@ async function initMap(taskArray, latitude, longitude) {
     content: you,
   });
 
+  var infoWindows = [];
+
   // Add markers for each task location
   // TODO: This is just a dummy data. Location data should be fetched from the database.
   for (let task of taskArray) {
@@ -83,6 +85,54 @@ async function initMap(taskArray, latitude, longitude) {
       (function (marker) {
         return function () {
           console.log(marker.title);
+
+          // =========== TEST
+          const contentString = `
+          <h3><a href="index.html">${task[1].name}</a></h3>
+          <p>May 28th, 10:00am</p>
+          <p>Estimated Favor Length: <span class="bold">1hour</span></p>
+          <div class="requester">
+            <img class="photo" src="https://ca.slack-edge.com/T61666YTB-U06C1DELWP3-a8c7ced7390c-512">
+            <div class="profile">
+              <p class="name">${task[1].requester}</p>
+              <p>Marpole Vancouver, BC</p>
+            </div>
+          </div>
+          <style>
+          h3 { 
+            margin-bottom: 1rem; 
+            font-family: Arial Black, sans-serif;
+            font-size: 1.2rem;
+          }
+          .bold { font-weight: bold; }
+          .requester { display: flex; }
+          .requester .name {
+            font-family: Arial Black, sans-serif;
+            font-size: 1rem;
+          }
+          .photo { 
+            display: block; 
+            border-radius: 50%; 
+            width: 60px; 
+            height: 60px; 
+            margin: .5rem .5rem .5rem 0;
+          }
+          .profile {
+            align-self: center;
+          }
+          </style>
+          `;
+          const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            ariaLabel: "Uluru",
+          });
+          infowindow.open({
+            anchor: marker,
+            map,
+          });
+          infoWindows.push(infowindow);
+          // =========== TEST
+
           let infoArea = document.getElementById("taskinfo");
           infoArea.innerHTML = "";
           let card = document.createElement("div");
@@ -98,6 +148,17 @@ async function initMap(taskArray, latitude, longitude) {
         };
       })(marker)
     );
+  }
+
+  map.addListener("click", function () {
+    closeAllInfoWindows();
+  });
+
+  function closeAllInfoWindows() {
+    for (var i = 0; i < infoWindows.length; i++) {
+      infoWindows[i].close();
+    }
+    infoWindows = [];
   }
 }
 
