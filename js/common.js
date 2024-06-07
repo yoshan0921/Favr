@@ -1,30 +1,23 @@
 import { signOut } from "./utils.js";
+let pageTitles = {
+  "dashboard.html": "Dashboard",
+  "tasks/create.html": "Request favor",
+  "profile.html": "Profile",
+  "updates.html": "Updates",
+}
 
-/* -------------------------------------------------- */
-/* Side Bar Menu                                      */
-/* -------------------------------------------------- */
-window.addEventListener("load", async function (event) {
-    await loadCommonContent();
-    // Open and close sidebar
-    /*
-    const check = document.getElementById("check");
-    if (check) {
-      check.addEventListener("click", () => {
-        if (check.checked) {
-          localStorage.setItem("sidebar", "checked");
-        } else {
-          localStorage.removeItem("sidebar");
-        }
-      });
-    }
-    */
-})
+loadCommonContent();
 
 /**
  * 
  */
 async function loadCommonContent(){
+    loadPartial("_header","header").then(()=>{
+      loadPageTitle(window.location.pathname);
+    });
     await loadPartial("_sidebar","leftside-column");
+    const backButton = document.getElementById("backBtn");
+    if(backButton) backButton.addEventListener("click",(e)=>{window.history.back()});
 
     //adding event listener to dynamically loaded logout button
     document.addEventListener("click", function(e){
@@ -41,9 +34,28 @@ async function loadCommonContent(){
  * @param {string} destination - the unique id of the HTML element where the partial will be loaded
  */
 async function loadPartial(partial,destination){
-    fetch(`../partials/${partial}.html`)
+    return fetch(`../partials/${partial}.html`)
     .then((response) => response.text())
     .then((data) => document.getElementById(destination).innerHTML = data);
+}
+/**
+ * 
+ * @param {string} path 
+ */
+function loadPageTitle(path){
+  document.addEventListener("readystatechange",()=>{
+    if(document.readyState === "complete"){
+      let title = "";
+      console.log(path);
+      for(let pathEnding in pageTitles){
+        if(path.endsWith(pathEnding)){
+          title = pageTitles[pathEnding];
+        }
+      }
+      const pageTitle = document.getElementById("page-title");
+      pageTitle.innerText = title;
+    }
+  })
 }
 export {
     loadPartial

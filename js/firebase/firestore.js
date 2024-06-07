@@ -9,44 +9,73 @@ import {
     collection
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// ======================
+// Classes (data models)
+// ======================
 /**
- * Class that represents an user document (still not used)
+ * Class that represents an user document. This is used for both volunteers and elders, so all users will have these fields on the database, although some of them will be null depending on the role of the user
  */
 class User{
     constructor(obj){
         this.id = obj.id;
         this.firstName = obj.firstName;
+        this.middleName = obj.middleName;
         this.lastName = obj.lastName;
+        this.institution = obj.institution; //the school they go to
+        this.birthday = obj.birthday;
+        this.bio = obj.bio;
+        this.address = obj.address;
+        this.phone = obj.phone;
         this.email = obj.email;
         this.role = obj.role;
         this.age = obj.age;
+        this.eldersHelped = obj.eldersHelped;
+        this.hours = obj.hours;
+        this.favors = obj.favors;
+        this.emergencyContactName = obj.emergencyContactName;
+        this.emergencyContactNumber = obj.emergencyContactNumber;
     }
 }
 /**
- * Class that represents a task document (still not used)
+ * Class that represents a task document
  */
 class Task {
     constructor(obj){
         this.id = obj.id;
         this.name = obj.name;
         this.status = obj.status;
-        this.requester = obj.requester;
-        this.volunteer = obj.volunteer;
+        this.requesterID = obj.requesterID;
+        this.volunteerID = obj.volunteerID;
+        this.notes = obj.notes;
+        this.details = obj.details; //an object with no strict structure (depends on task type)
     }
 }
 
-/***=========== Firestore data converters ===========***/
+// ======================
+// Firestore data converters
+// ======================
 // Reference: https://firebase.google.com/docs/reference/js/v8/firebase.firestore.FirestoreDataConverter
 //  They are used to make sure every document within a collection of the database have the same structure (fields)
+
 const userConverter = {
     toFirestore: (user) => {
         return {
             id: user.id,
             firstName: user.firstName ? user.firstName : null,
+            middleName: user.middleName ? user.middleName : null,
             lastName: user.lastName ? user.lastName : null,
+            institution: user.institution ? user.institution : null,
+            birthday: user.birthday ? user.birthday : null,
+            bio: user.bio ? user.bio : null,
+            phone:user.phone?user.phone:null,         
             email: user.email ? user.email : null,
+            address: user.address ? user.address : null,
             role: user.role ? user.role : null,
-            age:user.age ? user.age : null
+            age:user.age ? user.age : null,
+            eldersHelped: user.eldersHelped ? user.eldersHelped : 0,
+            hours: user.hours ? user.hours : 0,
+            favors:user.favors ? user.favors : 0,
+            emergencyContactName:user.emergencyContactName ? user.emergencyContactName : null
         };
     },
     fromFirestore: (snapshot, options) => {
@@ -54,30 +83,33 @@ const userConverter = {
         return new User({
             id:data.id,
             firstName:data.firstName,
+            middleName: data.middleName,
             lastName:data.lastName,
+            institution: data.institution,
+            birthday: data.birthday,
+            bio: data.bio,
+            phone:data.phone,
             email:data.email,
+            address: data.address,
             role:data.role,
-            age:data.age
+            age:data.age,
+            eldersHelped: data.eldersHelped,
+            hours: data.hours,
+            favors: data.favors,
+            emergencyContactName:data.emergencyContactName
         });
     },
 };
 const taskConverter = {
     toFirestore: (obj) => {
-        console.log(
-            new Task({
-                id: obj.id,
-                name: obj.name ? obj.name : null,
-                status: obj.status ? obj.status : null,
-                requester: obj.requester ? obj.requester : null,
-                volunteer: obj.volunteer ? obj.volunteer : null
-            })
-        )
         return {
             id: obj.id,
             name: obj.name ? obj.name : null,
             status: obj.status ? obj.status : null,
-            requester: obj.requester ? obj.requester : null,
-            volunteer: obj.volunteer ? obj.volunteer : null
+            requesterID: obj.requesterID ? obj.requesterID : null,
+            volunteerID: obj.volunteerID ? obj.volunteerID : null,
+            details: obj.details ? obj.details : [],
+            notes: obj.notes ? obj.notes : null
         };
     },
     fromFirestore: (snapshot, options) => {
@@ -86,15 +118,17 @@ const taskConverter = {
             id: data.id,
             name: data.name,
             status: data.status,
-            requester: data.requester,
-            volunteer: data.volunteer
+            requesterID: data.requester,
+            volunteerID: data.volunteer,
+            details: data.details,
+            notes: data.notes
         });
     },
 };
 
 /**
  * Selects which converter to use depending on the collection in which they will be used
- * @param {string} collection 
+ * @param {string} collection - the relative path to a collection or subcollection
  * @returns reference to a converter
  */
 function selectDataConverter(collectionPath){
@@ -114,7 +148,7 @@ function selectDataConverter(collectionPath){
 /**
  * Creates a document on the provided collection
  * @param {String} collectionPath 
- * @param {Object} object 
+ * @param {Object} object object that will be created on the database
  * 
  * @return Promise
  */
@@ -129,8 +163,13 @@ async function createDocument(collectionPath,object){
 }
 
 /**
- * Updates a document from the provided collection based on the document ID
- * @param {string} collectionPath 
+ * Updates a document from the provided collection based on the document ID.
+ * Obs.: This should also be used to create a document with a specific ID. The
+ * function above (createDocument) will only create documents with automatically 
+ * generated IDs. Use this function instead to control which ID the document will
+ * have
+ * 
+ * @param {string} collectionPath - the relative path to a collection or subcollection
  * @param {string} id 
  * @param {Object} object - object that represents the updated document 
  * 
@@ -146,7 +185,7 @@ async function updateDocument(collectionPath, id, object){
 }
 /**
  * Deletes a document from the provided collection based on the document ID
- * @param {string} collectionPath 
+ * @param {string} collectionPath  - the relative path to a collection or subcollection
  * @param {string} id 
  * 
  * @returns Promise

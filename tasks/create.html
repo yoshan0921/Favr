@@ -3,25 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script type="module" src="../js/common.js"></script>
-    <script type="module" src="../js/createTask.js"></script>
+    <script type="module" src="../js/createTask.js" defer></script>
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/createTask.css">
     <title>Create Task</title>
 </head>
 <body>
+    <!--Header-->
+    <header id="header"></header>
+
     <!-- Left Column -->
     <div id="leftside-column"></div>
     
     <!-- Main Content -->
     <main class="content">
-        <div><button>Back</button></div>
-        <div class="steps-counter">1,2,3,4</div>
-        <div id="step-content"></div>
-        <button id="nextStepBtn">Next step</button>
+
+        <div class="container"><button id="backBtn">Back</button></div>
+
+        <div class="container steps-counter">1,2,3,4</div>
+
+        <form action="#" id="createTaskForm">
+            
+            <!-- Step 1 -->
+            <div class="step" id="step-1">
+                <h2>Select a favor type</h2>
+                <div class="selection-history">
+                    <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
+                    <ul class="selection-list">
+                        <!--dynamically add <li> here-->
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <div class="favorOption"><label for="favorOption1">Option 1</label><input type="radio" id="favorOption1"></div>
+                    <div class="favorOption"><label for="favorOption2">Option 2</label><input type="radio" id="favorOption2"></div>
+                    <div class="favorOption"><label for="favorOption3">Option 3</label><input type="radio" id="favorOption3"></div>
+                    <div class="favorOption"><label for="favorOption4">Option 4</label><input type="radio" id="favorOption4"></div>
+                    <div class="favorOption"><label for="favorOption5">Option 5</label><input type="radio" id="favorOption5"></div>
+                    <div class="favorOption"><label for="favorOption6">Option 6</label><input type="radio" id="favorOption6"></div>
+
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step hidden" id="step-2">
+                <h2>Pick date and time</h2>
+                <div class="selection-history">
+                    <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
+                    <ul class="selection-list">
+                        <!--dynamically add <li> here-->
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="favorDate">Date</label>
+                    <input type="datetime" name="" id="favorDate">
+                </div>
+            </div>
+            <div class="step hidden" id="step-3">
+                <h2>Enter Address</h2>
+                <div class="selection-history">
+                    <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
+                    <ul class="selection-list">
+                        <!--dynamically add <li> here-->
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" name="" id="address">
+                </div>
+            </div>
+            <div class="step hidden" id="step-4">
+                <h2>Complete</h2>
+                <div class="selection-history">
+                    <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
+                    <ul class="selection-list">
+                        <!--dynamically add <li> here-->
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea name="" id="notes"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="container form-navigation">
+            <button id="previousStepBtn">Previous step</button>
+            <button id="nextStepBtn">Next step</button>
+        </div>
     </main>
-    <form action="" class="hidden">
-        <input type="hidden" id="taskName">
-    </form>
     
     <footer>
         <p><small>&copy; Favr2024</small></p>
