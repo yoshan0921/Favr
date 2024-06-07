@@ -29,6 +29,14 @@ body:not(#indexBody){
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
 }
+body {
+  overflow: hidden;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.75em;
+}
 header{
   z-index: 1000;
   grid-row: 1;
@@ -49,11 +57,7 @@ footer{
   grid-row: 3;
   grid-template-columns: 1/-1;
 }
-main {
-  padding: 0 0.5rem;
-  flex-grow: 1;
-  height: auto;
-}
+
 .min-height-100vh {
   min-height: 100vh;
 }
@@ -93,13 +97,6 @@ main .page-header {
 .container {
   width: 100%;
   padding: 1rem 0.5rem;
-}
-body {
-  background-color: var(--background);
-  color: var(--text);
-  font-family: "Open Sans", sans-serif;
-  font-size: 16px;
-  line-height: 1.75em;
 }
 
 a,
