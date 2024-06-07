@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" src="./js/common.js"></script>
   <script type="module" src="./js/dashboard.js" defer></script>
+  <script>
+    (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+      key: "AIzaSyCmy-0P_Y1HQdMacXnu9a2zs4dcm5FQ40w",
+      v: "weekly",
+    });
+  </script>
   <link rel="stylesheet" href="./css/styles.css">
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <title>Dashboard</title>
+
 </head>
 
 <body>
@@ -16,9 +24,7 @@
   <div id="leftside-column"></div>
   <header id="header"></header>
   <!-- Main Content -->
-  <main class="content" id="dashboard-content">
-
-  </main>
+  <main class="content" id="dashboard-content"></main>
 
   <footer>
     <p><small>&copy; Favr2024</small></p>
