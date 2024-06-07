@@ -20,21 +20,8 @@ if (document.readyState === "loading") {
 
 function runFunction() {
   const logoutBtn = document.getElementById("logoutBtn");
-  logoutBtn.addEventListener("click", (e)=>{
+  logoutBtn.addEventListener("click", (e) => {
     e.preventDefault();
     signOut();
   });
-  /**
-   * Open and close sidebar
-   */
-  const check = document.getElementById("check");
-  if (check) {
-    check.addEventListener("click", () => {
-      if (check.checked) {
-        localStorage.setItem("sidebar", "checked");
-      } else {
-        localStorage.removeItem("sidebar");
-      }
-    });
-  }
 }
