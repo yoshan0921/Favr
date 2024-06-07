@@ -21,18 +21,44 @@ html,body{
     padding: 0;
     margin: 0;
 }
+.min-height-100vh{
+  min-height: 100vh;
+}
 body{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  /*
   display: flex;
   flex-flow: column wrap;
+  */
+  min-height: 100vh;
+}
+header{
+  z-index: 1000;
+  grid-row: 1;
+  grid-column: 1 / 3;
+}
+#leftside-column{
+  position: fixed;
+  grid-row:1/-1;
+  align-self: end;
+  grid-column: 1/-1;
 }
 main{
   padding: 0 .5rem;
+  grid-row: 2;
+  grid-column: 1/-1;
+  /*
   flex-grow: 1;
   min-height: 70vh;
+  */
 }
-.min-height-100vh{
-    min-height: 100vh;
+footer{
+  grid-row: 3;
+  grid-template-columns: 1/-1;
 }
+
 header .container{
   display: flex;
   flex-flow: row nowrap;
@@ -141,13 +167,14 @@ footer {
   background-color: #333;
   padding: 10px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
+  z-index: 999;
 }
 .sidebar ul{
   list-style: none;
   padding-left: 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  align-self: center;
   flex-grow: 1;
 }
 .sidebar ul li{
@@ -198,7 +225,33 @@ footer {
 }
 
 @media (min-width: 800px) {
-  .sidebar .logo-wrapper,
+  body{
+    grid-template-columns: 240px 1fr;
+  }
+  #leftside-column{
+    bottom: 0;
+    top: 0;
+    left: 0;
+    height: 100%;
+    grid-column: 1 / 2;
+  }
+  header{
+    grid-column: 1 / 4;
+  }
+  footer{
+    grid-column: 2 / 4;
+  }
+  main{
+    grid-column: 2/-1;
+  }
+  .sidebar{
+    grid-row: 1/-1;
+    grid-column: 1;
+  }
+  .sidebar ul{
+    justify-content: unset;
+  }
+
   #btn,
   #cancel {
     display: block;
@@ -213,8 +266,6 @@ footer {
     text-align: right;
   }
   .sidebar {
-    display: block;
-    position: fixed;
     width: 240px;
     height: 100%;
     background: #1e1e1e;
@@ -227,24 +278,9 @@ footer {
   .content {
     position: relative;
     padding: 0 20px;
-    width: calc(100% - 240px);
-    left:240px;
     height: 100%;
     /* transition: all 0.5s ease; */
   }
-
-  .sidebar .logo-wrapper {
-    font-size: 28px;
-    color: white;
-    line-height: 70px;
-    text-align: center;
-    background: #1b1b1b;
-    user-select: none;
-  }
-  .sidebar .logo-wrapper h1 {
-    padding: .6rem;
-  }
-
   .sidebar a,
   #logoutBtn {
     display: flex;
