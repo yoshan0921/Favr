@@ -37,7 +37,8 @@ async function runFunction() {
     loadPartial(`dashboard/_${currentUserRole}Dashboard`,"dashboard-content");
   });
   
-      
+  const pageTitle = document.getElementById("page-title");
+  if(pageTitle) pageTitle.innerText = "Dashboard";
   /* -------------------------------------------------- */
   /* Home Tab Menu                                      */
   /* -------------------------------------------------- */
