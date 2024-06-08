@@ -88,7 +88,7 @@ async function initMap(taskArray, latitude, longitude) {
 
           // =========== TEST
           const contentString = `
-          <h3><a href="index.html">${task[1].name}</a></h3>
+          <h3><a href="/tasks/accept.html?taskid=${task[0]}">${task[1].name}</a></h3>
           <p>May 28th, 10:00am</p>
           <p>Estimated Favor Length: <span class="bold">1hour</span></p>
           <div class="requester">
@@ -133,18 +133,18 @@ async function initMap(taskArray, latitude, longitude) {
           infoWindows.push(infowindow);
           // =========== TEST
 
-          let infoArea = document.getElementById("taskinfo");
-          infoArea.innerHTML = "";
-          let card = document.createElement("div");
-          card.classList.add("taskCard");
-          let title = marker.title;
-          card.innerHTML = `
-          <h2>${task[1].name}</h2>
-          <p>status: ${task[1].status}</p>
-          <p>Requester: ${task[1].requester}</p>
-          <button><a href="./create-task.html">See more</button>
-        `;
-          infoArea.appendChild(card);
+          // let infoArea = document.getElementById("taskinfo");
+          // infoArea.innerHTML = "";
+          // let card = document.createElement("div");
+          // card.classList.add("taskCard");
+          // let title = marker.title;
+          // card.innerHTML = `
+          // <h2>${task[1].name}</h2>
+          // <p>status: ${task[1].status}</p>
+          // <p>Requester: ${task[1].requester}</p>
+          // <button><a href="./create-task.html">See more</button>
+          // `;
+          // infoArea.appendChild(card);
         };
       })(marker)
     );
