@@ -30,6 +30,11 @@ form{
     gap: 1rem;
     flex: 1;
 }
+
+.favorOption:has(input[type=radio]:checked){
+    color: white;
+    background-color: hotpink;
+}
 .favorOption{
     flex: 1;
     box-sizing: border-box;

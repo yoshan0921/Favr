@@ -1,3 +1,4 @@
+import { getCurrentUserID } from "./firebase/authentication.js";
 import { createDocument } from "./firebase/firestore.js";
 
 
@@ -22,6 +23,8 @@ function runFunction() {
   const form = document.getElementById("createTaskForm");
   const previousStepBtn = document.getElementById("previousStepBtn");
   const nextStepBtn = document.getElementById("nextStepBtn");
+  const datePickers = document.querySelectorAll("input[type=date]");
+  datePickers.forEach((input)=> input.valueAsDate = new Date());
   let historyLists; // Declare historyLists variable in the same scope
 
   previousStepBtn.disabled = true; //by default it is disabled
@@ -59,11 +62,12 @@ function runFunction() {
 
     /* User inputs */
     const task = {
+      name: document.querySelector('input[name="favorOption"]:checked').value,
+      notes: document.getElementById("notes").value,
+      requesterID: getCurrentUserID(),
       details: {
-        favorOption: document.querySelector('input[name="favorOption"]:checked').value,
-        favorDate: document.getElementById("favorDate").value,
+        date: document.getElementById("favorDate").value,
         address: document.getElementById("address").value,
-        notes: document.getElementById("notes").value
       }
     };
     createTask(task);
@@ -85,36 +89,37 @@ function runFunction() {
       if(currentStep < 4){ //the add operation should only work if the current step is not the last one
 
         // Capture selection based on current step
-        if (currentStep == 1) {
-          const selectedOption = document.querySelector('input[name="favorOption"]:checked');
-          if (selectedOption) {
-            selectionHistory.push(`Favor Option: ${selectedOption.value}`);
+        switch(currentStep){
+          case 1:
+            const selectedOption = document.querySelector('input[name="favorOption"]:checked');
+            if (selectedOption) {
+              selectionHistory.push(`Favor Option: ${selectedOption.value}`);
+            }
+            break;
+          case 2:
+            const favorDate = document.getElementById("favorDate").value;
+            if (favorDate) {
+              selectionHistory.push(`Favor Date: ${favorDate}`);
+            }
+            break;
+          case 3:
+            const address = document.getElementById("address").value;
+            if (address) {
+              selectionHistory.push(`Address: ${address}`);
+            }
+            break;
+        
           }
-        } else if (currentStep == 2) {
-          const favorDate = document.getElementById("favorDate").value;
-          if (favorDate) {
-            selectionHistory.push(`Favor Date: ${favorDate}`);
-          }
-        } else if (currentStep == 3) {
-          const address = document.getElementById("address").value;
-          if (address) {
-            selectionHistory.push(`Address: ${address}`);
-          }
-        }
-
+              
         currentStep += 1;
         currentStepDiv.classList.add("hidden"); //hides current step
         currentStepDiv = document.getElementById(`step-${currentStep}`); //gets next step
         currentStepDiv.classList.remove("hidden"); //shows next step
         previousStepBtn.disabled = false;
 
-        
   //TODO: if the user clicked on next, then we should get the data on the inputs they just filled, turn them into a readable string and add to selectionHistory array. After doing that, updateSelectionHistory should be called to display this array as a list
         updateSelectionHistory();
-
-        if(currentStep==4){
-          nextStepBtn.disabled = true;
-        }
+        if(currentStep==4) nextStepBtn.disabled = true;
 
       }else{
         nextStepBtn.disabled = true;
