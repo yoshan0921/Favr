@@ -30,7 +30,7 @@ form{
     flex-basis: 45%;
     text-align: center;
     border: thin solid gray;
-    padding: 1rem;
+    padding: 1rem 2rem;
     border-radius: 10px;
 }
 .favorOption input{
@@ -40,4 +40,12 @@ form{
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
+}
+.favorOption {
+    transition: .25s;
+}
+.favorOption:hover {
+    cursor: pointer;
+    color: white;
+    background-color: var(--accent);
 }
