@@ -6,6 +6,7 @@
 :root {
   --background: white;
   --background-dark: #1e1e1e;
+  --lightBorder: lightgray;
   --accent: hotpink;
   --text: black;
 }
@@ -30,7 +31,6 @@ body:not(#indexBody){
   grid-template-rows: auto 1fr auto;
 }
 body {
-  overflow: hidden;
   background-color: var(--background);
   color: var(--text);
   font-family: "Open Sans", sans-serif;
@@ -64,20 +64,24 @@ footer{
 header .container {
   display: flex;
   flex-flow: row nowrap;
-  border-bottom: thin solid gray;
   justify-content: space-between;
+  padding-bottom: 0;
 }
 header .container div {
   flex-grow: 0;
   align-content: center;
   text-align: right;
+  border-bottom: solid thin var(--lightBorder);
+}
+header .container div:not(:first-child){
+  padding: .5rem;
 }
 header .container .page-title-wrapper {
-  display: none;
   flex-grow: 1;
 }
 header .container .page-title-wrapper h1 {
   text-align: left;
+  display: none;
 }
 main .page-header {
   display: flex;
@@ -90,6 +94,9 @@ main .page-header {
   padding: 1px 5px;
   height: max-content;
   display: flex;
+  align-items: center;
+  width: max-content;
+  gap: .5rem;
 }
 .hidden {
   display: none !important;
@@ -98,7 +105,16 @@ main .page-header {
   width: 100%;
   padding: 1rem 0.5rem;
 }
-
+.chat-icon-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.chat-icon-wrapper button{
+  background-color: gray;
+  color: darkgray;
+  border-color: var(--lightBorder);
+}
 a,
 #logoutBtn {
   color: var(--accent);
@@ -143,7 +159,7 @@ footer {
   width: 100%;
   color: var(--text);
   padding: 0.5rem;
-  border-top: 1px solid var(--background-dark);
+  border-top: 1px solid var(--lightBorder);
 
   @media (max-width: 800px) {
     display: none;
@@ -251,13 +267,16 @@ footer {
   #cancel {
     display: block;
   }
-  header .container .page-title-wrapper {
+  header .container .logo-wrapper{
+    border-bottom: none;
+  }
+  header .container .page-title-wrapper h1{
     display: block;
   }
   header .container div {
     flex-grow: 0;
     align-content: center;
-    flex-basis: 240px;
+    flex-basis: calc(240px - .5rem);
     text-align: right;
   }
   .sidebar {
@@ -285,7 +304,7 @@ footer {
     line-height: 65px;
     padding-left: 30px;
     box-sizing: border-box;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--background-dark);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-left: 5px solid transparent;
   }
@@ -325,75 +344,6 @@ footer {
     line-height: 45px;
   }
 }
-
-/* -------------------------------------------------- */
-/* Home                                               */
-/* -------------------------------------------------- */
-#home-content {
-  display: block;
-}
-
-.tabs {
-  display: flex;
-}
-
-.tab {
-  flex: 1 0 auto;
-  cursor: pointer;
-  padding: 10px;
-  text-align: center;
-}
-
-.tab.active {
-  border-bottom: 2px solid #000;
-}
-
-.tab-content-item {
-  padding: 10px;
-}
-
-.hide {
-  display: none;
-}
-
-/* -------------------------------------------------- */
-/* Home > Map                                         */
-/* -------------------------------------------------- */
-#map {
-  height: 60vh;
-  width: 100%;
-}
-/* Style for the marker of current location */
-.you {
-  background-color: #4285f4;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 14px;
-  padding: 10px 15px;
-  position: relative;
-}
-
-.you::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 0);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #4285f4;
-}
-
-.taskCard {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 1rem 0;
-  padding: 1rem;
-}
-
 /* -------------------------------------------------- */
 /* Updates                                            */
 /* -------------------------------------------------- */

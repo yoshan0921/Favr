@@ -1,9 +1,14 @@
 import { signOut } from "./utils.js";
+
+/**
+ * An object that maps some pages to their title that will show to the user
+ */
 let pageTitles = {
   "dashboard.html": "Dashboard",
-  "tasks/create.html": "Request favor",
   "profile.html": "Profile",
-  "updates.html": "Updates",
+  "tasks/create.html": "Request favor",
+  "tasks/details.html": "Task Details",
+  "tasks/updates.html": "Updates",
 };
 
 loadCommonContent();
@@ -12,23 +17,14 @@ loadCommonContent();
  *
  */
 async function loadCommonContent() {
-  loadPartial("_header", "header").then(() => {
-    loadPageTitle(window.location.pathname);
-  });
-  await loadPartial("_sidebar", "leftside-column");
+  loadPartial("_header", "header").then(loadPageTitle).catch((error)=>console.log(error));
+  loadPartial("_sidebar", "leftside-column").then(addListenerToLogoutButton).catch((error)=> console.log(error));
+
   const backButton = document.getElementById("backBtn");
   if (backButton)
     backButton.addEventListener("click", (e) => {
       window.history.back();
     });
-
-  //adding event listener to dynamically loaded logout button
-  document.addEventListener("click", function (e) {
-    const target = e.target.closest("#logoutBtn"); // Or any other selector.
-    if (target) {
-      signOut();
-    }
-  });
 }
 
 /**
@@ -51,33 +47,41 @@ async function loadPartial(partial, destination) {
 
   return new Promise((resolve) => {
     const targetElement = document.getElementById(destination);
-    const observer = new MutationObserver(() => {
-      observer.disconnect();
-      resolve();
-    });
-
-    observer.observe(targetElement, { childList: true });
-    targetElement.innerHTML = data;
+    if(targetElement){
+      const observer = new MutationObserver(() => {
+        observer.disconnect();
+        resolve();
+      });
+  
+      observer.observe(targetElement, { childList: true });
+      targetElement.innerHTML = data;
+    }else{
+      reject(`Could not load "../partials/${partial}.html. There is no element with the id "${destination}"`);
+    }
   });
 }
 
 /**
- *
- * @param {string} path
+ * 
  */
-function loadPageTitle(path) {
-  document.addEventListener("readystatechange", () => {
-    if (document.readyState === "complete") {
-      let title = "";
-      console.log(path);
-      for (let pathEnding in pageTitles) {
-        if (path.endsWith(pathEnding)) {
-          title = pageTitles[pathEnding];
-        }
+function loadPageTitle() {
+    let path = window.location.pathname;
+    let title = "";
+    for (let pathEnding in pageTitles) {
+      if (path.endsWith(pathEnding)) {
+        title = pageTitles[pathEnding];
       }
-      const pageTitle = document.getElementById("page-title");
-      pageTitle.innerText = title;
     }
-  });
+    const pageTitle = document.getElementById("page-title");
+    pageTitle.innerText = title;
+  
 }
+/**
+ * 
+ */
+function addListenerToLogoutButton(){
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click",signOut);
+}
+
 export { loadPartial };

@@ -122,7 +122,7 @@ async function populateTaskList() {
         <h2>${taskDetails.name}</h2>
         <p>${taskDetails.status}</p>
         <p>${taskDetails.requester}</p>
-        <button><a href="./task-detail.html">See more</button>
+        <button><a href="./tasks/details.html">See more</button>
       `;
       listSection.appendChild(card);
     }
