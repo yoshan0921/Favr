@@ -1,3 +1,4 @@
+import { getCurrentUserID } from "./firebase/authentication.js";
 import { createDocument } from "./firebase/firestore.js";
 
 
@@ -22,7 +23,9 @@ function runFunction() {
   const form = document.getElementById("createTaskForm");
   const previousStepBtn = document.getElementById("previousStepBtn");
   const nextStepBtn = document.getElementById("nextStepBtn");
-  const historyLists = document.getElementsByClassName("selection-list"); //this will return an array containing all the elements of the HTML that has "selection-list" as a class. They all should be <ul>
+  const datePickers = document.querySelectorAll("input[type=date]");
+  datePickers.forEach((input)=> input.valueAsDate = new Date());
+  let historyLists; // Declare historyLists variable in the same scope
 
   previousStepBtn.disabled = true; //by default it is disabled
 
@@ -36,6 +39,39 @@ function runFunction() {
     TODO: get all the user inputs, turn them into an object with the same properties as the Task class (refer to firestore.js) 
     and call createTask function defined later on this file with this object as the parameter
     */
+
+    // let favorOptions = document.getElementsByName("favorOption");
+    // let selectedOption = "";
+    // for(let option of favorOptions){
+    //   if(option.checked){
+    //     selectedOption = option.value;
+    //   }
+    // }
+
+  //   class Task {
+  //     constructor(obj){
+  //         this.id = obj.id;
+  //         this.name = obj.name;
+  //         this.status = obj.status;
+  //         this.requesterID = obj.requesterID;
+  //         this.volunteerID = obj.volunteerID;
+  //         this.notes = obj.notes;
+  //         this.details = obj.details; //an object with no strict structure (depends on task type)
+  //     }
+  // }
+
+    /* User inputs */
+    const task = {
+      name: document.querySelector('input[name="favorOption"]:checked').value,
+      notes: document.getElementById("notes").value,
+      requesterID: getCurrentUserID(),
+      details: {
+        date: document.getElementById("favorDate").value,
+        address: document.getElementById("address").value,
+      }
+    };
+    createTask(task);
+    console.log(task);
   });
 
   /**
@@ -52,19 +88,38 @@ function runFunction() {
 
       if(currentStep < 4){ //the add operation should only work if the current step is not the last one
 
+        // Capture selection based on current step
+        switch(currentStep){
+          case 1:
+            const selectedOption = document.querySelector('input[name="favorOption"]:checked');
+            if (selectedOption) {
+              selectionHistory.push(`Favor Option: ${selectedOption.value}`);
+            }
+            break;
+          case 2:
+            const favorDate = document.getElementById("favorDate").value;
+            if (favorDate) {
+              selectionHistory.push(`Favor Date: ${favorDate}`);
+            }
+            break;
+          case 3:
+            const address = document.getElementById("address").value;
+            if (address) {
+              selectionHistory.push(`Address: ${address}`);
+            }
+            break;
+        
+          }
+              
         currentStep += 1;
         currentStepDiv.classList.add("hidden"); //hides current step
         currentStepDiv = document.getElementById(`step-${currentStep}`); //gets next step
         currentStepDiv.classList.remove("hidden"); //shows next step
         previousStepBtn.disabled = false;
 
-        
   //TODO: if the user clicked on next, then we should get the data on the inputs they just filled, turn them into a readable string and add to selectionHistory array. After doing that, updateSelectionHistory should be called to display this array as a list
         updateSelectionHistory();
-
-        if(currentStep==4){
-          nextStepBtn.disabled = true;
-        }
+        if(currentStep==4) nextStepBtn.disabled = true;
 
       }else{
         nextStepBtn.disabled = true;
@@ -73,6 +128,13 @@ function runFunction() {
     }else{
 
       if(currentStep > 1){ //the subtract operation should only work if the current step is not the first one
+
+        const removedItem = selectionHistory.pop();
+
+        // Remove the last added <li> element from each list
+        for (let list of historyLists) {
+          list.lastElementChild.remove();
+        }
 
         currentStep -= 1;
         currentStepDiv.classList.add("hidden"); //hides current step
@@ -89,7 +151,7 @@ function runFunction() {
       }
     }
   }
-}
+
 /**
  * A function that receives an object that representes a task.
  * 
@@ -105,21 +167,26 @@ function runFunction() {
  * 
  * @param {Object} task - object that represents the task that will be created on the database
  */
-function createTask(task){
-    try{
-      createDocument("tasks",task);
-    }catch(error){
-      console.log(error);
-    }
-}
-/**
- * Processes the selectionHistory array and populate the history lists on each step with the selections the user has made so far
- */
-function updateSelectionHistory(){
-  for(let list of historyLists){
-    for(let item of selectionHistory){
-      //TODO: create a <li> element, add the item of the selection history to it, then append the <li> to the list (which is a <ul>)
-    }
-
+  function createTask(task){
+      try{
+        createDocument("tasks",task);
+      }catch(error){
+        console.log(error);
+      }
   }
+  /**
+   * Processes the selectionHistory array and populate the history lists on each step with the selections the user has made so far
+   */
+  function updateSelectionHistory(){
+    for(let list of historyLists){
+      list.innerHTML = ''; // Clear existing items
+      for(let item of selectionHistory){
+        //TODO: create a <li> element, add the item of the selection history to it, then append the <li> to the list (which is a <ul>)
+        let li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
+      }
+    }
+  }
+  historyLists = document.getElementsByClassName("selection-list"); //this will return an array containing all the elements of the HTML that has "selection-list" as a class. They all should be <ul>
 }

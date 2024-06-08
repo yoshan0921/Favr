@@ -293,6 +293,10 @@ body {
   }
   .sidebar ul {
     flex-flow: column nowrap;
+
+    /* Align navigation to top then adjust to not cover the logo */
+    align-self: start;
+    margin-top: 90px;
   }
 
   .content {

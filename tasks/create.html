@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +11,11 @@
     <link rel="stylesheet" href="../css/createTask.css">
     <title>Create Task</title>
 </head>
+
 <body>
     <!-- Left Column -->
     <div id="leftside-column"></div>
-    
+
     <!--Header-->
     <header id="header"></header>
     <!-- Main Content -->
@@ -24,7 +26,7 @@
         <div class="container steps-counter">1,2,3,4</div>
 
         <form action="#" id="createTaskForm">
-            
+
             <!-- Step 1 -->
             <div class="step" id="step-1">
                 <h2>Select a favor type</h2>
@@ -35,12 +37,24 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <div class="favorOption"><label for="favorOption1">Option 1</label><input type="radio" id="favorOption1"></div>
-                    <div class="favorOption"><label for="favorOption2">Option 2</label><input type="radio" id="favorOption2"></div>
-                    <div class="favorOption"><label for="favorOption3">Option 3</label><input type="radio" id="favorOption3"></div>
-                    <div class="favorOption"><label for="favorOption4">Option 4</label><input type="radio" id="favorOption4"></div>
-                    <div class="favorOption"><label for="favorOption5">Option 5</label><input type="radio" id="favorOption5"></div>
-                    <div class="favorOption"><label for="favorOption6">Option 6</label><input type="radio" id="favorOption6"></div>
+                    <label for="favorOption1" class="favorOption">
+                        <div>Grocery Shopping</div><input type="radio" id="favorOption1" name="favorOption" value="Grocery Shopping" hidden>
+                    </label>
+                    <label for="favorOption2" class="favorOption">
+                        <div>Meds Pick-up</div><input type="radio" id="favorOption2" name="favorOption" value="Meds Pickup" hidden>
+                    </label>
+                    <label for="favorOption3" class="favorOption">
+                        <div>Transportation</div><input type="radio" id="favorOption3" name="favorOption" value="Transportation" hidden>
+                    </label>
+                    <label for="favorOption4" class="favorOption">
+                        <div>Mail & Packages</div><input type="radio" id="favorOption4" name="favorOption" value="Mail & Packages" hidden>
+                    </label>
+                    <label for="favorOption5" class="favorOption">
+                        <div>Pet Care</div><input type="radio" id="favorOption5" name="favorOption" value="Pet Care" hidden>
+                    </label>
+                    <label for="favorOption6" class="favorOption">
+                        <div>Tech Help</div><input type="radio" id="favorOption6" name="favorOption" value="Tech Help" hidden>
+                    </label>
 
                 </div>
             </div>
@@ -56,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="favorDate">Date</label>
-                    <input type="datetime" name="" id="favorDate">
+                    <input type="date" name="favorDate" id="favorDate">
                 </div>
             </div>
             <div class="step hidden" id="step-3">
@@ -69,7 +83,7 @@
                 </div>
                 <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" name="" id="address">
+                    <input type="text" name="address" id="address">
                 </div>
             </div>
             <div class="step hidden" id="step-4">
@@ -89,15 +103,16 @@
                 </div>
             </div>
         </form>
-        
+
         <div class="container form-navigation">
             <button id="previousStepBtn">Previous step</button>
             <button id="nextStepBtn">Next step</button>
         </div>
     </main>
-    
+
     <footer>
         <p><small>&copy; Favr2024</small></p>
     </footer>
 </body>
+
 </html>

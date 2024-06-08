@@ -103,7 +103,6 @@ const userConverter = {
 const taskConverter = {
     toFirestore: (obj) => {
         return {
-            id: obj.id,
             name: obj.name ? obj.name : null,
             status: obj.status ? obj.status : null,
             requesterID: obj.requesterID ? obj.requesterID : null,
