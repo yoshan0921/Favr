@@ -17,7 +17,7 @@
         <!-- taskinfo containers (List) -->
         <div id="taskListExplore" class="gridContainer"></div>
         <!-- taskinfo containers (Map) -->
-        <div id="taskMapExplore" class="hide">
+        <div id="taskMapExplore" class="mapContainer hide">
             <div id="map" class="map"></div>
             <div id="taskinfo"></div>
         </div>
@@ -27,12 +27,13 @@
         <div id="taskListMyFavor" class="gridContainer"></div>
     </div>
     <div id="tab3-content" class="tab-content-item hide">
-        <div class="statusFilter">
-            <button class="completed">Completed</button>
-            <button class="pending">Peding approval</button>
-            <button class="cancelled">Cancelled</button>
-            <button><i class="fa-solid fa-sliders"></i></button>
-        </div>
+        <input class="completed" type="checkbox" id="toggleCompletedCheckbox">
+        <label class="completed" for="toggleCompletedCheckbox">Completed</label>
+        <input class="pending" type="checkbox" id="togglePendingCheckbox">
+        <label class="pending" for="togglePendingCheckbox">Pending</label>
+        <input class="cancelled" type="checkbox" id="toggleCancelledCheckbox">
+        <label class="cancelled" for="toggleCancelledCheckbox">Cancelled</label>
+        <button class="setting"><i class="fa-solid fa-sliders"></i></button>
         <!-- taskinfo containers (List) -->
         <div id="taskListHistory" class="gridContainer"></div>
     </div>

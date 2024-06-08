@@ -141,9 +141,16 @@ function createListView(allTasks) {
       favorCount++;
     } else if (["Pending approval", "Completed", "Cancelled"].includes(taskDetails.status)) {
       listHistory.appendChild(card);
-      if (taskDetails.status === "Pending approval") card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
-      else if (taskDetails.status === "Completed") card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
-      else if (taskDetails.status === "Cancelled") card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
+      if (taskDetails.status === "Pending approval") {
+        card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+        card.setAttribute("data-status", "Pending approval");
+      } else if (taskDetails.status === "Completed") {
+        card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
+        card.setAttribute("data-status", "Completed");
+      } else if (taskDetails.status === "Cancelled") {
+        card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
+        card.setAttribute("data-status", "Cancelled");
+      }
     }
   }
   // Update favor count on tabmenu
