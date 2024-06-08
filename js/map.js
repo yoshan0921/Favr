@@ -91,7 +91,7 @@ async function initMap(taskArray, latitude, longitude) {
             <p class="date">May 28th, 10:00am</p>
             <p class="duration">Estimated Favor Length: <span class="bold">1hour</span></p>
             <div class="requester">
-              <img class="photo" src="https://ca.slack-edge.com/T61666YTB-U06C1DELWP3-a8c7ced7390c-512">
+              <img class="photo" src="https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512">
               <div class="profile">
                 <p class="name">${task[1].requester}</p>
                 <p class="address">Marpole Vancouver, BC</p>
