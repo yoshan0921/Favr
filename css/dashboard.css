@@ -1,0 +1,71 @@
+
+/* -------------------------------------------------- */
+/* Home                                               */
+/* -------------------------------------------------- */
+#home-content {
+    display: block;
+  }
+  
+  .tabs {
+    display: flex;
+  }
+  
+  .tab {
+    color: gray;
+    flex: 1 0 auto;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .tab.active {
+    border-bottom: 2px solid #000;
+    color: black;
+  }
+  
+  .tab-content-item {
+    padding: 10px;
+  }
+  
+  .hide {
+    display: none;
+  }
+  
+  /* -------------------------------------------------- */
+  /* Home > Map                                         */
+  /* -------------------------------------------------- */
+  #map {
+    height: 60vh;
+    width: 100%;
+  }
+  /* Style for the marker of current location */
+  .you {
+    background-color: #4285f4;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 10px 15px;
+    position: relative;
+  }
+  
+  .you::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #4285f4;
+  }
+  
+  .taskCard {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+  

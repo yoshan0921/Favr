@@ -113,6 +113,7 @@ function createListView(allTasks) {
   const listExplore = document.getElementById("taskListExplore");
   const listMyFavor = document.getElementById("taskListMyFavor");
   const listHistory = document.getElementById("taskListHistory");
+  let favorCount = 0;
   for (let task of allTasks) {
     let id = task[0];
     let taskDetails = task[1];
@@ -120,20 +121,39 @@ function createListView(allTasks) {
     const card = document.createElement("div");
     card.classList.add("taskCard");
     card.innerHTML = `
-      <h3><a href="/tasks/accept.html?taskid=${id}">${taskDetails.name}</a></h3>
-      <p>May 28th, 10:00am</p>
-      <p>Estimated Favor Length: <span class="bold">1hour</span></p>
+      <a href="/tasks/accept.html?taskid=${id}"></a>
+      <h3 class="title">${taskDetails.name}</h3>
+      <div class="statusColor"></div>
+      <p class="date">May 28th, 10:00am</p>
+      <p class="duration">Estimated Favor Length: <span class="bold">1hour</span></p>
       <div class="requester">
         <img class="photo" src="https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512">
         <div class="profile">
           <p class="name">${taskDetails.requester}</p>
-          <p>Marpole Vancouver, BC</p>
+          <p class="address">Marpole Vancouver, BC</p>
         </div>
       </div>
     `;
 
     if (["Waiting to be accepted"].includes(taskDetails.status)) listExplore.appendChild(card);
-    else if (["On going"].includes(taskDetails.status)) listMyFavor.appendChild(card);
-    else if (["Pending approval", "Completed", "Cancelled"].includes(taskDetails.status)) listHistory.appendChild(card);
+    else if (["On going"].includes(taskDetails.status)) {
+      listMyFavor.appendChild(card);
+      favorCount++;
+    } else if (["Pending approval", "Completed", "Cancelled"].includes(taskDetails.status)) {
+      listHistory.appendChild(card);
+      if (taskDetails.status === "Pending approval") {
+        card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+        card.setAttribute("data-status", "Pending approval");
+      } else if (taskDetails.status === "Completed") {
+        card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
+        card.setAttribute("data-status", "Completed");
+      } else if (taskDetails.status === "Cancelled") {
+        card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
+        card.setAttribute("data-status", "Cancelled");
+      }
+    }
   }
+  // Update favor count on tabmenu
+  console.log(favorCount);
+  document.getElementById("favorCount").innerText = favorCount;
 }

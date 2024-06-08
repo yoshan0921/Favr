@@ -1,36 +1,71 @@
-/* -------------------------------------------------- */
-/* Base Settings                                      */
-/* -------------------------------------------------- */
-@import "https://fonts.googleapis.com/css?family=Open+Sans";
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
 :root {
+  --text: #4d5156;
   --background: #ffffff;
   --background-dark: #1e1e1e;
+  --lightBorder: lightgray;
   --accent: hotpink;
-  --text: black;
+  --accent2: gray;
 }
+
+/* -------------------------------------------------- */
+/* Base Settings / Reset                              */
+/* -------------------------------------------------- */
 * {
   margin: 0;
   padding: 0;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Source Sans 3", sans-serif; /* The font family allied in Figma */
   box-sizing: border-box;
 }
+
 html,
 body {
   padding: 0;
   margin: 0;
+  color: var(--text);
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* -------------------------------------------------- */
+/* Common                                             */
+/* -------------------------------------------------- */
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.75em;
   min-height: 100vh;
 }
+
+h1,
+h2 {
+  color: #444444;
+  padding: 20px 0px;
+  text-align: center;
+}
+
+button {
+  color: var(--text);
+  line-height: 1.75em;
+}
+
+/* -------------------------------------------------- */
+/* Header & Footer                                    */
+/* -------------------------------------------------- */
 .min-height-100vh {
   min-height: 100vh;
 }
+
 body:not(#indexBody) {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
 }
 body {
-  /* overflow: hidden; */
   background-color: var(--background);
   color: var(--text);
   font-family: "Open Sans", sans-serif;
@@ -42,43 +77,49 @@ header {
   grid-row: 1;
   grid-column: 1 / 3;
 }
+
 #leftside-column {
   position: fixed;
   grid-row: 1/-1;
   align-self: end;
   grid-column: 1/-1;
+  position: relative;
 }
+
 main {
   padding: 0 0.5rem;
   grid-row: 2;
   grid-column: 1/-1;
 }
+
 footer {
   grid-row: 3;
   grid-template-columns: 1/-1;
 }
 
-.min-height-100vh {
-  min-height: 100vh;
-}
 header .container {
   display: flex;
   flex-flow: row nowrap;
-  border-bottom: thin solid gray;
   justify-content: space-between;
+  padding-bottom: 0;
 }
 header .container div {
   flex-grow: 0;
   align-content: center;
   text-align: right;
+  border-bottom: solid thin var(--lightBorder);
+}
+header .container div:not(:first-child){
+  padding: .5rem;
 }
 header .container .page-title-wrapper {
-  display: none;
   flex-grow: 1;
 }
 header .container .page-title-wrapper h1 {
   text-align: left;
+  display: none;
 }
+
 main .page-header {
   display: flex;
   align-items: center;
@@ -90,6 +131,9 @@ main .page-header {
   padding: 1px 5px;
   height: max-content;
   display: flex;
+  align-items: center;
+  width: max-content;
+  gap: .5rem;
 }
 .hidden {
   display: none !important;
@@ -98,37 +142,21 @@ main .page-header {
   width: 100%;
   padding: 1rem 0.5rem;
 }
-
+.chat-icon-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.chat-icon-wrapper button{
+  background-color: gray;
+  color: darkgray;
+  border-color: var(--lightBorder);
+}
 a,
 #logoutBtn {
   color: var(--accent);
   text-decoration: none;
   background-color: transparent;
-}
-
-ul {
-  list-style-type: none;
-}
-
-/* table,
-th,
-td {
-  border: 1px solid #aaa;
-  border-collapse: collapse;
-  padding: 5px;
-} */
-
-button {
-  color: var(--text);
-  font-family: "Open Sans", sans-serif;
-  font-size: 16px;
-  line-height: 1.75em;
-}
-
-h1,
-h2 {
-  padding: 20px 0px;
-  text-align: center;
 }
 
 .center {
@@ -138,12 +166,11 @@ h2 {
 footer {
   display: flex;
   flex-direction: row-reverse;
-  /*position: fixed;*/
   bottom: 0;
   width: 100%;
   color: var(--text);
   padding: 0.5rem;
-  border-top: 1px solid var(--background-dark);
+  border-top: 1px solid var(--lightBorder);
 
   @media (max-width: 800px) {
     display: none;
@@ -153,6 +180,11 @@ footer {
 /* -------------------------------------------------- */
 /* Side Bar                                           */
 /* -------------------------------------------------- */
+
+body {
+  /* To avoid overlaying content to menubar in mobile layout */
+  padding-bottom: 100px;
+}
 .sidebar {
   position: fixed;
   bottom: 0;
@@ -190,18 +222,15 @@ footer {
 .sidebar button {
   border: none;
 }
-
 .sidebar a .fa-fw,
 #logoutBtn .fa-fw {
   display: block;
   font-size: 20px;
 }
-
 .sidebar a.active {
   background-color: #575757;
   border-radius: 4px;
 }
-
 .sidebar a:hover,
 #logoutBtn:hover {
   background-color: #575757;
@@ -209,17 +238,10 @@ footer {
   cursor: pointer;
 }
 
-.sidebar .logo-wrapper,
-#btn,
-#cancel {
-  display: none;
-}
-
-#check {
-  display: none;
-}
-
 @media (min-width: 800px) {
+  body {
+    padding-bottom: 0px;
+  }
   body:not(#indexBody) {
     grid-template-columns: 240px 1fr;
   }
@@ -247,13 +269,20 @@ footer {
     justify-content: unset;
   }
 
-  header .container .page-title-wrapper {
+  #btn,
+  #cancel {
+    display: block;
+  }
+  header .container .logo-wrapper{
+    border-bottom: none;
+  }
+  header .container .page-title-wrapper h1{
     display: block;
   }
   header .container div {
     flex-grow: 0;
     align-content: center;
-    flex-basis: 240px;
+    flex-basis: calc(240px - .5rem);
     text-align: right;
   }
   .sidebar {
@@ -269,11 +298,13 @@ footer {
     align-self: start;
     margin-top: 90px;
   }
+
   .content {
     position: relative;
-    padding: 0 20px;
+    padding: 2rem;
     height: 100%;
   }
+
   .sidebar a,
   #logoutBtn {
     display: flex;
@@ -285,7 +316,7 @@ footer {
     line-height: 65px;
     padding-left: 30px;
     box-sizing: border-box;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--background-dark);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-left: 5px solid transparent;
   }
@@ -311,21 +342,27 @@ footer {
 }
 
 /* -------------------------------------------------- */
-/* Volunteer: Home                                    */
+/* Volunteer: Home Tab Menu                           */
 /* -------------------------------------------------- */
 .volunteer.tabs {
   display: flex;
+  margin-bottom: 1rem;
 }
 
 .volunteer.tabs .tab {
   flex: 1 0 33.3%;
   cursor: pointer;
-  padding: 10px;
+  padding-bottom: 0.5rem;
   text-align: center;
+}
+
+.volunteer.tabs .tab {
+  border-bottom: 1px solid #ccc;
 }
 
 .volunteer.tabs .tab.active {
   border-bottom: 2px solid #000;
+  font-weight: bold;
 }
 
 .volunteer.tabs .tab-content-item {
@@ -337,51 +374,21 @@ footer {
 }
 
 /* -------------------------------------------------- */
-/* Volunteer: Explore Favor Map View                  */
+/* Volunteer: Explore Favor List View                 */
 /* -------------------------------------------------- */
-.volunteer.tab-content #map {
-  height: 60vh;
-  width: 100%;
-}
-
-/* Style for the marker of current location */
-.volunteer.tab-content .you {
-  background-color: #4285f4;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 14px;
-  padding: 10px 15px;
-  position: relative;
-}
-
-.volunteer.tab-content .you::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 0);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #4285f4;
-}
-
-/* -------------------------------------------------- */
-/* Volunteer: Explore Favor List View                  */
-/* -------------------------------------------------- */
-.volunteer.tab-content {
-  padding: 1rem 0rem;
-}
-
-.volunteer.tab-content .viewSwitcher {
-  padding: 1rem 0rem;
+.volunteer.tab-content .viewSwitcher button {
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0rem 1rem;
 }
 
 .volunteer.tab-content .gridContainer {
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(1, 1fr);
+  margin-top: 1rem;
 
   @media (min-width: 600px) {
     grid-template-columns: repeat(2, 1fr);
@@ -393,20 +400,193 @@ footer {
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   padding: 1rem;
+  position: relative;
+}
+
+.volunteer.tab-content .taskCard a {
+  border-radius: 10px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.volunteer.tab-content .taskCard .statusColor {
+  background-color: #fff;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+}
+
+.volunteer.tab-content .taskCard a:hover {
+  opacity: 0.1;
+  background-color: var(--accent2);
+}
+
+.volunteer.tab-content .taskCard .title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 .volunteer.tab-content .taskCard .requester {
   display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  align-items: center;
 }
 
-.volunteer.tab-content .taskCard .photo {
+.volunteer.tab-content .taskCard .requester .photo {
   display: block;
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  margin: 0.5rem 0.5rem 0.5rem 0;
 }
 
-.volunteer.tab-content .taskCard .profile {
-  align-self: center;
+.volunteer.tab-content .taskCard .requester .name {
+  font-weight: bold;
+}
+
+/* -------------------------------------------------- */
+/* Volunteer: Explore Favor Map View                  */
+/* -------------------------------------------------- */
+.volunteer.tab-content .mapContainer {
+  margin-top: 1rem;
+}
+
+.volunteer.tab-content .map {
+  height: 60vh;
+  width: 100%;
+}
+
+.volunteer.tab-content .map .you {
+  background-color: var(--accent);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.volunteer.tab-content .map .you::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--accent);
+}
+
+.volunteer.tab-content .infoWindow {
+  line-height: 1.75em;
+  font-size: 1rem;
+}
+
+.volunteer.tab-content .infoWindow {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  position: relative;
+}
+
+.volunteer.tab-content .infoWindow a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.volunteer.tab-content .infoWindow a:hover {
+  opacity: 0.1;
+  background-color: var(--accent2);
+}
+
+.volunteer.tab-content .infoWindow .title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  padding: 0.5rem 0rem;
+  text-align: left;
+}
+
+.volunteer.tab-content .infoWindow .requester {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.volunteer.tab-content .infoWindow .requester .photo {
+  display: block;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.volunteer.tab-content .infoWindow .requester .name {
+  font-weight: bold;
+}
+
+/* -------------------------------------------------- */
+/* Volunteer: History                                 */
+/* -------------------------------------------------- */
+.volunteer.tab-content input[type="checkbox"].completed,
+.volunteer.tab-content input[type="checkbox"].pending,
+.volunteer.tab-content input[type="checkbox"].cancelled {
+  display: none;
+}
+
+.volunteer.tab-content input[type="checkbox"] + label,
+.volunteer.tab-content .setting {
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0rem 1rem;
+}
+
+.volunteer.tab-content input[type="checkbox"] + label::before {
+  content: "\00D7";
+  padding-right: 0.5rem;
+}
+
+.volunteer.tab-content input[type="checkbox"]:checked + label::before {
+  content: none;
+}
+
+.volunteer.tab-content input[type="checkbox"]:checked + label {
+  filter: brightness(0.8);
+}
+
+.volunteer.tab-content label.completed {
+  background-color: #44c451;
+}
+
+.volunteer.tab-content label.pending {
+  background-color: #ffcd29;
+}
+
+.volunteer.tab-content label.cancelled {
+  background-color: #f24822;
+}
+
+/* Filtering task cards by using CSS */
+.volunteer.tab-content .taskCard[data-status="Completed"],
+.volunteer.tab-content .taskCard[data-status="Pending"],
+.volunteer.tab-content .taskCard[data-status="Cancelled"] {
+  display: block;
+}
+
+#toggleCompletedCheckbox:checked ~ #taskListHistory .taskCard[data-status="Completed"],
+#togglePendingCheckbox:checked ~ #taskListHistory .taskCard[data-status="Pending"],
+#toggleCancelledCheckbox:checked ~ #taskListHistory .taskCard[data-status="Cancelled"] {
+  display: none;
 }
