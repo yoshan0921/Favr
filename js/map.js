@@ -74,7 +74,6 @@ async function initMap(taskArray, latitude, longitude) {
     const marker = new AdvancedMarkerElement({
       map: map,
       position: markerLatLng,
-      // title: Object.keys(taskArray)[i],
       title: task[0],
     });
 
@@ -85,66 +84,29 @@ async function initMap(taskArray, latitude, longitude) {
       (function (marker) {
         return function () {
           console.log(marker.title);
-
-          // =========== TEST
           const contentString = `
-          <h3><a href="/tasks/accept.html?taskid=${task[0]}">${task[1].name}</a></h3>
-          <p>May 28th, 10:00am</p>
-          <p>Estimated Favor Length: <span class="bold">1hour</span></p>
-          <div class="requester">
-            <img class="photo" src="https://ca.slack-edge.com/T61666YTB-U06C1DELWP3-a8c7ced7390c-512">
-            <div class="profile">
-              <p class="name">${task[1].requester}</p>
-              <p>Marpole Vancouver, BC</p>
+          <div class=infoWindow>
+            <a href="/tasks/accept.html?taskid=${task[0]}"></a>
+            <h2 class="title">${task[1].name}</a></h2>
+            <p class="date">May 28th, 10:00am</p>
+            <p class="duration">Estimated Favor Length: <span class="bold">1hour</span></p>
+            <div class="requester">
+              <img class="photo" src="https://ca.slack-edge.com/T61666YTB-U06C1DELWP3-a8c7ced7390c-512">
+              <div class="profile">
+                <p class="name">${task[1].requester}</p>
+                <p class="address">Marpole Vancouver, BC</p>
+              </div>
             </div>
           </div>
-          <style>
-          h3 { 
-            margin-bottom: 1rem; 
-            font-family: Arial Black, sans-serif;
-            font-size: 1.2rem;
-          }
-          .bold { font-weight: bold; }
-          .requester { display: flex; }
-          .requester .name {
-            font-family: Arial Black, sans-serif;
-            font-size: 1rem;
-          }
-          .photo { 
-            display: block; 
-            border-radius: 50%; 
-            width: 60px; 
-            height: 60px; 
-            margin: .5rem .5rem .5rem 0;
-          }
-          .profile {
-            align-self: center;
-          }
-          </style>
           `;
           const infowindow = new google.maps.InfoWindow({
             content: contentString,
-            ariaLabel: "Uluru",
           });
           infowindow.open({
             anchor: marker,
             map,
           });
           infoWindows.push(infowindow);
-          // =========== TEST
-
-          // let infoArea = document.getElementById("taskinfo");
-          // infoArea.innerHTML = "";
-          // let card = document.createElement("div");
-          // card.classList.add("taskCard");
-          // let title = marker.title;
-          // card.innerHTML = `
-          // <h2>${task[1].name}</h2>
-          // <p>status: ${task[1].status}</p>
-          // <p>Requester: ${task[1].requester}</p>
-          // <button><a href="./create-task.html">See more</button>
-          // `;
-          // infoArea.appendChild(card);
         };
       })(marker)
     );
