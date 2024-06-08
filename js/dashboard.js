@@ -26,10 +26,12 @@ if (document.readyState === "loading") {
  */
 async function runFunction() {
   const currentUserRole = await getCurrentUserRole();
-  await loadPartial(`dashboard/_${currentUserRole}Dashboard`, "dashboard-content");
 
   // Wait for loadPartial to complete before loading the dashboard.
-  loadVolunteersDashboard();
+  await loadPartial(`dashboard/_${currentUserRole}Dashboard`, "dashboard-content");
+
+  // Load the dashboard based on the user's role
+  if (currentUserRole === "volunteer") loadVolunteersDashboard();
 
   const pageTitle = document.getElementById("page-title");
   if (pageTitle) pageTitle.innerText = "Dashboard";
@@ -39,22 +41,16 @@ async function runFunction() {
  * Load the dashboard for volunteers
  */
 function loadVolunteersDashboard() {
+  // Retrieve all tasks from the database
   populateTaskList();
 
+  // View switcher radio buttons
   const mapView = document.getElementById("mapView");
   const listView = document.getElementById("listView");
-  const tabLinks = document.querySelectorAll(".tab4__link");
-  const tabBodyItems = document.querySelectorAll(".tab4-body__item");
 
-  console.log(mapView);
-  console.log(listView);
-  console.log(tabLinks);
-  console.log(tabBodyItems);
-
-  // For Volunteers' Role:
+  // Tab menu
   const tabs = document.querySelectorAll(".tab");
   const tabContents = document.querySelectorAll(".tab-content-item");
-
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       // Remove 'active' class from all tabs
@@ -72,15 +68,14 @@ function loadVolunteersDashboard() {
     });
   });
 
-  // For Volunteers' Role:
   // Switch between map and list view (toggle hide class)
   if (mapView) {
     mapView.addEventListener(
       "change",
       (event) => {
         if (event.cancelable) event.preventDefault();
-        document.getElementById("mapSection").classList.remove("hide");
-        document.getElementById("listSection").classList.add("hide");
+        document.getElementById("taskMapExplore").classList.remove("hide");
+        document.getElementById("taskListExplore").classList.add("hide");
       },
       { passive: false }
     );
@@ -90,8 +85,8 @@ function loadVolunteersDashboard() {
       "change",
       (event) => {
         if (event.cancelable) event.preventDefault();
-        document.getElementById("mapSection").classList.add("hide");
-        document.getElementById("listSection").classList.remove("hide");
+        document.getElementById("taskMapExplore").classList.add("hide");
+        document.getElementById("taskListExplore").classList.remove("hide");
       },
       { passive: false }
     );
@@ -105,28 +100,40 @@ function loadVolunteersDashboard() {
 async function populateTaskList() {
   try {
     let allTasks = await getAll("tasks");
-    console.log(allTasks);
-
     // Create map view
     createMapView(allTasks);
-
     // Create card view
-    const listSection = document.getElementById("listSection");
-    for (let task of allTasks) {
-      let id = task[0];
-      let taskDetails = task[1];
-
-      const card = document.createElement("div");
-      card.classList.add("taskCard");
-      card.innerHTML = `
-        <h2>${taskDetails.name}</h2>
-        <p>${taskDetails.status}</p>
-        <p>${taskDetails.requester}</p>
-        <button><a href="./task-detail.html">See more</button>
-      `;
-      listSection.appendChild(card);
-    }
+    createListView(allTasks);
   } catch (error) {
     console.log(error);
+  }
+}
+
+function createListView(allTasks) {
+  const listExplore = document.getElementById("taskListExplore");
+  const listMyFavor = document.getElementById("taskListMyFavor");
+  const listHistory = document.getElementById("taskListHistory");
+  for (let task of allTasks) {
+    let id = task[0];
+    let taskDetails = task[1];
+
+    const card = document.createElement("div");
+    card.classList.add("taskCard");
+    card.innerHTML = `
+      <h3><a href="/tasks/accept.html?taskid=${id}">${taskDetails.name}</a></h3>
+      <p>May 28th, 10:00am</p>
+      <p>Estimated Favor Length: <span class="bold">1hour</span></p>
+      <div class="requester">
+        <img class="photo" src="https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512">
+        <div class="profile">
+          <p class="name">${taskDetails.requester}</p>
+          <p>Marpole Vancouver, BC</p>
+        </div>
+      </div>
+    `;
+
+    if (["Waiting to be accepted"].includes(taskDetails.status)) listExplore.appendChild(card);
+    else if (["On going"].includes(taskDetails.status)) listMyFavor.appendChild(card);
+    else if (["Pending approval", "Completed", "Cancelled"].includes(taskDetails.status)) listHistory.appendChild(card);
   }
 }
