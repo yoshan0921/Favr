@@ -1,0 +1,71 @@
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.user-profile-wrapper {
+    display: block;
+    margin: auto;
+    padding: 2rem 30rem 2rem 30rem;
+}
+
+.user-profile-wrapper .user-profile {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    grid-template-rows: 5rem 40%;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.user-profile-wrapper .user-profile i {
+    grid-column: span 1;
+    align-self: center;
+    text-align: center;
+    font-size: 2rem;
+}
+.user-profile-wrapper .user-profile .user-info {
+    grid-row: span 1;
+    align-self: center;
+}
+
+.user-profile-wrapper .user-profile .user-info h3 {
+    font-weight: bold;
+    font-size: clamp(2rem 4vw 4rem);
+}
+
+.user-profile-wrapper .user-profile .user-info p {
+    font-size: clamp(0.5rem 2vw 2.5rem);
+}
+
+.user-profile-wrapper .user-profile button {
+    grid-column: 2;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(184, 184, 184);
+}
+
+.user-profile-wrapper .detail-instruction {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 10px;
+    background-color: rgb(184, 184, 184);
+}
+
+.user-profile-wrapper .set {
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-profile-wrapper .set button {
+    border-radius: 50px;
+    border: none;
+    padding: 0.2rem 2rem;
+
+}
+
+
