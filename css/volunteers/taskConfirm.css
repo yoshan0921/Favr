@@ -1,0 +1,53 @@
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+main {
+    margin-top: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+.confirm-wrapper {
+    margin: auto;
+    background-color: rgb(233, 233, 233);
+    text-align: center;
+    padding: 5rem;
+    border-radius: 30px;
+    width: 400px;
+    height: 400px;
+
+}
+
+.confirm-wrapper .user-profile {
+    display: grid;
+    grid-template-columns: 1rem 1fr;
+    margin-top: 1rem;
+}
+
+.confirm-wrapper .user-profile i {
+    grid-column: 1 / 2;
+    align-content: center;
+}
+
+.confirm-wrapper .set {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.confirm-wrapper .set button {
+    border: none;
+    padding: 0.2rem 1rem 0.2rem 1rem;
+    border-radius: 50px;
+    
+
+}
+
+
+.confirm-wrapper .set #confirmBtn {
+    background-color: rgb(184, 184, 184);
+    flood-color: white;
+}
