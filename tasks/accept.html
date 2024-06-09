@@ -15,14 +15,13 @@
 
 <body>
   <!-- Left Column -->
+  <header id="header"></header>
+
+  <!-- Left Column -->
   <div id="leftside-column"></div>
 
   <!-- Main Content -->
-  <main class="content">
-  
-    <!-- Profile -->
-    <div id="profile-content">
-    </div>
+  <main class="content" id="dashboard-content"></main>
 
     <div class="user-profile-wrapper">
 
@@ -33,6 +32,7 @@
           <h3 class="name">Willuam Dubois</h3>
           <p>Marpole Vancouver, BC</p>
         </div>
+        <button id="contactBtn">Contact</button>
       </section>
 
       <section class="schedule">
@@ -56,6 +56,29 @@
         <button id="completeBtn">Complete</button>
       </section>
     </div>
+
+    <div id="overlay">
+      <div class="confirm-wrapper">
+          <section class="message">
+              <h3>Confirm Favor Acceptance</h3>
+              <p>Are you willing to help William Dubois with this Delivery Favor?</p>
+          </section>
+
+          <section class="user-profile">
+              <i class="fa-solid fa-user"></i>
+              <div class="user-info">
+                  <h3 class="name">Willuam Dubois</h3>
+                  <p>Marpole Vancouver, BC</p>
+              </div>
+          </section>
+
+          <section class="set">
+              <button id="backlBtn">Back</button>
+              <button id="confirmBtn">Confirm</button>
+          </section>    
+      </div>
+  </div>
+
   </main>
   
 </body>
