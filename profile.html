@@ -6,6 +6,7 @@
   <script type="module" src="./js/profile.js"></script>
   <script type="module" src="./js/common.js"></script>
   <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/profile.css">
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <title>Profile</title>
@@ -20,9 +21,83 @@
 
   <!-- Main Content -->
   <main class="content">
-    
-    <!-- Profile -->
-    <div id="profile-content">
+    <div class="profile-header">
+      <div class="user-name-picture">
+        <div class="img-wrapper user-picture-wrapper">
+          <img src="#" alt="User profile picture" id="profilePic">
+        </div>
+        <div class="user-name-edit">
+          <h2 id="username"></h2>
+          <a href="./profile/edit.html" class="rounded-btn">Edit profile</a>
+        </div>
+      </div>
+      <div class="user-accomplishments">
+        <div class="accomplishment">
+          <div class="icon-wrapper">
+            <i class="fa-solid fa-person-cane"></i>
+          </div>
+          <span class="accomplishment-number">0</span>
+          <span class="accomplishment-title">Seniors</span>
+        </div>
+        <div class="accomplishment">
+          <div class="icon-wrapper">
+            <i class="fa-regular fa-clock"></i>
+          </div>
+          <span class="accomplishment-number">0</span>
+          <span class="accomplishment-title">Hours</span>
+        </div>
+        <div class="accomplishment">
+          <div class="icon-wrapper">
+            <i class="fa-regular fa-note-sticky"></i>
+          </div>
+          <span class="accomplishment-number">0</span>
+          <span class="accomplishment-title">Favors</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-details">
+      <div class="info-group" id="personal">
+        <table>
+          <caption>Personal</caption>
+          <tr>
+            <th scope="row">Birthday</th>
+            <td id="birthday">01/02/03</td>
+          </tr>
+          <tr>
+            <th scope="row">Bio</th>
+            <td id="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur odit voluptates architecto totam dignissimos, quibusdam corporis alias adipisci provident in!</td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="info-group" id="contact">
+        <table>
+          <caption>Contact</caption>
+          <tr>
+            <th scope="row">Birthday</th>
+            <td>01/02/03</td>
+          </tr>
+          <tr>
+            <th scope="row">Bio</th>
+            <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur odit voluptates architecto totam dignissimos, quibusdam corporis alias adipisci provident in!</td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="info-group" id="emergency-contact">
+        <table>
+          <caption>Emergency contact</caption>
+          <tr>
+            <th scope="row">Birthday</th>
+            <td>01/02/03</td>
+          </tr>
+          <tr>
+            <th scope="row">Bio</th>
+            <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur odit voluptates architecto totam dignissimos, quibusdam corporis alias adipisci provident in!</td>
+          </tr>
+        </table>
+
+      </div>
     </div>
   </main>
 

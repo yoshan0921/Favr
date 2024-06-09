@@ -35,31 +35,6 @@ function runFunction() {
   form.addEventListener("submit",(e)=>{
     e.preventDefault();
 
-    /*
-    TODO: get all the user inputs, turn them into an object with the same properties as the Task class (refer to firestore.js) 
-    and call createTask function defined later on this file with this object as the parameter
-    */
-
-    // let favorOptions = document.getElementsByName("favorOption");
-    // let selectedOption = "";
-    // for(let option of favorOptions){
-    //   if(option.checked){
-    //     selectedOption = option.value;
-    //   }
-    // }
-
-  //   class Task {
-  //     constructor(obj){
-  //         this.id = obj.id;
-  //         this.name = obj.name;
-  //         this.status = obj.status;
-  //         this.requesterID = obj.requesterID;
-  //         this.volunteerID = obj.volunteerID;
-  //         this.notes = obj.notes;
-  //         this.details = obj.details; //an object with no strict structure (depends on task type)
-  //     }
-  // }
-
     /* User inputs */
     const task = {
       name: document.querySelector('input[name="favorOption"]:checked').value,
@@ -155,7 +130,9 @@ function runFunction() {
 /**
  * A function that receives an object that representes a task.
  * 
- * The object is expected to have these properties (refer to firestore.js):
+ * The object is expected to have these properties (refer to firestore.js)
+ * It's ok if any of these properties are missing, but make sure that the 
+ * names of the properties you will use are the same as below:
  * 
  *  - name = Name of the task (ex.: Grocery shopping, Tech Help, etc);
  *  - status = Status of the task (processing, cancelled, approval required, waiting to be accepted, etc);

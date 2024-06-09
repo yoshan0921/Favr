@@ -6,6 +6,7 @@ import { signOut } from "./utils.js";
 let pageTitles = {
   "dashboard.html": "Dashboard",
   "profile.html": "Profile",
+  "profile/edit.html": "Profile",
   "tasks/create.html": "Request favor",
   "tasks/details.html": "Task Details",
   "tasks/updates.html": "Updates",
