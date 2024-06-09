@@ -1,0 +1,96 @@
+.profile-header{
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    align-content: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 2rem;
+}
+.user-name-picture,
+.user-name-edit{
+    display: flex;
+    gap: 1rem;
+}
+.user-name-edit{
+    flex-flow: column wrap;
+    justify-content: space-around;
+}
+.user-name-picture h2{
+    text-align: left;
+}
+.user-picture-wrapper{
+    overflow: hidden;
+    border: thin solid var(--lightBorder);
+    border-radius: 50%;
+    aspect-ratio: 1;
+    width: 120px;
+    object-fit: cover;
+    align-self: center;
+}
+.user-picture-wrapper img{
+    width: 100%;
+}
+.user-accomplishments,
+.save-btn-wrapper{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+.save-btn-wrapper{
+    align-items: flex-end;
+    justify-content: end;
+}
+.accomplishment{
+    border: thin solid var(--lightBorder);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.accomplishment *{
+    display: block;
+}
+.accomplishment .accomplishment-number{
+    font-size: 3rem;
+    font-weight: 800;
+    padding: 1rem 0;
+}
+
+.profile-details{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.profile-details .info-group{
+    flex-basis: 100%;
+    
+}
+.profile-details .info-group caption{
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: left;
+    margin: 1.7rem 0;
+}
+.profile-details .info-group table tr th{
+    text-align: left;
+    align-content: start;
+    min-width: 100px;
+}
+.profile-details .info-group table tr{
+    border-bottom: thin solid var(--lightBorder);
+}
+@media screen and (min-width: 800px){
+    .profile-header{
+        justify-content: space-between;
+    }
+    .profile-details .info-group{
+        flex-basis: calc(50% - 1rem);
+        
+    }
+}

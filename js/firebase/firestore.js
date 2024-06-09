@@ -1,4 +1,12 @@
-import { firestore } from "./firebase.js";
+import {
+    firestore,
+    storage
+} from "./firebase.js";
+ import{
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"
 import {
     getDocs,
     doc,
@@ -13,7 +21,7 @@ import {
 // Classes (data models)
 // ======================
 /**
- * Class that represents an user document. This is used for both volunteers and elders, so all users will have these fields on the database, although some of them will be null depending on the role of the user
+ * Class that represents an user document. This is used for both volunteers and elders, so all users will have these fields on the database, although some of them will be null depending on their role
  */
 class User{
     constructor(obj){
@@ -22,6 +30,7 @@ class User{
         this.middleName = obj.middleName;
         this.lastName = obj.lastName;
         this.institution = obj.institution; //the school they go to
+        this.profilePictureURL = obj.profilePictureURL,
         this.birthday = obj.birthday;
         this.bio = obj.bio;
         this.address = obj.address;
@@ -34,6 +43,7 @@ class User{
         this.favors = obj.favors;
         this.emergencyContactName = obj.emergencyContactName;
         this.emergencyContactNumber = obj.emergencyContactNumber;
+        this.tasksList = obj.tasksList;
     }
 }
 /**
@@ -65,6 +75,7 @@ const userConverter = {
             middleName: user.middleName ? user.middleName : null,
             lastName: user.lastName ? user.lastName : null,
             institution: user.institution ? user.institution : null,
+            profilePictureURL: user.profilePictureURL ? user.profilePictureURL : null,
             birthday: user.birthday ? user.birthday : null,
             bio: user.bio ? user.bio : null,
             phone:user.phone?user.phone:null,         
@@ -75,7 +86,8 @@ const userConverter = {
             eldersHelped: user.eldersHelped ? user.eldersHelped : 0,
             hours: user.hours ? user.hours : 0,
             favors:user.favors ? user.favors : 0,
-            emergencyContactName:user.emergencyContactName ? user.emergencyContactName : null
+            emergencyContactName:user.emergencyContactName ? user.emergencyContactName : null,
+            tasksList : user.tasksList ? user.tasksList : null
         };
     },
     fromFirestore: (snapshot, options) => {
@@ -86,6 +98,7 @@ const userConverter = {
             middleName: data.middleName,
             lastName:data.lastName,
             institution: data.institution,
+            profilePictureURL: data.profilePictureURL,
             birthday: data.birthday,
             bio: data.bio,
             phone:data.phone,
@@ -96,7 +109,8 @@ const userConverter = {
             eldersHelped: data.eldersHelped,
             hours: data.hours,
             favors: data.favors,
-            emergencyContactName:data.emergencyContactName
+            emergencyContactName:data.emergencyContactName,
+            tasksList : data.tasksList
         });
     },
 };
@@ -239,11 +253,51 @@ async function getAll(collectionPath){
         throw error;
     }
 }
+/**
+ * Uploads a file to Firebase Storage. If a file already exists on the given path, it is overwritten (updated)
+ * 
+ * @param {string} path - the relative path to the file on Firebase Storage. It should have the name of the bucket (ex.: profile) and the name of the file with it's extension (ex.: .jpg, .png, etc)
+ * @param {File} file - a File object that should be retrieved through a form (refer to profile.js to see how to do it)
+ * @param {JSON} metadata - (OPTIONAL) An object that contains metadata about the file. It is not required for this function to work
+ */
+async function uploadFile(path, file, metadata = {}){
+    const storageRef = ref(storage, path);
 
+    return new Promise((resolve, reject)=>{
+        uploadBytes(storageRef, file, metadata)
+        .then(() => {
+            console.log('Uploaded file successfully!');
+            resolve(storageRef);
+        })
+        .catch((error)=>{
+            reject(error);
+        });
+    })
+
+
+}
+/**
+ * 
+ * @param {Reference} path 
+ */
+async function getFile(path){
+    return new Promise((resolve, reject)=>{
+        getDownloadURL(ref(storage, path))
+        .then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            resolve(downloadURL);
+        })
+        .catch((error)=>{
+            reject(error);
+        });
+    })
+}
 export {
     createDocument,
     updateDocument,
     deleteDocument,
     getDocument,
-    getAll
+    getAll,
+    uploadFile,
+    getFile
 }
