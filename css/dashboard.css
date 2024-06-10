@@ -1,4 +1,77 @@
 /* -------------------------------------------------- */
+/* Elder: Favor List View                             */
+/* -------------------------------------------------- */
+.elder h2 {
+  padding: 0;
+}
+
+.elder .gridContainer {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+  margin-top: 1rem;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.elder .taskCard {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  position: relative;
+}
+
+.elder .taskCard a {
+  border-radius: 10px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.elder .taskCard .statusColor {
+  display: inline-block;
+  background-color: #fff;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  margin-right: 0.5rem;
+}
+
+.elder .taskCard a:hover {
+  opacity: 0.1;
+  background-color: var(--accent2);
+}
+
+.elder .taskCard .title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.elder .taskCard .requester {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.elder .taskCard .requester .photo {
+  display: block;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.elder .taskCard .requester .name {
+  font-weight: bold;
+}
+
+/* -------------------------------------------------- */
 /* Volunteer: Home Tab Menu                           */
 /* -------------------------------------------------- */
 .volunteer.tabs {
