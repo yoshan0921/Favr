@@ -24,16 +24,21 @@
     <div class="profile-header">
         <div class="user-name-picture">
           <div class="img-wrapper user-picture-wrapper">
-            <img src="#" alt="User profile picture" id="profilePic">
+            <img src="#" id="profilePic">
           </div>
-          <div class="user-name-edit">
-            <h2 id="username"></h2>
-            <button type="button" class="rounded-btn" id="uploadBtn">Upload Picture</a>
+          <div class="edit-page-btns">
+            <button type="button" class="rounded-btn" id="uploadBtn">Upload Photo</a>
+            <button type="submit" class="rounded-btn" id="saveBtn">Save</button>
           </div>
+        </div>   
+    </div>
+    <div class="profile-details">
+      <form method="post" id="profileEditForm" action="#">
+        <div id="profile-content">
+
         </div>
-        <div class="save-btn-wrapper">
-            <button type="button" id="saveChangesBtn" class="rounded-btn">Save</button>
-        </div>    
+        <button class="hidden" type="submit" id="realSubmitBtn">Save</button>
+      </form>
     </div>
   </main>
 

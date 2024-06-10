@@ -51,7 +51,7 @@ async function loadPartial(partial, destination) {
   const response = await fetch(`../partials/${partial}.html`);
   const data = await response.text();
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const targetElement = document.getElementById(destination);
     if (targetElement) {
       const observer = new MutationObserver(() => {

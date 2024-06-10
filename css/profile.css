@@ -4,7 +4,7 @@
     width: 100%;
     align-content: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     gap: 2rem;
 }
 .user-name-picture,
@@ -14,7 +14,25 @@
 }
 .user-name-edit{
     flex-flow: column wrap;
-    justify-content: space-around;
+    justify-content: start;
+    gap: 0;
+}
+.edit-page-btns{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.edit-page-btns .rounded-btn{
+    background-color: white;
+    border-color: var(--lightBorder);
+    padding: .4rem .5rem;
+    min-width: 80px;
+    justify-content: center;
+    cursor: pointer;
+}
+.edit-page-btns #saveBtn{
+    color: white;
+    background-color: gray;
 }
 .user-name-picture h2{
     text-align: left;
@@ -31,6 +49,7 @@
 .user-picture-wrapper img{
     width: 100%;
 }
+
 .user-accomplishments,
 .save-btn-wrapper{
     display: flex;
@@ -39,6 +58,12 @@
     align-content: center;
     justify-content: center;
 }
+.user-accomplishments{
+    flex-grow: 1;
+    flex-basis: 60%;
+    align-self: end;
+    justify-content: end;
+}
 .save-btn-wrapper{
     align-items: flex-end;
     justify-content: end;
@@ -46,6 +71,8 @@
 .accomplishment{
     border: thin solid var(--lightBorder);
     border-radius: 10px;
+    flex-grow: 1;
+    max-width: 200px !important;
     padding: 1rem;
     display: flex;
     flex-flow: column nowrap;
@@ -65,32 +92,79 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 2rem;
 }
 .profile-details .info-group{
     flex-basis: 100%;
     
 }
 .profile-details .info-group caption{
+    width: max-content;
     font-weight: 700;
     font-size: 1.5rem;
     text-align: left;
     margin: 1.7rem 0;
 }
+
 .profile-details .info-group table tr th{
     text-align: left;
     align-content: start;
     min-width: 100px;
+    font-weight: 100;
 }
-.profile-details .info-group table tr{
-    border-bottom: thin solid var(--lightBorder);
+.profile-details .info-group table{
+    border-collapse: collapse;
+    width: 100%;
 }
+.profile-details .info-group table tr:not(:last-child){
+    border-bottom: 1px solid lightgray;
+}
+
+/*
+===================
+  Profile Edit
+===================
+*/
+form{
+    width: 100%;
+    max-width: 500px;
+}
+form > div{
+    display: grid;
+    grid-template-columns: minmax(100px,1fr) 3fr;
+    grid-template-rows: auto;
+}
+form input,
+form textarea{
+    padding: .5rem .2rem;
+    border-radius: 8px;
+    border: thin solid var(--lightBorder);
+}
+.form-section{
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: subgrid;
+    gap: 1rem;
+}
+.form-section h2{
+    grid-row: 1;
+    grid-column: 1/-1;
+    text-align: left;
+}
+.form-section .form-group{
+    grid-column: 1/-1;
+}
+/*
+====================
+  Media queries
+====================
+*/
 @media screen and (min-width: 800px){
     .profile-header{
         justify-content: space-between;
     }
     .profile-details .info-group{
-        flex-basis: calc(50% - 1rem);
+        flex-basis: calc(50% - 2rem);
         
     }
 }

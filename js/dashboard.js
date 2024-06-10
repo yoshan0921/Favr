@@ -32,7 +32,7 @@ if (document.readyState === "loading") {
  * rendered there.
  */
 async function runFunction() {
-  currentUserID = await getCurrentUserID();
+  currentUserID = getCurrentUserID();
   currentUserRole = await getCurrentUserRole();
 
   // Wait for loadPartial to complete before loading the dashboard.
