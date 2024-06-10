@@ -24,6 +24,7 @@
 }
 .stepText {
     font-size: 1rem;
+    display: none;
 }
 .stepActive {
     background-color: var(--accent);
@@ -97,5 +98,8 @@ form{
     }
     .favorOption {
         flex: 1 0 25%;
+    }
+    .stepText {
+        display: block;
     }
 }
