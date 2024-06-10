@@ -87,6 +87,7 @@ const userConverter = {
             hours: user.hours ? user.hours : 0,
             favors:user.favors ? user.favors : 0,
             emergencyContactName:user.emergencyContactName ? user.emergencyContactName : null,
+            emergencyContactNumber:user.emergencyContactNumber ? user.emergencyContactNumber : null,
             tasksList : user.tasksList ? user.tasksList : null
         };
     },
@@ -110,6 +111,7 @@ const userConverter = {
             hours: data.hours,
             favors: data.favors,
             emergencyContactName:data.emergencyContactName,
+            emergencyContactNumber:data.emergencyContactNumber,
             tasksList : data.tasksList
         });
     },

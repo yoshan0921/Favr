@@ -1,25 +1,53 @@
+
+/**
+ * NOTE: This file will be used for both profile.html and profile/edit.html, since the difference between those pages doesn't require two separate javascript files
+ */
+
 import{
-  getCurrentUserID
+  getCurrentUserID,
+  getCurrentUserRole
 } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
+import { loadPartial } from "./common.js";
 
-window.addEventListener("load", async (event) => {
-  const user = await getDocument("users",getCurrentUserID());
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", runFunction);
+} else {
+  runFunction();
+}
+
+/**
+ * This adds an event listener to the page that triggers once everything is done downloading.
+ * This is to prevent the code from trying to access an element from the page before it was
+ * rendered there.
+ */
+async function runFunction() {
+  let currentUserRole = await getCurrentUserRole();
+  let partialPrefix = (window.location.pathname.endsWith("edit.html")) ? "edit" : "";
+
+  // Wait for loadPartial to complete 
+  if(document.getElementById("profile-content"))
+  await loadPartial(`profile/_${partialPrefix+currentUserRole}Profile`, "profile-content");
+
+  const user = await getDocument("users",getCurrentUserID()); //gets the current user's info from the database as an object that will be used for filling the page with the user's info
+
   loadUserInfo();
+
+  //Edit page elements
+  const profileEditForm = document.getElementById("profileEditForm");
+  const saveChangesBtn = document.getElementById("saveBtn");
   const uploadPictureForm = document.getElementById("uploadPictureForm");
 
   //==========
   //  Modal
   //==========
-  // Get the modal
-  var modal = document.getElementById("uploadPictureModal");
-  
+  const modal = document.getElementById("uploadPictureModal");  
   // Get the button that opens the modal
-  var uploadBtn = document.getElementById("uploadBtn");
-  
+  const uploadBtn = document.getElementById("uploadBtn");
+
   // Get the <span> element that closes the modal
-  var closeModalBtn = document.getElementsByClassName("close")[0];
+  const closeModalBtn = document.getElementsByClassName("close")[0];
   
   // When the user clicks on the button, open the modal
   if(uploadBtn) uploadBtn.onclick = function() {modal.style.display = "block";}
@@ -37,7 +65,8 @@ window.addEventListener("load", async (event) => {
   //================
   // File Upload
   //================
-  uploadPictureForm.addEventListener("submit",async (e)=>{
+  
+  if(uploadPictureForm) uploadPictureForm.addEventListener("submit",async (e)=>{
 
     e.preventDefault();
 
@@ -62,22 +91,144 @@ window.addEventListener("load", async (event) => {
   })
   
   /**
-   * Fills the fields with the appropriate information about the user
+   * Fills the fields with the appropriate information about the user based on the user object that this file loads (line 28). Depending on which page the user is requesting (edit or view profile), it will call specific funtions for each case
    */
   async function loadUserInfo(){
     if(user){
       let username = document.getElementById("username");
-      let profileImg = document.getElementById("profilePic");  
-      username.innerText = user.firstName +" " +user.lastName;
-      let picture = await getFile(`profile/${user.profilePictureURL}`);
-      if(!picture) picture = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"; //default user img
-      profileImg.setAttribute("src",picture);
+      let profileImg = document.getElementById("profilePic");
 
-      //TODO: fill the rest of the page with the remaining info of the user
+      if(username) username.innerText = user.firstName +" " +user.lastName;
+      let url = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
+      if(user.profilePictureURL){
+        url = await getFile(`profile/${user.profilePictureURL}`);
+      }
+
+      profileImg.setAttribute("src",url);
+
+      if(window.location.pathname.endsWith("edit.html")){
+        loadEditPage();
+      }else{
+        loadViewPage();
+      }
+     
     }else{
-      console.log("no user info!");
       redirect("/500.html");
     }
   }
-})
+
+  /**
+   * Fills the input fields of the edit page
+   */
+  function loadEditPage(){
+    const firstName = document.getElementById("firstName");
+    const middleName = document.getElementById("middleName");
+    const lastName = document.getElementById("lastName");
+    const birthday = document.getElementById("birthday");
+    const bio = document.getElementById("bio");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+    const address = document.getElementById("address");
+    
+    firstName.value = user.firstName ? user.firstName : "";
+    middleName.value = user.middleName ? user.middleName : "";
+    lastName.value = user.lastName ? user.lastName : "";
+    birthday.value = user.birthday ? user.birthday : "";
+    bio.value = user.bio ? user.bio : "";
+    phone.value = user.phone ? user.phone : "";
+    email.value = user.email ? user.email : "";
+    address.value = user.address ? user.address : "";
+
+    if(getCurrentUserRole == "elder"){
+      let emergencyName = document.getElementById("emergencyName");
+      let emergencyPhone = document.getElementById("emergencyPhone");
+
+      emergencyName.value = user.emergencyContactName;
+
+      emergencyPhone.value = user.emergencyContactPhone;
+
+    }
+  }
+  /**
+   * Adds static information about the user on the profile view page
+   */
+  function loadViewPage(){
+    const birthday = document.getElementById("birthday");
+    const bio = document.getElementById("bio");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+    const address = document.getElementById("address");
+
+    birthday.innerText = user.birthday ? user.birthday : "";
+    bio.innerText = user.bio ? user.bio : "";
+    phone.innerText = user.phone ? user.phone : "";
+    email.innerText = user.email ? user.email : "";
+    address.innerText = user.address ? user.address : "";
+
+    if(getCurrentUserRole == "elder"){
+      let emergencyName = document.getElementById("emergencyName");
+      let emergencyPhone = document.getElementById("emergencyPhone");
+
+      emergencyName.innerText = user.emergencyContactName;
+
+      emergencyPhone.innerText = user.emergencyContactPhone;
+
+    }else{
+      if(!window.location.pathname.endsWith("edit.html")){
+        let seniors = document.getElementById("accomplishmentElder");
+        let favors = document.getElementById("accomplishmentHours");
+        let hours = document.getElementById("accomplishmentFavors");
+
+        seniors.innerText = user.eldersHelped;
+        favors.innerText = user.favors;        
+        hours.innerText = user.hours;
+      }
+    }
+  }
+  
+  /**
+   * Gets the from inputs, changes the current user's object fields and update the user on the database
+   */
+  async function saveChanges(){
+    const firstName = document.getElementById("firstName");
+    const middleName = document.getElementById("middleName");
+    const lastName = document.getElementById("lastName");
+    const birthday = document.getElementById("birthday");
+    const bio = document.getElementById("bio");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+    const address = document.getElementById("address");
+    const emergencyName = document.getElementById("emergencyName");
+    const emergencyPhone = document.getElementById("emergencyPhone");
+
+
+    user.firstName = firstName.value,
+    user.middleName = middleName.value,
+    user.lastName = lastName.value,
+    user.birthday = birthday.value,
+    user.bio = bio.value,
+    user.phone = phone.value,
+    user.email = email.value,
+    user.address = address.value,
+    user.emergencyContactName = (emergencyName) ? emergencyName.value : user.emergencyContactName,
+    user.emergencyContactPhone = (emergencyPhone) ? emergencyPhone.value : user.emergencyContactPhone
+
+    updateDocument("users", getCurrentUserID(), user)
+    .then((response)=>{
+      console.log(resolve, "Update successful!");
+      loadUserInfo();
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
+
+  if(saveChangesBtn) saveChangesBtn.addEventListener("click",()=>{
+    document.getElementById("realSubmitBtn").click();
+  });
+  if(profileEditForm) profileEditForm.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    saveChanges();
+  })
+}
