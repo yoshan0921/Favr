@@ -10,6 +10,7 @@ let pageTitles = {
   "tasks/create.html": "Request favor",
   "tasks/details.html": "Task Details",
   "tasks/updates.html": "Updates",
+  "tasks/accept.html": "Accept favor",
 };
 
 loadCommonContent();
@@ -18,8 +19,12 @@ loadCommonContent();
  *
  */
 async function loadCommonContent() {
-  loadPartial("_header", "header").then(loadPageTitle).catch((error)=>console.log(error));
-  loadPartial("_sidebar", "leftside-column").then(addListenerToLogoutButton).catch((error)=> console.log(error));
+  loadPartial("_header", "header")
+    .then(loadPageTitle)
+    .catch((error) => console.log(error));
+  loadPartial("_sidebar", "leftside-column")
+    .then(addListenerToLogoutButton)
+    .catch((error) => console.log(error));
 
   const backButton = document.getElementById("backBtn");
   if (backButton)
@@ -48,41 +53,40 @@ async function loadPartial(partial, destination) {
 
   return new Promise((resolve) => {
     const targetElement = document.getElementById(destination);
-    if(targetElement){
+    if (targetElement) {
       const observer = new MutationObserver(() => {
         observer.disconnect();
         resolve();
       });
-  
+
       observer.observe(targetElement, { childList: true });
       targetElement.innerHTML = data;
-    }else{
+    } else {
       reject(`Could not load "../partials/${partial}.html. There is no element with the id "${destination}"`);
     }
   });
 }
 
 /**
- * 
+ *
  */
 function loadPageTitle() {
-    let path = window.location.pathname;
-    let title = "";
-    for (let pathEnding in pageTitles) {
-      if (path.endsWith(pathEnding)) {
-        title = pageTitles[pathEnding];
-      }
+  let path = window.location.pathname;
+  let title = "";
+  for (let pathEnding in pageTitles) {
+    if (path.endsWith(pathEnding)) {
+      title = pageTitles[pathEnding];
     }
-    const pageTitle = document.getElementById("page-title");
-    pageTitle.innerText = title;
-  
+  }
+  const pageTitle = document.getElementById("page-title");
+  pageTitle.innerText = title;
 }
 /**
- * 
+ *
  */
-function addListenerToLogoutButton(){
+function addListenerToLogoutButton() {
   const logoutBtn = document.getElementById("logoutBtn");
-  logoutBtn.addEventListener("click",signOut);
+  logoutBtn.addEventListener("click", signOut);
 }
 
 export { loadPartial };
