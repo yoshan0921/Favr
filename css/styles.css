@@ -52,7 +52,91 @@ button {
   color: var(--text);
   line-height: 1.75em;
 }
+/* -------------------------------------------------- */
+/* Toggle switch (list <-> map)
+/* -------------------------------------------------- */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 25px;
+  margin: 0 5px;
+}
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 5px;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "\f0c9";
+  font-family: 'FontAwesome';
+  font-size: 12px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.switch input:checked + .slider {
+  background-color: #2196F3;
+}
+.switch input:checked + .slider::before {
+  content: "\f276";
+}
+
+.switch input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+#listView{
+  font-weight: 600;
+}
+#mapView{
+  font-weight: 400;
+}
+.switch-wrapper:has(input:checked) #listView{
+  font-weight: 400;
+}
+.switch-wrapper:has(input:checked) #mapView{
+  font-weight: 600;
+}
+.switch input:checked + .slider:before {
+  -webkit-transform: translateX(17px);
+  -ms-transform: translateX(17px);
+  transform: translateX(17px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
 /* -------------------------------------------------- */
 /* Header & Footer                                    */
 /* -------------------------------------------------- */

@@ -65,9 +65,11 @@ function loadVolunteersDashboard() {
   populateTaskListForVolunteers();
 
   // View switcher radio buttons
+  const taskViewSwitch = document.getElementById("taskViewSwitch");
+  /*
   const mapView = document.getElementById("mapView");
   const listView = document.getElementById("listView");
-
+  */
   // Tab menu
   const tabs = document.querySelectorAll(".tab");
   const tabContents = document.querySelectorAll(".tab-content-item");
@@ -80,36 +82,22 @@ function loadVolunteersDashboard() {
       tab.classList.add("active");
 
       // Remove 'hide' class from all tab contents
-      tabContents.forEach((content) => content.classList.add("hide"));
+      tabContents.forEach((content) => content.classList.add("hidden"));
 
       // Add 'hide' class to the clicked tab's content
       const contentId = `${tab.id}-content`;
-      document.getElementById(contentId).classList.remove("hide");
+      document.getElementById(contentId).classList.remove("hidden");
     });
   });
 
-  // Switch between map and list view (toggle hide class)
-  if (mapView) {
-    mapView.addEventListener(
-      "change",
-      (event) => {
-        if (event.cancelable) event.preventDefault();
-        document.getElementById("taskMapExplore").classList.remove("hide");
-        document.getElementById("taskListExplore").classList.add("hide");
-      },
-      { passive: false }
-    );
-  }
-  if (listView) {
-    listView.addEventListener(
-      "change",
-      (event) => {
-        if (event.cancelable) event.preventDefault();
-        document.getElementById("taskMapExplore").classList.add("hide");
-        document.getElementById("taskListExplore").classList.remove("hide");
-      },
-      { passive: false }
-    );
+  // Switch between map and list view (toggle hidden class)
+  if(taskViewSwitch){
+    taskViewSwitch.addEventListener("change",(event)=>{
+      if (event.cancelable) event.preventDefault();
+        document.getElementById("taskMapExplore").classList.toggle("hidden");
+        document.getElementById("taskListExplore").classList.toggle("hidden");
+    },
+    { passive: false })
   }
 }
 

@@ -106,6 +106,11 @@
 /* -------------------------------------------------- */
 /* Volunteer: Explore Favor List View                 */
 /* -------------------------------------------------- */
+
+.volunteer.tab-content .viewSwitcher{
+  display: flex;
+  gap: 1rem;
+}
 .volunteer.tab-content .viewSwitcher button {
   border: none;
   border-radius: 30px;

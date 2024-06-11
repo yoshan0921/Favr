@@ -8,25 +8,36 @@
 <div class="volunteer tab-content">
     <div id="tab1-content" class="tab-content-item">
         <div class="viewSwitcher">
+            
+            <div class="switch-wrapper">
+                <label for="view" id="listView">List</label>
+                <label class="switch">
+                    <input type="checkbox" id="taskViewSwitch" name="view">
+                    <span class="slider round"></span>
+                </label>
+                <label for="view" id="mapView">Map</label>
+            </div>
+<!--
             <input type="radio" id="listView" name="view" checked>
             <label for="listView">List</label>
             <input type="radio" id="mapView" name="view">
             <label for="mapView">Map</label>
+        -->
             <button><i class="fa-solid fa-sliders"></i></button>
         </div>
         <!-- taskinfo containers (List) -->
         <div id="taskListExplore" class="gridContainer"></div>
         <!-- taskinfo containers (Map) -->
-        <div id="taskMapExplore" class="mapContainer hide">
+        <div id="taskMapExplore" class="mapContainer hidden">
             <div id="map" class="map"></div>
             <div id="taskinfo"></div>
         </div>
     </div>
-    <div id="tab2-content" class="tab-content-item hide">
+    <div id="tab2-content" class="tab-content-item hidden">
         <!-- taskinfo containers (List) -->
         <div id="taskListMyFavor" class="gridContainer"></div>
     </div>
-    <div id="tab3-content" class="tab-content-item hide">
+    <div id="tab3-content" class="tab-content-item hidden">
         <input class="completed" type="checkbox" id="toggleCompletedCheckbox">
         <label class="completed" for="toggleCompletedCheckbox">Completed</label>
         <input class="pending" type="checkbox" id="togglePendingCheckbox">
