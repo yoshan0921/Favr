@@ -1,21 +1,29 @@
 .profile-header{
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
     width: 100%;
     align-content: center;
     justify-content: space-between;
     margin: 1rem 0;
     gap: 2rem;
 }
+.profile-header > div {
+    flex-grow: 1;
+    width: 100%;
+}
 .user-name-picture,
 .user-name-edit{
     display: flex;
-    gap: 1rem;
+}
+.user-name-picture{
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
 }
 .user-name-edit{
     flex-flow: column wrap;
-    justify-content: start;
-    gap: 0;
+    justify-content: center;
+    align-items: center;
 }
 .edit-page-btns{
     display: flex;
@@ -59,10 +67,8 @@
     justify-content: center;
 }
 .user-accomplishments{
-    flex-grow: 1;
-    flex-basis: 60%;
     align-self: end;
-    justify-content: end;
+    justify-content: center;
 }
 .save-btn-wrapper{
     align-items: flex-end;
@@ -161,10 +167,25 @@ form textarea{
 */
 @media screen and (min-width: 800px){
     .profile-header{
+        flex-flow: row wrap;
         justify-content: space-between;
+    }
+    .profile-header > div{
+        width: min-content;
     }
     .profile-details .info-group{
         flex-basis: calc(50% - 2rem);
         
+    }
+    .user-name-picture{
+        flex-flow: row nowrap;
+        justify-content: start;
+    }
+    .user-name-picture,
+    .user-name-edit{
+        gap: 1rem;
+    }
+    .user-name-edit{
+        align-items: start;
     }
 }
