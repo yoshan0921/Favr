@@ -1,6 +1,6 @@
 import { loadPartial } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAll, getDocument } from "./firebase/firestore.js";
+import { getAll, getDocument, getFile } from "./firebase/firestore.js";
 import { createMapView } from "./map.js";
 import { redirect } from "./utils.js";
 
@@ -66,10 +66,7 @@ function loadVolunteersDashboard() {
 
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
-  /*
-  const mapView = document.getElementById("mapView");
-  const listView = document.getElementById("listView");
-  */
+
   // Tab menu
   const tabs = document.querySelectorAll(".tab");
   const tabContents = document.querySelectorAll(".tab-content-item");
@@ -91,13 +88,16 @@ function loadVolunteersDashboard() {
   });
 
   // Switch between map and list view (toggle hidden class)
-  if(taskViewSwitch){
-    taskViewSwitch.addEventListener("change",(event)=>{
-      if (event.cancelable) event.preventDefault();
+  if (taskViewSwitch) {
+    taskViewSwitch.addEventListener(
+      "change",
+      (event) => {
+        if (event.cancelable) event.preventDefault();
         document.getElementById("taskMapExplore").classList.toggle("hidden");
         document.getElementById("taskListExplore").classList.toggle("hidden");
-    },
-    { passive: false })
+      },
+      { passive: false }
+    );
   }
 }
 
@@ -125,7 +125,7 @@ async function populateTaskListForVolunteers() {
     console.log(error);
   }
 }
-function createListViewForElders(allTasks) {
+async function createListViewForElders(allTasks) {
   const list = document.getElementById("taskList");
   for (let task of allTasks) {
     let id = task[0]; // Task ID
@@ -133,7 +133,7 @@ function createListViewForElders(allTasks) {
 
     // Get requester's information
     Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
-      .then(([requester, volunteer]) => {
+      .then(async ([requester, volunteer]) => {
         console.log(id);
         console.log(requester);
         console.log(volunteer);
@@ -143,26 +143,28 @@ function createListViewForElders(allTasks) {
         if (taskDetails.requesterID !== currentUserID) return;
 
         // Get task information
-        let taskName = taskDetails.name ? taskDetails.name : "Not provided";
-        let taskRequesterPhoto = taskDetails.profilePictureURL ? taskDetails.profilePictureURL : "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
-        let taskDate = taskDetails.details["date"] ? taskDetails.details["date"] : "Not provided";
-        let taskDuration = taskDetails.details["duration"] ? taskDetails.details.duration : "Not provided";
-        let taskRequesterAddress = requester.address ? requester.address : "Not provided";
-        let taskStatus = taskDetails.status ? taskDetails.status : "Not provided";
-        let taskNotes = taskDetails.notes ? taskDetails.notes : "Not provided";
+        let taskName = taskDetails.name ? taskDetails.name : "";
+        let taskStatus = taskDetails.status ? taskDetails.status : "";
+        let taskVolunteerPhoto;
+        try {
+          taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
+        } catch (error) {
+          taskVolunteerPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+        }
 
         let taskVolunteerFirstName;
         let taskVolunteerLastName;
         let taskVolunteerInstitution;
-        if (volunteer === undefined) {
-          taskVolunteerFirstName = "Not provided";
-          taskVolunteerLastName = "Not provided";
-          taskVolunteerInstitution = "Not provided";
-        } else {
-          taskVolunteerFirstName = volunteer.firstName ? volunteer.firstName : "Not provided";
-          taskVolunteerLastName = volunteer.lastName ? volunteer.lastName : "Not provided";
-          taskVolunteerInstitution = volunteer.institution ? volunteer.institution : "Not provided";
+        try {
+          taskVolunteerFirstName = volunteer.firstName ? volunteer.firstName : "";
+          taskVolunteerLastName = volunteer.lastName ? volunteer.lastName : "";
+          taskVolunteerInstitution = volunteer.institution ? volunteer.institution : "";
+        } catch (error) {
+          taskVolunteerFirstName = "";
+          taskVolunteerLastName = "";
+          taskVolunteerInstitution = "";
         }
+
         // Create task card
         const card = document.createElement("div");
         card.classList.add("taskCard");
@@ -170,15 +172,18 @@ function createListViewForElders(allTasks) {
         <a href="/tasks/tracking.html?taskid=${id}"></a>
         <h3 class="title">${taskName}</h3>
         <p class="status"><span class="statusColor"></span>${taskStatus}</p>
-        <p class="notes">${taskNotes}</p>
-        <div class="requester">
-          <img class="photo" src="${taskRequesterPhoto}">
-          <div class="profile">
-            <p class="name">${taskVolunteerFirstName} ${taskVolunteerLastName}</p>
-            <p class="address">${taskVolunteerInstitution}</p>
-          </div>
-        </div>
         `;
+        if (taskDetails.status != "Waiting to be accepted") {
+          card.innerHTML += `
+          <div class="requester">
+            <img class="photo" src="${taskVolunteerPhoto}">
+            <div class="profile">
+              <p class="name">${taskVolunteerFirstName} ${taskVolunteerLastName}</p>
+              <p class="address">${taskVolunteerInstitution}</p>
+            </div>
+          </div>
+          `;
+        }
 
         // Append card to the correct list based on the task status
         if (["Waiting to be accepted"].includes(taskDetails.status)) {
@@ -206,7 +211,7 @@ function createListViewForElders(allTasks) {
       });
   }
 }
-function createListViewForVolunteers(allTasks) {
+async function createListViewForVolunteers(allTasks) {
   const listExplore = document.getElementById("taskListExplore");
   const listMyFavor = document.getElementById("taskListMyFavor");
   const listHistory = document.getElementById("taskListHistory");
@@ -216,17 +221,22 @@ function createListViewForVolunteers(allTasks) {
 
     // Get requester's information
     getDocument("users", taskDetails.requesterID)
-      .then((requester) => {
+      .then(async (requester) => {
         console.log(requester);
         console.log(taskDetails);
 
         // Get task information
         let taskName = taskDetails.name ? taskDetails.name : "Not provided";
-        let taskRequesterPhoto = taskDetails.profilePictureURL ? taskDetails.profilePictureURL : "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
         let taskDate = taskDetails.details["date"] ? taskDetails.details["date"] : "Not provided";
         let taskDuration = taskDetails.details["duration"] ? taskDetails.details.duration : "Not provided";
         let taskRequesterName = requester.firstName + " " + requester.lastName ? requester.firstName + " " + requester.lastName : "Not provided";
         let taskRequesterAddress = requester.address ? requester.address : "Not provided";
+        let taskRequesterPhoto;
+        try {
+          taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
+        } catch (error) {
+          taskRequesterPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+        }
 
         // Create task card
         const card = document.createElement("div");
