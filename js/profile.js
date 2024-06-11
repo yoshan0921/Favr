@@ -31,7 +31,7 @@ async function runFunction() {
   await loadPartial(`profile/_${partialPrefix+currentUserRole}Profile`, "profile-content");
 
   const user = await getDocument("users",getCurrentUserID()); //gets the current user's info from the database as an object that will be used for filling the page with the user's info
-
+  console.log(user);
   loadUserInfo();
 
   //Edit page elements
@@ -201,7 +201,6 @@ async function runFunction() {
     const address = document.getElementById("address");
     const emergencyName = document.getElementById("emergencyName");
     const emergencyPhone = document.getElementById("emergencyPhone");
-
 
     user.firstName = firstName.value,
     user.middleName = middleName.value,

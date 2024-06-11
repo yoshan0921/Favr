@@ -56,6 +56,9 @@ class Task {
         this.status = obj.status;
         this.requesterID = obj.requesterID;
         this.volunteerID = obj.volunteerID;
+        this.createdDate = obj.createdDate;
+        this.closedDate = obj.closedDate;
+        this.completionTime = obj.completionTime;
         this.notes = obj.notes;
         this.details = obj.details; //an object with no strict structure (depends on task type)
     }
@@ -124,6 +127,9 @@ const taskConverter = {
             requesterID: obj.requesterID ? obj.requesterID : null,
             volunteerID: obj.volunteerID ? obj.volunteerID : null,
             details: obj.details ? obj.details : [],
+            createdDate: obj.createdDate? obj.createdDate : null,
+            closedDate: obj.closedDate? obj.closedDate : null,
+            completionTime: obj.completionTime? obj.completionTime : null,
             notes: obj.notes ? obj.notes : null
         };
     },
@@ -136,6 +142,9 @@ const taskConverter = {
             requesterID: data.requester,
             volunteerID: data.volunteer,
             details: data.details,
+            createdDate: data.createdDate,
+            closedDate: data.closedDate,
+            completionTime: data.completionTime,
             notes: data.notes
         });
     },
@@ -261,6 +270,7 @@ async function getAll(collectionPath){
  * @param {string} path - the relative path to the file on Firebase Storage. It should have the name of the bucket (ex.: profile) and the name of the file with it's extension (ex.: .jpg, .png, etc)
  * @param {File} file - a File object that should be retrieved through a form (refer to profile.js to see how to do it)
  * @param {JSON} metadata - (OPTIONAL) An object that contains metadata about the file. It is not required for this function to work
+ * @returns a promise
  */
 async function uploadFile(path, file, metadata = {}){
     const storageRef = ref(storage, path);
@@ -279,8 +289,9 @@ async function uploadFile(path, file, metadata = {}){
 
 }
 /**
- * 
- * @param {Reference} path 
+ * Gets the downloadURL of a file from the Storage
+ * @param {string} path - the absolute path to the file (name of the collection followed by / and the file name with the extension)
+ * @returns a promise
  */
 async function getFile(path){
     return new Promise((resolve, reject)=>{

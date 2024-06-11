@@ -2,6 +2,7 @@ import { signOut } from "./utils.js";
 
 /**
  * An object that maps some pages to their title that will show to the user
+ * on the page <header>
  */
 let pageTitles = {
   "dashboard.html": "Dashboard",
@@ -16,7 +17,7 @@ let pageTitles = {
 loadCommonContent();
 
 /**
- *
+ * Loads the header, the menu and the footer
  */
 async function loadCommonContent() {
   loadPartial("_header", "header")
@@ -25,6 +26,8 @@ async function loadCommonContent() {
   loadPartial("_sidebar", "leftside-column")
     .then(addListenerToLogoutButton)
     .catch((error) => console.log(error));
+  loadPartial("_footer", "footer")
+  .catch((error) => console.log(error));
 
   const backButton = document.getElementById("backBtn");
   if (backButton)
@@ -38,15 +41,6 @@ async function loadCommonContent() {
  * @param {string} partial - the name of the partial file (without .html)
  * @param {string} destination - the unique id of the HTML element where the partial will be loaded
  */
-
-// async function loadPartial(partial, destination) {
-//   fetch(`../partials/${partial}.html`)
-//     .then((response) => response.text())
-//     .then((data) => (document.getElementById(destination).innerHTML = data));
-// }
-
-// Memo by Yosuke:
-// Revised: Returns a Promise when the DOM update is complete.
 async function loadPartial(partial, destination) {
   const response = await fetch(`../partials/${partial}.html`);
   const data = await response.text();
@@ -68,7 +62,10 @@ async function loadPartial(partial, destination) {
 }
 
 /**
- *
+ * Sets the title of the page header based on the current URL.
+ * It tries to match the path on the URL to one the of the fields
+ * of the pageTitles object. If there is no field on this object
+ * for the current page, then the title will remain empty
  */
 function loadPageTitle() {
   let path = window.location.pathname;
@@ -82,7 +79,7 @@ function loadPageTitle() {
   pageTitle.innerText = title;
 }
 /**
- *
+ * Self explanatory
  */
 function addListenerToLogoutButton() {
   const logoutBtn = document.getElementById("logoutBtn");
