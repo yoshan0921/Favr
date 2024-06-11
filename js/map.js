@@ -1,4 +1,4 @@
-import { getAll, getDocument } from "./firebase/firestore.js";
+import { getAll, getDocument, getFile } from "./firebase/firestore.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 const { Map } = await google.maps.importLibrary("maps");
@@ -7,16 +7,6 @@ const { Map } = await google.maps.importLibrary("maps");
  * Create a map view with current location and task markers
  * @param {object} taskArray - Array of tasks
  *
- * Example:
- * let taskArray = {
- *    task1: {
- *      taskName: "Delivery Errand",
- *      status: "1 hour",
- *      requester: "Yosuke",
- *    },
- *    task2: {},
- *    task3: {},
- * };
  */
 function createMapView(taskArray) {
   // Get current location
@@ -75,17 +65,22 @@ async function initMap(taskArray, latitude, longitude) {
     let taskDetails = task[1]; // Task detail data
 
     getDocument("users", taskDetails.requesterID)
-      .then((requester) => {
+      .then(async (requester) => {
         console.log(requester);
         console.log(taskDetails);
 
         // Get task information
         let taskName = taskDetails.name ? taskDetails.name : "Not provided";
-        let taskRequesterPhoto = taskDetails.profilePictureURL ? taskDetails.profilePictureURL : "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
         let taskDate = taskDetails.details["date"] ? taskDetails.details["date"] : "Not provided";
         let taskDuration = taskDetails.details["duration"] ? taskDetails.details.duration : "Not provided";
         let taskRequesterName = requester.firstName + " " + requester.lastName ? requester.firstName + " " + requester.lastName : "Not provided";
         let taskRequesterAddress = requester.address ? requester.address : "Not provided";
+        let taskRequesterPhoto;
+        try {
+          taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
+        } catch (error) {
+          taskRequesterPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+        }
 
         // Skip tasks that are not "Waiting to be accepted" status
         if (!["Waiting to be accepted"].includes(taskDetails.status)) return;

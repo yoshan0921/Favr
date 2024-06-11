@@ -78,14 +78,14 @@ button {
   padding-bottom: 5px;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
   position: absolute;
   content: "\f0c9";
-  font-family: 'FontAwesome';
+  font-family: "FontAwesome";
   font-size: 12px;
   text-align: center;
   display: flex;
@@ -97,30 +97,30 @@ button {
   left: 2px;
   bottom: 3px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .switch input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 .switch input:checked + .slider::before {
   content: "\f276";
 }
 
 .switch input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #2196f3;
 }
-#listView{
+#listView {
   font-weight: 600;
 }
-#mapView{
+#mapView {
   font-weight: 400;
 }
-.switch-wrapper:has(input:checked) #listView{
+.switch-wrapper:has(input:checked) #listView {
   font-weight: 400;
 }
-.switch-wrapper:has(input:checked) #mapView{
+.switch-wrapper:has(input:checked) #mapView {
   font-weight: 600;
 }
 .switch input:checked + .slider:before {
@@ -171,7 +171,7 @@ header {
 }
 
 main {
-  padding: 0 0.5rem;
+  padding: 0.5rem;
   grid-row: 2;
   grid-column: 1/-1;
 }
@@ -278,6 +278,7 @@ body {
   background-color: #333;
   padding: 10px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1; /* Bring sidebar front in mobile screen */
 }
 .sidebar ul {
   list-style: none;
@@ -335,8 +336,8 @@ Modal
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 /* Modal Content/Box */
 .modal-content {
