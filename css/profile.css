@@ -7,9 +7,17 @@
     margin: 1rem 0;
     gap: 2rem;
 }
+.profile-header.edit-page{
+    max-width: 500px;
+}
+.profile-header.edit-page .edit-page-btns{
+    justify-content: space-between;
+    flex-grow: 1;
+}
 .profile-header > div {
     flex-grow: 1;
     width: 100%;
+    gap: 1.5rem;
 }
 .user-name-picture,
 .user-name-edit{
@@ -47,7 +55,7 @@
 }
 .user-picture-wrapper{
     overflow: hidden;
-    border: thin solid var(--lightBorder);
+    border: 2px solid var(--lightBorder);
     border-radius: 50%;
     aspect-ratio: 1;
     width: 120px;

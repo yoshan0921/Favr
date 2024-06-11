@@ -33,6 +33,9 @@ ul {
 /* -------------------------------------------------- */
 /* Common                                             */
 /* -------------------------------------------------- */
+header{
+  background-color: white;
+}
 body {
   background-color: var(--background);
   color: var(--text);
@@ -158,6 +161,10 @@ body {
 }
 header {
   z-index: 1000;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
   grid-row: 1;
   grid-column: 1 / 3;
 }
@@ -169,7 +176,9 @@ header {
   grid-column: 1/-1;
   position: relative;
 }
-
+main.content{
+  margin-top: 85px;
+}
 main {
   padding: 0.5rem;
   grid-row: 2;
@@ -185,6 +194,7 @@ header .container {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  padding-top: 0;
   padding-bottom: 0;
 }
 header .container div {
@@ -193,15 +203,12 @@ header .container div {
   text-align: right;
   border-bottom: solid thin var(--lightBorder);
 }
-header .container div:not(:first-child) {
+header .container > div {
   padding: 0.5rem;
+  background-color: white;
 }
 header .container .page-title-wrapper {
   flex-grow: 1;
-}
-header .container .page-title-wrapper h1 {
-  text-align: left;
-  display: none;
 }
 
 main .page-header {
@@ -271,6 +278,7 @@ body {
 }
 .sidebar {
   position: fixed;
+  z-index: 2;
   bottom: 0;
   width: 100%;
   display: flex;
@@ -383,6 +391,7 @@ Media queries
     grid-column: 1 / 2;
   }
   header {
+    background-color: transparent;
     grid-column: 1 / 4;
   }
   footer {
@@ -398,16 +407,19 @@ Media queries
   .sidebar ul {
     justify-content: unset;
   }
-
+  header .container > div {
+    padding: 0.5rem;
+  }
   #btn,
   #cancel {
     display: block;
   }
   header .container .logo-wrapper {
+    background-color: transparent;
     border-bottom: none;
   }
   header .container .page-title-wrapper h1 {
-    display: block;
+    text-align: left;
   }
   header .container div {
     flex-grow: 0;
@@ -426,7 +438,7 @@ Media queries
 
     /* Align navigation to top then adjust to not cover the logo */
     align-self: start;
-    margin-top: 90px;
+    margin-top: 75px;
   }
 
   .content {
