@@ -28,7 +28,7 @@
           </div>
           <div class="edit-page-btns">
             <button type="button" class="rounded-btn" id="uploadBtn">Upload Photo</a>
-            <button type="submit" class="rounded-btn" id="saveBtn">Save</button>
+            <button type="submit" class="rounded-btn" id="openSaveModalBtn">Save</button>
           </div>
         </div>   
     </div>
@@ -42,9 +42,8 @@
     </div>
   </main>
 
-  <footer>
-    <p><small>&copy; Favr2024</small></p>
-  </footer>
+  <footer id="footer"></footer>
+  
   <div id="uploadPictureModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
@@ -59,6 +58,32 @@
                 <button type="submit">Upload</button>
             </div>
         </form>
+      </div>
+    </div>
+  
+  </div>
+  <div id="confirmChangesModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="modal-form">
+        <h2>Confirm to update profile</h2>
+        <div class="form-group">
+            <button type="submit" id="saveBtn" class="rounded-btn">Confirm</button>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  <div id="savedMessageModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div>
+        <div class="icon-wrapper">
+          <i class="fa-regular fa-circle-check"></i>
+        </div>
+        <h2>Profile update is saved</h2>
       </div>
     </div>
   

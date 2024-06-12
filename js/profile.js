@@ -42,25 +42,36 @@ async function runFunction() {
   //==========
   //  Modal
   //==========
-  const modal = document.getElementById("uploadPictureModal");  
+  const uploadPictureModal = document.getElementById("uploadPictureModal");
+  const openSaveModalBtn = document.getElementById("openSaveModalBtn");
+  const savedMessageModal = document.getElementById("savedMessageModal");  
+
   // Get the button that opens the modal
   const uploadBtn = document.getElementById("uploadBtn");
 
   // Get the <span> element that closes the modal
-  const closeModalBtn = document.getElementsByClassName("close")[0];
+  const closeModalBtns = document.getElementsByClassName("close");
   
   // When the user clicks on the button, open the modal
-  if(uploadBtn) uploadBtn.onclick = function() {modal.style.display = "block";}
+  if(uploadBtn) uploadBtn.onclick = function() {uploadPictureModal.style.display = "block";}
   
   // When the user clicks on <span> (x), close the modal
-  if(closeModalBtn) closeModalBtn.onclick = function() {modal.style.display = "none";}
-  
+  if(closeModalBtns.length>0) {
+    for(const btn of closeModalBtns){
+      btn.onclick = function() {
+        let parentModal = btn.closest(".modal");
+        parentModal.style.display = "none";
+      }
+    }
+  }
+  /*
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
   }
+  */
   
   //================
   // File Upload
@@ -140,15 +151,18 @@ async function runFunction() {
     email.value = user.email ? user.email : "";
     address.value = user.address ? user.address : "";
 
-    if(getCurrentUserRole == "elder"){
-      let emergencyName = document.getElementById("emergencyName");
-      let emergencyPhone = document.getElementById("emergencyPhone");
-
-      emergencyName.value = user.emergencyContactName;
-
-      emergencyPhone.value = user.emergencyContactPhone;
-
-    }
+    getCurrentUserRole()
+    .then((role)=>{
+      if(role == "elder"){
+        let emergencyName = document.getElementById("emergencyContactName");
+        let emergencyPhone = document.getElementById("emergencyContactPhone");
+  
+        emergencyName.innerText = user.emergencyContactName ? user.emergencyContactName : "";
+  
+        emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
+  
+      }
+    })
   }
   /**
    * Adds static information about the user on the profile view page
@@ -166,16 +180,17 @@ async function runFunction() {
     email.innerText = user.email ? user.email : "";
     address.innerText = user.address ? user.address : "";
 
-    if(getCurrentUserRole == "elder"){
-      let emergencyName = document.getElementById("emergencyName");
-      let emergencyPhone = document.getElementById("emergencyPhone");
-
-      emergencyName.innerText = user.emergencyContactName;
-
-      emergencyPhone.innerText = user.emergencyContactPhone;
-
-    }else{
-      if(!window.location.pathname.endsWith("edit.html")){
+    getCurrentUserRole()
+    .then((role)=>{
+      if(role == "elder"){
+        let emergencyName = document.getElementById("emergencyContactName");
+        let emergencyPhone = document.getElementById("emergencyContactPhone");
+  
+        emergencyName.innerText = user.emergencyContactName ? user.emergencyContactName : "";
+  
+        emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
+  
+      }else{
         let seniors = document.getElementById("accomplishmentElder");
         let favors = document.getElementById("accomplishmentHours");
         let hours = document.getElementById("accomplishmentFavors");
@@ -184,7 +199,7 @@ async function runFunction() {
         favors.innerText = user.favors;        
         hours.innerText = user.hours;
       }
-    }
+    })
   }
   
   /**
@@ -199,8 +214,8 @@ async function runFunction() {
     const phone = document.getElementById("phone");
     const email = document.getElementById("email");
     const address = document.getElementById("address");
-    const emergencyName = document.getElementById("emergencyName");
-    const emergencyPhone = document.getElementById("emergencyPhone");
+    const emergencyName = document.getElementById("emergencyContactName");
+    const emergencyPhone = document.getElementById("emergencyContactPhone");
 
     user.firstName = firstName.value,
     user.middleName = middleName.value,
@@ -215,19 +230,27 @@ async function runFunction() {
 
     updateDocument("users", getCurrentUserID(), user)
     .then((response)=>{
-      console.log(resolve, "Update successful!");
+      console.log(response, "Update successful!");
       loadUserInfo();
     })
     .catch((error)=>{
       console.log(error);
     })
   }
-
+  if(openSaveModalBtn) openSaveModalBtn.addEventListener("click", ()=> {
+    confirmChangesModal.style.display = "block";
+  })
   if(saveChangesBtn) saveChangesBtn.addEventListener("click",()=>{
+    confirmChangesModal.style.display = "none";
     document.getElementById("realSubmitBtn").click();
   });
   if(profileEditForm) profileEditForm.addEventListener("submit", async (e)=>{
     e.preventDefault();
-    saveChanges();
+    saveChanges()
+    .then((response)=>{
+      console.log(response);
+      confirmChangesModal.style.display = "none";
+      savedMessageModal.style.display = "block";
+    });
   })
 }
