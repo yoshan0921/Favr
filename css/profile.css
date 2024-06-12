@@ -41,6 +41,7 @@
 .edit-page-btns .rounded-btn{
     background-color: white;
     border-color: var(--lightBorder);
+    border-width: 2px;
     padding: .4rem .5rem;
     min-width: 80px;
     justify-content: center;

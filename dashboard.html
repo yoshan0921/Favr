@@ -30,6 +30,52 @@
 
   <!-- Footer -->
   <footer id="footer"></footer>
+  <div id="filterModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="closeModal">&times;</span>
+        <div class="modal-form">
+            <h3>Filter favors by:</h3>
+            <form action="#" id="filterForm">
+                <div class="form-group">
+                    <h3>Date</h3>
+                    <div class="form-group form-row">
+                        <div><label for="newest">Newest to oldest</label><input type="radio" name="dateFilter" id="newest" value="newest"></div>
+                        <div><label for="oldest">Oldest to newest</label><input type="radio" name="dateFilter" id="oldest" value="oldest"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h3>Distance</h3>
+                    <div class="form-group">
+                       <input type="range" min="0" max="4" value="1" step="1" id="distanceFilter">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h3>Length</h3>
+                    <div class="form-group">
+                       <input type="range" min="0" max="4" value="1" step="1" id=lengthFilter">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h3>Favor type</h3>
+                    <div class="favor-options">
+                        <span class="option">Grocery shopping</span>
+                        <span class="option">Mail & Packages</span>
+                        <span class="option">Meds pickup</span>
+                        <span class="option">Tech Help</span>
+                        <span class="option">Pet Care</span>
+                        <span class="option">Transportation</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button id="cancelFilter" type="reset">Cancel</button>
+                    <button id="applyFilter" type="button">Apply</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
 </body>
 
 </html>

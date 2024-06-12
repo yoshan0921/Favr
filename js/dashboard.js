@@ -1,4 +1,4 @@
-import { loadPartial } from "./common.js";
+import { closeModal, loadPartial, openModal } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
 import { createMapView } from "./map.js";
@@ -100,6 +100,10 @@ async function loadVolunteersDashboard() {
 
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
+  //Filter button
+  const filterBtn = document.getElementById("openFilterBtn");
+  const filterModal = document.getElementById("filterModal");
+  const closeFilterBtn = document.getElementById("cancelFilter");
 
   // Tab menu
   const tabs = document.querySelectorAll(".tab");
@@ -131,6 +135,20 @@ async function loadVolunteersDashboard() {
         document.getElementById("taskListExplore").classList.toggle("hidden");
       },
       { passive: false }
+    );
+  }
+  if(filterBtn){
+    filterBtn.addEventListener(
+      "click",
+      ()=>{
+        openModal(filterModal);
+      }
+    )
+  }
+  if(closeFilterBtn){
+    closeFilterBtn.addEventListener(
+      "click", 
+      ()=>closeModal(filterModal)
     );
   }
 }

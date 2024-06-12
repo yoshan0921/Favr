@@ -269,6 +269,26 @@
 .volunteer.tab-content .infoWindow .requester .name {
   font-weight: bold;
 }
+/*Filter*/
+#filterModal .modal-content{
+  height: 80vh;
+  max-width: 330px;
+  margin-top: 1vh;
+  margin-right: 1rem;
+  display: flex;
+  flex-flow: column wrap;
+}
+.modal-form, #filterForm, #filterForm > .form-group{
+  display: flex;
+  flex-grow: 1;
+  flex-flow: column nowrap;
+}
+.flex-row{
+  flex-flow: row nowrap;
+}
+
+
+
 
 /* -------------------------------------------------- */
 /* Volunteer: History                                 */

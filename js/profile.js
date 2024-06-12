@@ -9,7 +9,7 @@ import{
 } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
-import { loadPartial } from "./common.js";
+import { closeModal, loadPartial, openModal } from "./common.js";
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", runFunction);
@@ -53,14 +53,14 @@ async function runFunction() {
   const closeModalBtns = document.getElementsByClassName("close");
   
   // When the user clicks on the button, open the modal
-  if(uploadBtn) uploadBtn.onclick = function() {uploadPictureModal.style.display = "block";}
+  if(uploadBtn) uploadBtn.onclick = () => openModal(uploadPictureModal);
   
   // When the user clicks on <span> (x), close the modal
   if(closeModalBtns.length>0) {
     for(const btn of closeModalBtns){
       btn.onclick = function() {
         let parentModal = btn.closest(".modal");
-        parentModal.style.display = "none";
+        closeModal(parentModal);
       }
     }
   }
@@ -238,10 +238,10 @@ async function runFunction() {
     })
   }
   if(openSaveModalBtn) openSaveModalBtn.addEventListener("click", ()=> {
-    confirmChangesModal.style.display = "block";
+    openModal(confirmChangesModal);
   })
   if(saveChangesBtn) saveChangesBtn.addEventListener("click",()=>{
-    confirmChangesModal.style.display = "none";
+    closeModal(confirmChangesModal);
     document.getElementById("realSubmitBtn").click();
   });
   if(profileEditForm) profileEditForm.addEventListener("submit", async (e)=>{
@@ -249,8 +249,7 @@ async function runFunction() {
     saveChanges()
     .then((response)=>{
       console.log(response);
-      confirmChangesModal.style.display = "none";
-      savedMessageModal.style.display = "block";
+      openModal(savedMessageModal);
     });
   })
 }

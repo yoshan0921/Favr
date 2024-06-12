@@ -49,8 +49,13 @@ h2 {
 }
 
 button {
-  color: var(--text);
+  border: 2px solid var(--lightBorder);
+  border-radius: 5px;
+  padding: .1rem .2rem;
   line-height: 1.75em;
+}
+button a {
+  color: var(--text);
 }
 /* -------------------------------------------------- */
 /* Toggle switch (list <-> map)
@@ -215,7 +220,8 @@ main .page-header {
   gap: 1rem;
 }
 .rounded-btn {
-  border: thin solid var(--accent);
+  border: thin solid var(--lightBorder);
+  color: gray;
   border-radius: 50px;
   padding: 1px 5px;
   height: max-content;
@@ -337,6 +343,7 @@ Modal
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 3; /* Sit on top */
+  align-content: center;
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -348,7 +355,7 @@ Modal
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 10% auto; /* 15% from the top and centered */
+  margin: auto; /* centered */
   padding: 20px;
   border: 1px solid var(--lightBorder);
   border-radius: 10px;
