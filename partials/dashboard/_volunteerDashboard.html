@@ -8,7 +8,7 @@
 <div class="volunteer tab-content">
     <div id="tab1-content" class="tab-content-item">
         <div class="viewSwitcher">
-            
+
             <div class="switch-wrapper">
                 <label for="view" id="listView">List</label>
                 <label class="switch">
@@ -17,12 +17,7 @@
                 </label>
                 <label for="view" id="mapView">Map</label>
             </div>
-<!--
-            <input type="radio" id="listView" name="view" checked>
-            <label for="listView">List</label>
-            <input type="radio" id="mapView" name="view">
-            <label for="mapView">Map</label>
-        -->
+
             <button><i class="fa-solid fa-sliders"></i></button>
         </div>
         <!-- taskinfo containers (List) -->
@@ -47,5 +42,16 @@
         <button class="setting"><i class="fa-solid fa-sliders"></i></button>
         <!-- taskinfo containers (List) -->
         <div id="taskListHistory" class="gridContainer"></div>
+    </div>
+</div>
+
+<div id="acceptTaskModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-form">
+            <button id="cancel">Cancel</button>
+            <button id="accept">Accept</button>
+        </div>
     </div>
 </div>
