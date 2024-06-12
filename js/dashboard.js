@@ -40,29 +40,63 @@ async function runFunction() {
 
   // Load the dashboard based on the user's role
   if (currentUserRole === "volunteer") {
-    loadVolunteersDashboard();
+    await loadVolunteersDashboard();
   } else if (currentUserRole === "elder") {
-    loadEldersDashboard();
+    await loadEldersDashboard();
   }
 
   const pageTitle = document.getElementById("page-title");
   if (pageTitle) pageTitle.innerText = "Dashboard";
+
+  //==========
+  //  Modal for Task Acceptance
+  //==========
+  const modal = document.getElementById("acceptTaskModal");
+
+  // Get all the buttons that open the modal
+  const selectBtns = document.querySelectorAll(".taskCard");
+  console.log(selectBtns);
+
+  // Get the <span> element that closes the modal
+  const closeModalBtn = document.getElementsByClassName("close")[0];
+
+  // When the user clicks on the button, open the modal
+  selectBtns.forEach((selectBtn) => {
+    // TO be used later.
+    // selectBtn.onclick = function (event) {
+    //   console.log("Button clicked:", event.target);
+    //   modal.style.display = "block";
+    // };
+  });
+
+  // When the user clicks on <span> (x), close the modal
+  if (closeModalBtn)
+    closeModalBtn.onclick = function () {
+      modal.style.display = "none";
+    };
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
 }
 
 /**
  * Load the dashboard for elders
  */
-function loadEldersDashboard() {
+async function loadEldersDashboard() {
   // Retrieve tasks from the database
-  populateTaskListForElders();
+  await populateTaskListForElders();
 }
 
 /**
  * Load the dashboard for volunteers
  */
-function loadVolunteersDashboard() {
+async function loadVolunteersDashboard() {
   // Retrieve tasks from the database
-  populateTaskListForVolunteers();
+  await populateTaskListForVolunteers();
 
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
@@ -102,25 +136,15 @@ function loadVolunteersDashboard() {
 }
 
 /**
- * Fetches data from the "Tasks" collection of Firestoer Database
- * and displays on a table
+ * For elders' dashboard:
+ * Fetches data from the "tasks" collection and show them
+ * as card view or list view.
  */
 async function populateTaskListForElders() {
   try {
     let allTasks = await getAll("tasks");
     // Create card view
-    createListViewForElders(allTasks);
-  } catch (error) {
-    console.log(error);
-  }
-}
-async function populateTaskListForVolunteers() {
-  try {
-    let allTasks = await getAll("tasks");
-    // Create map view
-    createMapView(allTasks);
-    // Create card view
-    createListViewForVolunteers(allTasks);
+    await createListViewForElders(allTasks);
   } catch (error) {
     console.log(error);
   }
@@ -143,8 +167,8 @@ async function createListViewForElders(allTasks) {
         if (taskDetails.requesterID !== currentUserID) return;
 
         // Get task information
-        let taskName = taskDetails.name ? taskDetails.name : "";
-        let taskStatus = taskDetails.status ? taskDetails.status : "";
+        let taskName = taskDetails.name ?? "";
+        let taskStatus = taskDetails.status ?? "";
         let taskVolunteerPhoto;
         try {
           taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
@@ -156,9 +180,9 @@ async function createListViewForElders(allTasks) {
         let taskVolunteerLastName;
         let taskVolunteerInstitution;
         try {
-          taskVolunteerFirstName = volunteer.firstName ? volunteer.firstName : "";
-          taskVolunteerLastName = volunteer.lastName ? volunteer.lastName : "";
-          taskVolunteerInstitution = volunteer.institution ? volunteer.institution : "";
+          taskVolunteerFirstName = volunteer.firstName ?? "";
+          taskVolunteerLastName = volunteer.lastName ?? "";
+          taskVolunteerInstitution = volunteer.institution ?? "";
         } catch (error) {
           taskVolunteerFirstName = "";
           taskVolunteerLastName = "";
@@ -211,26 +235,46 @@ async function createListViewForElders(allTasks) {
       });
   }
 }
+
+/**
+ * For volunteers' dashboard:
+ * Fetches data from the "tasks" collection and show them
+ * as card view or list view.
+ */
+async function populateTaskListForVolunteers() {
+  try {
+    let allTasks = await getAll("tasks");
+    // Create map view
+    await createMapView(allTasks);
+    // Create card view
+    await createListViewForVolunteers(allTasks);
+  } catch (error) {
+    console.log(error);
+  }
+}
 async function createListViewForVolunteers(allTasks) {
   const listExplore = document.getElementById("taskListExplore");
   const listMyFavor = document.getElementById("taskListMyFavor");
   const listHistory = document.getElementById("taskListHistory");
-  for (let task of allTasks) {
+
+  // Map allTasks to an array of Promises
+  const tasksPromises = allTasks.map((task) => {
+    // for (let task of allTasks) {
     let id = task[0]; // Task ID
     let taskDetails = task[1]; // Task detail data
 
     // Get requester's information
-    getDocument("users", taskDetails.requesterID)
+    return getDocument("users", taskDetails.requesterID)
       .then(async (requester) => {
         console.log(requester);
         console.log(taskDetails);
 
         // Get task information
-        let taskName = taskDetails.name ? taskDetails.name : "Not provided";
-        let taskDate = taskDetails.details["date"] ? taskDetails.details["date"] : "Not provided";
-        let taskDuration = taskDetails.details["duration"] ? taskDetails.details.duration : "Not provided";
-        let taskRequesterName = requester.firstName + " " + requester.lastName ? requester.firstName + " " + requester.lastName : "Not provided";
-        let taskRequesterAddress = requester.address ? requester.address : "Not provided";
+        let taskName = taskDetails.name ?? "";
+        let taskDate = taskDetails.details["date"] ?? "";
+        let taskDuration = taskDetails.details["duration"] ?? "";
+        let taskRequesterName = `${requester.firstName} ${requester.lastName}` ?? "";
+        let taskRequesterAddress = requester.address ?? "";
         let taskRequesterPhoto;
         try {
           taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
@@ -242,7 +286,7 @@ async function createListViewForVolunteers(allTasks) {
         const card = document.createElement("div");
         card.classList.add("taskCard");
         card.innerHTML = `
-        <a href="/tasks/accept.html?taskid=${id}"></a>
+        <a href="/tasks/accept.html?taskid=${id}" data-taskid="${id}"></a>
         <h3 class="title">${taskName}</h3>
         <div class="statusColor"></div>
         <p class="date">${taskDate}</p>
@@ -282,5 +326,7 @@ async function createListViewForVolunteers(allTasks) {
       .catch((error) => {
         console.log(error);
       });
-  }
+  });
+  // Wait for all Promises to resolve
+  return Promise.all(tasksPromises);
 }

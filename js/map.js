@@ -14,7 +14,6 @@ function createMapView(taskArray) {
     // Get current location
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
-
     // Initialize the map
     initMap(taskArray, latitude, longitude);
   });
@@ -28,12 +27,11 @@ function createMapView(taskArray) {
  *
  */
 async function initMap(taskArray, latitude, longitude) {
-  // Display map with current location
-  const position = { lat: latitude, lng: longitude };
-
   const mapElement = document.getElementById("map");
-  if (!mapElement) return;
 
+  // Display map with current location
+  if (!mapElement) return;
+  const position = { lat: latitude, lng: longitude };
   const map = new Map(mapElement, {
     zoom: 14,
     center: position,
@@ -58,23 +56,26 @@ async function initMap(taskArray, latitude, longitude) {
 
   // Add markers for each task location
   let markerPromises = taskArray.map((task) => {
-    let lat = latitude + (Math.random() - 0.5) / 111.0;
-    let lng = longitude + (Math.random() - 0.5) / (111.0 * Math.cos((latitude * Math.PI) / 180));
-    let markerLatLng = { lat: lat, lng: lng };
     let id = task[0]; // Task ID
     let taskDetails = task[1]; // Task detail data
+    let markerLatLng = {}; // Task location (Marker position)
 
+    // Add marker for each task which is "Waiting to be accepted" status
+    // To show the requester information, firstly get the requesterID from the task details.
+    // Then, get the requester information from the users collection.
     getDocument("users", taskDetails.requesterID)
       .then(async (requester) => {
-        console.log(requester);
-        console.log(taskDetails);
+        console.log("Requester: " + JSON.stringify(requester));
+        console.log("Errand Info: " + JSON.stringify(taskDetails));
 
         // Get task information
-        let taskName = taskDetails.name ? taskDetails.name : "Not provided";
-        let taskDate = taskDetails.details["date"] ? taskDetails.details["date"] : "Not provided";
-        let taskDuration = taskDetails.details["duration"] ? taskDetails.details.duration : "Not provided";
-        let taskRequesterName = requester.firstName + " " + requester.lastName ? requester.firstName + " " + requester.lastName : "Not provided";
-        let taskRequesterAddress = requester.address ? requester.address : "Not provided";
+        let taskName = taskDetails.name ?? "";
+        let taskDate = taskDetails.details["date"] ?? "";
+        let taskDuration = taskDetails.details["duration"] ?? "";
+        let taskRequesterName = requester.firstName + " " + requester.lastName ?? "";
+        let taskRequesterAddress = requester.address ?? "";
+
+        // Get requester's profile picture
         let taskRequesterPhoto;
         try {
           taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
@@ -85,12 +86,27 @@ async function initMap(taskArray, latitude, longitude) {
         // Skip tasks that are not "Waiting to be accepted" status
         if (!["Waiting to be accepted"].includes(taskDetails.status)) return;
 
+        // Get specified address of the task
+        let taskAddress = taskDetails.details["address"] ?? "";
+        try {
+          let result = await getCoordinates(taskAddress);
+          markerLatLng = { lat: result.lat, lng: result.lng };
+          let formattedAddress = result.address;
+          console.log("Formatted Address: " + formattedAddress);
+          console.log("Formatted Address Coordinates: " + JSON.stringify(markerLatLng));
+        } catch (error) {
+          console.log(error);
+          return;
+        }
+
         // Create a marker and add clickevent
         const marker = new AdvancedMarkerElement({
           map: map,
           position: markerLatLng,
           title: id,
         });
+
+        // Add a click event to the marker
         marker.addListener(
           "click",
           // TODO: Midfy according to our design team's wireframe
@@ -99,7 +115,7 @@ async function initMap(taskArray, latitude, longitude) {
               console.log(marker.title);
               const contentString = `
               <div class=infoWindow>
-                <a href="/tasks/accept.html?taskid=${id}"></a>
+                <a href="/tasks/accept.html?taskid=${id}" data-taskid="${id}"></a>
                 <h3 class="title">${taskName}</h3>
                 <div class="statusColor"></div>
                 <p class="date">${taskDate}</p>
@@ -144,6 +160,27 @@ async function initMap(taskArray, latitude, longitude) {
     }
     infoWindows = [];
   }
+}
+
+/**
+ * Get the coordinates of the specified address
+ * @param {string} address - Array of tasks
+ * @return {object} location - Latitude and longitude of the address
+ *
+ */
+function getCoordinates(address) {
+  return new Promise((resolve, reject) => {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: address }, function (results, status) {
+      if (status === "OK") {
+        const location = results[0].geometry.location;
+        const formattedAddress = results[0].formatted_address;
+        resolve({ lat: location.lat(), lng: location.lng(), address: formattedAddress });
+      } else {
+        reject("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  });
 }
 
 export { createMapView };
