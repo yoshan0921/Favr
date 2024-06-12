@@ -10,7 +10,7 @@ let pageTitles = {
   "profile/edit.html": "Profile",
   "tasks/create.html": "Request favor",
   "tasks/details.html": "Task Details",
-  "tasks/updates.html": "Updates",
+  "updates.html": "Updates",
   "tasks/accept.html": "Accept favor",
   "support.html":"Get support"
 };

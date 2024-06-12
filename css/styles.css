@@ -461,7 +461,6 @@ Media queries
   .content {
     position: relative;
     padding: 2rem;
-    height: 100%;
   }
 
   .sidebar a,
