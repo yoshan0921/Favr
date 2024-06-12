@@ -115,7 +115,7 @@ async function initMap(taskArray, latitude, longitude) {
               console.log(marker.title);
               const contentString = `
               <div class=infoWindow>
-                <a href="/tasks/accept.html?taskid="${id}" data-taskid="${id}"></a>
+                <a href="/tasks/accept.html?taskid=${id}" data-taskid="${id}"></a>
                 <h3 class="title">${taskName}</h3>
                 <div class="statusColor"></div>
                 <p class="date">${taskDate}</p>

@@ -286,7 +286,7 @@ async function createListViewForVolunteers(allTasks) {
         const card = document.createElement("div");
         card.classList.add("taskCard");
         card.innerHTML = `
-        <a href="/tasks/accept.html?taskid="${id}" data-taskid="${id}"></a>
+        <a href="/tasks/accept.html?taskid=${id}" data-taskid="${id}"></a>
         <h3 class="title">${taskName}</h3>
         <div class="statusColor"></div>
         <p class="date">${taskDate}</p>
