@@ -1,8 +1,36 @@
 .steps-counter{
+    display: flex;
+    justify-content: space-around;
     width: 100%;
     height: 100px;
     text-align: center;
     align-items: center;
+}
+.step1, .step2, .step3, .step4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.stepNumber {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background-color: #BFBFBF;
+    color: white;
+    border-radius: 50%;
+    margin-right: .5rem;
+}
+.stepText {
+    font-size: 1rem;
+    display: none;
+}
+.stepActive {
+    background-color: var(--accent);
+}
+.textActive {
+    font-weight: bold;
 }
 form{
     border: thin solid gray;
@@ -70,5 +98,8 @@ form{
     }
     .favorOption {
         flex: 1 0 25%;
+    }
+    .stepText {
+        display: block;
     }
 }

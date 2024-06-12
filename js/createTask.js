@@ -40,6 +40,7 @@ function runFunction() {
       name: document.querySelector('input[name="favorOption"]:checked').value,
       notes: document.getElementById("notes").value,
       requesterID: getCurrentUserID(),
+      status: "Waiting to be accepted",
       details: {
         date: document.getElementById("favorDate").value,
         address: document.getElementById("address").value,
@@ -83,14 +84,28 @@ function runFunction() {
               selectionHistory.push(`Address: ${address}`);
             }
             break;
+          case 4:
+            const status = taskDetails.status;
+            if (status) {
+              selectionHistory.push(`Status: ${status}`);
+            }
+            break;
         
           }
+
+        // Remove stepActive class from the current step number
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.remove("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.remove("textActive");
               
         currentStep += 1;
         currentStepDiv.classList.add("hidden"); //hides current step
         currentStepDiv = document.getElementById(`step-${currentStep}`); //gets next step
         currentStepDiv.classList.remove("hidden"); //shows next step
         previousStepBtn.disabled = false;
+
+        // Add stepActive and textActive classes to the current step number
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
 
   //TODO: if the user clicked on next, then we should get the data on the inputs they just filled, turn them into a readable string and add to selectionHistory array. After doing that, updateSelectionHistory should be called to display this array as a list
         updateSelectionHistory();
@@ -111,6 +126,10 @@ function runFunction() {
           list.lastElementChild.remove();
         }
 
+        // Remove stepActive class from the current step number
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.remove("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.remove("textActive");
+
         currentStep -= 1;
         currentStepDiv.classList.add("hidden"); //hides current step
         currentStepDiv = document.getElementById(`step-${currentStep}`); //gets previous step
@@ -120,6 +139,10 @@ function runFunction() {
         if(currentStep==1){
           previousStepBtn.disabled = true;
         } 
+
+        // Add stepActive class to the current step number
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
 
       }else{
         previousStepBtn.disabled = true;
@@ -145,12 +168,22 @@ function runFunction() {
  * @param {Object} task - object that represents the task that will be created on the database
  */
   function createTask(task){
-      try{
-        createDocument("tasks",task);
-      }catch(error){
-        console.log(error);
-      }
+    createDocument("tasks",task)
+      .then(() => {
+        displayTaskSummary(task);
+        // window.location.href = "/dashboard.html";
+      })
+    .catch((error) => {
+      console.log(error);
+    });
   }
+  // function createTask(task){
+  //     try{
+  //       createDocument("tasks",task);
+  //     }catch(error){
+  //       console.log(error);
+  //     }
+  // }
   /**
    * Processes the selectionHistory array and populate the history lists on each step with the selections the user has made so far
    */
@@ -166,4 +199,35 @@ function runFunction() {
     }
   }
   historyLists = document.getElementsByClassName("selection-list"); //this will return an array containing all the elements of the HTML that has "selection-list" as a class. They all should be <ul>
+
+  // Display the user inputs in a summary page
+  function displayTaskSummary(task) {
+    // Hide form and navigation buttons
+    const form = document.getElementById("createTaskForm");
+    form.style.display = "none";
+    const formNavigation = document.querySelector(".form-navigation");
+    formNavigation.style.display = "none";
+
+    // Show the task summary
+    const summaryDiv = document.getElementById("summaryDiv");
+    summaryDiv.classList.remove("hidden"); // Remove the "hidden" class to display the summary
+
+    const statusList = document.getElementById("statusList");
+    statusList.innerHTML = `
+      <div>Status: ${task.status}</div>
+      <div>You'll be notified once it's accepted.</div>
+    `;
+
+    const summaryList = document.getElementById("summaryList");
+    summaryList.innerHTML = `
+      <li>Favor Type: ${task.name}</li>
+      <li>Date: ${task.details.date}</li>
+      <li>Address: ${task.details.address}</li>
+      <li>Notes: ${task.notes}</li>
+    `;
+  }
+
+  backToHome.addEventListener("click", (e) => {
+    window.location.href = "/dashboard.html";
+  });
 }
