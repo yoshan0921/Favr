@@ -314,6 +314,11 @@
   width: 100%;
 }
 
+button#applyFilter,
+button#cancelFilter {
+  cursor: pointer;
+}
+
 /* -------------------------------------------------- */
 /* Volunteer: History                                 */
 /* -------------------------------------------------- */

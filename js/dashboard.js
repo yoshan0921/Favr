@@ -10,6 +10,7 @@ const { spherical } = await google.maps.importLibrary("geometry");
 let currentUserID;
 let currentUserRole;
 let favorCount = 0;
+let infoWindows = []; // For Google Map
 
 window.addEventListener("load", function (event) {
   // Check if the user is logged in
@@ -287,21 +288,31 @@ async function displayTaskListForVolunteers() {
 async function createTaskListForVolunteers(allTasks) {
   const mapElement = document.getElementById("map");
   let map; // For Google Map
-  let infoWindows = []; // For Google Map
   let latitude;
   let longitude;
 
   try {
-    // TODO:
+    // Memo:
     // Sometimes, getCurrentPosition takes a long time to get the return.
-    // It might be better to call it, when user access the login page.
-    // Then, store the coodinate in the local storage.
-    // Or, show the loading icon until the coordinate is returned.
+    // So, geoPosition data is stored in sessionStorage to avoid the delay for the next time.
 
-    // Get current location
-    const position = await getCurrentPosition();
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
+    // Get current location (if we already)
+    let position = sessionStorage.getItem("currentPosition");
+    if (!position) {
+      let geoPosition = await getCurrentPosition();
+      position = {
+        latitude: geoPosition.coords.latitude,
+        longitude: geoPosition.coords.longitude,
+      };
+      // Store the position as a string
+      sessionStorage.setItem("currentPosition", JSON.stringify(position));
+    } else {
+      // Parse the position back into an object
+      position = JSON.parse(position);
+    }
+    latitude = position.latitude;
+    longitude = position.longitude;
+    console.log("Current Position: " + position);
     console.log(`Current Coordinates: ${latitude}, ${longitude}`);
 
     // Create Map
@@ -565,6 +576,7 @@ function closeAllInfoWindows(infoWindows) {
  * or rejects with a PositionError object on failure.
  */
 function getCurrentPosition() {
+  console.log("Get Current Position");
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
@@ -657,6 +669,9 @@ function applyFilter() {
     // Task sort by date (newest or oldest)
     sortTasksByDate(dateFilterValue, taskCards);
   });
+
+  // When inforWindow is open on the Google Map, close all infoWindows
+  closeAllInfoWindows(infoWindows);
 }
 
 // ============================================================
