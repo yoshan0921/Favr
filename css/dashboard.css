@@ -227,7 +227,6 @@
 
 .volunteer.tab-content .infoWindow {
   background-color: #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   padding: 1rem;
   position: relative;
 }
@@ -269,8 +268,12 @@
 .volunteer.tab-content .infoWindow .requester .name {
   font-weight: bold;
 }
-/*Filter*/
-#filterModal .modal-content{
+
+/* -------------------------------------------------- */
+/* Volunteer: Explore Favor Filter                    */
+/* -------------------------------------------------- */
+
+#filterModal .modal-content {
   height: 80vh;
   max-width: 330px;
   margin-top: 1vh;
@@ -278,17 +281,63 @@
   display: flex;
   flex-flow: column wrap;
 }
-.modal-form, #filterForm, #filterForm > .form-group{
+
+.modal-form,
+#filterForm,
+#filterForm > .form-group {
   display: flex;
   flex-grow: 1;
   flex-flow: column nowrap;
 }
-.flex-row{
+
+.flex-row {
   flex-flow: row nowrap;
 }
 
+#lengthFilter {
+  width: 100%;
+}
 
+#lengthFilterScale {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+}
 
+#distanceFilter {
+  width: 100%;
+}
+
+#distanceFilterScale {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Filtering task cards by distance */
+.volunteer.tab-content input[type="checkbox"].distance1,
+.volunteer.tab-content input[type="checkbox"].distance2,
+.volunteer.tab-content input[type="checkbox"].distance3,
+.volunteer.tab-content input[type="checkbox"].distance4,
+.volunteer.tab-content input[type="checkbox"].distance5 {
+  display: none;
+}
+
+.volunteer.tab-content .taskCard[data-distance-l1="true"],
+.volunteer.tab-content .taskCard[data-distance-l2="true"],
+.volunteer.tab-content .taskCard[data-distance-l3="true"],
+.volunteer.tab-content .taskCard[data-distance-l4="true"],
+.volunteer.tab-content .taskCard[data-distance-l5="true"] {
+  display: block;
+}
+
+#toggleDistance1Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l1="true"],
+#toggleDistance2Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l2="true"],
+#toggleDistance3Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l3="true"],
+#toggleDistance4Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l4="true"],
+#toggleDistance5Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l5="true"] {
+  display: none;
+}
 
 /* -------------------------------------------------- */
 /* Volunteer: History                                 */
@@ -334,7 +383,7 @@
   background-color: #f24822;
 }
 
-/* Filtering task cards by using CSS */
+/* Filtering task cards by status */
 .volunteer.tab-content .taskCard[data-status="Completed"],
 .volunteer.tab-content .taskCard[data-status="Pending"],
 .volunteer.tab-content .taskCard[data-status="Cancelled"] {

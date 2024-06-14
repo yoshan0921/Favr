@@ -7,7 +7,7 @@
   <script type="module" src="./js/common.js"></script>
   <script type="module" src="./js/dashboard.js" defer></script>
   <script>
-    (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+    (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set(["geometry"]), e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
       key: "AIzaSyCmy-0P_Y1HQdMacXnu9a2zs4dcm5FQ40w",
       v: "weekly",
     });
@@ -17,7 +17,6 @@
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <title>Dashboard</title>
-
 </head>
 
 <body>
@@ -33,49 +32,63 @@
   <div id="filterModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-        <span class="closeModal">&times;</span>
-        <div class="modal-form">
-            <h3>Filter favors by:</h3>
-            <form action="#" id="filterForm">
-                <div class="form-group">
-                    <h3>Date</h3>
-                    <div class="form-group form-row">
-                        <div><label for="newest">Newest to oldest</label><input type="radio" name="dateFilter" id="newest" value="newest"></div>
-                        <div><label for="oldest">Oldest to newest</label><input type="radio" name="dateFilter" id="oldest" value="oldest"></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <h3>Distance</h3>
-                    <div class="form-group">
-                       <input type="range" min="0" max="4" value="1" step="1" id="distanceFilter">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <h3>Length</h3>
-                    <div class="form-group">
-                       <input type="range" min="0" max="4" value="1" step="1" id=lengthFilter">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <h3>Favor type</h3>
-                    <div class="favor-options">
-                        <span class="option">Grocery shopping</span>
-                        <span class="option">Mail & Packages</span>
-                        <span class="option">Meds pickup</span>
-                        <span class="option">Tech Help</span>
-                        <span class="option">Pet Care</span>
-                        <span class="option">Transportation</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button id="cancelFilter" type="reset">Cancel</button>
-                    <button id="applyFilter" type="button">Apply</button>
-                </div>
-            </form>
+      <span class="closeModal">&times;</span>
+      <div class="modal-form">
+        <h3>Filter favors by:</h3>
+        <form action="#" id="filterForm">
+          <div class="form-group">
+            <h3>Date</h3>
+            <div class="form-group form-row">
+              <div><label for="newest">Newest to oldest</label><input type="radio" name="dateFilter" id="newest" value="newest"></div>
+              <div><label for="oldest">Oldest to newest</label><input type="radio" name="dateFilter" id="oldest" value="oldest"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <h3>Distance</h3>
+            <div class="form-group">
+              <input type="range" min="2000" max="10000" value="10000" step="2000" id="distanceFilter" list="distanceFilterScale">
+              <datalist id="distanceFilterScale">
+                <option value="2000" label="2km"></option>
+                <option value="4000" label="4km"></option>
+                <option value="6000" label="6km"></option>
+                <option value="8000" label="8km"></option>
+                <option value="10000" label="8+km"></option>
+              </datalist>
+            </div>
+          </div>
+          <div class="form-group">
+            <h3>Length</h3>
+            <div class="form-group">
+              <input type="range" min="0.5" max="2.5" value="2.5" step="0.5" id="lengthFilter" list="lengthFilterScale">
+              <datalist id="lengthFilterScale">
+                <option value="0.5" label="0.5hr"></option>
+                <option value="1" label="1hr"></option>
+                <option value="1.5" label="1.5hr"></option>
+                <option value="2" label="2hr"></option>
+                <option value="2.5" label="2+hr"></option>
+              </datalist>
+            </div>
+          </div>
+          <div class="form-group">
+            <h3>Favor type</h3>
+            <div class="favor-options">
+              <span class="option">Grocery shopping</span>
+              <span class="option">Mail & Packages</span>
+              <span class="option">Meds pickup</span>
+              <span class="option">Tech Help</span>
+              <span class="option">Pet Care</span>
+              <span class="option">Transportation</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <button id="cancelFilter" type="reset">Cancel</button>
+            <button id="applyFilter" type="button">Apply</button>
+          </div>
+        </form>
 
-        </div>
+      </div>
     </div>
-</div>
+  </div>
 </body>
 
 </html>

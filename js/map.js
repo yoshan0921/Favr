@@ -28,6 +28,7 @@ function createMapView(taskArray) {
  */
 async function initMap(taskArray, latitude, longitude) {
   const mapElement = document.getElementById("map");
+  let infoWindows = [];
 
   // Display map with current location
   if (!mapElement) return;
@@ -51,8 +52,6 @@ async function initMap(taskArray, latitude, longitude) {
     position: position,
     content: you,
   });
-
-  let infoWindows = [];
 
   // Add markers for each task location
   let markerPromises = taskArray.map((task) => {
@@ -99,7 +98,11 @@ async function initMap(taskArray, latitude, longitude) {
           return;
         }
 
-        // Create a marker and add clickevent
+        // Calculate the distance between the current location and the task location
+        let distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(latitude, longitude), new google.maps.LatLng(markerLatLng.lat, markerLatLng.lng));
+        console.log("Distance: " + distance + " meters");
+
+        // Create a marker for the task
         const marker = new AdvancedMarkerElement({
           map: map,
           position: markerLatLng,
@@ -115,7 +118,7 @@ async function initMap(taskArray, latitude, longitude) {
               console.log(marker.title);
               const contentString = `
               <div class=infoWindow>
-                <a href="/tasks/accept.html?taskid=${id}" data-taskid="${id}"></a>
+                <a href="/tasks/accept.html?taskid=${id}" data-taskid="${id} data-distance=${distance}"></a>
                 <h3 class="title">${taskName}</h3>
                 <div class="statusColor"></div>
                 <p class="date">${taskDate}</p>
