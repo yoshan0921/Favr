@@ -23,6 +23,7 @@ window.addEventListener("load", function (event) {
 });
 
 /**
+ * Memo:
  * runFunction(); should be called when DOMContentLoaded event is triggered
  * However, there is a case DOMContentLoaded is not triggered.
  * That is why we need to check the readyState of the document.
@@ -81,6 +82,8 @@ async function displayTaskListForElders() {
     let allTasks = await getAll("tasks");
     // Create card view
     await createTaskListForElders(allTasks);
+    // Sort the task cards by date (newest to oldest)
+    sortTasksByDate("newest", getQuerySelector("#taskList .taskCard"));
   } catch (error) {
     console.log(error);
   }
@@ -110,6 +113,7 @@ async function createTaskListForElders(allTasks) {
         // Get task information
         let taskName = taskDetails.name ?? "";
         let taskStatus = taskDetails.status ?? "";
+        let taskDate = taskDetails.details["date"] ?? "";
         let taskVolunteerPhoto;
         try {
           taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
@@ -133,6 +137,9 @@ async function createTaskListForElders(allTasks) {
         // Create task card
         const card = document.createElement("div");
         card.classList.add("taskCard");
+        card.setAttribute("data-taskid", id);
+        card.setAttribute("data-favorType", taskName);
+        card.setAttribute("data-date", taskDate);
         card.innerHTML = `
         <a href="/tasks/tracking.html?taskid=${id}"></a>
         <h3 class="title">${taskName}</h3>
@@ -197,6 +204,8 @@ async function loadVolunteersDashboard() {
   const filterBtn = document.getElementById("openFilterBtn");
   const filterModal = document.getElementById("filterModal");
   const closeFilterBtn = document.getElementById("cancelFilter");
+  const applyFilterBtn = document.getElementById("applyFilter");
+  const cancelFilterBtn = document.getElementById("cancelFilter");
 
   // Tab menu
   const tabs = document.querySelectorAll(".tab");
@@ -233,7 +242,21 @@ async function loadVolunteersDashboard() {
     });
   }
   if (closeFilterBtn) {
-    closeFilterBtn.addEventListener("click", () => closeModal(filterModal));
+    closeFilterBtn.addEventListener("click", () => {
+      closeModal(filterModal);
+    });
+  }
+  if (applyFilterBtn) {
+    applyFilterBtn.addEventListener("click", () => {
+      applyFilter();
+      closeModal(filterModal);
+    });
+  }
+  if (cancelFilterBtn) {
+    cancelFilterBtn.addEventListener("click", () => {
+      console.log("Cancel Filter");
+      closeModal(filterModal);
+    });
   }
 }
 
@@ -273,6 +296,7 @@ async function createTaskListForVolunteers(allTasks) {
     // Sometimes, getCurrentPosition takes a long time to get the return.
     // It might be better to call it, when user access the login page.
     // Then, store the coodinate in the local storage.
+    // Or, show the loading icon until the coordinate is returned.
 
     // Get current location
     const position = await getCurrentPosition();
@@ -307,16 +331,17 @@ async function createTaskListForVolunteers(allTasks) {
     console.log(error);
   }
 
-  // Map allTasks to an array of Promises
   let tasksPromises = allTasks.map((task) => {
-    let id = task[0]; // Task ID
-    let taskDetails = task[1]; // Task detail data
-    let markerLatLng = {}; // Task location (Marker position)
-    let distance = 0; // Distance between the current location and the task location
+    return new Promise(async (resolve) => {
+      // Wrap the task in a new Promise
+      let id = task[0]; // Task ID
+      let taskDetails = task[1]; // Task detail data
+      let markerLatLng = {}; // Task location (Marker position)
+      let distance = 0; // Distance between the current location and the task location
 
-    // Get requester's information
-    return getDocument("users", taskDetails.requesterID)
-      .then(async (requester) => {
+      try {
+        // Get requester's information
+        let requester = await getDocument("users", taskDetails.requesterID);
         console.log(requester);
         console.log(taskDetails);
 
@@ -342,7 +367,6 @@ async function createTaskListForVolunteers(allTasks) {
             console.log(`Distance: ${distance} meters`);
           } catch (error) {
             console.log(error);
-            return;
           }
         }
 
@@ -361,14 +385,17 @@ async function createTaskListForVolunteers(allTasks) {
           taskMarkerLatLng: markerLatLng,
           taskDistance: distance,
         };
+        console.log(taskObj);
 
         // Display task information on the list and map
         createCard(taskObj);
         createMapMarker(taskObj, map, infoWindows);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log(error);
-      });
+      }
+
+      resolve(); // Resolve the Promise even if there was an error
+    });
   });
 
   // Wait for all Promises to resolve
@@ -389,7 +416,10 @@ function createCard(task) {
   const card = document.createElement("div");
   card.classList.add("taskCard");
   card.setAttribute("data-taskid", task.taskID);
+  card.setAttribute("data-favorType", task.taskName);
+  card.setAttribute("data-date", task.taskDate);
   card.setAttribute("data-distance", task.taskDistance);
+  card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
   <a href="/tasks/accept.html?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
@@ -427,8 +457,8 @@ function createCard(task) {
     }
   }
 
-  // Add data-distance attribute (label) to the card for distance filtering
-  addDistanceAttributes(card, task.taskDistance);
+  // Sort the task cards by date (newest to oldest)
+  sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"));
 }
 
 /**
@@ -442,6 +472,7 @@ function createCard(task) {
 function createMapMarker(task, map, infoWindows) {
   // If the task is not "Waiting to be accepted", do not create a marker
   if (!["Waiting to be accepted"].includes(task.taskStatus)) return;
+  console.log(`createMapMarker: ${JSON.stringify(task)}`);
 
   // Create a marker for the task
   const marker = new AdvancedMarkerElement({
@@ -460,7 +491,10 @@ function createMapMarker(task, map, infoWindows) {
         const card = document.createElement("div");
         card.classList.add("infoWindow");
         card.setAttribute("data-taskid", task.taskID);
+        card.setAttribute("data-favorType", task.taskName);
+        card.setAttribute("data-date", task.taskDate);
         card.setAttribute("data-distance", task.taskDistance);
+        card.setAttribute("data-length", task.taskDuration);
         card.innerHTML = `
         <a href="/tasks/accept.html?taskid=${task.taskID}"></a>
         <h3 class="title">${task.taskName}</h3>
@@ -485,9 +519,6 @@ function createMapMarker(task, map, infoWindows) {
           map,
         });
         infoWindows.push(infowindow);
-
-        // Add data-distance attribute (label) to the card for distance filtering
-        addDistanceAttributes(card, task.taskDistance);
       };
     })(marker)
   );
@@ -539,16 +570,137 @@ function getCurrentPosition() {
   });
 }
 
+function applyFilter() {
+  console.log("Apply Filter");
+
+  // Get the specified filter conditions
+  let distanceFilterValue = document.getElementById("distanceFilter").value;
+  let lengthFilterValue = document.getElementById("lengthFilter").value;
+  let groceryShopping = document.getElementById("groceryShopping").checked;
+  let mailPackages = document.getElementById("mailPackages").checked;
+  let medsPickup = document.getElementById("medsPickup").checked;
+  let techHelp = document.getElementById("techHelp").checked;
+  let petCare = document.getElementById("petCare").checked;
+  let transportation = document.getElementById("transportation").checked;
+  let dateFilterValue;
+  // Get all radio buttons with the name 'dateFilter'
+  let radios = document.getElementsByName("dateFilter");
+  for (let radio of radios) {
+    // If the radio button is selected, get its value
+    if (radio.checked) {
+      dateFilterValue = radio.value;
+      break;
+    }
+  }
+
+  console.log(`Filter Conditions: 
+  Date Sort: ${dateFilterValue},
+  Distance: ${distanceFilterValue},
+  Length: ${lengthFilterValue},
+  Grocery Shopping: ${groceryShopping},
+  Mail Packages: ${mailPackages},
+  Meds Pickup: ${medsPickup},
+  Tech Help: ${techHelp},
+  Pet Care: ${petCare},
+  Transportation: ${transportation}
+  `);
+
+  // Evaluate each task card with "Waiting to be accepted"
+  let taskCards = document.querySelectorAll("#taskListExplore .taskCard");
+  console.log(taskCards);
+
+  // Hide the task card that does not meet the filter conditions
+  taskCards.forEach((card) => {
+    let marker = document.querySelector(`div[title="${card.getAttribute("data-taskid")}"]`);
+    let favorType = card.getAttribute("data-favorType");
+    let distance = parseInt(card.getAttribute("data-distance"));
+    let length = parseInt(card.getAttribute("data-length"));
+    console.log(`favorType: ${favorType}, distance: ${distance}, length: ${length}`);
+
+    // Initialize display status as true
+    let displayStatus = true;
+
+    // Distance filter
+    console.log(`distance: ${distance}, distanceFilterValue: ${distanceFilterValue}`);
+    if (distance === 10000) {
+      // This is the case for 8+ km selected in the filter
+      displayStatus = true;
+    } else if (distance > distanceFilterValue) {
+      displayStatus = false;
+    }
+
+    // Length filter
+    console.log(`length: ${length}, lengthFilterValue: ${lengthFilterValue}`);
+    if (length === 2.5) {
+      // This is the case for 2+ hours selected in the filter
+      displayStatus = true;
+    } else if (length > lengthFilterValue) {
+      displayStatus = false;
+    }
+
+    // Task type filter
+    if (
+      (favorType === "Grocery Shopping" && !groceryShopping) ||
+      (favorType === "Mail Packages" && !mailPackages) ||
+      (favorType === "Meds Pickup" && !medsPickup) ||
+      (favorType === "Tech Help" && !techHelp) ||
+      (favorType === "Pet Care" && !petCare) ||
+      (favorType === "Transportation" && !transportation)
+    ) {
+      displayStatus = false;
+    }
+
+    // Set display status
+    if (card) card.style.display = displayStatus ? "block" : "none";
+    if (marker) marker.style.display = displayStatus ? "block" : "none";
+
+    // Task sort by date (newest or oldest)
+    sortTasksByDate(dateFilterValue, taskCards);
+  });
+}
+
+// ============================================================
+// Utility Functions
+// ============================================================
+
 /**
- * Adds data-distance attributes to a card for distance filtering.
+ * Sorts the given task cards based on the provided date filter value.
  *
- * @param {Object} card - The card element to which attributes will be added.
- * @param {number} distance - The distance value used to determine which attributes to add.
+ * @param {string} dateFilterValue - The value of the date filter. It can be 'newest' or 'oldest'.
+ * @param {NodeList} taskCards - The task cards to be sorted. Each task card is a DOM node.
+ *
+ * The function first converts the NodeList of task cards into an array. It then sorts the array based on the date attribute of each task card.
+ * If the date filter value is 'newest', the task cards are sorted from newest to oldest.
+ * If the date filter value is 'oldest', the task cards are sorted from oldest to newest.
+ * After sorting, the function replaces the old NodeList in the DOM with the sorted array of task cards.
  */
-function addDistanceAttributes(card, distance) {
-  if (distance >= 0) card.setAttribute("data-distance-l1", "true");
-  if (distance >= 2000) card.setAttribute("data-distance-l2", "true");
-  if (distance >= 4000) card.setAttribute("data-distance-l3", "true");
-  if (distance >= 6000) card.setAttribute("data-distance-l4", "true");
-  if (distance >= 8000) card.setAttribute("data-distance-l5", "true");
+function sortTasksByDate(dateFilterValue, taskCards) {
+  // Convert NodeList to Array
+  let taskCardsArray = Array.from(taskCards);
+
+  // Sort the array based on the date
+  taskCardsArray.sort((a, b) => {
+    let dateA = new Date(a.getAttribute("data-date"));
+    let dateB = new Date(b.getAttribute("data-date"));
+
+    // For newest to oldest
+    if (dateFilterValue === "newest") {
+      return dateB - dateA;
+    }
+
+    // For oldest to newest
+    if (dateFilterValue === "oldest") {
+      return dateA - dateB;
+    }
+
+    return 0; // If no sorting is needed
+  });
+
+  // Replace the old NodeList with the sorted array
+  let taskListExplore = document.querySelector("#taskListExplore");
+  taskCardsArray.forEach((card) => {
+    taskListExplore.appendChild(card);
+  });
+
+  console.log(`Sort by ${dateFilterValue}`);
 }
