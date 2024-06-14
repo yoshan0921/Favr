@@ -1,5 +1,9 @@
 import { closeModal, loadPartial, openModal } from "./common.js";
-import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
+import {
+  getCurrentUserID,
+  getCurrentUserRole,
+  monitorAuthenticationState,
+} from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
 import { createMapView } from "./map.js";
 import { redirect } from "./utils.js";
@@ -36,7 +40,10 @@ async function runFunction() {
   currentUserRole = await getCurrentUserRole();
 
   // Wait for loadPartial to complete before loading the dashboard.
-  await loadPartial(`dashboard/_${currentUserRole}Dashboard`, "dashboard-content");
+  await loadPartial(
+    `dashboard/_${currentUserRole}Dashboard`,
+    "dashboard-content"
+  );
 
   // Load the dashboard based on the user's role
   if (currentUserRole === "volunteer") {
@@ -137,19 +144,13 @@ async function loadVolunteersDashboard() {
       { passive: false }
     );
   }
-  if(filterBtn){
-    filterBtn.addEventListener(
-      "click",
-      ()=>{
-        openModal(filterModal);
-      }
-    )
+  if (filterBtn) {
+    filterBtn.addEventListener("click", () => {
+      openModal(filterModal);
+    });
   }
-  if(closeFilterBtn){
-    closeFilterBtn.addEventListener(
-      "click", 
-      ()=>closeModal(filterModal)
-    );
+  if (closeFilterBtn) {
+    closeFilterBtn.addEventListener("click", () => closeModal(filterModal));
   }
 }
 
@@ -174,7 +175,10 @@ async function createListViewForElders(allTasks) {
     let taskDetails = task[1]; // Task detail data
 
     // Get requester's information
-    Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
+    Promise.all([
+      getDocument("users", taskDetails.requesterID),
+      getDocument("users", taskDetails.volunteerID),
+    ])
       .then(async ([requester, volunteer]) => {
         console.log(id);
         console.log(requester);
@@ -187,11 +191,15 @@ async function createListViewForElders(allTasks) {
         // Get task information
         let taskName = taskDetails.name ?? "";
         let taskStatus = taskDetails.status ?? "";
+        let taskNotes = taskDetails.notes ?? "";
         let taskVolunteerPhoto;
         try {
-          taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
+          taskVolunteerPhoto = await getFile(
+            "profile/" + volunteer.profilePictureURL
+          );
         } catch (error) {
-          taskVolunteerPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+          taskVolunteerPhoto =
+            "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
         }
 
         let taskVolunteerFirstName;
@@ -214,6 +222,7 @@ async function createListViewForElders(allTasks) {
         <a href="/tasks/tracking.html?taskid=${id}"></a>
         <h3 class="title">${taskName}</h3>
         <p class="status"><span class="statusColor"></span>${taskStatus}</p>
+        <p>${taskNotes}</p>
         `;
         if (taskDetails.status != "Waiting to be accepted") {
           card.innerHTML += `
@@ -229,21 +238,28 @@ async function createListViewForElders(allTasks) {
 
         // Append card to the correct list based on the task status
         if (["Waiting to be accepted"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+          card.querySelector(".taskCard .statusColor").style.backgroundColor =
+            "#ffcd29";
           list.appendChild(card);
         } else if (["On going"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
+          card.querySelector(".taskCard .statusColor").style.backgroundColor =
+            "#0D99FF";
           list.appendChild(card);
-        } else if (["Pending approval", "Cancelled"].includes(taskDetails.status)) {
+        } else if (
+          ["Pending approval", "Cancelled"].includes(taskDetails.status)
+        ) {
           list.appendChild(card);
           if (taskDetails.status === "Pending approval") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#ffcd29";
             card.setAttribute("data-status", "Pending approval");
           } else if (taskDetails.status === "Completed") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#44c451";
             card.setAttribute("data-status", "Completed");
           } else if (taskDetails.status === "Cancelled") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#f24822";
             card.setAttribute("data-status", "Cancelled");
           }
         }
@@ -291,13 +307,17 @@ async function createListViewForVolunteers(allTasks) {
         let taskName = taskDetails.name ?? "";
         let taskDate = taskDetails.details["date"] ?? "";
         let taskDuration = taskDetails.details["duration"] ?? "";
-        let taskRequesterName = `${requester.firstName} ${requester.lastName}` ?? "";
+        let taskRequesterName =
+          `${requester.firstName} ${requester.lastName}` ?? "";
         let taskRequesterAddress = requester.address ?? "";
         let taskRequesterPhoto;
         try {
-          taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
+          taskRequesterPhoto = await getFile(
+            "profile/" + requester.profilePictureURL
+          );
         } catch (error) {
-          taskRequesterPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+          taskRequesterPhoto =
+            "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
         }
 
         // Create task card
@@ -321,19 +341,30 @@ async function createListViewForVolunteers(allTasks) {
         // Append card to the correct list based on the task status
         if (["Waiting to be accepted"].includes(taskDetails.status)) {
           listExplore.appendChild(card);
-        } else if (["On going"].includes(taskDetails.status) && taskDetails.volunteerID === currentUserID) {
+        } else if (
+          ["On going"].includes(taskDetails.status) &&
+          taskDetails.volunteerID === currentUserID
+        ) {
           listMyFavor.appendChild(card);
           favorCount++;
-        } else if (["Pending approval", "Completed", "Cancelled"].includes(taskDetails.status) && taskDetails.volunteerID === currentUserID) {
+        } else if (
+          ["Pending approval", "Completed", "Cancelled"].includes(
+            taskDetails.status
+          ) &&
+          taskDetails.volunteerID === currentUserID
+        ) {
           listHistory.appendChild(card);
           if (taskDetails.status === "Pending approval") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#ffcd29";
             card.setAttribute("data-status", "Pending approval");
           } else if (taskDetails.status === "Completed") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#44c451";
             card.setAttribute("data-status", "Completed");
           } else if (taskDetails.status === "Cancelled") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#f24822";
             card.setAttribute("data-status", "Cancelled");
           }
         }

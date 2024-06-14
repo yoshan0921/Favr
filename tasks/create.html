@@ -26,19 +26,22 @@
         <div class="container steps-counter">
             <div class="step1">
                 <div class="stepNumber stepActive"><span>1</span></div>
-                <div class="stepText textActive">Select Favor Type</div>
+                <div class="stepText textActive">Favor Type</div>
             </div>
+            <div class="stepLine2"></div>
             <div class="step2">
                 <div class="stepNumber"><span>2</span></div>
-                <div class="stepText">Select Date & Time</div>
+                <div class="stepText">Date & Time</div>
             </div>
+            <div class="stepLine3"></div>
             <div class="step3">
                 <div class="stepNumber"><span>3</span></div>
-                <div class="stepText">Enter Address</div>
+                <div class="stepText">Address</div>
             </div>
+            <div class="stepLine4"></div>
             <div class="step4">
                 <div class="stepNumber"><span>4</span></div>
-                <div class="stepText">Complete</div>
+                <div class="stepText">Notes</div>
             </div>
         </div>
 
@@ -88,10 +91,12 @@
                 <div class="form-group">
                     <label for="favorDate">Date</label>
                     <input type="date" name="favorDate" id="favorDate">
+                    <label for="favorTime">Time</label>
+                    <input type="time" name="favorTime" id="favorTime">
                 </div>
             </div>
             <div class="step hidden" id="step-3">
-                <h2>Enter Address</h2>
+                <h2>Enter address</h2>
                 <div class="selection-history">
                     <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
                     <ul class="selection-list">
@@ -99,12 +104,14 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" name="address" id="address">
+                    <label for="startAddress">Start Address</label>
+                    <input type="text" name="startAddress" id="startAddress">
+                    <label for="endAddress">End Address (Optional)</label>
+                    <input type="text" name="endAddress" id="endAddress">
                 </div>
             </div>
             <div class="step hidden" id="step-4">
-                <h2>Complete</h2>
+                <h2>Enter notes</h2>
                 <div class="selection-history">
                     <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
                     <ul class="selection-list">
@@ -115,6 +122,7 @@
                     <label for="notes">Notes</label>
                     <textarea name="" id="notes"></textarea>
                 </div>
+                <!-- Try to move the location of submit button to next step button location -->
                 <div class="form-group">
                     <button type="submit">Submit</button>
                 </div>
@@ -124,6 +132,8 @@
         <div class="container form-navigation">
             <button id="previousStepBtn">Previous step</button>
             <button id="nextStepBtn">Next step</button>
+            <!-- Moved submit button here, to replace next step button in step 4 -->
+            <button id="submitBtn" class="hidden" type="submit">Submit</button>
         </div>
 
         <!-- Summary Section -->
@@ -145,7 +155,7 @@
 
     </main>
     <!-- Footer -->
-  <footer id="footer"></footer>
+    <footer id="footer"></footer>
 </body>
 
 </html>
