@@ -55,6 +55,7 @@ function runFunction() {
       details: {
         date: document.getElementById("favorDate").value,
         time: document.getElementById("favorTime").value,
+        favorLength: document.getElementById("favorLength").value,
         startAddress: document.getElementById("startAddress").value,
         endAddress: document.getElementById("endAddress").value || "None",
       },
@@ -94,9 +95,11 @@ function runFunction() {
         case 2:
           const favorDate = document.getElementById("favorDate").value;
           const favorTime = document.getElementById("favorTime").value;
-          if (favorDate && favorTime) {
+          const favorLength = document.getElementById("favorLength").value;
+          if (favorDate && favorTime && favorLength) {
             selectionHistory.push(`Date: ${favorDate}`);
             selectionHistory.push(`Time: ${favorTime}`);
+            selectionHistory.push(`Favor Length: ${favorLength}`);
             canProceed = true;
           } else {
             alert("Enter a date and time.");
@@ -173,10 +176,19 @@ function runFunction() {
 
         // Remove the last added <li> element from each list
 
-        // Remove 2 last <li> for steps 2 and 3 that has 2 inputs
-        if (currentStep === 3 || currentStep === 4) {
-          selectionHistory.pop(); // Remove input 1 from selectionHistory
-          selectionHistory.pop(); // Remove input 2 from selectionHistory
+        // Remove <li> dependin on number of inputs
+        if (currentStep === 3) {
+          selectionHistory.pop(); // Remove date from selectionHistory
+          selectionHistory.pop(); // Remove time from selectionHistory
+          selectionHistory.pop(); // Remove length from selectionHistory
+          for (let list of historyLists) {
+            list.removeChild(list.lastElementChild);
+            list.removeChild(list.lastElementChild);
+            list.removeChild(list.lastElementChild);
+          }
+        } else if (currentStep === 4) {
+          selectionHistory.pop(); // Remove startAddress from selectionHistory
+          selectionHistory.pop(); // Remove endAddress selectionHistory
           for (let list of historyLists) {
             list.removeChild(list.lastElementChild);
             list.removeChild(list.lastElementChild);
@@ -300,6 +312,7 @@ function runFunction() {
       <li>Favor Type Selected: ${task.name}</li>
       <li>Date: ${task.details.date}</li>
       <li>Time: ${task.details.time}</li>
+      <li>Favor Length: ${task.details.favorLength}</li>
       <li>Start Address: ${task.details.startAddress}</li>
       <li>End Address ${task.details.endAddress}</li>
       <li>Notes: ${task.notes}</li>
