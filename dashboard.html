@@ -39,7 +39,7 @@
           <div class="form-group">
             <h3>Date</h3>
             <div class="form-group form-row">
-              <div><label for="newest">Newest to oldest</label><input type="radio" name="dateFilter" id="newest" value="newest"></div>
+              <div><label for="newest">Newest to oldest</label><input type="radio" name="dateFilter" id="newest" value="newest" checked></div>
               <div><label for="oldest">Oldest to newest</label><input type="radio" name="dateFilter" id="oldest" value="oldest"></div>
             </div>
           </div>
@@ -72,12 +72,18 @@
           <div class="form-group">
             <h3>Favor type</h3>
             <div class="favor-options">
-              <span class="option">Grocery shopping</span>
-              <span class="option">Mail & Packages</span>
-              <span class="option">Meds pickup</span>
-              <span class="option">Tech Help</span>
-              <span class="option">Pet Care</span>
-              <span class="option">Transportation</span>
+              <label class="favorType" for="groceryShopping">Grocery shopping</label>
+              <input class="favorType" type="checkbox" id="groceryShopping" checked>
+              <label class="favorType" for="mailPackages">Mail & Packages</label>
+              <input class="favorType" type="checkbox" id="mailPackages" checked>
+              <label class="favorType" for="medsPickup">Meds pickup</label>
+              <input class="favorType" type="checkbox" id="medsPickup" checked>
+              <label class="favorType" for="techHelp">Tech Help</label>
+              <input class="favorType" type="checkbox" id="techHelp" checked>
+              <label class="favorType" for="petCare">Pet Care</label>
+              <input class="favorType" type="checkbox" id="petCare" checked>
+              <label class="favorType" for="transportation">Transportation</label>
+              <input class="favorType" type="checkbox" id="transportation" checked>
             </div>
           </div>
           <div class="form-group">
@@ -85,7 +91,6 @@
             <button id="applyFilter" type="button">Apply</button>
           </div>
         </form>
-
       </div>
     </div>
   </div>

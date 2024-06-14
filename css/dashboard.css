@@ -314,31 +314,6 @@
   width: 100%;
 }
 
-/* Filtering task cards by distance */
-.volunteer.tab-content input[type="checkbox"].distance1,
-.volunteer.tab-content input[type="checkbox"].distance2,
-.volunteer.tab-content input[type="checkbox"].distance3,
-.volunteer.tab-content input[type="checkbox"].distance4,
-.volunteer.tab-content input[type="checkbox"].distance5 {
-  display: none;
-}
-
-.volunteer.tab-content .taskCard[data-distance-l1="true"],
-.volunteer.tab-content .taskCard[data-distance-l2="true"],
-.volunteer.tab-content .taskCard[data-distance-l3="true"],
-.volunteer.tab-content .taskCard[data-distance-l4="true"],
-.volunteer.tab-content .taskCard[data-distance-l5="true"] {
-  display: block;
-}
-
-#toggleDistance1Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l1="true"],
-#toggleDistance2Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l2="true"],
-#toggleDistance3Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l3="true"],
-#toggleDistance4Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l4="true"],
-#toggleDistance5Checkbox:checked ~ #taskListExplore .taskCard[data-distance-l5="true"] {
-  display: none;
-}
-
 /* -------------------------------------------------- */
 /* Volunteer: History                                 */
 /* -------------------------------------------------- */
