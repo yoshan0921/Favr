@@ -49,6 +49,7 @@ async function displayTaskSummary(taskID) {
     const favorTypeData = document.getElementById("favorType");
     const dateData = document.getElementById("date");
     const timeData = document.getElementById("time");
+    const favorLengthData = document.getElementById("favorLength");
     const startAddressData = document.getElementById("startAddress");
     const endAddressData = document.getElementById("endAddress");
     const taskIdData = document.getElementById("taskID");
@@ -88,6 +89,7 @@ async function displayTaskSummary(taskID) {
     favorTypeData.innerHTML = task.name;
     dateData.innerHTML = task.details.date;
     timeData.innerHTML = task.details.time;
+    favorLengthData.innerHTML = task.details.favorLength;
     startAddressData.innerHTML = task.details.startAddress;
     endAddressData.innerHTML = task.details.endAddress;
     taskIdData.innerHTML = taskID;
