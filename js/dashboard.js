@@ -1,9 +1,5 @@
 import { closeModal, loadPartial, openModal } from "./common.js";
-import {
-  getCurrentUserID,
-  getCurrentUserRole,
-  monitorAuthenticationState,
-} from "./firebase/authentication.js";
+import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
 
@@ -87,8 +83,6 @@ async function displayTaskListForElders() {
     let allTasks = await getAll("tasks");
     // Create card view
     await createTaskListForElders(allTasks);
-    // Sort the task cards by date (newest to oldest)
-    sortTasksByDate("newest", getQuerySelector("#taskList .taskCard"));
   } catch (error) {
     console.log(error);
   }
@@ -101,15 +95,13 @@ async function displayTaskListForElders() {
  */
 async function createTaskListForElders(allTasks) {
   const list = document.getElementById("taskList");
-  for (let task of allTasks) {
+  const tasksPromises = allTasks.map(async (task) => {
+    // for (let task of allTasks) {
     let id = task[0]; // Task ID
     let taskDetails = task[1]; // Task detail data
 
     // Get requester's information
-    Promise.all([
-      getDocument("users", taskDetails.requesterID),
-      getDocument("users", taskDetails.volunteerID),
-    ])
+    return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
         console.log(requester);
         console.log(volunteer);
@@ -122,15 +114,13 @@ async function createTaskListForElders(allTasks) {
         let taskName = taskDetails.name ?? "";
         let taskStatus = taskDetails.status ?? "";
         let taskDate = taskDetails.details["date"] ?? "";
+        let taskAddress = taskDetails.details["startAddress"] ?? "";
         let taskNotes = taskDetails.details["notes"] ?? "";
         let taskVolunteerPhoto;
         try {
-          taskVolunteerPhoto = await getFile(
-            "profile/" + volunteer.profilePictureURL
-          );
+          taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
         } catch (error) {
-          taskVolunteerPhoto =
-            "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+          taskVolunteerPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
         }
 
         let taskVolunteerFirstName;
@@ -152,6 +142,7 @@ async function createTaskListForElders(allTasks) {
         card.setAttribute("data-taskid", id);
         card.setAttribute("data-favorType", taskName);
         card.setAttribute("data-date", taskDate);
+        card.setAttribute("data-address", taskAddress);
         card.innerHTML = `
         <a href="/tasks/tracking.html?taskid=${id}"></a>
         <h3 class="title">${taskName}</h3>
@@ -172,28 +163,21 @@ async function createTaskListForElders(allTasks) {
 
         // Append card to the correct list based on the task status
         if (["Waiting to be accepted"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor =
-            "#ffcd29";
+          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
           list.appendChild(card);
         } else if (["On going"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor =
-            "#0D99FF";
+          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
           list.appendChild(card);
-        } else if (
-          ["Pending approval", "Cancelled"].includes(taskDetails.status)
-        ) {
+        } else if (["Pending approval", "Cancelled"].includes(taskDetails.status)) {
           list.appendChild(card);
           if (taskDetails.status === "Pending approval") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor =
-              "#ffcd29";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
             card.setAttribute("data-status", "Pending approval");
           } else if (taskDetails.status === "Completed") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor =
-              "#44c451";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
             card.setAttribute("data-status", "Completed");
           } else if (taskDetails.status === "Cancelled") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor =
-              "#f24822";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
             card.setAttribute("data-status", "Cancelled");
           }
         }
@@ -201,7 +185,13 @@ async function createTaskListForElders(allTasks) {
       .catch((error) => {
         console.log(error);
       });
-  }
+  });
+
+  // Wait for all tasks to be processed
+  await Promise.all(tasksPromises);
+
+  // Sort the task cards by date (newest to oldest)
+  sortTasksByDate("newest", document.querySelectorAll("#taskList .taskCard"), document.getElementById("taskList"));
 }
 
 // ============================================================
@@ -378,9 +368,7 @@ async function createTaskListForVolunteers(allTasks) {
         // Get requester's profile picture
         let taskRequesterPhoto;
         try {
-          taskRequesterPhoto = await getFile(
-            "profile/" + requester.profilePictureURL
-          );
+          taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
         } catch (error) {
           taskRequesterPhoto = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
         }
@@ -388,7 +376,7 @@ async function createTaskListForVolunteers(allTasks) {
         // Get coordinates of the task location
         if (["Waiting to be accepted"].includes(taskDetails.status)) {
           try {
-            let result = await getCoordinates(taskDetails.details["address"]);
+            let result = await getCoordinates(taskDetails.details["startAddress"]);
             markerLatLng = { lat: result.lat, lng: result.lng };
             console.log("Formatted Address: " + result.address);
 
@@ -434,6 +422,9 @@ async function createTaskListForVolunteers(allTasks) {
 
   // Wait for all Promises to resolve
   await Promise.all(tasksPromises);
+
+  // Sort the task cards by date (newest to oldest)
+  sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"), document.getElementById("taskListExplore"));
 }
 
 /**
@@ -452,6 +443,7 @@ function createCard(task) {
   card.setAttribute("data-taskid", task.taskID);
   card.setAttribute("data-favorType", task.taskName);
   card.setAttribute("data-date", task.taskDate);
+  card.setAttribute("data-address", task.taskAddress);
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
@@ -490,9 +482,6 @@ function createCard(task) {
       card.setAttribute("data-status", "Cancelled");
     }
   }
-
-  // Sort the task cards by date (newest to oldest)
-  sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"));
 }
 
 /**
@@ -527,6 +516,7 @@ function createMapMarker(task, map, infoWindows) {
         card.setAttribute("data-taskid", task.taskID);
         card.setAttribute("data-favorType", task.taskName);
         card.setAttribute("data-date", task.taskDate);
+        card.setAttribute("data-address", task.taskAddress);
         card.setAttribute("data-distance", task.taskDistance);
         card.setAttribute("data-length", task.taskDuration);
         card.innerHTML = `
@@ -712,7 +702,7 @@ function applyFilter() {
  * If the date filter value is 'oldest', the task cards are sorted from oldest to newest.
  * After sorting, the function replaces the old NodeList in the DOM with the sorted array of task cards.
  */
-function sortTasksByDate(dateFilterValue, taskCards) {
+function sortTasksByDate(dateFilterValue, taskCards, target) {
   // Convert NodeList to Array
   let taskCardsArray = Array.from(taskCards);
 
@@ -735,9 +725,9 @@ function sortTasksByDate(dateFilterValue, taskCards) {
   });
 
   // Replace the old NodeList with the sorted array
-  let taskListExplore = document.querySelector("#taskListExplore");
+  // let taskListExplore = document.querySelector("#taskListExplore");
   taskCardsArray.forEach((card) => {
-    taskListExplore.appendChild(card);
+    target.appendChild(card);
   });
 
   console.log(`Sort by ${dateFilterValue}`);
