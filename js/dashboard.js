@@ -115,7 +115,7 @@ async function createTaskListForElders(allTasks) {
         let taskStatus = taskDetails.status ?? "";
         let taskDate = taskDetails.details["date"] ?? "";
         let taskAddress = taskDetails.details["startAddress"] ?? "";
-        let taskNotes = taskDetails.details["notes"] ?? "";
+        let taskNotes = taskDetails.notes ?? "";
         let taskVolunteerPhoto;
         try {
           taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
