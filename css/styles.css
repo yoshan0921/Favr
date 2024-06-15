@@ -1,12 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
 :root {
-  --text: #4d5156;
-  --background: #ffffff;
-  --background-dark: #1e1e1e;
-  --lightBorder: lightgray;
-  --accent: hotpink;
-  --accent2: gray;
+  --text: #333333;
+  --disabledText : #9c9c9c;
+  --background: #FAFAFA;
+  --background-gray: #F1F3F3;
+  --background-dark: #1A1A1A;
+  --lightBorder: #D1D1D1;
+  --primary: #156A85;
+  --caringOrange: #E98872;
+  --brown: #E7D4C0;
+  --helpfulBlue: #78B8D8;
+  --warmRed: #E43F3F;
+  --pureWhite: #FFFFFF;
+  --statusYellow: #FFCD29;
+  --statusGreen: #44C451;
+  --statusBlue: #0D99FF;
 }
 
 /* -------------------------------------------------- */
@@ -23,39 +32,84 @@ html,
 body {
   padding: 0;
   margin: 0;
-  color: var(--text);
+}
+/* -------------------------------------------------- */
+/* Common                                             */
+/* -------------------------------------------------- */
+.min-height-100vh {
+  min-height: 100vh;
 }
 
 ul {
   list-style-type: none;
 }
 
-/* -------------------------------------------------- */
-/* Common                                             */
-/* -------------------------------------------------- */
 body {
-  background-color: var(--background);
+  background-color: var(--background-gray);
   color: var(--text);
   font-size: 16px;
   line-height: 1.75em;
   min-height: 100vh;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  /* To avoid overlaying content to menubar in mobile layout */
+  padding-bottom: 100px;
 }
-
-h1,
-h2 {
-  color: #444444;
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+h1, h2 {
   padding: 20px 0px;
-  text-align: center;
+}
+h1, h2, h3{
+  font-weight: 700;
+}
+h1.light, h2.light, h3.light{
+  font-weight: 100;
 }
 
-button {
-  border: 2px solid var(--lightBorder);
+
+
+/*===============
+* Buttons
+/*==============*/
+
+button,
+.link-btn {
+  display: block;
+  background-color: var(--primary);
+  border: none;
+  color: var(--pureWhite);
   border-radius: 5px;
   padding: .1rem .2rem;
   line-height: 1.75em;
 }
 button a {
   color: var(--text);
+}
+.rounded-btn {
+  border-radius: 50px;
+  padding: 1px 5px;
+  height: max-content;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 0.5rem;
+}
+.outlined-btn{
+  background-color: transparent;
+  color: var(--text);
+  border: thin solid var(--lightBorder);
 }
 /* -------------------------------------------------- */
 /* Toggle switch (list <-> map)
@@ -82,7 +136,7 @@ button a {
   right: 0;
   padding-bottom: 5px;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--disabledText);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -96,25 +150,25 @@ button a {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: gray;
+  color: var(--disabledText);
   height: 20px;
   width: 20px;
   left: 2px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--pureWhite);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 .switch input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--primary);
 }
 .switch input:checked + .slider::before {
   content: "\f276";
 }
 
 .switch input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px var(--primary);
 }
 #listView {
   font-weight: 600;
@@ -145,24 +199,13 @@ button a {
 /* -------------------------------------------------- */
 /* Header & Footer                                    */
 /* -------------------------------------------------- */
-.min-height-100vh {
-  min-height: 100vh;
-}
-
 body:not(#indexBody) {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
 }
-body {
-  background-color: var(--background);
-  color: var(--text);
-  font-family: "Open Sans", sans-serif;
-  font-size: 16px;
-  line-height: 1.75em;
-}
 header {
-  background-color: white;
+  background-color: var(--background);
   z-index: 2;
   position: fixed;
   left: 0;
@@ -197,18 +240,32 @@ header .container {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
+  border-bottom: thin solid var(--background-gray);
 }
 header .container div {
   flex-grow: 0;
   align-content: center;
-  text-align: right;
-  border-bottom: solid thin var(--lightBorder);
 }
 header .container > div {
   padding: 0.5rem;
-  background-color: white;
+  background-color: var(--background);
+}
+header .container .logo-wrapper,
+header .container .logo-wrapper a{
+  display: flex;
+  justify-content: center;
+}
+header .container .logo-wrapper #desktopLogo{
+  display: none;
+  min-width: 50px;
+  max-width: 150px;
+}
+header .container .logo-wrapper #mobileLogo{
+  max-width: 40px;
+}
+header .container .logo-wrapper img{
+  width: 100%;
 }
 header .container .page-title-wrapper {
   flex-grow: 1;
@@ -219,17 +276,7 @@ main .page-header {
   align-items: center;
   gap: 1rem;
 }
-.rounded-btn {
-  border: thin solid var(--lightBorder);
-  color: gray;
-  border-radius: 50px;
-  padding: 1px 5px;
-  height: max-content;
-  display: flex;
-  align-items: center;
-  width: max-content;
-  gap: 0.5rem;
-}
+
 .hidden {
   display: none !important;
 }
@@ -242,14 +289,14 @@ main .page-header {
   justify-content: flex-end;
   align-items: center;
 }
-.chat-icon-wrapper button {
-  background-color: gray;
-  color: darkgray;
-  border-color: var(--lightBorder);
+.chat-icon-wrapper a,
+.chat-icon-wrapper i {
+  color: var(--primary);
 }
+
 a,
 #logoutBtn {
-  color: var(--accent);
+  color: var(--disabledText);
   text-decoration: none;
   background-color: transparent;
 }
@@ -276,10 +323,6 @@ footer {
 /* Side Bar                                           */
 /* -------------------------------------------------- */
 
-body {
-  /* To avoid overlaying content to menubar in mobile layout */
-  padding-bottom: 100px;
-}
 .sidebar {
   position: fixed;
   z-index: 2;
@@ -287,10 +330,10 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  background-color: #333;
+  background-color: var(--background-gray);
   padding: 10px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
   z-index: 1; /* Bring sidebar front in mobile screen */
+  border-top: 2px solid var(--primary);
 }
 .sidebar ul {
   list-style: none;
@@ -310,10 +353,11 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--disabledText);
   text-decoration: none;
-  padding: 10px;
-  font-size: 14px;
+  padding: 0 10px;
+  font-size: 1rem;
+  font-weight: 700;
 }
 .sidebar button {
   border: none;
@@ -324,13 +368,11 @@ body {
   font-size: 20px;
 }
 .sidebar a.active {
-  background-color: #575757;
-  border-radius: 4px;
+  color: var(--primary);
 }
 .sidebar a:hover,
 #logoutBtn:hover {
-  background-color: #575757;
-  border-radius: 4px;
+  color: var(--primary);
   cursor: pointer;
 }
 
@@ -354,7 +396,7 @@ Modal
 }
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
+  background-color: var(--background-gray);
   margin: auto; /* centered */
   padding: 20px;
   border: 1px solid var(--lightBorder);
@@ -365,10 +407,11 @@ Modal
 
 /* The Close Button */
 .close {
-  color: #aaa;
+  color: var(--disabledText);
   float: right;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .close:hover,
@@ -431,12 +474,34 @@ Media queries
   #cancel {
     display: block;
   }
-  header .container .logo-wrapper {
-    background-color: transparent;
-    border-bottom: none;
+  
+  .sidebar li{
+    width: 75%;
+    align-self: end;
+  }
+  header .container .logo-wrapper{
+    justify-content: end;
+  }
+  header .container .logo-wrapper #mobileLogo{
+    display: none;
+  }
+  header .container .logo-wrapper #desktopLogo{
+    display: block;
+  }
+  header .container .logo-wrapper a{
+    width: 70%;
+    align-self: end;
+  }
+  header .container .logo-wrapper .img-wrapper{
+    display: flex;
+    justify-content: center;
   }
   header .container .page-title-wrapper h1 {
     text-align: left;
+    padding-left: 2rem;
+  }
+  header .container .chat-icon-wrapper{
+    padding-right: 2rem;
   }
   header .container div {
     flex-grow: 0;
@@ -447,8 +512,6 @@ Media queries
   .sidebar {
     width: 240px;
     height: 100%;
-    background: #1e1e1e;
-    padding: 10px 0px;
   }
   .sidebar ul {
     flex-flow: column nowrap;
@@ -471,31 +534,29 @@ Media queries
     justify-content: flex-start;
     height: 65px;
     width: 100%;
-    color: white;
     line-height: 65px;
     padding-left: 30px;
     box-sizing: border-box;
+    /*
     border-bottom: 1px solid var(--background-dark);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-left: 5px solid transparent;
+    */
   }
-
   .sidebar a.active,
   .sidebar a:hover,
   #logoutBtn:hover {
-    border-left: 5px solid var(--accent);
-    color: var(--accent);
+    color: var(--primary);
   }
 
   .sidebar a i,
   #logoutBtn i {
-    font-size: 23px;
+    font-size: 1rem;
     margin-right: 16px;
   }
 
   .sidebar a span,
   #logoutBtn span {
     letter-spacing: 1px;
-    text-transform: uppercase;
   }
 }
