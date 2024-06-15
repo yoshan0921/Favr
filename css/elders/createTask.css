@@ -52,6 +52,8 @@
 
 ul.selection-list {
 
+    margin-bottom: 1rem;
+
     li {
         font-size: 1.2rem;
         border-left: 4px solid var(--accent);
@@ -72,6 +74,7 @@ form{
     gap: 2rem;
     box-sizing: border-box;
 }
+
 .step{
     padding: 1rem;
     height: 100%;
@@ -85,6 +88,35 @@ form{
     justify-content: center;
     gap: 1rem;
     flex: 1;
+}
+
+#step-2 .form-group,
+#step-3 .form-group {
+    display: flex;
+    flex-flow: column wrap;
+}
+
+#step-2 .form-group input,
+#step-3 .form-group input,
+#step-2 .form-group select,
+#step-3 .form-group select {
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+#step-2 .form-group input,
+#step-2 .form-group select,
+#step-3 .form-group input,
+#step-3 .form-group select {
+    height: 30px;
+}
+
+#step-4 textarea {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    height: 100px;
+    margin-bottom: 1rem;
 }
 
 .favorOption:has(input[type=radio]:checked){
@@ -120,13 +152,31 @@ form{
 }
 
 @media only screen and (min-width: 800px) {
+
     #step-1 .form-group{
         flex-flow: row wrap;
         gap: 2rem;
     }
+
+    #step-2 .form-group,
+    #step-3 .form-group {
+        flex-flow: row nowrap;
+    }
+
+    #step-2 .form-group input,
+    #step-3 .form-group input {
+        margin-right: 2rem;
+    }
+
+    #step-2 .form-group label,
+    #step-3 .form-group label {
+        margin-right: .5rem;
+    }
+
     .favorOption {
         flex: 1 0 25%;
     }
+
     .stepText {
         display: block;
     }

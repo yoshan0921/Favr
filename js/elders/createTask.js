@@ -84,7 +84,7 @@ function runFunction() {
           );
           if (selectedOption) {
             selectionHistory.push(
-              `Favor Type Selected: ${selectedOption.value}`
+              `Favor Type: ${selectedOption.value}`
             );
             canProceed = true;
           } else {
@@ -309,13 +309,13 @@ function runFunction() {
 
     const summaryList = document.getElementById("summaryList");
     summaryList.innerHTML = `
-      <li>Favor Type Selected: ${task.name}</li>
+      <li>Favor Type: ${task.name}</li>
       <li>Date: ${task.details.date}</li>
-      <li>Time: ${task.details.time}</li>
-      <li>Favor Length: ${task.details.favorLength}</li>
+      <li>Start Time: ${task.details.time}</li>
+      <li>Duration: ${task.details.favorLength}</li>
       <li>Start Address: ${task.details.startAddress}</li>
       <li>End Address ${task.details.endAddress}</li>
-      <li>Notes: ${task.notes}</li>
+      <li>Details: ${task.notes}</li>
     `;
     // Replace step4 number with check after submit
     document.querySelector(`.step4 .stepNumber span`).textContent = "✔";
