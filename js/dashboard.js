@@ -305,7 +305,7 @@ async function createTaskListForVolunteers(allTasks) {
     // Sometimes, getCurrentPosition takes a long time to get the return.
     // So, geoPosition data is stored in sessionStorage to avoid the delay for the next time.
 
-    // Get current location (if we already)
+    // Get current location (If it's not first time in the session, get the location from sessionStorage)
     let position = sessionStorage.getItem("currentPosition");
     if (!position) {
       let geoPosition = await getCurrentPosition();
@@ -390,6 +390,25 @@ async function createTaskListForVolunteers(allTasks) {
           }
         }
 
+        // Get favor length
+        // TODO: The following code is only for tentative until the favor length value is revised.
+        let length = taskDetails.details["favorLength"];
+        if (length === "30 mins") {
+          length = 0.5;
+        } else if (length === "1 hrs") {
+          length = 1;
+        } else if (length === "1.5 hrs") {
+          length = 1.5;
+        } else if (length === "2 hrs") {
+          length = 2;
+        } else if (length === "2.5 hrs") {
+          length = 2.5;
+        } else if (length === "3 hrs") {
+          length = 3;
+        } else {
+          length = "N/A";
+        }
+
         // Create task object for List & Map view
         let taskObj = {
           taskID: id,
@@ -397,7 +416,7 @@ async function createTaskListForVolunteers(allTasks) {
           taskStatus: taskDetails.status ?? "",
           taskDate: taskDetails.details["date"] ?? "",
           taskTime: taskDetails.details["time"] ?? "",
-          taskDuration: taskDetails.details["favorLength"] ?? "N/A",
+          taskDuration: length,
           taskAddress: taskDetails.details["startAddress"] ?? "",
           taskEndAddress: taskDetails.details["endAddress"] ?? "",
           taskVolunteerID: taskDetails.volunteerID ?? "",
@@ -451,7 +470,7 @@ function createCard(task) {
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
-  <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration}</span></p>
+  <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration} hours</span></p>
   <div class="requester">
     <img class="photo" src="${task.taskRequesterPhoto}">
     <div class="profile">
@@ -524,7 +543,7 @@ function createMapMarker(task, map, infoWindows) {
         <h3 class="title">${task.taskName}</h3>
         <div class="statusColor"></div>
         <p class="date">${task.taskDate}, ${task.taskTime}</p>
-        <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration}</span></p>
+        <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration} hours</span></p>
         <div class="requester">
           <img class="photo" src="${task.taskRequesterPhoto}">
           <div class="profile">
@@ -641,32 +660,27 @@ function applyFilter() {
 
   // Hide the task card that does not meet the filter conditions
   taskCards.forEach((card) => {
-    let marker = document.querySelector(`div[title="${card.getAttribute("data-taskid")}"]`);
+    let taskID = card.getAttribute("data-taskid");
+    let marker = document.querySelector(`div[title="${taskID}"]`);
     let favorType = card.getAttribute("data-favorType");
-    let distance = parseInt(card.getAttribute("data-distance"));
-    let length = parseInt(card.getAttribute("data-length"));
-    console.log(`favorType: ${favorType}, distance: ${distance}, length: ${length}`);
+    let distance = Number(card.getAttribute("data-distance"));
+    let length = Number(card.getAttribute("data-length"));
+    console.log(`taskID: ${taskID} favorType: ${favorType}, distance: ${distance}, length: ${length}`);
 
     // Initialize display status as true
     let displayStatus = true;
 
     // Distance filter
-    console.log(`distance: ${distance}, distanceFilterValue: ${distanceFilterValue}`);
-    if (distance === 10000) {
-      // This is the case for 8+ km selected in the filter
-      displayStatus = true;
-    } else if (distance > distanceFilterValue) {
+    if (distanceFilterValue != 10000 && distance > distanceFilterValue) {
       displayStatus = false;
+      console.log("Distance filter applied");
     }
 
     // Length filter
-    console.log(`length: ${length}, lengthFilterValue: ${lengthFilterValue}`);
-    // if (length === 2.5) {
-    //   // This is the case for 2+ hours selected in the filter
-    //   displayStatus = true;
-    // } else if (length > lengthFilterValue) {
-    //   displayStatus = false;
-    // }
+    if (length > lengthFilterValue) {
+      displayStatus = false;
+      console.log("Length filter applied");
+    }
 
     // Task type filter
     if (
@@ -678,15 +692,16 @@ function applyFilter() {
       (favorType === "Transportation" && !transportation)
     ) {
       displayStatus = false;
+      console.log("Task type filter applied");
     }
 
     // Set display status
-    if (card) card.style.display = displayStatus ? "block" : "none";
+    card.style.display = displayStatus ? "block" : "none";
     if (marker) marker.style.display = displayStatus ? "block" : "none";
-
-    // Task sort by date (newest or oldest)
-    sortTasksByDate(dateFilterValue, taskCards, document.getElementById("taskListExplore"));
   });
+
+  // Task sort by date (newest or oldest)
+  sortTasksByDate(dateFilterValue, taskCards, document.getElementById("taskListExplore"));
 
   // When inforWindow is open on the Google Map, close all infoWindows
   closeAllInfoWindows(infoWindows);
