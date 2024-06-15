@@ -1,5 +1,9 @@
 import { closeModal, loadPartial, openModal } from "./common.js";
-import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
+import {
+  getCurrentUserID,
+  getCurrentUserRole,
+  monitorAuthenticationState,
+} from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
 
@@ -102,7 +106,10 @@ async function createTaskListForElders(allTasks) {
     let taskDetails = task[1]; // Task detail data
 
     // Get requester's information
-    Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
+    Promise.all([
+      getDocument("users", taskDetails.requesterID),
+      getDocument("users", taskDetails.volunteerID),
+    ])
       .then(async ([requester, volunteer]) => {
         console.log(requester);
         console.log(volunteer);
@@ -118,9 +125,12 @@ async function createTaskListForElders(allTasks) {
         let taskNotes = taskDetails.details["notes"] ?? "";
         let taskVolunteerPhoto;
         try {
-          taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
+          taskVolunteerPhoto = await getFile(
+            "profile/" + volunteer.profilePictureURL
+          );
         } catch (error) {
-          taskVolunteerPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+          taskVolunteerPhoto =
+            "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
         }
 
         let taskVolunteerFirstName;
@@ -162,21 +172,28 @@ async function createTaskListForElders(allTasks) {
 
         // Append card to the correct list based on the task status
         if (["Waiting to be accepted"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+          card.querySelector(".taskCard .statusColor").style.backgroundColor =
+            "#ffcd29";
           list.appendChild(card);
         } else if (["On going"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
+          card.querySelector(".taskCard .statusColor").style.backgroundColor =
+            "#0D99FF";
           list.appendChild(card);
-        } else if (["Pending approval", "Cancelled"].includes(taskDetails.status)) {
+        } else if (
+          ["Pending approval", "Cancelled"].includes(taskDetails.status)
+        ) {
           list.appendChild(card);
           if (taskDetails.status === "Pending approval") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#ffcd29";
             card.setAttribute("data-status", "Pending approval");
           } else if (taskDetails.status === "Completed") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#44c451";
             card.setAttribute("data-status", "Completed");
           } else if (taskDetails.status === "Cancelled") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
+            card.querySelector(".taskCard .statusColor").style.backgroundColor =
+              "#f24822";
             card.setAttribute("data-status", "Cancelled");
           }
         }
@@ -361,7 +378,9 @@ async function createTaskListForVolunteers(allTasks) {
         // Get requester's profile picture
         let taskRequesterPhoto;
         try {
-          taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
+          taskRequesterPhoto = await getFile(
+            "profile/" + requester.profilePictureURL
+          );
         } catch (error) {
           taskRequesterPhoto = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
         }
