@@ -1,14 +1,13 @@
 <!-- Tab Contents --->
 <div class="volunteer tabs">
     <div class="tab active" id="tab1">Explore Favors</div>
-    <div class="tab" id="tab2">My Favors (<span id="favorCount"></span>)</div>
+    <div class="tab" id="tab2">My Favors (<span id="favorCount">0</span>)</div>
     <div class="tab" id="tab3">History</div>
 </div>
 
 <div class="volunteer tab-content">
     <div id="tab1-content" class="tab-content-item">
         <div class="viewSwitcher">
-
             <div class="switch-wrapper">
                 <label for="view" id="listView">List</label>
                 <label class="switch">
@@ -17,7 +16,6 @@
                 </label>
                 <label for="view" id="mapView">Map</label>
             </div>
-
             <button type="button" id="openFilterBtn"><i class="fa-solid fa-sliders"></i></button>
         </div>
         <!-- taskinfo containers (List) -->
@@ -25,7 +23,6 @@
         <!-- taskinfo containers (Map) -->
         <div id="taskMapExplore" class="mapContainer hidden">
             <div id="map" class="map"></div>
-            <div id="taskinfo"></div>
         </div>
     </div>
     <div id="tab2-content" class="tab-content-item hidden">
@@ -33,12 +30,14 @@
         <div id="taskListMyFavor" class="gridContainer"></div>
     </div>
     <div id="tab3-content" class="tab-content-item hidden">
+        <!-- Checkbox for Status Filter -->
         <input class="completed" type="checkbox" id="toggleCompletedCheckbox">
         <label class="completed" for="toggleCompletedCheckbox">Completed</label>
         <input class="pending" type="checkbox" id="togglePendingCheckbox">
         <label class="pending" for="togglePendingCheckbox">Pending</label>
         <input class="cancelled" type="checkbox" id="toggleCancelledCheckbox">
         <label class="cancelled" for="toggleCancelledCheckbox">Cancelled</label>
+        <!-- Filter Button -->
         <button class="setting"><i class="fa-solid fa-sliders"></i></button>
         <!-- taskinfo containers (List) -->
         <div id="taskListHistory" class="gridContainer"></div>
@@ -55,4 +54,3 @@
         </div>
     </div>
 </div>
-
