@@ -595,6 +595,11 @@ function getCurrentPosition() {
   });
 }
 
+/**
+ * Apply filters to a list of tasks.
+ * It filters tasks by distance, length, favor type, and date.
+ * After applying the filters, it hides the tasks that do not meet the filter conditions.
+ */
 function applyFilter() {
   console.log("Apply Filter");
 
@@ -656,12 +661,12 @@ function applyFilter() {
 
     // Length filter
     console.log(`length: ${length}, lengthFilterValue: ${lengthFilterValue}`);
-    if (length === 2.5) {
-      // This is the case for 2+ hours selected in the filter
-      displayStatus = true;
-    } else if (length > lengthFilterValue) {
-      displayStatus = false;
-    }
+    // if (length === 2.5) {
+    //   // This is the case for 2+ hours selected in the filter
+    //   displayStatus = true;
+    // } else if (length > lengthFilterValue) {
+    //   displayStatus = false;
+    // }
 
     // Task type filter
     if (
@@ -680,7 +685,7 @@ function applyFilter() {
     if (marker) marker.style.display = displayStatus ? "block" : "none";
 
     // Task sort by date (newest or oldest)
-    sortTasksByDate(dateFilterValue, taskCards);
+    sortTasksByDate(dateFilterValue, taskCards, document.getElementById("taskListExplore"));
   });
 
   // When inforWindow is open on the Google Map, close all infoWindows
