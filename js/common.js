@@ -1,5 +1,9 @@
+import {db} from "./testdb.js";
 import { signOut } from "./utils.js";
-
+import { registerUserFCM, checkUserPushSubscription, requestNotificationPermission, sendTokenToDB } from "./firebase/notifications.js";
+import { messaging } from "./firebase/firebase.js";
+import { onMessage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+import { getCurrentUserID } from "./firebase/authentication.js";
 /**
  * An object that maps some pages to their title that will show to the user
  * on the page <header>
@@ -38,8 +42,35 @@ async function loadCommonContent() {
     backButton.addEventListener("click", (e) => {
       window.history.back();
     });
-}
 
+  //setUpNotifications();
+  checkUserPushSubscription()
+  .then(sub => {
+    console.log(sub);
+    setTimeout(()=>sendNotification(sub), 500);
+  })
+  .catch((error)=> { //user is not subscribed
+    console.log(error);
+    if("serviceWorker" in navigator){
+      requestNotificationPermission();
+    }
+  })
+  /*
+  onMessage(messaging, (payload) => {
+    console.log('Message received. ', payload);
+    const theNotification = payload.data
+
+    if (Notification.permission === "granted") {
+        console.log("nofitications granted");
+        onNotification(theNotification);
+        registerUserFCM();
+    }
+  })
+    */
+}
+function sendNotification(subscriptionObj){
+  new Notification("you are subscribed!");
+}
 /**
  *
  * @param {string} partial - the name of the partial file (without .html)

@@ -1,7 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+//importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import { getMessaging } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyA98KYP3hvGX8q7uk1WNdEStxMo1S85HmA",
@@ -18,3 +20,4 @@ export const firebase = initializeApp(firebaseConfig);
 export const auth = getAuth(firebase);
 export const firestore = getFirestore(firebase);
 export const storage = getStorage(firebase);
+export const messaging = getMessaging(firebase);
