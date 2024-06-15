@@ -12,7 +12,8 @@ let pageTitles = {
   "tasks/details.html": "Task Details",
   "tasks/updates.html": "Updates",
   "tasks/accept.html": "Accept favor",
-  "support.html":"Get support"
+  "support.html": "Get support",
+  "tasks/tracking.html": "Favor Tracking"
 };
 
 loadCommonContent();

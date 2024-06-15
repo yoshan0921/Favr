@@ -1,5 +1,5 @@
-import { getCurrentUserID } from "./firebase/authentication.js";
-import { createDocument } from "./firebase/firestore.js";
+import { getCurrentUserID } from "../firebase/authentication.js";
+import { createDocument } from "../firebase/firestore.js";
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
