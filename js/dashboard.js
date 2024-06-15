@@ -10,6 +10,7 @@ const { spherical } = await google.maps.importLibrary("geometry");
 let currentUserID;
 let currentUserRole;
 let favorCount = 0;
+let markers = {}; // For Google Map
 let infoWindows = []; // For Google Map
 
 window.addEventListener("load", function (event) {
@@ -523,6 +524,9 @@ function createMapMarker(task, map, infoWindows) {
     title: task.taskID,
   });
 
+  // Store the marker in the markers object
+  markers[task.taskID] = marker;
+
   // Add a click event to the marker
   marker.addListener(
     "click",
@@ -661,11 +665,11 @@ function applyFilter() {
   // Hide the task card that does not meet the filter conditions
   taskCards.forEach((card) => {
     let taskID = card.getAttribute("data-taskid");
-    let marker = document.querySelector(`div[title="${taskID}"]`);
+    let marker = markers[taskID];
     let favorType = card.getAttribute("data-favorType");
     let distance = Number(card.getAttribute("data-distance"));
     let length = Number(card.getAttribute("data-length"));
-    console.log(`taskID: ${taskID} favorType: ${favorType}, distance: ${distance}, length: ${length}`);
+    console.log(`taskID: ${taskID} favorType: ${favorType}, distance: ${distance}, length: ${length}, marker: ${marker}`);
 
     // Initialize display status as true
     let displayStatus = true;
@@ -697,7 +701,7 @@ function applyFilter() {
 
     // Set display status
     card.style.display = displayStatus ? "block" : "none";
-    if (marker) marker.style.display = displayStatus ? "block" : "none";
+    if (marker) marker.element.style.visibility = displayStatus ? "visible" : "hidden";
   });
 
   // Task sort by date (newest or oldest)
