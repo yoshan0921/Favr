@@ -122,6 +122,7 @@ async function createTaskListForElders(allTasks) {
         let taskName = taskDetails.name ?? "";
         let taskStatus = taskDetails.status ?? "";
         let taskDate = taskDetails.details["date"] ?? "";
+        let taskNotes = taskDetails.details["notes"] ?? "";
         let taskVolunteerPhoto;
         try {
           taskVolunteerPhoto = await getFile(
@@ -155,7 +156,7 @@ async function createTaskListForElders(allTasks) {
         <a href="/tasks/tracking.html?taskid=${id}"></a>
         <h3 class="title">${taskName}</h3>
         <p class="status"><span class="statusColor"></span>${taskStatus}</p>
-        <p>${taskNotes}</p>
+        <p class="notes">${taskNotes}</p>
         `;
         if (taskDetails.status != "Waiting to be accepted") {
           card.innerHTML += `
@@ -407,8 +408,10 @@ async function createTaskListForVolunteers(allTasks) {
           taskName: taskDetails.name ?? "",
           taskStatus: taskDetails.status ?? "",
           taskDate: taskDetails.details["date"] ?? "",
-          taskDuration: taskDetails.details["duration"] ?? "",
-          taskAddress: taskDetails.details["address"] ?? "",
+          taskTime: taskDetails.details["time"] ?? "",
+          taskDuration: taskDetails.details["favorLength"] ?? "N/A",
+          taskAddress: taskDetails.details["startAddress"] ?? "",
+          taskEndAddress: taskDetails.details["endAddress"] ?? "",
           taskVolunteerID: taskDetails.volunteerID ?? "",
           taskRequesterName: `${requester.firstName} ${requester.lastName}` ?? "",
           taskRequesterAddress: requester.address ?? "",
@@ -455,7 +458,7 @@ function createCard(task) {
   <a href="/tasks/accept.html?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
-  <p class="date">${task.taskDate}</p>
+  <p class="date">${task.taskDate}, ${task.taskTime}</p>
   <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration}</span></p>
   <div class="requester">
     <img class="photo" src="${task.taskRequesterPhoto}">
@@ -530,7 +533,7 @@ function createMapMarker(task, map, infoWindows) {
         <a href="/tasks/accept.html?taskid=${task.taskID}"></a>
         <h3 class="title">${task.taskName}</h3>
         <div class="statusColor"></div>
-        <p class="date">${task.taskDate}</p>
+        <p class="date">${task.taskDate}, ${task.taskTime}</p>
         <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration}</span></p>
         <div class="requester">
           <img class="photo" src="${task.taskRequesterPhoto}">
