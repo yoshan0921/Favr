@@ -394,7 +394,7 @@ button#cancelFilter {
   border-radius: 30px;
   cursor: pointer;
   font-size: 1rem;
-  padding: 0rem 1rem;
+  padding: 0rem 0.5rem;
 }
 
 .volunteer.tab-content input[type="checkbox"] + label::before {
@@ -422,8 +422,8 @@ button#cancelFilter {
   background-color: #f24822;
 }
 
-/* Filtering task cards by status */
-.volunteer.tab-content .taskCard[data-status="Completed"],
+/* Filtering task cards by status  WILL BE DELETED*/
+/* .volunteer.tab-content .taskCard[data-status="Completed"],
 .volunteer.tab-content .taskCard[data-status="Pending"],
 .volunteer.tab-content .taskCard[data-status="Cancelled"] {
   display: block;
@@ -433,4 +433,4 @@ button#cancelFilter {
 #togglePendingCheckbox:checked ~ #taskListHistory .taskCard[data-status="Pending"],
 #toggleCancelledCheckbox:checked ~ #taskListHistory .taskCard[data-status="Cancelled"] {
   display: none;
-}
+} */

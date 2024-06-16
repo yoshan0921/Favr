@@ -669,7 +669,6 @@ function applyFilter() {
     localStorage.setItem("petCare", petCare);
     localStorage.setItem("transportation", transportation);
     localStorage.setItem("dateFilter", dateFilterValue);
-    localStorage.setItem("savePreferenceCheckbox", true);
     console.log("Filter Conditions Saved");
   }
 
@@ -736,6 +735,10 @@ function applyFilter() {
 
   // When inforWindow is open on the Google Map, close all infoWindows
   closeAllInfoWindows(infoWindows);
+
+  // Save the filter conditions in localStorage
+  let savePreferenceCheckbox = document.getElementById("savePreferenceCheckbox").checked;
+  localStorage.setItem("savePreferenceCheckbox", savePreferenceCheckbox);
 }
 
 // ============================================================
@@ -784,6 +787,22 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
   console.log(`Sort by ${dateFilterValue}`);
 }
 
+/**
+ * The `readPreference` function retrieves saved user settings from localStorage,
+ * and sets the state of various fields in an HTML form based on these settings.
+ *
+ * The following settings are retrieved from localStorage:
+ * - dateFilter: The value for a date filter
+ * - distanceFilter: The value for a distance filter
+ * - lengthFilter: The value for a length filter
+ * - groceryShopping: The state of a 'Grocery Shopping' checkbox
+ * - mailPackages: The state of a 'Mail Packages' checkbox
+ * - medsPickup: The state of a 'Medication Pickup' checkbox
+ * - techHelp: The state of a 'Tech Help' checkbox
+ * - petCare: The state of a 'Pet Care' checkbox
+ * - transportation: The state of a 'Transportation' checkbox
+ * - savePreferenceCheckbox: The state of a 'Save Preference' checkbox
+ */
 function readPreference() {
   console.log("Read Preference");
   // If there is a saved preference, get the filter conditions from localStorage
