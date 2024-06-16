@@ -261,6 +261,7 @@ async function loadVolunteersDashboard() {
   if (filterBtn) {
     filterBtn.addEventListener("click", () => {
       openModal(filterModal);
+      readPreference();
     });
   }
   if (closeFilterBtn) {
@@ -657,6 +658,21 @@ function applyFilter() {
     }
   }
 
+  // Store the filter conditions in localStorage
+  if (document.getElementById("savePreferenceCheckbox").checked) {
+    localStorage.setItem("distanceFilter", distanceFilterValue);
+    localStorage.setItem("lengthFilter", lengthFilterValue);
+    localStorage.setItem("groceryShopping", groceryShopping);
+    localStorage.setItem("mailPackages", mailPackages);
+    localStorage.setItem("medsPickup", medsPickup);
+    localStorage.setItem("techHelp", techHelp);
+    localStorage.setItem("petCare", petCare);
+    localStorage.setItem("transportation", transportation);
+    localStorage.setItem("dateFilter", dateFilterValue);
+    localStorage.setItem("savePreferenceCheckbox", true);
+    console.log("Filter Conditions Saved");
+  }
+
   console.log(`Filter Conditions: 
   Date Sort: ${dateFilterValue},
   Distance: ${distanceFilterValue},
@@ -766,4 +782,31 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
   });
 
   console.log(`Sort by ${dateFilterValue}`);
+}
+
+function readPreference() {
+  console.log("Read Preference");
+  // If there is a saved preference, get the filter conditions from localStorage
+  let dateFilterValue = localStorage.getItem("dateFilter");
+  let distanceFilterValue = localStorage.getItem("distanceFilter");
+  let lengthFilterValue = localStorage.getItem("lengthFilter");
+  let groceryShopping = localStorage.getItem("groceryShopping") === "true";
+  let mailPackages = localStorage.getItem("mailPackages") === "true";
+  let medsPickup = localStorage.getItem("medsPickup") === "true";
+  let techHelp = localStorage.getItem("techHelp") === "true";
+  let petCare = localStorage.getItem("petCare") === "true";
+  let transportation = localStorage.getItem("transportation") === "true";
+  let savePreferenceCheckbox = localStorage.getItem("savePreferenceCheckbox") === "true";
+
+  // Set the filter conditions
+  document.getElementById(dateFilterValue).checked = true;
+  document.getElementById("distanceFilter").value = distanceFilterValue;
+  document.getElementById("lengthFilter").value = lengthFilterValue;
+  document.getElementById("groceryShopping").checked = groceryShopping;
+  document.getElementById("mailPackages").checked = mailPackages;
+  document.getElementById("medsPickup").checked = medsPickup;
+  document.getElementById("techHelp").checked = techHelp;
+  document.getElementById("petCare").checked = petCare;
+  document.getElementById("transportation").checked = transportation;
+  document.getElementById("savePreferenceCheckbox").checked = savePreferenceCheckbox;
 }
