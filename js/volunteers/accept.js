@@ -1,11 +1,3 @@
-function on() {
-    document.getElementById("overlay").style.display = "block";
-}
-  
-function off() {
-    document.getElementById("overlay").style.display = "none";
-}
-
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { updateDocument, getDocument } from "../firebase/firestore.js";
 
@@ -30,10 +22,12 @@ function runFunction() {
   taskID = urlParams.get("taskid");
   console.log(taskID);
 
-  let volunteerName = document.getElementById("volunteerName");
-  let volunteerAddress = document.getElementById("volunteerAddress");
+  let taskName = document.getElementById("taskName");
+  let elderName = document.getElementById("elderName");
+  let elderAddress = document.getElementById("elderAddress");
   let taskAddress = document.getElementById("taskAddress");
   let taskTime = document.getElementById("taskTime");
+  let taskNote = document.getElementById("taskNote");
 
 
   // Get the task data from the Firestore
@@ -44,15 +38,20 @@ function runFunction() {
       taskData = task;
       getDocument("users", task.requesterID)
         .then((user) => {
-          console.log(user);
           // ToDo: Display task data on the page
           // Code here...
-          // volunteerAddress.innerHTML = user.lastName;
-          volunteerName.innerHTML = user.lastName;
+          taskName.innerHTML = taskData.name;
 
-          taskAddress.innerHTML = taskData.details.address;
-          taskTime.innerHTML = taskData.details.date;
-    
+          // I am STRUGGLING this part↓=====================
+
+          // console.log(user.firstName);
+          // elderName.innerHTML = user.firstName;
+
+
+          taskAddress.innerHTML = taskData.details.startAddress;
+          taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
+          taskNote.innerHTML = taskData.notes;   
+
     });
 
     })
@@ -60,11 +59,6 @@ function runFunction() {
       console.log(error);
     });
 }
-
-document.getElementById("completeBtn").addEventListener("click", function () {
-//   acceptTask(taskID, taskData);
-on();
-});
 
 async function acceptTask(taskID, taskData) {
   console.log(taskData);
@@ -86,3 +80,53 @@ async function acceptTask(taskID, taskData) {
       console.log(error);
     });
 }
+
+
+
+function confirmOn() {
+  document.getElementById("confirm-overlay").style.display = "block";
+}
+
+document.getElementById("acceptBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  confirmOn();
+});
+  
+function confirmOff() {
+  document.getElementById("confirm-overlay").style.display = "none";
+}
+  
+document.getElementById("backBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  confirmOff();
+});
+
+function acceptOn() {
+  document.getElementById("accept-overlay").style.display = "block";
+}
+
+document.getElementById("confirmBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  acceptOn();
+});
+
+function goHome() {
+  window.location.href = "http://127.0.0.1:5500/dashboard.html";
+}
+
+document.getElementById("homeBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  goHome();
+});
+
+document.getElementById("cancelBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  goHome();
+});
+
+
+
+  
+
+
+  
