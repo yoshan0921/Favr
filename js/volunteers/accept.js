@@ -124,9 +124,3 @@ document.getElementById("cancelBtn").addEventListener("click", function () {
   goHome();
 });
 
-
-
-  
-
-
-  

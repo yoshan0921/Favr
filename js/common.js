@@ -12,7 +12,8 @@ let pageTitles = {
   "tasks/details.html": "Task Details",
   "tasks/updates.html": "Updates",
   "tasks/accept.html": "Accept favor",
-  "support.html":"Get support"
+  "support.html": "Get support",
+  "tasks/tracking.html": "Favor Tracking"
 };
 
 loadCommonContent();
@@ -21,12 +22,15 @@ loadCommonContent();
  * Loads the header, the menu and the footer
  */
 async function loadCommonContent() {
+
   loadPartial("_header", "header")
     .then(loadPageTitle)
     .catch((error) => console.log(error));
+
   loadPartial("_sidebar", "leftside-column")
     .then(addListenerToLogoutButton)
     .catch((error) => console.log(error));
+
   loadPartial("_footer", "footer")
   .catch((error) => console.log(error));
 
@@ -87,4 +91,33 @@ function addListenerToLogoutButton() {
   logoutBtn.addEventListener("click", signOut);
 }
 
-export { loadPartial };
+// Get the <span> element that closes the modal
+const closeModalBtns = document.getElementsByClassName("closeModal");
+// When the user clicks on <span> (x), close the modal
+if(closeModalBtns.length>0) {
+  for(const btn of closeModalBtns){
+    btn.onclick = function() {
+      let parentModal = btn.closest(".modal");
+      closeModal(parentModal);
+    }
+  }
+}
+
+function openModal(modal){
+  modal.style.display = "block";
+  window.addEventListener("click", function(event) {
+    if (event.target == modal) {
+      closeModal(modal);
+    }
+  });
+}
+function closeModal(modal){
+  modal.style.display = "none";
+  removeEventListener("click", window);
+}
+
+export { 
+  loadPartial,
+  openModal,
+  closeModal,
+ };

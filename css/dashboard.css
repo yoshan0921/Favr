@@ -227,7 +227,6 @@
 
 .volunteer.tab-content .infoWindow {
   background-color: #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   padding: 1rem;
   position: relative;
 }
@@ -268,6 +267,56 @@
 
 .volunteer.tab-content .infoWindow .requester .name {
   font-weight: bold;
+}
+
+/* -------------------------------------------------- */
+/* Volunteer: Explore Favor Filter                    */
+/* -------------------------------------------------- */
+
+#filterModal .modal-content {
+  height: 80vh;
+  max-width: 330px;
+  margin-top: 1vh;
+  margin-right: 1rem;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.modal-form,
+#filterForm,
+#filterForm > .form-group {
+  display: flex;
+  flex-grow: 1;
+  flex-flow: column nowrap;
+}
+
+.flex-row {
+  flex-flow: row nowrap;
+}
+
+#lengthFilter {
+  width: 100%;
+}
+
+#lengthFilterScale {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#distanceFilter {
+  width: 100%;
+}
+
+#distanceFilterScale {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+button#applyFilter,
+button#cancelFilter {
+  cursor: pointer;
 }
 
 /* -------------------------------------------------- */
@@ -314,7 +363,7 @@
   background-color: #f24822;
 }
 
-/* Filtering task cards by using CSS */
+/* Filtering task cards by status */
 .volunteer.tab-content .taskCard[data-status="Completed"],
 .volunteer.tab-content .taskCard[data-status="Pending"],
 .volunteer.tab-content .taskCard[data-status="Cancelled"] {
