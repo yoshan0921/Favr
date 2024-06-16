@@ -2,20 +2,20 @@
 
 :root {
   --text: #333333;
-  --disabledText : #9c9c9c;
-  --background: #FAFAFA;
-  --background-gray: #F1F3F3;
-  --background-dark: #1A1A1A;
-  --lightBorder: #D1D1D1;
-  --primary: #156A85;
-  --caringOrange: #E98872;
-  --brown: #E7D4C0;
-  --helpfulBlue: #78B8D8;
-  --warmRed: #E43F3F;
-  --pureWhite: #FFFFFF;
-  --statusYellow: #FFCD29;
-  --statusGreen: #44C451;
-  --statusBlue: #0D99FF;
+  --disabledText: #9c9c9c;
+  --background: #fafafa;
+  --background-gray: #f1f3f3;
+  --background-dark: #1a1a1a;
+  --lightBorder: #d1d1d1;
+  --primary: #156a85;
+  --caringOrange: #e98872;
+  --brown: #e7d4c0;
+  --helpfulBlue: #78b8d8;
+  --warmRed: #e43f3f;
+  --pureWhite: #ffffff;
+  --statusYellow: #ffcd29;
+  --statusGreen: #44c451;
+  --statusBlue: #0d99ff;
 }
 
 /* -------------------------------------------------- */
@@ -50,7 +50,7 @@ body {
   font-size: 16px;
   line-height: 1.75em;
   min-height: 100vh;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   /* To avoid overlaying content to menubar in mobile layout */
   padding-bottom: 100px;
 }
@@ -68,17 +68,20 @@ img {
   white-space: nowrap;
   width: 1px;
 }
-h1, h2 {
+h1,
+h2 {
   padding: 20px 0px;
 }
-h1, h2, h3{
+h1,
+h2,
+h3 {
   font-weight: 700;
 }
-h1.light, h2.light, h3.light{
+h1.light,
+h2.light,
+h3.light {
   font-weight: 100;
 }
-
-
 
 /*===============
 * Buttons
@@ -91,7 +94,7 @@ button,
   border: none;
   color: var(--pureWhite);
   border-radius: 5px;
-  padding: .1rem .2rem;
+  padding: 0.1rem 0.2rem;
   line-height: 1.75em;
 }
 button a {
@@ -106,7 +109,7 @@ button a {
   width: max-content;
   gap: 0.5rem;
 }
-.outlined-btn{
+.outlined-btn {
   background-color: transparent;
   color: var(--text);
   border: thin solid var(--lightBorder);
@@ -222,7 +225,7 @@ header {
   grid-column: 1/-1;
   position: relative;
 }
-main.content{
+main.content {
   margin-top: 85px;
 }
 main {
@@ -252,19 +255,19 @@ header .container > div {
   background-color: var(--background);
 }
 header .container .logo-wrapper,
-header .container .logo-wrapper a{
+header .container .logo-wrapper a {
   display: flex;
   justify-content: center;
 }
-header .container .logo-wrapper #desktopLogo{
+header .container .logo-wrapper #desktopLogo {
   display: none;
   min-width: 50px;
   max-width: 150px;
 }
-header .container .logo-wrapper #mobileLogo{
+header .container .logo-wrapper #mobileLogo {
   max-width: 40px;
 }
-header .container .logo-wrapper img{
+header .container .logo-wrapper img {
   width: 100%;
 }
 header .container .page-title-wrapper {
@@ -420,15 +423,15 @@ Modal
   text-decoration: none;
   cursor: pointer;
 }
-#confirmChangesModal .form-group{
+#confirmChangesModal .form-group {
   display: flex;
   justify-content: center;
 }
-#savedMessageModal .icon-wrapper{
+#savedMessageModal .icon-wrapper {
   width: 100%;
   text-align: center;
 }
-#savedMessageModal .icon-wrapper i{
+#savedMessageModal .icon-wrapper i {
   font-size: 5rem;
 }
 /*
@@ -474,25 +477,25 @@ Media queries
   #cancel {
     display: block;
   }
-  
-  .sidebar li{
+
+  .sidebar li {
     width: 75%;
     align-self: end;
   }
-  header .container .logo-wrapper{
+  header .container .logo-wrapper {
     justify-content: end;
   }
-  header .container .logo-wrapper #mobileLogo{
+  header .container .logo-wrapper #mobileLogo {
     display: none;
   }
-  header .container .logo-wrapper #desktopLogo{
+  header .container .logo-wrapper #desktopLogo {
     display: block;
   }
-  header .container .logo-wrapper a{
+  header .container .logo-wrapper a {
     width: 70%;
     align-self: end;
   }
-  header .container .logo-wrapper .img-wrapper{
+  header .container .logo-wrapper .img-wrapper {
     display: flex;
     justify-content: center;
   }
@@ -500,7 +503,7 @@ Media queries
     text-align: left;
     padding-left: 2rem;
   }
-  header .container .chat-icon-wrapper{
+  header .container .chat-icon-wrapper {
     padding-right: 2rem;
   }
   header .container div {
@@ -524,7 +527,7 @@ Media queries
   .content {
     position: relative;
     padding: 2rem;
-    height: 100%;
+    /* height: 100%; */
   }
 
   .sidebar a,

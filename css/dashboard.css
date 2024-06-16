@@ -110,7 +110,10 @@
 .volunteer.tab-content .viewSwitcher {
   display: flex;
   gap: 1rem;
+  justify-content: space-between;
+  height: 25px;
 }
+
 .volunteer.tab-content .viewSwitcher button {
   border: none;
   border-radius: 30px;
@@ -294,6 +297,17 @@
   flex-flow: row nowrap;
 }
 
+#filterModal .form-group.sort {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+#filterModal .form-group.sort label {
+  margin-right: 0.2rem;
+}
+
 #lengthFilter {
   width: 100%;
 }
@@ -314,9 +328,55 @@
   width: 100%;
 }
 
+.favorType {
+  background-color: #cccccc;
+  border-radius: 30px;
+  cursor: pointer;
+  color: var(--pureWhite);
+  padding: 0rem 0.5rem;
+}
+
+.favorType[type="checkbox"] {
+  display: none;
+}
+
+.favor-options {
+  justify-content: center;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+}
+
+.favorType + label::before {
+  content: none;
+}
+
+.favorType[type="checkbox"] + label::before {
+  padding-right: 0.5rem;
+}
+
+.favorType[type="checkbox"]:checked + label::before {
+  content: "\00D7";
+}
+
+.favorType[type="checkbox"]:checked + label {
+  background-color: var(--primary);
+}
+
+#filterModal .form-group.form-submit {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+}
+
+#savePreference {
+  flex-basis: 100%;
+}
+
 button#applyFilter,
 button#cancelFilter {
   cursor: pointer;
+  flex-grow: 1;
 }
 
 /* -------------------------------------------------- */
@@ -347,7 +407,6 @@ button#cancelFilter {
 }
 
 .volunteer.tab-content input[type="checkbox"]:checked + label {
-  /* filter: brightness(0.8); */
   background-color: #cccccc;
 }
 
