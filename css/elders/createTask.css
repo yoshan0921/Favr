@@ -37,10 +37,10 @@
     background-color: #BFBFBF;
 }
 .stepLineActive {
-    background-color: var(--accent);
+    background-color: var(--primary);
 }
 .stepActive {
-    background-color: var(--accent);
+    background-color: var(--primary);
 }
 .textActive {
     font-weight: bold;
@@ -56,7 +56,7 @@ ul.selection-list {
 
     li {
         font-size: 1.2rem;
-        border-left: 4px solid var(--accent);
+        border-left: 4px solid var(--primary);
         padding-left: .5rem;
         margin-bottom: .5rem;
     }
@@ -82,6 +82,11 @@ form{
     flex-flow: column nowrap;
     flex: 1;
 }
+
+.step h2 {
+    text-align: center;
+}
+
 #step-1 .form-group{
     display: flex;
     flex-flow: column wrap;
@@ -119,9 +124,30 @@ form{
     margin-bottom: 1rem;
 }
 
+.summary h2 {
+    text-align: center;
+}
+
+#statusList {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+ul#summaryList {
+
+    margin-bottom: 1rem;
+
+    li {
+        font-size: 1.2rem;
+        border-left: 4px solid var(--primary);
+        padding-left: .5rem;
+        margin-bottom: .5rem;
+    }
+}
+
 .favorOption:has(input[type=radio]:checked){
     color: white;
-    background-color: hotpink;
+    background-color: var(--primary);
 }
 .favorOption{
     flex: 1;
@@ -148,7 +174,7 @@ form{
 .favorOption:hover {
     cursor: pointer;
     color: white;
-    background-color: var(--accent);
+    background-color: var(--primary);
 }
 
 @media only screen and (min-width: 800px) {
