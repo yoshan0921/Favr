@@ -53,11 +53,11 @@ main.content {
     background-color: rgb(184, 184, 184);
 }
 
-.user-profile-wrapper .detail-instruction {
-    margin-top: 2rem;
+.note {
     margin-bottom: 2rem;
     padding: 2rem;
     border-radius: 10px;
+    border: none;
     background-color: rgb(184, 184, 184);
 }
 
@@ -70,10 +70,15 @@ main.content {
     border-radius: 50px;
     border: none;
     padding: 0.2rem 2rem;
-
 }
 
-#overlay {
+
+
+#confirm-overlay,
+#accept-overlay,
+#schedule-conflict {
+    display: grid;
+    align-content: center;
     position: fixed; /* Sit on top of the page content */
     display: none; /* Hidden by default */
     width: 100%; /* Full width (cover the whole page) */

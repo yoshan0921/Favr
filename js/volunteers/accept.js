@@ -22,24 +22,43 @@ function runFunction() {
   taskID = urlParams.get("taskid");
   console.log(taskID);
 
+  let taskName = document.getElementById("taskName");
+  let elderName = document.getElementById("elderName");
+  let elderAddress = document.getElementById("elderAddress");
+  let taskAddress = document.getElementById("taskAddress");
+  let taskTime = document.getElementById("taskTime");
+  let taskNote = document.getElementById("taskNote");
+
+
   // Get the task data from the Firestore
   getDocument("tasks", taskID)
     .then((task) => {
       console.log(task);
       // Save the task data to a global variable
       taskData = task;
+      getDocument("users", task.requesterID)
+        .then((user) => {
+          // ToDo: Display task data on the page
+          // Code here...
+          taskName.innerHTML = taskData.name;
 
-      // ToDo: Display task data on the page
-      // Code here...
+          // I am STRUGGLING this part↓=====================
+
+          // console.log(user.firstName);
+          // elderName.innerHTML = user.firstName;
+
+
+          taskAddress.innerHTML = taskData.details.startAddress;
+          taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
+          taskNote.innerHTML = taskData.notes;   
+
+    });
+
     })
     .catch((error) => {
       console.log(error);
     });
 }
-
-document.getElementById("completeBtn").addEventListener("click", function () {
-  acceptTask(taskID, taskData);
-});
 
 async function acceptTask(taskID, taskData) {
   console.log(taskData);
@@ -56,9 +75,52 @@ async function acceptTask(taskID, taskData) {
   updateDocument("tasks", taskID, taskData)
     .then(() => {
       console.log("Task accepted!");
-      alert("Task accepted!");
     })
     .catch((error) => {
       console.log(error);
     });
 }
+
+
+
+function confirmOn() {
+  document.getElementById("confirm-overlay").style.display = "block";
+}
+
+document.getElementById("acceptBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  confirmOn();
+});
+  
+function confirmOff() {
+  document.getElementById("confirm-overlay").style.display = "none";
+}
+  
+document.getElementById("backBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  confirmOff();
+});
+
+function acceptOn() {
+  document.getElementById("accept-overlay").style.display = "block";
+}
+
+document.getElementById("confirmBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  acceptOn();
+});
+
+function goHome() {
+  window.location.href = "http://127.0.0.1:5500/dashboard.html";
+}
+
+document.getElementById("homeBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  goHome();
+});
+
+document.getElementById("cancelBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  goHome();
+});
+
