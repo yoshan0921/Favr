@@ -39,7 +39,7 @@
         <form action="#" id="filterForm">
           <div class="form-group">
             <h3>Date</h3>
-            <div class="form-group form-row">
+            <div class="form-group form-row sort">
               <div><label for="newest">Newest to oldest</label><input type="radio" name="dateFilter" id="newest" value="newest" checked></div>
               <div><label for="oldest">Oldest to newest</label><input type="radio" name="dateFilter" id="oldest" value="oldest"></div>
             </div>
@@ -73,21 +73,22 @@
           <div class="form-group">
             <h3>Favor type</h3>
             <div class="favor-options">
-              <label class="favorType" for="groceryShopping">Grocery shopping</label>
               <input class="favorType" type="checkbox" id="groceryShopping" checked>
-              <label class="favorType" for="mailPackages">Mail & Packages</label>
+              <label class="favorType" for="groceryShopping">Grocery shopping</label>
               <input class="favorType" type="checkbox" id="mailPackages" checked>
-              <label class="favorType" for="medsPickup">Meds pickup</label>
+              <label class="favorType" for="mailPackages">Mail & Packages</label>
               <input class="favorType" type="checkbox" id="medsPickup" checked>
-              <label class="favorType" for="techHelp">Tech Help</label>
+              <label class="favorType" for="medsPickup">Meds pickup</label>
               <input class="favorType" type="checkbox" id="techHelp" checked>
-              <label class="favorType" for="petCare">Pet Care</label>
+              <label class="favorType" for="techHelp">Tech Help</label>
               <input class="favorType" type="checkbox" id="petCare" checked>
-              <label class="favorType" for="transportation">Transportation</label>
+              <label class="favorType" for="petCare">Pet Care</label>
               <input class="favorType" type="checkbox" id="transportation" checked>
+              <label class="favorType" for="transportation">Transportation</label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group form-submit">
+            <div id="savePreference"><input type="checkbox" id="filterPreference" value="newest"><label for="filterPreference">Save Preferences</label></div>
             <button id="cancelFilter" type="reset" class="outlined-btn">Cancel</button>
             <button id="applyFilter" type="button">Apply</button>
           </div>
