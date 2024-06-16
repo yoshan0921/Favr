@@ -59,6 +59,17 @@ async function runFunction() {
   } else if (currentUserRole === "elder") {
     await loadEldersDashboard();
   }
+
+  // Link to each tasb in the dashboard
+  let hash = window.location.hash;
+  console.log("hash = " + hash);
+  if (hash === "#explore") {
+    tab1.click();
+  } else if (hash === "#myfavor") {
+    tab2.click();
+  } else if (hash === "#history") {
+    tab3.click();
+  }
 }
 
 // ============================================================
@@ -627,8 +638,8 @@ function applyFilter() {
   console.log("Apply Filter");
 
   // Get the specified filter conditions
-  let distanceFilterValue = document.getElementById("distanceFilter").value;
-  let lengthFilterValue = document.getElementById("lengthFilter").value;
+  let distanceFilterValue = Number(document.getElementById("distanceFilter").value);
+  let lengthFilterValue = Number(document.getElementById("lengthFilter").value);
   let groceryShopping = document.getElementById("groceryShopping").checked;
   let mailPackages = document.getElementById("mailPackages").checked;
   let medsPickup = document.getElementById("medsPickup").checked;
