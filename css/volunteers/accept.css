@@ -5,7 +5,7 @@ img {
 }
 
 main.content {
-    margin-top: 30px;
+    margin-top: 20rem;
 }
 
 .user-profile-wrapper {
@@ -108,7 +108,7 @@ main {
     margin: auto;
     background-color: rgb(233, 233, 233);
     text-align: center;
-    padding: 5rem;
+    padding: 3rem 5rem;
     border-radius: 30px;
     width: 400px;
     height: 400px;
