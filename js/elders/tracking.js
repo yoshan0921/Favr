@@ -1,4 +1,5 @@
 import { getDocument } from "../firebase/firestore.js";
+import { enableBackButton } from "../utils.js";
 
 let taskID;
 
@@ -18,7 +19,7 @@ function runFunction() {
   // Get task ID from URL
   const urlParams = new URLSearchParams(window.location.search);
   taskID = urlParams.get("taskid");
-  console.log(taskID);
+  //console.log(taskID);
 
   // Get the task data from the Firestore
   getDocument("tasks", taskID)
@@ -40,6 +41,7 @@ displayTaskSummary(taskID)
 .then(()=>{
   const main = document.getElementsByTagName("main")[0];
   main.classList.add("loaded");
+  enableBackButton();
 });
 
 async function displayTaskSummary(taskID) {

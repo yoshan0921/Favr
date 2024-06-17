@@ -43,9 +43,20 @@ function resetLocalStorage(){
         window.localStorage.removeItem(item);
     }
 }
+function enableBackButton(){
+    const backBtn = document.getElementsByClassName("back-btn-wrapper")[0];
+    if(backBtn) {
+        backBtn.style.display = "flex";
+        backBtn.addEventListener("click", (e) => {
+            window.history.back();
+        });
+    }
+
+}
 export {
     signOut,
     redirect,
     handleError,
-    resetLocalStorage
+    resetLocalStorage,
+    enableBackButton
 }

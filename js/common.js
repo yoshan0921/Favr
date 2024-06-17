@@ -33,12 +33,6 @@ async function loadCommonContent() {
 
   loadPartial("_footer", "footer")
   .catch((error) => console.log(error));
-
-  const backButton = document.getElementById("backBtn");
-  if (backButton)
-    backButton.addEventListener("click", (e) => {
-      window.history.back();
-    });
 }
 
 /**

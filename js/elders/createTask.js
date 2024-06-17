@@ -1,5 +1,6 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { createDocument } from "../firebase/firestore.js";
+import { enableBackButton } from "../utils.js";
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
@@ -61,7 +62,7 @@ function runFunction() {
       },
     };
     createTask(task);
-    console.log(task);
+    //console.log(task);
   });
 
   /**
