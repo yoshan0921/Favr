@@ -66,7 +66,7 @@ async function acceptTask(taskID, taskData) {
 
   // Create updated task data object with the volunteer ID and status "On going"
   taskData.volunteerID = volunteerID;
-  taskData.status = "On going";
+  taskData.status = "Pending approval";
   console.log(taskData);
 
   // Update the task data on the Firestore
