@@ -111,7 +111,6 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  height: 25px;
 }
 
 .volunteer.tab-content .viewSwitcher button {
@@ -202,7 +201,7 @@
 }
 
 .volunteer.tab-content .map .you {
-  background-color: var(--accent);
+  background-color: var(--primary);
   border-radius: 8px;
   color: #ffffff;
   font-size: 14px;
@@ -220,7 +219,7 @@
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid var(--accent);
+  border-top: 8px solid var(--primary);
 }
 
 .volunteer.tab-content .infoWindow {
@@ -397,40 +396,35 @@ button#cancelFilter {
   padding: 0rem 0.5rem;
 }
 
+.volunteer.tab-content input[type="checkbox"] + label {
+  background-color: #cccccc;
+}
+
 .volunteer.tab-content input[type="checkbox"] + label::before {
+  content: none;
+}
+
+.volunteer.tab-content input[type="checkbox"]:checked + label::before {
   content: "\00D7";
   padding-right: 0.5rem;
 }
 
-.volunteer.tab-content input[type="checkbox"]:checked + label::before {
-  content: none;
-}
-
-.volunteer.tab-content input[type="checkbox"]:checked + label {
-  background-color: #cccccc;
-}
-
-.volunteer.tab-content label.completed {
+.volunteer.tab-content input[type="checkbox"]:checked + label.completed {
+  display: block;
   background-color: #44c451;
 }
 
-.volunteer.tab-content label.pending {
+.volunteer.tab-content input[type="checkbox"]:checked + label.pending {
+  display: block;
   background-color: #ffcd29;
 }
 
-.volunteer.tab-content label.cancelled {
+.volunteer.tab-content input[type="checkbox"]:checked + label.cancelled {
+  display: block;
   background-color: #f24822;
 }
 
-/* Filtering task cards by status  WILL BE DELETED*/
-/* .volunteer.tab-content .taskCard[data-status="Completed"],
-.volunteer.tab-content .taskCard[data-status="Pending"],
-.volunteer.tab-content .taskCard[data-status="Cancelled"] {
-  display: block;
+.volunteer.tab-content .viewSwitcher .statusFilter {
+  display: flex;
+  gap: 0.5rem;
 }
-
-#toggleCompletedCheckbox:checked ~ #taskListHistory .taskCard[data-status="Completed"],
-#togglePendingCheckbox:checked ~ #taskListHistory .taskCard[data-status="Pending"],
-#toggleCancelledCheckbox:checked ~ #taskListHistory .taskCard[data-status="Cancelled"] {
-  display: none;
-} */

@@ -222,12 +222,16 @@ async function loadVolunteersDashboard() {
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
 
-  //Filter button
+  //Filter button (Explore tab)
   const filterBtn = document.getElementById("openFilterBtn");
   const filterModal = document.getElementById("filterModal");
   const closeFilterBtn = document.getElementById("cancelFilter");
   const applyFilterBtn = document.getElementById("applyFilter");
   const cancelFilterBtn = document.getElementById("cancelFilter");
+  //Filter button (History tab)
+  const toggleCancelledCheckbox = document.getElementById("toggleCancelledCheckbox");
+  const togglePendingCheckbox = document.getElementById("togglePendingCheckbox");
+  const toggleCompletedCheckbox = document.getElementById("toggleCompletedCheckbox");
 
   // Tab menu
   const tabs = document.querySelectorAll(".tab");
@@ -258,6 +262,8 @@ async function loadVolunteersDashboard() {
       { passive: false }
     );
   }
+
+  // Filter modal on the Explore tab
   if (filterBtn) {
     filterBtn.addEventListener("click", () => {
       openModal(filterModal);
@@ -279,6 +285,38 @@ async function loadVolunteersDashboard() {
     cancelFilterBtn.addEventListener("click", () => {
       console.log("Cancel Filter");
       closeModal(filterModal);
+    });
+  }
+
+  // Status filter checkboxes on the History tab
+  if (toggleCancelledCheckbox) {
+    toggleCancelledCheckbox.addEventListener("change", () => {
+      const cards = document.querySelectorAll("#taskListHistory .taskCard");
+      cards.forEach((card) => {
+        if (card.getAttribute("data-status") === "Cancelled") {
+          card.style.display = toggleCancelledCheckbox.checked ? "block" : "none";
+        }
+      });
+    });
+  }
+  if (togglePendingCheckbox) {
+    togglePendingCheckbox.addEventListener("change", () => {
+      const cards = document.querySelectorAll("#taskListHistory .taskCard");
+      cards.forEach((card) => {
+        if (card.getAttribute("data-status") === "Pending approval") {
+          card.style.display = togglePendingCheckbox.checked ? "block" : "none";
+        }
+      });
+    });
+  }
+  if (toggleCompletedCheckbox) {
+    toggleCompletedCheckbox.addEventListener("change", () => {
+      const cards = document.querySelectorAll("#taskListHistory .taskCard");
+      cards.forEach((card) => {
+        if (card.getAttribute("data-status") === "Completed") {
+          card.style.display = toggleCompletedCheckbox.checked ? "block" : "none";
+        }
+      });
     });
   }
 }
@@ -375,8 +413,10 @@ async function createTaskListForVolunteers(allTasks) {
       try {
         // Get requester's information
         let requester = await getDocument("users", taskDetails.requesterID);
-        console.log(requester);
-        console.log(taskDetails);
+
+        // FOR DEBUGGING
+        // console.log(requester);
+        // console.log(taskDetails);
 
         // Get requester's profile picture
         let taskRequesterPhoto;
@@ -395,9 +435,11 @@ async function createTaskListForVolunteers(allTasks) {
 
             // Calculate the distance between the current location and the task location
             distance = await spherical.computeDistanceBetween(new google.maps.LatLng(latitude, longitude), new google.maps.LatLng(markerLatLng));
-            console.log(`Start Coordinates: ${latitude}, ${longitude}`);
-            console.log(`End Coordinates: ${markerLatLng.lat}, ${markerLatLng.lng}`);
-            console.log(`Distance: ${distance} meters`);
+
+            // FOR DEBUGGING
+            // console.log(`Start Coordinates: ${latitude}, ${longitude}`);
+            // console.log(`End Coordinates: ${markerLatLng.lat}, ${markerLatLng.lng}`);
+            // console.log(`Distance: ${distance} meters`);
           } catch (error) {
             console.log(error);
           }
@@ -527,7 +569,9 @@ function createCard(task) {
 function createMapMarker(task, map, infoWindows) {
   // If the task is not "Waiting to be accepted", do not create a marker
   if (!["Waiting to be accepted"].includes(task.taskStatus)) return;
-  console.log(`createMapMarker: ${JSON.stringify(task)}`);
+
+  // FOR DEBUGGING
+  // console.log(`createMapMarker: ${JSON.stringify(task)}`);
 
   // Create a marker for the task
   const marker = new AdvancedMarkerElement({

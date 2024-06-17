@@ -33,15 +33,17 @@
         <div class="viewSwitcher">
             <!-- Checkbox for Status Filter -->
             <div class="statusFilter">
-                <input class="completed" type="checkbox" id="toggleCompletedCheckbox">
+                <input class="completed" type="checkbox" id="toggleCompletedCheckbox" checked>
                 <label class="completed" for="toggleCompletedCheckbox">Completed</label>
-                <input class="pending" type="checkbox" id="togglePendingCheckbox">
+                <input class="pending" type="checkbox" id="togglePendingCheckbox" checked>
                 <label class="pending" for="togglePendingCheckbox">Pending</label>
-                <input class="cancelled" type="checkbox" id="toggleCancelledCheckbox">
+                <input class="cancelled" type="checkbox" id="toggleCancelledCheckbox" checked>
                 <label class="cancelled" for="toggleCancelledCheckbox">Cancelled</label>
             </div>
             <!-- Filter Button -->
-            <button class="setting"><i class="fa-solid fa-sliders"></i></button>
+            <button class="setting">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
         </div>
         <!-- taskinfo containers (List) -->
         <div id="taskListHistory" class="gridContainer"></div>
