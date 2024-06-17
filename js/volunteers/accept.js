@@ -79,11 +79,11 @@ async function acceptTask(taskID, taskData) {
     });
 }
 
-function cancel() {
-  document.getElementById("cancelBtn").addEventListener("click", function () {
-    window.location.href = "/dashboard.html";
-  });
-}
+// function cancel() {
+//   document.getElementById("cancelBtn").addEventListener("click", function () {
+//     window.location.href = "/dashboard.html";
+//   });
+// }
 
 // To display "confirm-overlay" ON
 function confirmOn() {
@@ -91,7 +91,6 @@ function confirmOn() {
 }
 
 document.getElementById("acceptBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
   confirmOn();
 });
 
@@ -101,7 +100,6 @@ function confirmOff() {
 }
 
 document.getElementById("backBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
   confirmOff();
 });
 
@@ -111,7 +109,7 @@ function acceptOn() {
 }
 
 document.getElementById("confirmBtn").addEventListener("click", function () {
-  // acceptTask(taskID, taskData);
+  acceptTask(taskID, taskData);
   acceptOn();
 });
 
@@ -120,12 +118,19 @@ function goHome() {
   window.location.href = "/dashboard.html";
 }
 
+// To move back to "dashboard.html#myFavors"
+function goMyFavors() {
+  window.location.href = "/dashboard.html#myfavors";
+}
+
 document.getElementById("homeBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
   goHome();
 });
 
 document.getElementById("cancelBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
   goHome();
+});
+
+document.getElementById("myFavorsBtn").addEventListener("click", function () {
+  goMyFavors();
 });

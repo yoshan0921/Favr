@@ -67,7 +67,7 @@ async function runFunction() {
   //console.log("hash = " + hash);
   if (hash === "#explore") {
     tab1.click();
-  } else if (hash === "#myfavor") {
+  } else if (hash === "#myfavors") {
     tab2.click();
   } else if (hash === "#history") {
     tab3.click();

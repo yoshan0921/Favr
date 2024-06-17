@@ -11,7 +11,11 @@ main.content {
 .user-profile-wrapper {
   display: block;
   margin: auto;
-  width: 400px;
+  width: 100%;
+
+  @media screen and (min-width: 800px) {
+    width: 400px;
+  }
 }
 
 .user-profile-wrapper .user-profile {
@@ -98,18 +102,24 @@ img {
 
 main {
   margin-top: 10rem;
-  margin-left: auto;
-  margin-right: auto;
+
+  @media screen and (min-width: 800px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .confirm-wrapper {
-  margin: auto;
+  margin: 0.5rem;
   background-color: rgb(233, 233, 233);
   text-align: center;
   padding: 3rem 5rem;
   border-radius: 30px;
-  width: 400px;
   height: 400px;
+
+  @media screen and (min-width: size) {
+    width: 400px;
+  }
 }
 
 .confirm-wrapper .user-profile {
