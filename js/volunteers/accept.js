@@ -29,32 +29,29 @@ function runFunction() {
   let taskTime = document.getElementById("taskTime");
   let taskNote = document.getElementById("taskNote");
 
-
   // Get the task data from the Firestore
   getDocument("tasks", taskID)
     .then((task) => {
       console.log(task);
       // Save the task data to a global variable
       taskData = task;
-      getDocument("users", task.requesterID)
-        .then((user) => {
-          // ToDo: Display task data on the page
-          // Code here...
+      getDocument("users", task.requesterID).then((user) => {
+        // ToDo: Display task data on the page
+        // Code here...
 
-          // Retrieve Task name====================
-          taskName.innerHTML = taskData.name;
+        // Retrieve Task name====================
+        taskName.innerHTML = taskData.name;
 
-          // Retrieve Elder's name and address=====================
-          console.log(user.firstName);
-          elderName.innerHTML = `${user.firstName} ${user.lastName}`;
-          elderAddress.innerHTML = user.address;
+        // Retrieve Elder's name and address=====================
+        console.log(user.firstName);
+        elderName.innerHTML = `${user.firstName} ${user.lastName}`;
+        elderAddress.innerHTML = user.address;
 
-          // Retrieve Task address, date and note=====================
-          taskAddress.innerHTML = taskData.details.startAddress;
-          taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
-          taskNote.innerHTML = taskData.notes;   
-    });
-
+        // Retrieve Task address, date and note=====================
+        taskAddress.innerHTML = taskData.details.startAddress;
+        taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
+        taskNote.innerHTML = taskData.notes;
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -84,10 +81,9 @@ async function acceptTask(taskID, taskData) {
 
 function cancel() {
   document.getElementById("cancelBtn").addEventListener("click", function () {
-    window.location.href = "http://dashboard.html";
-  })
+    window.location.href = "/dashboard.html";
+  });
 }
-
 
 // To display "confirm-overlay" ON
 function confirmOn() {
@@ -103,7 +99,7 @@ document.getElementById("acceptBtn").addEventListener("click", function () {
 function confirmOff() {
   document.getElementById("confirm-overlay").style.display = "none";
 }
-  
+
 document.getElementById("backBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
   confirmOff();
@@ -115,14 +111,13 @@ function acceptOn() {
 }
 
 document.getElementById("confirmBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
+  // acceptTask(taskID, taskData);
   acceptOn();
 });
 
-
 // To move back to "dashboard.html"
 function goHome() {
-  window.location.href = "http://dashboard.html";
+  window.location.href = "/dashboard.html";
 }
 
 document.getElementById("homeBtn").addEventListener("click", function () {
@@ -134,4 +129,3 @@ document.getElementById("cancelBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
   goHome();
 });
-
