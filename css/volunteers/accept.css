@@ -4,6 +4,10 @@ img {
   display: block;
 }
 
+.user-profile img {
+  border-radius: 50%;
+}
+
 #backBtn,
 #cancelBtn,
 #acceptBtn,

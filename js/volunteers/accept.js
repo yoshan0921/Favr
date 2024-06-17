@@ -1,8 +1,11 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
-import { updateDocument, getDocument } from "../firebase/firestore.js";
+import { updateDocument, getDocument, getFile } from "../firebase/firestore.js";
 
 let taskID;
 let taskData = {};
+
+// TODO: Need to define placeholder image properly
+const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
@@ -46,6 +49,15 @@ function runFunction() {
         console.log(user.firstName);
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
         elderAddress.innerHTML = user.address;
+
+        getFile("profile/" + user.profilePictureURL)
+          .then((url) => {
+            document.getElementById("elderPhoto").src = url;
+          })
+          .catch((error) => {
+            console.log(error);
+            document.getElementById("elderPhoto").src = placeholderImage;
+          });
 
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
