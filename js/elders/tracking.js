@@ -36,7 +36,11 @@ function runFunction() {
 }
 
 // Display summary
-displayTaskSummary(taskID);
+displayTaskSummary(taskID)
+.then(()=>{
+  const main = document.getElementsByTagName("main")[0];
+  main.classList.add("loaded");
+});
 
 async function displayTaskSummary(taskID) {
   try {

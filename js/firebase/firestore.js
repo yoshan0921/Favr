@@ -233,7 +233,7 @@ async function getDocument(collectionPath,id){
     try {
         const docSnap = await getDoc(documentReference);
         if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+            //console.log("Document data:", docSnap.data());
             return docSnap.data();
         } else {
             console.log("No such document!");
@@ -297,7 +297,7 @@ async function getFile(path){
     return new Promise((resolve, reject)=>{
         getDownloadURL(ref(storage, path))
         .then((downloadURL) => {
-            console.log('File available at', downloadURL);
+            //console.log('File available at', downloadURL);
             resolve(downloadURL);
         })
         .catch((error)=>{
