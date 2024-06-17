@@ -427,6 +427,7 @@ async function createTaskListForVolunteers(allTasks) {
       let taskDetails = task[1]; // Task detail data
       let markerLatLng = {}; // Task location (Marker position)
       let distance = 0; // Distance between the current location and the task location
+      let linkURL = "#"; // Link URL for the task card
 
       try {
         // Get requester's information
@@ -474,6 +475,15 @@ async function createTaskListForVolunteers(allTasks) {
             break;
         }
 
+        // Set the link URL for the task card
+        if (taskDetails.status === "Waiting to be accepted") {
+          linkURL = "/tasks/accept.html";
+        } else if (taskDetails.status === "On going") {
+          linkURL = "/tasks/myfavr.html";
+        } else {
+          linkURL = "#";
+        }
+
         // Create task object for List & Map view
         let taskObj = {
           taskID: id,
@@ -490,6 +500,7 @@ async function createTaskListForVolunteers(allTasks) {
           taskRequesterPhoto: `${requester.profilePictureURL}` ?? "", // For Performance Improvement
           taskMarkerLatLng: markerLatLng,
           taskDistance: distance,
+          taskLinkURL: linkURL,
         };
         //console.log(taskObj);
 
@@ -534,7 +545,7 @@ function createCard(task) {
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
-  <a href="/tasks/accept.html?taskid=${task.taskID}"></a>
+  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
@@ -620,7 +631,7 @@ function createMapMarker(task, map, infoWindows) {
         card.setAttribute("data-distance", task.taskDistance);
         card.setAttribute("data-length", task.taskDuration);
         card.innerHTML = `
-        <a href="/tasks/accept.html?taskid=${task.taskID}"></a>
+        <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
         <h3 class="title">${task.taskName}</h3>
         <div class="statusColor"></div>
         <p class="date">${task.taskDate}, ${task.taskTime}</p>
