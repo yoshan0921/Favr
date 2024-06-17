@@ -121,7 +121,7 @@ main {
 }
 
 .confirm-wrapper {
-  margin: 0.5rem;
+  margin: auto;
   background-color: rgb(233, 233, 233);
   text-align: center;
   padding: 3rem 5rem;
