@@ -113,7 +113,6 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  height: 25px;
 }
 
 .volunteer.tab-content .viewSwitcher button {
@@ -398,42 +397,36 @@ button#cancelFilter {
   padding: 0rem 0.5rem;
 }
 
+.volunteer.tab-content input[type="checkbox"] + label {
+  background-color: #cccccc;
+}
+
 .volunteer.tab-content input[type="checkbox"] + label::before {
+  content: none;
+}
+
+.volunteer.tab-content input[type="checkbox"]:checked + label::before {
   content: "\00D7";
   padding-right: 0.5rem;
 }
 
-.volunteer.tab-content input[type="checkbox"]:checked + label::before {
-  content: none;
-}
-
-.volunteer.tab-content input[type="checkbox"]:checked + label {
-  background-color: #cccccc;
-}
-.volunteer.tab-content label{
-  color: var(--primary);
-}
-.volunteer.tab-content label.completed {
+.volunteer.tab-content input[type="checkbox"]:checked + label.completed {
+  display: block;
   background-color: var(--statusGreen);
 }
 
-.volunteer.tab-content label.pending {
+.volunteer.tab-content input[type="checkbox"]:checked + label.pending {
+  display: block;
   background-color: var(--statusYellow);
 }
 
-.volunteer.tab-content label.cancelled {
-  background-color: var(--warmRed);
-}
-
-/* Filtering task cards by status  WILL BE DELETED*/
-/* .volunteer.tab-content .taskCard[data-status="Completed"],
-.volunteer.tab-content .taskCard[data-status="Pending"],
-.volunteer.tab-content .taskCard[data-status="Cancelled"] {
+.volunteer.tab-content input[type="checkbox"]:checked + label.cancelled {
   display: block;
+  background-color: var(--warmRed);
+
 }
 
-#toggleCompletedCheckbox:checked ~ #taskListHistory .taskCard[data-status="Completed"],
-#togglePendingCheckbox:checked ~ #taskListHistory .taskCard[data-status="Pending"],
-#toggleCancelledCheckbox:checked ~ #taskListHistory .taskCard[data-status="Cancelled"] {
-  display: none;
-} */
+.volunteer.tab-content .viewSwitcher .statusFilter {
+  display: flex;
+  gap: 0.5rem;
+}
