@@ -31,7 +31,11 @@ async function runFunction() {
   await loadPartial(`profile/_${partialPrefix+currentUserRole}Profile`, "profile-content");
 
   const user = await getDocument("users",getCurrentUserID()); //gets the current user's info from the database as an object that will be used for filling the page with the user's info
-  loadUserInfo();
+  loadUserInfo()
+  .then(()=>{
+    const main = document.getElementsByTagName("main")[0];
+    main.classList.add("loaded");
+  });
 
   //Edit page elements
   const profileEditForm = document.getElementById("profileEditForm");

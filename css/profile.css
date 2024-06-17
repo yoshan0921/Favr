@@ -17,7 +17,7 @@
 .profile-header > div {
     flex-grow: 1;
     width: 100%;
-    gap: 1.5rem;
+    gap: .5rem;
 }
 .user-name-picture,
 .user-name-edit{

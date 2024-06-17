@@ -87,12 +87,14 @@
 }
 
 .volunteer.tabs .tab {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 2px solid var(--disabledText);
+  color: var(--disabledText);
 }
 
 .volunteer.tabs .tab.active {
-  border-bottom: 2px solid #000;
+  border-bottom: 3px solid var(--primary);
   font-weight: bold;
+  color: var(--primary);
 }
 
 .volunteer.tabs .tab-content-item {
@@ -133,7 +135,7 @@
 }
 
 .volunteer.tab-content .taskCard {
-  background-color: #fff;
+  background-color: var(--pureWhite);
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   padding: 1rem;
@@ -150,7 +152,7 @@
 }
 
 .volunteer.tab-content .taskCard .statusColor {
-  background-color: #fff;
+  background-color: var(--pureWhite);
   border-radius: 50%;
   height: 10px;
   width: 10px;
@@ -161,7 +163,6 @@
 
 .volunteer.tab-content .taskCard a:hover {
   opacity: 0.1;
-  background-color: var(--accent2);
 }
 
 .volunteer.tab-content .taskCard .title {
@@ -203,7 +204,7 @@
 .volunteer.tab-content .map .you {
   background-color: var(--primary);
   border-radius: 8px;
-  color: #ffffff;
+  color: var(--pureWhite);
   font-size: 14px;
   padding: 10px 15px;
   position: relative;
@@ -228,7 +229,7 @@
 }
 
 .volunteer.tab-content .infoWindow {
-  background-color: #fff;
+  background-color: var(--pureWhite);
   padding: 1rem;
   position: relative;
 }
@@ -243,7 +244,7 @@
 
 .volunteer.tab-content .infoWindow a:hover {
   opacity: 0.1;
-  background-color: var(--accent2);
+  background-color: var(--primary);
 }
 
 .volunteer.tab-content .infoWindow .title {
@@ -411,17 +412,18 @@ button#cancelFilter {
 
 .volunteer.tab-content input[type="checkbox"]:checked + label.completed {
   display: block;
-  background-color: #44c451;
+  background-color: var(--statusGreen);
 }
 
 .volunteer.tab-content input[type="checkbox"]:checked + label.pending {
   display: block;
-  background-color: #ffcd29;
+  background-color: var(--statusYellow);
 }
 
 .volunteer.tab-content input[type="checkbox"]:checked + label.cancelled {
   display: block;
-  background-color: #f24822;
+  background-color: var(--warmRed);
+
 }
 
 .volunteer.tab-content .viewSwitcher .statusFilter {

@@ -31,10 +31,10 @@ window.addEventListener("load", function (event) {
  * That is why we need to check the readyState of the document.
  */
 if (document.readyState === "loading") {
-  console.log("readyState = " + document.readyState);
+  //console.log("readyState = " + document.readyState);
   document.addEventListener("DOMContentLoaded", runFunction);
 } else {
-  console.log("readyState = " + document.readyState);
+  //console.log("readyState = " + document.readyState);
   runFunction();
 }
 
@@ -52,7 +52,6 @@ async function runFunction() {
 
   // Load dashboard partil html
   await loadPartial(`dashboard/_${currentUserRole}Dashboard`, "dashboard-content");
-
   // Load the dashboard based on the user's role
   if (currentUserRole === "volunteer") {
     await loadVolunteersDashboard();
@@ -62,7 +61,7 @@ async function runFunction() {
 
   // Link to each tasb in the dashboard
   let hash = window.location.hash;
-  console.log("hash = " + hash);
+  //console.log("hash = " + hash);
   if (hash === "#explore") {
     tab1.click();
   } else if (hash === "#myfavor") {
@@ -82,7 +81,11 @@ async function runFunction() {
  */
 async function loadEldersDashboard() {
   // Retrieve tasks from the database
-  await displayTaskListForElders();
+  const main = document.getElementsByTagName("main")[0];
+  displayTaskListForElders()
+  .then(()=>{
+    main.classList.add("loaded");
+  });
 }
 
 /**
@@ -115,9 +118,9 @@ async function createTaskListForElders(allTasks) {
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
-        console.log(requester);
-        console.log(volunteer);
-        console.log(taskDetails);
+        //console.log(requester);
+        //console.log(volunteer);
+        //console.log(taskDetails);
 
         // Check if the requester of the task is the current user
         if (taskDetails.requesterID !== currentUserID) return;
@@ -217,7 +220,12 @@ async function createTaskListForElders(allTasks) {
  */
 async function loadVolunteersDashboard() {
   // Retrieve tasks from the database
-  await displayTaskListForVolunteers();
+  const main = document.getElementsByTagName("main")[0];
+  displayTaskListForVolunteers()
+  .then(()=>{
+    //loadingScreen.style.display = "none";
+    main.classList.add("loaded");
+  });
 
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
@@ -328,15 +336,23 @@ async function loadVolunteersDashboard() {
  * TODO: Not all data should be retrieved here, but the target of retrieval should be narrowed down with a where clause.
  */
 async function displayTaskListForVolunteers() {
-  try {
-    // Retrieve tasks from the Firestore
-    let allTasks = await getAll("tasks");
-
-    // Create List View (including Map View)
-    createTaskListForVolunteers(allTasks);
-  } catch (error) {
-    console.log(error);
-  }
+  return new Promise(async (resolve, reject)=>{
+    try {
+      // Retrieve tasks from the Firestore
+      let allTasks = await getAll("tasks");
+  
+      // Create List View (including Map View)
+      createTaskListForVolunteers(allTasks)
+      .then(()=>resolve())
+      .catch((error)=>{
+        console.log(error);
+        reject(error);
+      });
+    } catch (error) {
+      console.log(error);
+      reject(error);
+    }
+  })
 }
 
 /**
@@ -372,8 +388,8 @@ async function createTaskListForVolunteers(allTasks) {
     }
     latitude = position.latitude;
     longitude = position.longitude;
-    console.log("Current Position: " + position);
-    console.log(`Current Coordinates: ${latitude}, ${longitude}`);
+    //console.log("Current Position: " + position);
+    //console.log(`Current Coordinates: ${latitude}, ${longitude}`);
 
     // Create Map
     map = new Map(mapElement, {
@@ -431,7 +447,7 @@ async function createTaskListForVolunteers(allTasks) {
           try {
             let result = await getCoordinates(taskDetails.details["startAddress"]);
             markerLatLng = { lat: result.lat, lng: result.lng };
-            console.log("Formatted Address: " + result.address);
+            //console.log("Formatted Address: " + result.address);
 
             // Calculate the distance between the current location and the task location
             distance = await spherical.computeDistanceBetween(new google.maps.LatLng(latitude, longitude), new google.maps.LatLng(markerLatLng));
@@ -448,20 +464,28 @@ async function createTaskListForVolunteers(allTasks) {
         // Get favor length
         // TODO: The following code is only for tentative until the favor length value is revised.
         let length = taskDetails.details["favorLength"];
-        if (length === "30 mins") {
-          length = 0.5;
-        } else if (length === "1 hrs") {
-          length = 1;
-        } else if (length === "1.5 hrs") {
-          length = 1.5;
-        } else if (length === "2 hrs") {
-          length = 2;
-        } else if (length === "2.5 hrs") {
-          length = 2.5;
-        } else if (length === "3 hrs") {
-          length = 3;
-        } else {
-          length = "N/A";
+        switch(length){
+          case "30 mins":
+            length = 0.5;
+            break;
+          case "1 hrs":
+            length = 1;
+            break;
+          case "1.5 hrs":
+            length = 1.5;
+            break;
+          case "2 hrs":
+            length = 2;
+            break;
+          case "2.5 hrs":
+            length = 2.5;
+            break;
+          case "3 hrs":
+            length = 3;
+            break;
+          default:
+            length = "N/A";
+            break;
         }
 
         // Create task object for List & Map view
@@ -481,7 +505,7 @@ async function createTaskListForVolunteers(allTasks) {
           taskMarkerLatLng: markerLatLng,
           taskDistance: distance,
         };
-        console.log(taskObj);
+        //console.log(taskObj);
 
         // Display task information on the list and map
         createCard(taskObj);
@@ -541,7 +565,7 @@ function createCard(task) {
   } else if (["On going"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listMyFavor.appendChild(card);
     listMyFavorCount.innerHTML = ++favorCount;
-    console.log("favorCount = " + favorCount);
+    //console.log("favorCount = " + favorCount);
   } else if (["Pending approval", "Completed", "Cancelled"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listHistory.appendChild(card);
     // Add data-status attribute to the card for status filtering
@@ -589,7 +613,7 @@ function createMapMarker(task, map, infoWindows) {
     // TODO: Midfy according to our design team's wireframe
     (function (marker) {
       return function () {
-        console.log(marker.title);
+        //console.log(marker.title);
         const card = document.createElement("div");
         card.classList.add("infoWindow");
         card.setAttribute("data-taskid", task.taskID);
@@ -668,7 +692,7 @@ function closeAllInfoWindows(infoWindows) {
  * or rejects with a PositionError object on failure.
  */
 function getCurrentPosition() {
-  console.log("Get Current Position");
+  //console.log("Get Current Position");
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
@@ -680,7 +704,7 @@ function getCurrentPosition() {
  * After applying the filters, it hides the tasks that do not meet the filter conditions.
  */
 function applyFilter() {
-  console.log("Apply Filter");
+  //console.log("Apply Filter");
 
   // Get the specified filter conditions
   let distanceFilterValue = Number(document.getElementById("distanceFilter").value);
@@ -715,7 +739,7 @@ function applyFilter() {
     localStorage.setItem("dateFilter", dateFilterValue);
     console.log("Filter Conditions Saved");
   }
-
+  /*
   console.log(`Filter Conditions: 
   Date Sort: ${dateFilterValue},
   Distance: ${distanceFilterValue},
@@ -727,10 +751,10 @@ function applyFilter() {
   Pet Care: ${petCare},
   Transportation: ${transportation}
   `);
-
+  */
   // Evaluate each task card with "Waiting to be accepted"
   let taskCards = document.querySelectorAll("#taskListExplore .taskCard");
-  console.log(taskCards);
+  //console.log(taskCards);
 
   // Hide the task card that does not meet the filter conditions
   taskCards.forEach((card) => {
@@ -739,7 +763,7 @@ function applyFilter() {
     let favorType = card.getAttribute("data-favorType");
     let distance = Number(card.getAttribute("data-distance"));
     let length = Number(card.getAttribute("data-length"));
-    console.log(`taskID: ${taskID} favorType: ${favorType}, distance: ${distance}, length: ${length}, marker: ${marker}`);
+    //console.log(`taskID: ${taskID} favorType: ${favorType}, distance: ${distance}, length: ${length}, marker: ${marker}`);
 
     // Initialize display status as true
     let displayStatus = true;
@@ -828,7 +852,7 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
     target.appendChild(card);
   });
 
-  console.log(`Sort by ${dateFilterValue}`);
+  //console.log(`Sort by ${dateFilterValue}`);
 }
 
 /**
@@ -848,7 +872,7 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
  * - savePreferenceCheckbox: The state of a 'Save Preference' checkbox
  */
 function readPreference() {
-  console.log("Read Preference");
+  //console.log("Read Preference");
   // If there is a saved preference, get the filter conditions from localStorage
   let dateFilterValue = localStorage.getItem("dateFilter");
   let distanceFilterValue = localStorage.getItem("distanceFilter");
