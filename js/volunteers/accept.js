@@ -111,7 +111,7 @@ document.getElementById("confirmBtn").addEventListener("click", function () {
 });
 
 function goHome() {
-  window.location.href = "http://127.0.0.1:5500/dashboard.html";
+  window.location.href = "http://dashboard.html";
 }
 
 document.getElementById("homeBtn").addEventListener("click", function () {
