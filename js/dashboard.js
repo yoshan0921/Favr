@@ -777,7 +777,7 @@ function applyFilter() {
     // Task type filter
     if (
       (favorType === "Grocery Shopping" && !groceryShopping) ||
-      (favorType === "Mail Packages" && !mailPackages) ||
+      (favorType === "Mail & Packages" && !mailPackages) ||
       (favorType === "Meds Pickup" && !medsPickup) ||
       (favorType === "Tech Help" && !techHelp) ||
       (favorType === "Pet Care" && !petCare) ||
