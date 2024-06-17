@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="../js/common.js"></script>
-    <script type="module" src="../js/volunteers/accept.js"></script>
+    <script type="module" src="../js/volunteers/myfavr.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/styles.css">
-    <link rel="stylesheet" type="text/css" href="../css/volunteers/accept.css">
+    <link rel="stylesheet" type="text/css" href="../css/volunteers/myfavr.css">
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <title>Accept Task</title>
@@ -53,70 +53,45 @@
         </section>
         <section class="set">
           <button id="cancelBtn">Cancel</button>
-          <button id="acceptBtn">Accept</button>
+          <button id="completeBtn">Complete</button>
         </section>
       </div>
 
-      <div id="confirm-overlay">
+      <div id="complete-confirm-overlay">
         <div class="confirm-wrapper">
           <section class="message">
-            <h2>Confirm Favor Acceptance</h2>
-            <p>Are you willing to help William Dubois with this Delivery Favor?</p>
+            <p>How do you rate this experience?</p>
+            <h2>Confirm Favor has been delivered successfully</h2>
           </section>
 
           <section class="user-profile">
-            <i class="fa-solid fa-user"></i>
-            <div class="user-info">
-              <h3 id="elderName" class="name"></h3>
-              <p id="elderAddress"></p>            
-            </div>
+            <i class="fa-regular fa-thumbs-up"></i>
+            <i class="fa-regular fa-thumbs-down"></i>
           </section>
 
           <section class="set">
-            <button id="backBtn">Back</button>
-            <button id="confirmBtn">Confirm</button>
+            <button id="completeBtn">Complete</button>
           </section>
         </div>
       </div>
 
-      <div id="accept-overlay">
+      <div id="task-completed-overlay">
         <div class="confirm-wrapper">
           <section class="message">
-            <h2>Favor Accepted</h2>
-            <i class="fa-solid fa-check"></i>
-            <p>You have agreed to help <span id="elderName"></span>  with his <span id="taskName"></span> Favor on:</p>
+            <i class="fa-solid fa-heart"></i>
+            <h2>Thank you for supporting <span id="elderName"></span> and our community!</h2>
+            <p>Request for approval has been sent to <span id="elderName"></span> and will be updated to you after approved.</p>
+            <p></p>
             <p id="taskTime"></p>
           </section>
 
-          <section class="user-profile">
-            <i class="fa-solid fa-user"></i>
-            <div class="user-info">
-              <h3 id="elderName" class="name"></h3>
-              <p id="elderAddress"></p>            
-            </div>
-          </section>
-
           <section class="set">
-            <button id="homeBtn">Home</button>
-            <button id="confirmBtn">My Favors</button>
+            <p>See more seniors you can help:</p>
+            <button id="exploreBtn">Explore Favors</button>
           </section>
         </div>
       </div>
 
-      <div id="schedule-conflict">
-        <div class="confirm-wrapper">
-          <section class="message">
-            <h2>Schedule Conflict!</h2>
-            <i class="fa-regular fa-calendar-xmark"></i>            <p>You have another Favor going on during this time slot.</p>
-            <p>Do you still want to accept the Favor?</p>
-          </section>
-
-          <section class="set">
-            <button id="backBtn">Back</button>
-            <button id="confirmBtn">Confirm</button>
-          </section>
-        </div>
-      </div>
     </main>
 
     <!-- Footer -->

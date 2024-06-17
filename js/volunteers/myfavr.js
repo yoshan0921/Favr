@@ -82,45 +82,33 @@ async function acceptTask(taskID, taskData) {
     });
 }
 
-function cancel() {
-  document.getElementById("cancelBtn").addEventListener("click", function () {
-    window.location.href = "http://dashboard.html";
-  })
+
+
+function completeConfirmOn() {
+  document.getElementById("complete-confirm-overlay").style.display = "block";
 }
 
-
-// To display "confirm-overlay" ON
-function confirmOn() {
-  document.getElementById("confirm-overlay").style.display = "block";
-}
-
-document.getElementById("acceptBtn").addEventListener("click", function () {
+document.getElementById("completeBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
-  confirmOn();
+  completeConfirmOn();
 });
-
-// To display "confirm-overlay" OFF
-function confirmOff() {
-  document.getElementById("confirm-overlay").style.display = "none";
-}
   
-document.getElementById("backBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
-  confirmOff();
-});
 
-// To display "accept-overlay" ON
-function acceptOn() {
-  document.getElementById("accept-overlay").style.display = "block";
+function cancel() {
+    document.getElementById("cancelBtn").addEventListener("click", function () {
+      window.location.href = "http://dashboard.html";
+    })
+}  
+
+function taskCompletedOn() {
+  document.getElementById("complete-confirm-overlay").style.display = "block";
 }
 
-document.getElementById("confirmBtn").addEventListener("click", function () {
+document.getElementById("completeBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
-  acceptOn();
+  taskCompletedOn();
 });
 
-
-// To move back to "dashboard.html"
 function goHome() {
   window.location.href = "http://dashboard.html";
 }
@@ -134,4 +122,3 @@ document.getElementById("cancelBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
   goHome();
 });
-
