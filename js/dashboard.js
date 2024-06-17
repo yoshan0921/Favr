@@ -7,6 +7,9 @@ const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 const { Map } = await google.maps.importLibrary("maps");
 const { spherical } = await google.maps.importLibrary("geometry");
 
+// TODO: Need to define placeholder image properly
+const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
+
 let currentUserID;
 let currentUserRole;
 let favorCount = 0;
@@ -82,8 +85,7 @@ async function runFunction() {
 async function loadEldersDashboard() {
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
-  displayTaskListForElders()
-  .then(()=>{
+  displayTaskListForElders().then(() => {
     main.classList.add("loaded");
   });
 }
@@ -118,6 +120,7 @@ async function createTaskListForElders(allTasks) {
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
+        // FOR DEBUGGING
         //console.log(requester);
         //console.log(volunteer);
         //console.log(taskDetails);
@@ -135,7 +138,7 @@ async function createTaskListForElders(allTasks) {
         try {
           taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
         } catch (error) {
-          taskVolunteerPhoto = "https://ca.slack-edge.com/T61666YTB-U01K4V1UYJU-gb4b5740b553-512";
+          taskVolunteerPhoto = placeholderImage;
         }
 
         let taskVolunteerFirstName;
@@ -221,8 +224,7 @@ async function createTaskListForElders(allTasks) {
 async function loadVolunteersDashboard() {
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
-  displayTaskListForVolunteers()
-  .then(()=>{
+  displayTaskListForVolunteers().then(() => {
     //loadingScreen.style.display = "none";
     main.classList.add("loaded");
   });
@@ -336,23 +338,23 @@ async function loadVolunteersDashboard() {
  * TODO: Not all data should be retrieved here, but the target of retrieval should be narrowed down with a where clause.
  */
 async function displayTaskListForVolunteers() {
-  return new Promise(async (resolve, reject)=>{
+  return new Promise(async (resolve, reject) => {
     try {
       // Retrieve tasks from the Firestore
       let allTasks = await getAll("tasks");
-  
+
       // Create List View (including Map View)
       createTaskListForVolunteers(allTasks)
-      .then(()=>resolve())
-      .catch((error)=>{
-        console.log(error);
-        reject(error);
-      });
+        .then(() => resolve())
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
     } catch (error) {
       console.log(error);
       reject(error);
     }
-  })
+  });
 }
 
 /**
@@ -430,41 +432,25 @@ async function createTaskListForVolunteers(allTasks) {
         // Get requester's information
         let requester = await getDocument("users", taskDetails.requesterID);
 
-        // FOR DEBUGGING
-        // console.log(requester);
-        // console.log(taskDetails);
-
-        // Get requester's profile picture
-        let taskRequesterPhoto;
-        try {
-          taskRequesterPhoto = await getFile("profile/" + requester.profilePictureURL);
-        } catch (error) {
-          taskRequesterPhoto = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
-        }
-
         // Get coordinates of the task location
         if (["Waiting to be accepted"].includes(taskDetails.status)) {
           try {
             let result = await getCoordinates(taskDetails.details["startAddress"]);
             markerLatLng = { lat: result.lat, lng: result.lng };
-            //console.log("Formatted Address: " + result.address);
 
             // Calculate the distance between the current location and the task location
             distance = await spherical.computeDistanceBetween(new google.maps.LatLng(latitude, longitude), new google.maps.LatLng(markerLatLng));
-
-            // FOR DEBUGGING
-            // console.log(`Start Coordinates: ${latitude}, ${longitude}`);
-            // console.log(`End Coordinates: ${markerLatLng.lat}, ${markerLatLng.lng}`);
-            // console.log(`Distance: ${distance} meters`);
           } catch (error) {
             console.log(error);
+            console.log(requester);
+            console.log(taskDetails);
           }
         }
 
         // Get favor length
         // TODO: The following code is only for tentative until the favor length value is revised.
         let length = taskDetails.details["favorLength"];
-        switch(length){
+        switch (length) {
           case "30 mins":
             length = 0.5;
             break;
@@ -501,7 +487,7 @@ async function createTaskListForVolunteers(allTasks) {
           taskVolunteerID: taskDetails.volunteerID ?? "",
           taskRequesterName: `${requester.firstName} ${requester.lastName}` ?? "",
           taskRequesterAddress: requester.address ?? "",
-          taskRequesterPhoto: taskRequesterPhoto,
+          taskRequesterPhoto: `${requester.profilePictureURL}` ?? "", // For Performance Improvement
           taskMarkerLatLng: markerLatLng,
           taskDistance: distance,
         };
@@ -523,6 +509,9 @@ async function createTaskListForVolunteers(allTasks) {
 
   // Sort the task cards by date (newest to oldest)
   sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"), document.getElementById("taskListExplore"));
+
+  // Apply lazy loading to images
+  lazyLoadImages();
 }
 
 /**
@@ -551,7 +540,7 @@ function createCard(task) {
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
   <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration} hours</span></p>
   <div class="requester">
-    <img class="photo" src="${task.taskRequesterPhoto}">
+    <img class="photo" src="${placeholderImage}" data-storage-path="profile/${task.taskRequesterPhoto}">
     <div class="profile">
       <p class="name">${task.taskRequesterName}</p>
       <p class="address">${task.taskRequesterAddress}</p>
@@ -565,7 +554,6 @@ function createCard(task) {
   } else if (["On going"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listMyFavor.appendChild(card);
     listMyFavorCount.innerHTML = ++favorCount;
-    //console.log("favorCount = " + favorCount);
   } else if (["Pending approval", "Completed", "Cancelled"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listHistory.appendChild(card);
     // Add data-status attribute to the card for status filtering
@@ -612,7 +600,16 @@ function createMapMarker(task, map, infoWindows) {
     "click",
     // TODO: Midfy according to our design team's wireframe
     (function (marker) {
-      return function () {
+      return async function () {
+        // Get profile photo of the requester
+        let imageURL;
+        try {
+          imageURL = await getFile("profile/" + task.taskRequesterPhoto);
+        } catch (error) {
+          console.error("Error getting image URL from Firebase Storage", error);
+          imageURL = placeholderImage;
+        }
+
         //console.log(marker.title);
         const card = document.createElement("div");
         card.classList.add("infoWindow");
@@ -629,7 +626,7 @@ function createMapMarker(task, map, infoWindows) {
         <p class="date">${task.taskDate}, ${task.taskTime}</p>
         <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration} hours</span></p>
         <div class="requester">
-          <img class="photo" src="${task.taskRequesterPhoto}">
+        <img class="photo" src="${imageURL}">
           <div class="profile">
             <p class="name">${task.taskRequesterName}</p>
             <p class="address">${task.taskRequesterAddress}</p>
@@ -704,8 +701,6 @@ function getCurrentPosition() {
  * After applying the filters, it hides the tasks that do not meet the filter conditions.
  */
 function applyFilter() {
-  //console.log("Apply Filter");
-
   // Get the specified filter conditions
   let distanceFilterValue = Number(document.getElementById("distanceFilter").value);
   let lengthFilterValue = Number(document.getElementById("lengthFilter").value);
@@ -739,19 +734,7 @@ function applyFilter() {
     localStorage.setItem("dateFilter", dateFilterValue);
     console.log("Filter Conditions Saved");
   }
-  /*
-  console.log(`Filter Conditions: 
-  Date Sort: ${dateFilterValue},
-  Distance: ${distanceFilterValue},
-  Length: ${lengthFilterValue},
-  Grocery Shopping: ${groceryShopping},
-  Mail Packages: ${mailPackages},
-  Meds Pickup: ${medsPickup},
-  Tech Help: ${techHelp},
-  Pet Care: ${petCare},
-  Transportation: ${transportation}
-  `);
-  */
+
   // Evaluate each task card with "Waiting to be accepted"
   let taskCards = document.querySelectorAll("#taskListExplore .taskCard");
   //console.log(taskCards);
@@ -896,4 +879,50 @@ function readPreference() {
   document.getElementById("petCare").checked = petCare;
   document.getElementById("transportation").checked = transportation;
   document.getElementById("savePreferenceCheckbox").checked = savePreferenceCheckbox;
+}
+
+/**
+ * Asynchronously loads images when they enter the viewport.
+ *
+ * This function uses the Intersection Observer API to lazily load images.
+ * It observes all img elements with a `data-storage-path` attribute.
+ * When an image enters the viewport, it fetches the image from the path specified in the `data-storage-path` attribute.
+ * If the path is not 'profile/null', it fetches the image from Firebase Storage using the `getFile` function.
+ * Once the image is fetched, it sets the image's src attribute to the fetched URL and removes the `data-storage-path` attribute.
+ * If an error occurs while fetching the image, it logs the error to the console.
+ * Regardless of whether the image fetch was successful or not, it stops observing the image after it has intersected.
+ */
+async function lazyLoadImages() {
+  try {
+    const lazyImages = document.querySelectorAll("img[data-storage-path]");
+
+    if ("IntersectionObserver" in window) {
+      let lazyImageObserver = new IntersectionObserver(async function (entries, observer) {
+        for (let entry of entries) {
+          if (entry.isIntersecting) {
+            let lazyImage = entry.target;
+            let storagePath = lazyImage.getAttribute("data-storage-path");
+            if (storagePath != "profile/null") {
+              try {
+                const url = await getFile(storagePath);
+                lazyImage.src = url;
+                lazyImage.removeAttribute("data-storage-path");
+              } catch (error) {
+                console.error("Error getting image URL from Firebase Storage", error);
+              } finally {
+                // Always unobserve the image, whether the request succeeded or failed
+                lazyImageObserver.unobserve(lazyImage);
+              }
+            }
+          }
+        }
+      });
+
+      lazyImages.forEach(function (lazyImage) {
+        lazyImageObserver.observe(lazyImage);
+      });
+    }
+  } catch (error) {
+    console.error("Error in lazyLoadImages function", error);
+  }
 }
