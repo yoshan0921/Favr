@@ -2,48 +2,51 @@
 /* Styles for Step Wizard                             */
 /* -------------------------------------------------- */
 
-.steps-counter{
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    gap: .5rem;
-    align-items: center;
+.steps-counter {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
 }
-.step1, .step2, .step3, .step4 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.step1,
+.step2,
+.step3,
+.step4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .stepNumber {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    background-color: #BFBFBF;
-    color: white;
-    border-radius: 50%;
-    margin-right: .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  background-color: #bfbfbf;
+  color: white;
+  border-radius: 50%;
+  margin-right: 0.5rem;
 }
 .stepText {
-    font-size: 1rem;
-    display: none;
+  font-size: 1rem;
+  display: none;
 }
 .stepLine2,
 .stepLine3,
 .stepLine4 {
-    flex-grow: 1;
-    height: 2px;
-    background-color: #BFBFBF;
+  flex-grow: 1;
+  height: 2px;
+  background-color: #bfbfbf;
 }
 .stepLineActive {
-    background-color: var(--primary);
+  background-color: var(--primary);
 }
 .stepActive {
-    background-color: var(--primary);
+  background-color: var(--primary);
 }
 .textActive {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /* -------------------------------------------------- */
@@ -51,159 +54,188 @@
 /* -------------------------------------------------- */
 
 ul.selection-list {
+  margin-bottom: 1rem;
 
-    margin-bottom: 1rem;
-
-    li {
-        font-size: 1.2rem;
-        border-left: 4px solid var(--primary);
-        padding-left: .5rem;
-        margin-bottom: .5rem;
-    }
+  li {
+    font-size: 1.2rem;
+    border-left: 4px solid var(--primary);
+    padding-left: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
-form{
-    border: thin solid gray;
-    margin: auto;
-    min-width: 400px;
-    min-height: 50vh;
-    width: 100%;
-    max-width: 90vw;
-    display: flex;
-    flex-flow: column wrap;
-    gap: 2rem;
-    box-sizing: border-box;
+form {
+  border: thin solid gray;
+  margin: auto;
+  min-width: 400px;
+  min-height: 50vh;
+  width: 100%;
+  max-width: 90vw;
+  display: flex;
+  flex-flow: column wrap;
+  gap: 2rem;
+  box-sizing: border-box;
 }
 
-.step{
-    padding: 1rem;
-    height: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-    flex: 1;
+.step {
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  flex: 1;
 }
 
 .step h2 {
-    text-align: center;
+  text-align: center;
 }
 
-#step-1 .form-group{
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    gap: 1rem;
-    flex: 1;
+#step-1 .form-group {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  gap: 1rem;
+  flex: 1;
 }
 
 #step-2 .form-group,
 #step-3 .form-group {
-    display: flex;
-    flex-flow: column wrap;
+  display: flex;
+  flex-flow: column wrap;
 }
 
 #step-2 .form-group input,
 #step-3 .form-group input,
 #step-2 .form-group select,
 #step-3 .form-group select {
-    margin-bottom: 1rem;
-    flex-grow: 1;
+  margin-bottom: 1rem;
+  flex-grow: 1;
 }
 
 #step-2 .form-group input,
 #step-2 .form-group select,
 #step-3 .form-group input,
 #step-3 .form-group select {
-    height: 30px;
+  height: 30px;
 }
 
 #step-4 textarea {
-    display: flex;
-    width: 100%;
-    max-width: 400px;
-    height: 100px;
-    margin-bottom: 1rem;
+  display: flex;
+  width: 100%;
+  max-width: 400px;
+  height: 100px;
+  margin-bottom: 1rem;
 }
 
 .summary h2 {
-    text-align: center;
+  text-align: center;
 }
 
 #statusList {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 ul#summaryList {
+  margin-bottom: 1rem;
 
-    margin-bottom: 1rem;
-
-    li {
-        font-size: 1.2rem;
-        border-left: 4px solid var(--primary);
-        padding-left: .5rem;
-        margin-bottom: .5rem;
-    }
+  li {
+    font-size: 1.2rem;
+    border-left: 4px solid var(--primary);
+    padding-left: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
-.favorOption:has(input[type=radio]:checked){
-    color: white;
-    background-color: var(--primary);
+.favorOption:has(input[type="radio"]:checked) {
+  color: white;
+  background-color: var(--primary);
 }
-.favorOption{
-    flex: 1;
-    box-sizing: border-box;
-    text-align: center;
-    border: thin solid gray;
-    padding: 1rem 2rem;
-    border-radius: 10px;
-    transition: .25s;
+.favorOption {
+  flex: 1;
+  box-sizing: border-box;
+  text-align: center;
+  border: thin solid gray;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  transition: 0.25s;
 
-    /* Center text */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Center text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.favorOption input{
-    visibility: hidden;
+.favorOption input {
+  visibility: hidden;
 }
-.form-navigation{
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+.form-navigation {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
 }
 .favorOption:hover {
-    cursor: pointer;
-    color: white;
-    background-color: var(--primary);
+  cursor: pointer;
+  color: white;
+  background-color: var(--primary);
 }
 
 @media only screen and (min-width: 800px) {
+  #step-1 .form-group {
+    flex-flow: row wrap;
+    gap: 2rem;
+  }
 
-    #step-1 .form-group{
-        flex-flow: row wrap;
-        gap: 2rem;
-    }
+  #step-2 .form-group,
+  #step-3 .form-group {
+    flex-flow: row nowrap;
+  }
 
-    #step-2 .form-group,
-    #step-3 .form-group {
-        flex-flow: row nowrap;
-    }
+  #step-2 .form-group input,
+  #step-3 .form-group input {
+    margin-right: 2rem;
+  }
 
-    #step-2 .form-group input,
-    #step-3 .form-group input {
-        margin-right: 2rem;
-    }
+  #step-2 .form-group label,
+  #step-3 .form-group label {
+    margin-right: 0.5rem;
+  }
 
-    #step-2 .form-group label,
-    #step-3 .form-group label {
-        margin-right: .5rem;
-    }
+  .favorOption {
+    flex: 1 0 25%;
+  }
 
-    .favorOption {
-        flex: 1 0 25%;
-    }
+  .stepText {
+    display: block;
+  }
+}
 
-    .stepText {
-        display: block;
-    }
+/* Cocoy, please adjust the folloeing CSS             */
+/* -------------------------------------------------- */
+/* Map                                                */
+/* -------------------------------------------------- */
+
+#startAddress,
+#endAddress {
+  font-size: 1em;
+}
+
+#startMap,
+#endMap {
+  height: 30vh;
+  width: 100%;
+}
+
+#step-3 .form-group {
+  flex-flow: row wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#step-3 .form-group .address {
+  flex: 0 0 100%;
+  @media screen and (min-width: 800px) {
+  }
+}
+
+#step-3 .form-group .map {
+  flex: 0 0 100%;
 }
