@@ -16,6 +16,10 @@
   --statusYellow: #ffcd29;
   --statusGreen: #44c451;
   --statusBlue: #0d99ff;
+
+  --hoverButtonBackground: color-mix(in hsl, var(--primary) 85%,  var(--pureWhite));
+  --hoverOutlinedButtonBackground: color-mix(in hsl, var(--primary) 20%,  var(--background-gray));
+
 }
 
 /* -------------------------------------------------- */
@@ -112,9 +116,19 @@ button,
   border: none;
   color: var(--pureWhite);
   border-radius: 5px;
-  padding: 0.1rem 0.2rem;
+  padding: .5rem 1rem;
   line-height: 1.75em;
-  font-weight: 700;
+  font-weight: 600;
+}
+:is(button:not(#logoutBtn), .link-btn):hover,
+:is(button:not(#logoutBtn), .link-btn):active{
+  background-color: var(--hoverButtonBackground);
+  cursor: pointer;
+}
+button:disabled,
+.link-btn:disabled{
+  background-color: var(--hoverButtonBackground);
+  opacity: 35%;
 }
 button a {
   color: var(--text);
@@ -125,13 +139,16 @@ button a {
   height: max-content;
   display: flex;
   align-items: center;
-  min-width: max-content;
   gap: 0.5rem;
 }
 .outlined-btn {
   background-color: transparent !important;
   color: var(--primary) !important;
   border: 2px solid var(--primary) !important;
+}
+:is(.outlined-btn, #backBtn):hover,
+:is(.outlined-btn, #backBtn):active{
+  background-color: var(--hoverOutlinedButtonBackground) !important;
 }
 /* -------------------------------------------------- */
 /* Toggle switch (list <-> map)
@@ -467,6 +484,7 @@ Modal
 .closeModal {
   color: var(--disabledText);
   float: right;
+  text-align: right;
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
@@ -545,6 +563,13 @@ Media queries
   }
   header .container .logo-wrapper #desktopLogo {
     display: block;
+  }
+  header .container .back-btn-wrapper #backBtn{
+    flex-flow: row nowrap;
+  }
+  header .container .back-btn-wrapper #backBtn span{
+    font-size: 1.5rem;
+    font-weight: 700;
   }
   header .container .logo-wrapper a {
     width: 70%;

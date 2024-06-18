@@ -28,7 +28,6 @@ async function runFunction() {
   if(partialPrefix == "edit"){
     currentUserRole = currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1);//capitalize
   }
-  console.log(partialPrefix + currentUserRole);
   // Wait for loadPartial to complete 
   if(document.getElementById("profile-content"))
   await loadPartial(`profile/_${partialPrefix+currentUserRole}Profile`, "profile-content");

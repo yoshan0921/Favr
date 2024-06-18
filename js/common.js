@@ -1,4 +1,4 @@
-import { signOut } from "./utils.js";
+import { enableBackButton, signOut } from "./utils.js";
 
 /**
  * An object that maps some pages to their title that will show to the user
@@ -26,19 +26,16 @@ loadCommonContent();
  * Loads the header, the menu and the footer
  */
 async function loadCommonContent() {
-
-  loadPartial("_header", "header")
-    .then(loadPageTitle)
-    .catch((error) => console.log(error));
-
-  loadPartial("_sidebar", "leftside-column")
-    .then(()=>{
-      addListenerToLogoutButton();
-      activateMenuLink();
-    })
-    .catch((error) => console.log(error));
-
-  loadPartial("_footer", "footer")
+  Promise.all([
+    loadPartial("_header", "header"),
+    loadPartial("_sidebar", "leftside-column"),
+    loadPartial("_footer", "footer")
+  ])
+  .then(()=>{
+    loadPageTitle();
+    addListenerToLogoutButton();
+    activateMenuLinkAndBackButton();
+  })
   .catch((error) => console.log(error));
 }
 
@@ -119,13 +116,18 @@ function closeModal(modal){
 /**
  * 
  */
-function activateMenuLink(){
+function activateMenuLinkAndBackButton(){
   const currentPath = window.location.pathname.split("/").pop();
+  let currentPageRequiresBackButton = true;
   for(let pathName in menuLinks){
     if(pathName == currentPath){
       const menuLink = document.getElementById(menuLinks[pathName]);
       menuLink.classList.add("active");
+      currentPageRequiresBackButton = false;
     }
+  }
+  if(currentPageRequiresBackButton){
+    enableBackButton();
   }
 }
 export { 
