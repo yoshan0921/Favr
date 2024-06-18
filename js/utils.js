@@ -37,12 +37,17 @@ function signOut(){
 function handleError(error){
     console.log(error);
 }
-
+/**
+ * 
+ */
 function resetLocalStorage(){
     for(let item of localStorageItems){
         window.localStorage.removeItem(item);
     }
 }
+/**
+ * 
+ */
 function enableBackButton(){
     const backBtn = document.getElementsByClassName("back-btn-wrapper")[0];
     if(backBtn) {
@@ -53,6 +58,7 @@ function enableBackButton(){
     }
 
 }
+
 export {
     signOut,
     redirect,

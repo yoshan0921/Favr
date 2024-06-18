@@ -277,7 +277,7 @@
 /* -------------------------------------------------- */
 
 #filterModal .modal-content {
-  height: 80vh;
+  min-height: 80vh;
   max-width: 330px;
   margin-top: 1vh;
   margin-right: 1rem;

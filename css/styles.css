@@ -354,9 +354,10 @@ footer {
 main.loaded .loading-screen{
   display: none;
 }
+/*
 #dashboard-content:has(.volunteer) .loading-screen{
   top: 120px;
-}
+}*/
 .loading-screen{
   z-index: 2;
   position: absolute;
@@ -441,7 +442,7 @@ Modal
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 3; /* Sit on top */
+  z-index: 1000; /* Sit on top */
   align-content: center;
   left: 0;
   top: 0;
@@ -463,7 +464,7 @@ Modal
 }
 
 /* The Close Button */
-.close {
+.closeModal {
   color: var(--disabledText);
   float: right;
   font-size: 30px;
@@ -471,9 +472,9 @@ Modal
   cursor: pointer;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
+.closeModal:hover,
+.closeModal:focus {
+  color: var(--primary);
   text-decoration: none;
   cursor: pointer;
 }

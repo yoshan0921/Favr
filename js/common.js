@@ -15,7 +15,11 @@ let pageTitles = {
   "support.html": "Get support",
   "tasks/tracking.html": "Favor Tracking"
 };
-
+const menuLinks = {
+  "dashboard.html" : "home-menu",
+  "updates.html":"updates-menu",
+  "profile.html":"profile-menu"
+}
 loadCommonContent();
 
 /**
@@ -28,7 +32,10 @@ async function loadCommonContent() {
     .catch((error) => console.log(error));
 
   loadPartial("_sidebar", "leftside-column")
-    .then(addListenerToLogoutButton)
+    .then(()=>{
+      addListenerToLogoutButton();
+      activateMenuLink();
+    })
     .catch((error) => console.log(error));
 
   loadPartial("_footer", "footer")
@@ -109,7 +116,18 @@ function closeModal(modal){
   modal.style.display = "none";
   removeEventListener("click", window);
 }
-
+/**
+ * 
+ */
+function activateMenuLink(){
+  const currentPath = window.location.pathname.split("/").pop();
+  for(let pathName in menuLinks){
+    if(pathName == currentPath){
+      const menuLink = document.getElementById(menuLinks[pathName]);
+      menuLink.classList.add("active");
+    }
+  }
+}
 export { 
   loadPartial,
   openModal,

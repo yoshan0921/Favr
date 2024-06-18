@@ -1,7 +1,7 @@
 import { closeModal, loadPartial, openModal } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
-import { redirect } from "./utils.js";
+import { redirect} from "./utils.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 const { Map } = await google.maps.importLibrary("maps");
@@ -19,12 +19,6 @@ let infoWindows = []; // For Google Map
 window.addEventListener("load", function (event) {
   // Check if the user is logged in
   monitorAuthenticationState();
-
-  //Give "active" class to a tag under nav#sidebar based on the current html file name
-  const filename = window.location.pathname.split("/").pop();
-  if (filename.startsWith("dashboard.html")) {
-    document.getElementById("home-menu").classList.add("active");
-  }
 });
 
 /**
@@ -880,7 +874,9 @@ function readPreference() {
   let savePreferenceCheckbox = localStorage.getItem("savePreferenceCheckbox") === "true";
 
   // Set the filter conditions
-  document.getElementById(dateFilterValue).checked = true;
+  let dateSortFilters = document.getElementsByName("dateFilter");
+  dateSortFilters[0].checked = true; //the first option is always checked by default
+  if(dateSortFilters[1].getAttribute("id") == dateFilterValue) dateSortFilters[1].checked = true;
   document.getElementById("distanceFilter").value = distanceFilterValue;
   document.getElementById("lengthFilter").value = lengthFilterValue;
   document.getElementById("groceryShopping").checked = groceryShopping;
