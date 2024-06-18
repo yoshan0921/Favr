@@ -12,6 +12,7 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", runFunction);
 } else {
   runFunction();
+  initMap();
 }
 
 function runFunction() {
@@ -80,13 +81,9 @@ function runFunction() {
       // Capture selection based on current step
       switch (currentStep) {
         case 1:
-          const selectedOption = document.querySelector(
-            'input[name="favorOption"]:checked'
-          );
+          const selectedOption = document.querySelector('input[name="favorOption"]:checked');
           if (selectedOption) {
-            selectionHistory.push(
-              `Favor Type: ${selectedOption.value}`
-            );
+            selectionHistory.push(`Favor Type: ${selectedOption.value}`);
             canProceed = true;
           } else {
             alert("Select an option.");
@@ -109,8 +106,8 @@ function runFunction() {
 
         case 3:
           const startAddress = document.getElementById("startAddress").value;
-          const endAddress =
-            document.getElementById("endAddress").value || "None";
+          const endAddress = document.getElementById("endAddress").value || "None";
+
           if (startAddress) {
             selectionHistory.push(`Start Address: ${startAddress}`);
             selectionHistory.push(`End Address: ${endAddress}`);
@@ -136,20 +133,12 @@ function runFunction() {
         previousStepBtn.disabled = false;
 
         // Add active classes to the current step number
-        document
-          .querySelector(`.step${currentStep} .stepNumber`)
-          .classList.add("stepActive");
-        document
-          .querySelector(`.step${currentStep} .stepText`)
-          .classList.add("textActive");
-        document
-          .querySelector(`.stepLine${currentStep}`)
-          .classList.add("stepLineActive");
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
+        document.querySelector(`.stepLine${currentStep}`).classList.add("stepLineActive");
 
         // Replace the previous step number with a check mark
-        document.querySelector(
-          `.step${currentStep - 1} .stepNumber span`
-        ).textContent = "✔";
+        document.querySelector(`.step${currentStep - 1} .stepNumber span`).textContent = "✔";
 
         // Update selection history
         updateSelectionHistory();
@@ -202,20 +191,12 @@ function runFunction() {
         }
 
         // Remove active classes from the current step number
-        document
-          .querySelector(`.step${currentStep} .stepNumber`)
-          .classList.remove("stepActive");
-        document
-          .querySelector(`.step${currentStep} .stepText`)
-          .classList.remove("textActive");
-        document
-          .querySelector(`.stepLine${currentStep}`)
-          .classList.remove("stepLineActive");
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.remove("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.remove("textActive");
+        document.querySelector(`.stepLine${currentStep}`).classList.remove("stepLineActive");
 
         // Restore the original step number
-        document.querySelector(
-          `.step${currentStep - 1} .stepNumber span`
-        ).textContent = `${currentStep - 1}`;
+        document.querySelector(`.step${currentStep - 1} .stepNumber span`).textContent = `${currentStep - 1}`;
 
         currentStep -= 1;
         currentStepDiv.classList.add("hidden"); // hides current step
@@ -229,12 +210,8 @@ function runFunction() {
         }
 
         // Add active class to the current step number
-        document
-          .querySelector(`.step${currentStep} .stepNumber`)
-          .classList.add("stepActive");
-        document
-          .querySelector(`.step${currentStep} .stepText`)
-          .classList.add("textActive");
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
 
         // Replace the Submit button with Next Step button when going back to previous steps
         if (currentStep < 4) {
@@ -325,4 +302,57 @@ function runFunction() {
   backToHome.addEventListener("click", (e) => {
     window.location.href = "/dashboard.html";
   });
+}
+
+/**
+ * Initializes the Google Maps and Places Autocomplete libraries.
+ * Sets up two maps and autocomplete inputs for start and end addresses.
+ */
+async function initMap() {
+  const { Map } = await google.maps.importLibrary("maps");
+  const { Autocomplete } = await google.maps.importLibrary("places");
+  const { Marker } = await google.maps.importLibrary("marker");
+
+  /**
+   * Sets up the autocomplete functionality for a given input field and map.
+   * @param {string} inputId - The ID of the input element for address autocomplete.
+   * @param {string} mapId - The ID of the map element where the address will be displayed.
+   */
+  function setupAutocomplete(inputId, mapId) {
+    let map = new Map(document.getElementById(mapId), {
+      zoom: 6,
+      center: { lat: 53.7267, lng: -127.6476 }, // Center on British Columbia
+      mapId: "DEMO_MAP_ID",
+    });
+
+    let addressInput = new Autocomplete(document.getElementById(inputId), {
+      componentRestrictions: { country: "ca" },
+    });
+
+    let marker = new Marker({
+      map: map,
+    });
+
+    addressInput.addListener("place_changed", () => {
+      const place = addressInput.getPlace();
+
+      if (!place.geometry) {
+        document.getElementById(inputId).placeholder = "Enter a place";
+        return;
+      }
+
+      document.getElementById(inputId).value = place.formatted_address;
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(17);
+      }
+
+      marker.setPosition(place.geometry.location);
+    });
+  }
+
+  setupAutocomplete("startAddress", "startMap");
+  setupAutocomplete("endAddress", "endMap");
 }
