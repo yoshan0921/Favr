@@ -29,6 +29,9 @@ function runFunction() {
   let taskTime = document.getElementById("taskTime");
   let taskNote = document.getElementById("taskNote");
 
+  let completedElderName = document.getElementById("completedElderName");
+  let approvedElderName = document.getElementById("approvedElderName");
+
   // Get the task data from the Firestore
   getDocument("tasks", taskID)
     .then((task) => {
@@ -46,6 +49,10 @@ function runFunction() {
         console.log(user.firstName);
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
         elderAddress.innerHTML = user.address;
+
+        completedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+        approvedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+      
 
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
