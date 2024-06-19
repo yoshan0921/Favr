@@ -26,10 +26,22 @@ function runFunction() {
   console.log(taskID);
 
   let taskName = document.getElementById("taskName");
+  let confirmTaskName = document.getElementById("confirmTaskName");
+  let acceptTaskName = document.getElementById("acceptTaskName");
+
   let elderName = document.getElementById("elderName");
+  let confirmWrapperElderName = document.getElementById("confirmWrapperElderName");
+  let confirmElderName = document.getElementById("confirmElderName");
+  let acceptWrapperElderName = document.getElementById("acceptWrapperElderName");
+  let acceptElderName = document.getElementById("acceptElderName");
+
   let elderAddress = document.getElementById("elderAddress");
+  let confirmElderAddress = document.getElementById("confirmElderAddress");
+  let acceptElderAddress = document.getElementById("acceptElderAddress");
+
   let taskAddress = document.getElementById("taskAddress");
   let taskTime = document.getElementById("taskTime");
+
   let taskNote = document.getElementById("taskNote");
 
   // Get the task data from the Firestore
@@ -44,11 +56,23 @@ function runFunction() {
 
         // Retrieve Task name====================
         taskName.innerHTML = taskData.name;
+        confirmTaskName.innerHTML = taskData.name;
+        acceptTaskName.innerHTML = taskData.name;
+
+
 
         // Retrieve Elder's name and address=====================
         console.log(user.firstName);
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
         elderAddress.innerHTML = user.address;
+
+        confirmWrapperElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+        confirmElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+        confirmElderAddress.innerHTML = user.address;
+
+        acceptWrapperElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+        acceptElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+        acceptElderAddress.innerHTML = user.address;
 
         getFile("profile/" + user.profilePictureURL)
           .then((url) => {
@@ -63,6 +87,7 @@ function runFunction() {
         taskAddress.innerHTML = taskData.details.startAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
         taskNote.innerHTML = taskData.notes;
+
       });
     })
     .catch((error) => {
