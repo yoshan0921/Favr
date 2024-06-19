@@ -135,11 +135,15 @@
 }
 
 .volunteer.tab-content .taskCard {
+  transition: all .2s ease-out;
   background-color: var(--pureWhite);
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   padding: 1rem;
   position: relative;
+}
+.volunteer.tab-content .taskCard:hover {
+  transform: translateY(-5px);
 }
 
 .volunteer.tab-content .taskCard a {

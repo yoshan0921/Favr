@@ -1,5 +1,12 @@
-import { enableBackButton, signOut } from "./utils.js";
+import { 
+  enableBackButton, 
+  redirect, 
+  signOut 
+} from "./utils.js";
 
+import { 
+  checkUserAuthorization 
+} from "./firebase/authentication.js";
 /**
  * An object that maps some pages to their title that will show to the user
  * on the page <header>
@@ -20,7 +27,15 @@ const menuLinks = {
   "updates.html":"updates-menu",
   "profile.html":"profile-menu"
 }
-loadCommonContent();
+document.getElementsByTagName("body")[0].style.visibility = "hidden";
+checkUserAuthorization()
+.then(()=>{
+  loadCommonContent()
+  .then(()=>{
+    document.getElementsByTagName("body")[0].style.visibility = "visible";
+  })
+})
+.catch((error)=>redirect("403.html"));
 
 /**
  * Loads the header, the menu and the footer
@@ -128,6 +143,8 @@ function activateMenuLinkAndBackButton(){
   }
   if(currentPageRequiresBackButton){
     enableBackButton();
+    const headerLogo = document.getElementsByClassName("logo-wrapper");
+    hdaderLogo.classList.add("disappear-mobile");
   }
 }
 export { 

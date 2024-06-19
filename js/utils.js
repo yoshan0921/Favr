@@ -4,7 +4,9 @@ import {
 
 let localStorageItems = [
     "currentUserID",
-    "currentUserRole"
+    "currentUserRole",
+    "errors",
+    "errors123"
 ]
 /**
  * Redirects to the page specified on the path
@@ -19,6 +21,7 @@ function redirect(path){
 function signOut(){
     auth.signOut().then(() => {
         // Sign-out successful.
+        resetLocalStorage();
         redirect("/index.html");
       }).catch((error) => {
         // An error happened.
@@ -41,6 +44,7 @@ function handleError(error){
  * 
  */
 function resetLocalStorage(){
+    console.log("here");
     for(let item of localStorageItems){
         window.localStorage.removeItem(item);
     }
