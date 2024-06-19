@@ -1,7 +1,7 @@
 import { closeModal, loadPartial, openModal } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
-import { redirect} from "./utils.js";
+import { redirect } from "./utils.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 const { Map } = await google.maps.importLibrary("maps");
@@ -43,11 +43,10 @@ if (document.readyState === "loading") {
 async function runFunction() {
   // Get Login user information
   currentUserID = getCurrentUserID();
-  getCurrentUserRole()
-  .then(async (currentUserRole)=>{
+  getCurrentUserRole().then(async (currentUserRole) => {
     console.log("Current User ID: " + currentUserID);
     console.log("Current User Role: " + currentUserRole);
-  
+
     // Load dashboard partil html
     await loadPartial(`dashboard/_${currentUserRole}Dashboard`, "dashboard-content");
     // Load the dashboard based on the user's role
@@ -56,19 +55,17 @@ async function runFunction() {
     } else if (currentUserRole === "elder") {
       await loadEldersDashboard();
     }
-  
+
+    // Link to each tasb in the dashboard
+    let hash = window.location.hash;
+    if (hash === "#explore") {
+      tab1.click();
+    } else if (hash === "#myfavors") {
+      tab2.click();
+    } else if (hash === "#history") {
+      tab3.click();
+    }
   });
-  
-  // Link to each tasb in the dashboard
-  let hash = window.location.hash;
-  //console.log("hash = " + hash);
-  if (hash === "#explore") {
-    tab1.click();
-  } else if (hash === "#myfavors") {
-    tab2.click();
-  } else if (hash === "#history") {
-    tab3.click();
-  }
 }
 
 // ============================================================
@@ -879,7 +876,7 @@ function readPreference() {
   // Set the filter conditions
   let dateSortFilters = document.getElementsByName("dateFilter");
   dateSortFilters[0].checked = true; //the first option is always checked by default
-  if(dateSortFilters[1].getAttribute("id") == dateFilterValue) dateSortFilters[1].checked = true;
+  if (dateSortFilters[1].getAttribute("id") == dateFilterValue) dateSortFilters[1].checked = true;
   document.getElementById("distanceFilter").value = distanceFilterValue;
   document.getElementById("lengthFilter").value = lengthFilterValue;
   document.getElementById("groceryShopping").checked = groceryShopping;
