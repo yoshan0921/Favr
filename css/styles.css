@@ -440,7 +440,7 @@ main.loaded .loading-screen{
   color: var(--disabledText);
   text-decoration: none;
   padding: 0 10px;
-  font-size: 1rem;
+  font-size: clamp(.5rem,5vw, .8rem);
   font-weight: 700;
 }
 .sidebar button {
@@ -551,6 +551,10 @@ Media queries
   .sidebar {
     grid-row: 1/-1;
     grid-column: 1;
+  }
+  .sidebar a,
+  #logoutBtn {
+    font-size: 1rem;
   }
   .sidebar ul {
     justify-content: unset;
