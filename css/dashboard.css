@@ -40,7 +40,7 @@
 }
 
 .tab-content .map {
-  height: 60vh;
+  height: calc(100vh - 85px - 13.5rem);
   width: 100%;
 }
 
