@@ -20,6 +20,7 @@ let pageTitles = {
 const menuLinks = {
   "dashboard.html": "home-menu",
   "updates.html": "updates-menu",
+  "history.html": "history-menu",
   "profile.html": "profile-menu",
 };
 document.getElementsByTagName("body")[0].style.visibility = "hidden";
