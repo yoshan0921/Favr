@@ -1,103 +1,30 @@
 /* -------------------------------------------------- */
-/* Elder: Favor List View                             */
+/* Tab Menu                                           */
 /* -------------------------------------------------- */
-.elder h2 {
-  padding: 0;
-}
-
-.elder .gridContainer {
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(1, 1fr);
-  margin-top: 1rem;
-
-  @media (min-width: 600px) {
-    /* grid-template-columns: repeat(2, 1fr); */
-  }
-}
-
-.elder .taskCard {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  padding: 1rem;
-  position: relative;
-}
-
-.elder .taskCard a {
-  border-radius: 10px;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-
-.elder .taskCard .statusColor {
-  display: inline-block;
-  background-color: #fff;
-  border-radius: 50%;
-  height: 10px;
-  width: 10px;
-  margin-right: 0.5rem;
-}
-
-.elder .taskCard a:hover {
-  opacity: 0.1;
-  background-color: var(--accent2);
-}
-
-.elder .taskCard .title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.elder .taskCard .requester {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  align-items: center;
-}
-
-.elder .taskCard .requester .photo {
-  display: block;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-}
-
-.elder .taskCard .requester .name {
-  font-weight: bold;
-}
-
-/* -------------------------------------------------- */
-/* Volunteer: Home Tab Menu                           */
-/* -------------------------------------------------- */
-.volunteer.tabs {
+.tabs {
   display: flex;
   margin-bottom: 1rem;
 }
 
-.volunteer.tabs .tab {
+.tabs .tab {
   flex: 1 0 33.3%;
   cursor: pointer;
   padding-bottom: 0.5rem;
   text-align: center;
 }
 
-.volunteer.tabs .tab {
+.tabs .tab {
   border-bottom: 2px solid var(--disabledText);
   color: var(--disabledText);
 }
 
-.volunteer.tabs .tab.active {
+.tabs .tab.active {
   border-bottom: 3px solid var(--primary);
   font-weight: bold;
   color: var(--primary);
 }
 
-.volunteer.tabs .tab-content-item {
+.tabs .tab-content-item {
   padding: 10px;
 }
 
@@ -106,106 +33,18 @@
 }
 
 /* -------------------------------------------------- */
-/* Volunteer: Explore Favor List View                 */
+/* Map                                                */
 /* -------------------------------------------------- */
-
-.volunteer.tab-content .viewSwitcher {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-}
-
-.volunteer.tab-content .viewSwitcher button {
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0rem 1rem;
-}
-
-.volunteer.tab-content .gridContainer {
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(1, 1fr);
-  margin-top: 1rem;
-
-  @media (min-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.volunteer.tab-content .taskCard {
-  transition: all .2s ease-out;
-  background-color: var(--pureWhite);
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  padding: 1rem;
-  position: relative;
-}
-.volunteer.tab-content .taskCard:hover {
-  transform: translateY(-5px);
-}
-
-.volunteer.tab-content .taskCard a {
-  border-radius: 10px;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-
-.volunteer.tab-content .taskCard .statusColor {
-  background-color: var(--pureWhite);
-  border-radius: 50%;
-  height: 10px;
-  width: 10px;
-  position: absolute;
-  top: 1.5rem;
-  right: 1rem;
-}
-
-.volunteer.tab-content .taskCard a:hover {
-  opacity: 0.1;
-}
-
-.volunteer.tab-content .taskCard .title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.volunteer.tab-content .taskCard .requester {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  align-items: center;
-}
-
-.volunteer.tab-content .taskCard .requester .photo {
-  display: block;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-}
-
-.volunteer.tab-content .taskCard .requester .name {
-  font-weight: bold;
-}
-
-/* -------------------------------------------------- */
-/* Volunteer: Explore Favor Map View                  */
-/* -------------------------------------------------- */
-.volunteer.tab-content .mapContainer {
+.tab-content .mapContainer {
   margin-top: 1rem;
 }
 
-.volunteer.tab-content .map {
+.tab-content .map {
   height: 60vh;
   width: 100%;
 }
 
-.volunteer.tab-content .map .you {
+.tab-content .map .you {
   background-color: var(--primary);
   border-radius: 8px;
   color: var(--pureWhite);
@@ -214,7 +53,7 @@
   position: relative;
 }
 
-.volunteer.tab-content .map .you::after {
+.tab-content .map .you::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -227,18 +66,18 @@
   border-top: 8px solid var(--primary);
 }
 
-.volunteer.tab-content .infoWindow {
+.tab-content .infoWindow {
   line-height: 1.75em;
   font-size: 1rem;
 }
 
-.volunteer.tab-content .infoWindow {
+.tab-content .infoWindow {
   background-color: var(--pureWhite);
   padding: 1rem;
   position: relative;
 }
 
-.volunteer.tab-content .infoWindow a {
+.tab-content .infoWindow a {
   position: absolute;
   top: 0;
   left: 0;
@@ -246,40 +85,146 @@
   width: 100%;
 }
 
-.volunteer.tab-content .infoWindow a:hover {
+.tab-content .infoWindow a:hover {
   opacity: 0.1;
   background-color: var(--primary);
 }
 
-.volunteer.tab-content .infoWindow .title {
+.tab-content .infoWindow .title {
   font-size: 1.25rem;
   font-weight: 900;
   padding: 0.5rem 0rem;
   text-align: left;
 }
 
-.volunteer.tab-content .infoWindow .requester {
+.tab-content .infoWindow .requester {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
   align-items: center;
 }
 
-.volunteer.tab-content .infoWindow .requester .photo {
+.tab-content .infoWindow .requester .photo {
   display: block;
   border-radius: 50%;
   width: 50px;
   height: 50px;
 }
 
-.volunteer.tab-content .infoWindow .requester .name {
+.tab-content .infoWindow .requester .name {
   font-weight: bold;
+}
+
+/* -------------------------------------------------- */
+/* Task Card                                          */
+/* -------------------------------------------------- */
+.taskCard {
+  transition: all 0.2s ease-out;
+  background-color: var(--pureWhite);
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  position: relative;
+}
+
+.taskCard:hover {
+  transform: translateY(-5px);
+}
+
+.taskCard a {
+  border-radius: 10px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.taskCard a:hover {
+  opacity: 0.1;
+}
+
+.taskCard .title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.taskCard .requester,
+.taskCard .vounteer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.taskCard .requester .photo,
+.taskCard .vounteer .photo {
+  display: block;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.taskCard .requester .name,
+.taskCard .vounteer .name {
+  font-weight: bold;
+}
+
+/* -------------------------------------------------- */
+/* Elder: Favor List View                             */
+/* -------------------------------------------------- */
+.elder h2 {
+  padding: 0;
+}
+
+.elder .gridContainer {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+  margin-top: 1rem;
+}
+
+.elder .taskCard .statusColor {
+  display: inline-block;
+  background-color: #fff;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  margin-right: 0.5rem;
+}
+
+/* -------------------------------------------------- */
+/* Volunteer: Explore Favor List View                 */
+/* -------------------------------------------------- */
+.volunteer .viewSwitcher {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.volunteer .viewSwitcher button {
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0rem 1rem;
+}
+
+.volunteer .gridContainer {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+  margin-top: 1rem;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* -------------------------------------------------- */
 /* Volunteer: Explore Favor Filter                    */
 /* -------------------------------------------------- */
-
 #filterModal .modal-content {
   min-height: 80vh;
   max-width: 330px;
@@ -386,6 +331,16 @@ button#cancelFilter {
 /* -------------------------------------------------- */
 /* Volunteer: History                                 */
 /* -------------------------------------------------- */
+.volunteer .taskCard .statusColor {
+  background-color: var(--pureWhite);
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+}
+
 .volunteer.tab-content input[type="checkbox"].completed,
 .volunteer.tab-content input[type="checkbox"].pending,
 .volunteer.tab-content input[type="checkbox"].cancelled {
@@ -427,7 +382,6 @@ button#cancelFilter {
 .volunteer.tab-content input[type="checkbox"]:checked + label.cancelled {
   display: block;
   background-color: var(--warmRed);
-
 }
 
 .volunteer.tab-content .viewSwitcher .statusFilter {
