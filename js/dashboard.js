@@ -28,10 +28,8 @@ window.addEventListener("load", function (event) {
  * That is why we need to check the readyState of the document.
  */
 if (document.readyState === "loading") {
-  //console.log("readyState = " + document.readyState);
   document.addEventListener("DOMContentLoaded", runFunction);
 } else {
-  //console.log("readyState = " + document.readyState);
   runFunction();
 }
 
@@ -54,16 +52,6 @@ async function runFunction() {
       await loadVolunteersDashboard();
     } else if (currentUserRole === "elder") {
       await loadEldersDashboard();
-    }
-
-    // Link to each tasb in the dashboard
-    let hash = window.location.hash;
-    if (hash === "#explore") {
-      tab1.click();
-    } else if (hash === "#myfavors") {
-      tab2.click();
-    } else if (hash === "#history") {
-      tab3.click();
     }
   });
 }
@@ -231,10 +219,19 @@ function createCardForElder(task) {
  * setting up the filter button and modal, and setting up the tab menu.
  */
 async function loadVolunteersDashboard() {
+  // Tab menu
+  showTabmenu();
+  // Link to each tasb in the dashboard
+  let hash = window.location.hash;
+  if (hash === "#explore") {
+    document.getElementById("tab1").click();
+  } else if (hash === "#myfavors") {
+    document.getElementById("tab2").click();
+  }
+
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
   displayTaskListForVolunteers().then(() => {
-    //loadingScreen.style.display = "none";
     main.classList.add("loaded");
   });
 
@@ -248,12 +245,9 @@ async function loadVolunteersDashboard() {
   const applyFilterBtn = document.getElementById("applyFilter");
   const cancelFilterBtn = document.getElementById("cancelFilter");
   //Filter button (History tab)
-  const toggleCancelledCheckbox = document.getElementById("toggleCancelledCheckbox");
-  const togglePendingCheckbox = document.getElementById("togglePendingCheckbox");
-  const toggleCompletedCheckbox = document.getElementById("toggleCompletedCheckbox");
-
-  // Tab menu
-  showTabmenu();
+  // const toggleCancelledCheckbox = document.getElementById("toggleCancelledCheckbox");
+  // const togglePendingCheckbox = document.getElementById("togglePendingCheckbox");
+  // const toggleCompletedCheckbox = document.getElementById("toggleCompletedCheckbox");
 
   // Switch between map and list view (toggle hidden class)
   if (taskViewSwitch) {
@@ -290,38 +284,6 @@ async function loadVolunteersDashboard() {
     cancelFilterBtn.addEventListener("click", () => {
       console.log("Cancel Filter");
       closeModal(filterModal);
-    });
-  }
-
-  // Status filter checkboxes on the History tab
-  if (toggleCancelledCheckbox) {
-    toggleCancelledCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Cancelled") {
-          card.style.display = toggleCancelledCheckbox.checked ? "block" : "none";
-        }
-      });
-    });
-  }
-  if (togglePendingCheckbox) {
-    togglePendingCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Pending approval") {
-          card.style.display = togglePendingCheckbox.checked ? "block" : "none";
-        }
-      });
-    });
-  }
-  if (toggleCompletedCheckbox) {
-    toggleCompletedCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Completed") {
-          card.style.display = toggleCompletedCheckbox.checked ? "block" : "none";
-        }
-      });
     });
   }
 }
@@ -385,8 +347,6 @@ async function createTaskListForVolunteers(allTasks) {
     }
     latitude = position.latitude;
     longitude = position.longitude;
-    //console.log("Current Position: " + position);
-    //console.log(`Current Coordinates: ${latitude}, ${longitude}`);
 
     // Create Map
     map = new Map(mapElement, {
@@ -518,7 +478,6 @@ async function createTaskListForVolunteers(allTasks) {
   // Sort the task cards by date (newest to oldest)
   sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"), document.getElementById("taskListExplore"));
   sortTasksByDate("newest", document.querySelectorAll("#taskListMyFavor .taskCard"), document.getElementById("taskListMyFavor"));
-  sortTasksByDate("newest", document.querySelectorAll("#taskListHistory .taskCard"), document.getElementById("taskListHistory"));
 
   // Apply lazy loading to images
   lazyLoadImages();
@@ -532,7 +491,7 @@ async function createTaskListForVolunteers(allTasks) {
 function createCardForVolunteer(task) {
   const listExplore = document.getElementById("taskListExplore");
   const listMyFavor = document.getElementById("taskListMyFavor");
-  const listHistory = document.getElementById("taskListHistory");
+  // const listHistory = document.getElementById("taskListHistory");
   const listMyFavorCount = document.getElementById("favorCount");
 
   const card = document.createElement("div");
@@ -564,19 +523,6 @@ function createCardForVolunteer(task) {
   } else if (["On going"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listMyFavor.appendChild(card);
     listMyFavorCount.innerHTML = ++favorCount;
-  } else if (["Pending approval", "Completed", "Cancelled"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
-    listHistory.appendChild(card);
-    // Add data-status attribute to the card for status filtering
-    if (task.taskStatus === "Pending approval") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
-      card.setAttribute("data-status", "Pending approval");
-    } else if (task.taskStatus === "Completed") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
-      card.setAttribute("data-status", "Completed");
-    } else if (task.taskStatus === "Cancelled") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
-      card.setAttribute("data-status", "Cancelled");
-    }
   }
 }
 
@@ -845,8 +791,6 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
   taskCardsArray.forEach((card) => {
     target.appendChild(card);
   });
-
-  //console.log(`Sort by ${dateFilterValue}`);
 }
 
 /**
@@ -893,3 +837,5 @@ function readPreference() {
   document.getElementById("transportation").checked = transportation;
   document.getElementById("savePreferenceCheckbox").checked = savePreferenceCheckbox;
 }
+
+export { sortTasksByDate };
