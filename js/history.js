@@ -47,14 +47,6 @@ async function runFunction() {
     } else if (currentUserRole === "elder") {
       await loadEldersHistory();
     }
-
-    // Link to each tasb in the dashboard
-    let hash = window.location.hash;
-    if (hash === "#completed") {
-      tab1.click();
-    } else if (hash === "#cancelled") {
-      tab2.click();
-    }
   });
 }
 
@@ -63,104 +55,26 @@ async function runFunction() {
 // ============================================================
 
 /**
- * Loads the volunteer's dashboard.
+ * Loads the elder's history.
  * This includes retrieving tasks from the database, setting up the view switcher for map and list views,
  * setting up the filter button and modal, and setting up the tab menu.
  */
 async function loadEldersHistory() {
+  // Tab menu
+  showTabmenu();
+  // Link to each tasb in the dashboard
+  let hash = window.location.hash;
+  if (hash === "#completed") {
+    document.getElementById("tab1").click();
+  } else if (hash === "#cancelled") {
+    document.getElementById("tab2").click();
+  }
+
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
   displayTaskListForElders().then(() => {
-    //loadingScreen.style.display = "none";
     main.classList.add("loaded");
   });
-
-  // View switcher radio buttons
-  const taskViewSwitch = document.getElementById("taskViewSwitch");
-
-  //Filter button (Explore tab)
-  const filterBtn = document.getElementById("openFilterBtn");
-  const filterModal = document.getElementById("filterModal");
-  const closeFilterBtn = document.getElementById("cancelFilter");
-  const applyFilterBtn = document.getElementById("applyFilter");
-  const cancelFilterBtn = document.getElementById("cancelFilter");
-  //Filter button (History tab)
-  const toggleCancelledCheckbox = document.getElementById("toggleCancelledCheckbox");
-  const togglePendingCheckbox = document.getElementById("togglePendingCheckbox");
-  const toggleCompletedCheckbox = document.getElementById("toggleCompletedCheckbox");
-
-  // Tab menu
-  showTabmenu();
-
-  // Switch between map and list view (toggle hidden class)
-  if (taskViewSwitch) {
-    taskViewSwitch.addEventListener(
-      "change",
-      (event) => {
-        if (event.cancelable) event.preventDefault();
-        document.getElementById("taskMapExplore").classList.toggle("hidden");
-        document.getElementById("taskListExplore").classList.toggle("hidden");
-      },
-      { passive: false }
-    );
-  }
-
-  // Filter modal on the Explore tab
-  if (filterBtn) {
-    filterBtn.addEventListener("click", () => {
-      openModal(filterModal);
-      readPreference();
-    });
-  }
-  if (closeFilterBtn) {
-    closeFilterBtn.addEventListener("click", () => {
-      closeModal(filterModal);
-    });
-  }
-  if (applyFilterBtn) {
-    applyFilterBtn.addEventListener("click", () => {
-      applyFilter();
-      closeModal(filterModal);
-    });
-  }
-  if (cancelFilterBtn) {
-    cancelFilterBtn.addEventListener("click", () => {
-      console.log("Cancel Filter");
-      closeModal(filterModal);
-    });
-  }
-
-  // Status filter checkboxes on the History tab
-  if (toggleCancelledCheckbox) {
-    toggleCancelledCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Cancelled") {
-          card.style.display = toggleCancelledCheckbox.checked ? "block" : "none";
-        }
-      });
-    });
-  }
-  if (togglePendingCheckbox) {
-    togglePendingCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Pending approval") {
-          card.style.display = togglePendingCheckbox.checked ? "block" : "none";
-        }
-      });
-    });
-  }
-  if (toggleCompletedCheckbox) {
-    toggleCompletedCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Completed") {
-          card.style.display = toggleCompletedCheckbox.checked ? "block" : "none";
-        }
-      });
-    });
-  }
 }
 
 /**
@@ -210,9 +124,9 @@ async function createTaskListForElders(allTasks) {
 
         // Set the link URL for the task card
         if (taskDetails.status === "Completed") {
-          linkURL = "/tasks/completedHistory.html";
+          linkURL = "/tasks/taskDetailCompleted.html";
         } else if (taskDetails.status === "Cancelled") {
-          linkURL = "/tasks/cancelledHistory.html";
+          linkURL = "/tasks/taskDetailCacelled.html";
         } else {
           linkURL = "#";
         }
@@ -249,6 +163,10 @@ async function createTaskListForElders(allTasks) {
 
   // Wait for all tasks to be processed
   await Promise.all(tasksPromises);
+
+  // Sort the task cards by date (newest to oldest)
+  sortTasksByDate("newest", document.querySelectorAll("#listCompleted .taskCard"), document.getElementById("listCompleted"));
+  sortTasksByDate("newest", document.querySelectorAll("#listCancelled .taskCard"), document.getElementById("listCancelled"));
 
   // Apply lazy loading to images
   lazyLoadImages();
@@ -292,4 +210,219 @@ function createCardForElder(task) {
   } else if (["Cancelled"].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
   }
+}
+
+// ============================================================
+// Load the history for Volunteers
+// ============================================================
+
+/**
+ * Loads the volunteer's history.
+ * This includes retrieving tasks from the database, setting up the view switcher for map and list views,
+ * setting up the filter button and modal, and setting up the tab menu.
+ */
+async function loadVolunteersHistory() {
+  // Tab menu
+  showTabmenu();
+  // Link to each tasb in the dashboard
+  let hash = window.location.hash;
+  if (hash === "#pending") {
+    document.getElementById("tab1").click();
+  } else if (hash === "#completed") {
+    document.getElementById("tab2").click();
+  } else if (hash === "#cancelled") {
+    document.getElementById("tab3").click();
+  }
+
+  // Retrieve tasks from the database
+  const main = document.getElementsByTagName("main")[0];
+  displayTaskListForVolunteers().then(() => {
+    main.classList.add("loaded");
+  });
+}
+
+/**
+ * Retrieves all tasks from the Firestore and populates the task list for volunteers.
+ * Also creates a list view (including map view) for the tasks.
+ *
+ * TODO: Not all data should be retrieved here, but the target of retrieval should be narrowed down with a where clause.
+ */
+async function displayTaskListForVolunteers() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Retrieve tasks from the Firestore
+      let allTasks = await getAll("tasks");
+
+      // Create List View (including Map View)
+      createTaskListForVolunteers(allTasks)
+        .then(() => resolve())
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    } catch (error) {
+      console.log(error);
+      reject(error);
+    }
+  });
+}
+
+/**
+ * Displays a list of tasks in card format.
+ * Tasks with a status of "waiting to be accepted" are also displayed on the map.
+ *
+ * @param {Array} allTasks - An array of all tasks.
+ */
+async function createTaskListForVolunteers(allTasks) {
+  const tasksPromises = allTasks.map(async (task) => {
+    // for (let task of allTasks) {
+    let id = task[0]; // Task ID
+    let taskDetails = task[1]; // Task detail data
+    let linkURL = "#"; // Link URL for the task card
+
+    // Get requester's information
+    return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
+      .then(async ([requester, volunteer]) => {
+        // Check if the volunteer of the task is the current user
+        if (taskDetails.volunteerID !== currentUserID) return;
+
+        // Set the link URL for the task card
+        if (taskDetails.status === "Pending") {
+          linkURL = "/tasks/taskDetailPending.html";
+        } else if (taskDetails.status === "Completed") {
+          linkURL = "/tasks/taskDetailCompleted.html";
+        } else if (taskDetails.status === "Cancelled") {
+          linkURL = "/tasks/taskDetailCancelled.html";
+        } else {
+          linkURL = "#";
+        }
+
+        // Create task object for List & Map view
+        let taskObj = {
+          // Task Information
+          taskID: id,
+          taskName: taskDetails.name ?? "",
+          taskStatus: taskDetails.status ?? "",
+          taskDate: taskDetails.details["date"] ?? "",
+          taskTime: taskDetails.details["time"] ?? "",
+          taskNotes: taskDetails.notes ?? "",
+          taskAddress: taskDetails.details["startAddress"] ?? "",
+          taskEndAddress: taskDetails.details["endAddress"] ?? "",
+          taskLinkURL: linkURL,
+          // Volunteer Information
+          taskVolunteerID: taskDetails.volunteerID ?? "",
+          taskVolunteerName: `${volunteer.firstName} ${volunteer.lastName}` ?? "",
+          taskVolunteerInstitution: volunteer.institution ?? "",
+          // Elder Information
+          taskRequesterName: `${requester.firstName} ${requester.lastName}` ?? "",
+          taskRequesterAddress: requester.address ?? "",
+          taskRequesterPhoto: `${requester.profilePictureURL}` ?? "", // For Performance Improvement
+        };
+
+        // Display task information on the list and map
+        createCardForVolunteers(taskObj);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  // Wait for all tasks to be processed
+  await Promise.all(tasksPromises);
+
+  // Sort the task cards by date (newest to oldest)
+  sortTasksByDate("newest", document.querySelectorAll("#taskListPending .taskCard"), document.getElementById("taskListPending"));
+  sortTasksByDate("newest", document.querySelectorAll("#taskListCompleted .taskCard"), document.getElementById("taskListCompleted"));
+  sortTasksByDate("newest", document.querySelectorAll("#taskListCancelled .taskCard"), document.getElementById("taskListCancelled"));
+
+  // Apply lazy loading to images
+  lazyLoadImages();
+}
+
+/**
+ * Creates a task card and appends it to the appropriate list based on the task status.
+ *
+ * @param {Object} task - The task object containing details about the task.
+ */
+function createCardForVolunteers(task) {
+  const listPending = document.getElementById("taskListPending");
+  const listCompleted = document.getElementById("taskListCompleted");
+  const listCancelled = document.getElementById("taskListCancelled");
+
+  const card = document.createElement("div");
+  card.classList.add("taskCard");
+  card.setAttribute("data-taskid", task.taskID);
+  card.setAttribute("data-favorType", task.taskName);
+  card.setAttribute("data-date", task.taskDate);
+  card.setAttribute("data-address", task.taskAddress);
+  card.setAttribute("data-distance", task.taskDistance);
+  card.setAttribute("data-length", task.taskDuration);
+  card.innerHTML = `
+  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <h3 class="title">${task.taskName}</h3>
+  <div class="statusColor"></div>
+  <p class="date">${task.taskDate}, ${task.taskTime}</p>
+  <p class="duration">Estimated Favor Length: <span class="bold">${task.taskDuration} hours</span></p>
+  <div class="requester">
+    <img class="photo" src="${placeholderImage}" data-storage-path="profile/${task.taskRequesterPhoto}">
+    <div class="profile">
+      <p class="name">${task.taskRequesterName}</p>
+      <p class="address">${task.taskRequesterAddress}</p>
+    </div>
+  </div>
+  `;
+
+  // Append card to the correct list based on the task status
+  if (["Pending approval"].includes(task.taskStatus)) {
+    listPending.appendChild(card);
+  } else if (["Completed"].includes(task.taskStatus)) {
+    listCompleted.appendChild(card);
+  } else if (["Cancelled"].includes(task.taskStatus)) {
+    listCancelled.appendChild(card);
+  }
+}
+
+// TODO: Move this function to a common file
+// ============================================================
+// Utility Functions
+// ============================================================
+
+/**
+ * Sorts the given task cards based on the provided date filter value.
+ *
+ * @param {string} dateFilterValue - The value of the date filter. It can be 'newest' or 'oldest'.
+ * @param {NodeList} taskCards - The task cards to be sorted. Each task card is a DOM node.
+ *
+ * The function first converts the NodeList of task cards into an array. It then sorts the array based on the date attribute of each task card.
+ * If the date filter value is 'newest', the task cards are sorted from newest to oldest.
+ * If the date filter value is 'oldest', the task cards are sorted from oldest to newest.
+ * After sorting, the function replaces the old NodeList in the DOM with the sorted array of task cards.
+ */
+function sortTasksByDate(dateFilterValue, taskCards, target) {
+  // Convert NodeList to Array
+  let taskCardsArray = Array.from(taskCards);
+
+  // Sort the array based on the date
+  taskCardsArray.sort((a, b) => {
+    let dateA = new Date(a.getAttribute("data-date"));
+    let dateB = new Date(b.getAttribute("data-date"));
+
+    // For newest to oldest
+    if (dateFilterValue === "newest") {
+      return dateB - dateA;
+    }
+
+    // For oldest to newest
+    if (dateFilterValue === "oldest") {
+      return dateA - dateB;
+    }
+
+    return 0; // If no sorting is needed
+  });
+
+  // Replace the old NodeList with the sorted array
+  // let taskListExplore = document.querySelector("#taskListExplore");
+  taskCardsArray.forEach((card) => {
+    target.appendChild(card);
+  });
 }
