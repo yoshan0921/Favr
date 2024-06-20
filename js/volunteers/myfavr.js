@@ -1,11 +1,8 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
-import { updateDocument, getDocument, getFile } from "../firebase/firestore.js";
+import { updateDocument, getDocument } from "../firebase/firestore.js";
 
 let taskID;
 let taskData = {};
-
-// TODO: Need to define placeholder image properly
-const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
@@ -50,15 +47,6 @@ function runFunction() {
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
         elderAddress.innerHTML = user.address;
 
-        getFile("profile/" + user.profilePictureURL)
-          .then((url) => {
-            document.getElementById("elderPhoto").src = url;
-          })
-          .catch((error) => {
-            console.log(error);
-            document.getElementById("elderPhoto").src = placeholderImage;
-          });
-
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
@@ -78,7 +66,7 @@ async function acceptTask(taskID, taskData) {
 
   // Create updated task data object with the volunteer ID and status "On going"
   taskData.volunteerID = volunteerID;
-  taskData.status = "On going";
+  taskData.status = "Pending approval";
   console.log(taskData);
 
   // Update the task data on the Firestore
@@ -91,58 +79,40 @@ async function acceptTask(taskID, taskData) {
     });
 }
 
-// function cancel() {
-//   document.getElementById("cancelBtn").addEventListener("click", function () {
-//     window.location.href = "/dashboard.html";
-//   });
-// }
-
-// To display "confirm-overlay" ON
-function confirmOn() {
-  document.getElementById("confirm-overlay").style.display = "block";
+function completeConfirmOn() {
+  document.getElementById("complete-confirm-overlay").style.display = "block";
 }
 
-document.getElementById("acceptBtn").addEventListener("click", function () {
-  confirmOn();
+document.getElementById("completeBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  completeConfirmOn();
 });
 
-// To display "confirm-overlay" OFF
-function confirmOff() {
-  document.getElementById("confirm-overlay").style.display = "none";
+function cancel() {
+  document.getElementById("cancelBtn").addEventListener("click", function () {
+    window.location.href = "/dashboard.html";
+  });
 }
 
-document.getElementById("backBtn").addEventListener("click", function () {
-  confirmOff();
-});
-
-// To display "accept-overlay" ON
-function acceptOn() {
-  document.getElementById("accept-overlay").style.display = "block";
+function taskCompletedOn() {
+  document.getElementById("complete-confirm-overlay").style.display = "block";
 }
 
-document.getElementById("confirmBtn").addEventListener("click", function () {
-  acceptTask(taskID, taskData);
-  acceptOn();
+document.getElementById("completeBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  taskCompletedOn();
 });
 
-// To move back to "dashboard.html"
 function goHome() {
   window.location.href = "/dashboard.html";
 }
 
-// To move back to "dashboard.html#myFavors"
-function goMyFavors() {
-  window.location.href = "/dashboard.html#myfavors";
-}
-
 document.getElementById("homeBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
   goHome();
 });
 
 document.getElementById("cancelBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
   goHome();
-});
-
-document.getElementById("myFavorsBtn").addEventListener("click", function () {
-  goMyFavors();
 });

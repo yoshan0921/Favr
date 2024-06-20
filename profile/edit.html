@@ -21,14 +21,16 @@
 
   <!-- Main Content -->
   <main class="content">
+    <div class="loading-screen">
+      <i class="fa-solid fa-spinner fa-spin-pulse"></i>
+  </div>
     <div class="profile-header edit-page">
         <div class="user-name-picture">
           <div class="img-wrapper user-picture-wrapper">
             <img src="#" id="profilePic">
           </div>
           <div class="edit-page-btns">
-            <button type="button" class="rounded-btn" id="uploadBtn">Upload Photo</a>
-            <button type="submit" class="rounded-btn" id="openSaveModalBtn">Save</button>
+            <button type="button" class="rounded-btn outlined-btn" id="uploadBtn">Upload Photo</a>
           </div>
         </div>   
     </div>
@@ -37,7 +39,10 @@
         <div id="profile-content">
 
         </div>
-        <button class="hidden" type="submit" id="realSubmitBtn">Save</button>
+        <div class="form-group">
+          <button id="realSubmitBtn" type="submit" class="hidden"></button>
+          <button type="button" class="rounded-btn" id="openSaveModalBtn">Save</button>
+        </div>
       </form>
     </div>
   </main>
@@ -47,7 +52,7 @@
   <div id="uploadPictureModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="closeModal">&times;</span>
       <div class="modal-form">
         <form action="#" method="post" enctype="multipart/form-data" id="uploadPictureForm">
             <div class="form-group">
@@ -65,7 +70,7 @@
   <div id="confirmChangesModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="closeModal">&times;</span>
       <div class="modal-form">
         <h2>Confirm to update profile</h2>
         <div class="form-group">

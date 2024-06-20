@@ -6,10 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script type="module" src="../js/common.js"></script>
-    <script type="module" src="../js/createTask.js" defer></script>
+    <script type="module" src="../js/elders/createTask.js" defer></script>
+    <script>
+        (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set(["geometry"]), e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+            key: "AIzaSyCmy-0P_Y1HQdMacXnu9a2zs4dcm5FQ40w",
+            v: "weekly",
+        });
+    </script>
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/createTask.css">
-    <title>Create Task</title>
+    <link rel="stylesheet" href="../css/elders/createTask.css">
+    <title>Request Favor</title>
 </head>
 
 <body>
@@ -20,25 +26,25 @@
     <header id="header"></header>
     <!-- Main Content -->
     <main class="content">
-
-        <div class="container"><button id="backBtn">Back</button></div>
-
         <div class="container steps-counter">
             <div class="step1">
                 <div class="stepNumber stepActive"><span>1</span></div>
-                <div class="stepText textActive">Select Favor Type</div>
+                <div class="stepText textActive">Favor Type</div>
             </div>
+            <div class="stepLine2"></div>
             <div class="step2">
                 <div class="stepNumber"><span>2</span></div>
-                <div class="stepText">Select Date & Time</div>
+                <div class="stepText">Date & Time</div>
             </div>
+            <div class="stepLine3"></div>
             <div class="step3">
                 <div class="stepNumber"><span>3</span></div>
-                <div class="stepText">Enter Address</div>
+                <div class="stepText">Address</div>
             </div>
+            <div class="stepLine4"></div>
             <div class="step4">
                 <div class="stepNumber"><span>4</span></div>
-                <div class="stepText">Complete</div>
+                <div class="stepText">Details</div>
             </div>
         </div>
 
@@ -88,10 +94,21 @@
                 <div class="form-group">
                     <label for="favorDate">Date</label>
                     <input type="date" name="favorDate" id="favorDate">
+                    <label for="favorTime">Start Time</label>
+                    <input type="time" name="favorTime" id="favorTime">
+                    <label for="favorLength">Duration</label>
+                    <select id="favorLength" name="favorLength">
+                        <option value="30 mins" selected>30 mins</option>
+                        <option value="1 hr">1 hr</option>
+                        <option value="1.5 hrs">1.5 hrs</option>
+                        <option value="2 hrs">2 hrs</option>
+                        <option value="2.5 hrs">2.5 hrs</option>
+                        <option value="3 hrs">3 hrs</option>
+                    </select>
                 </div>
             </div>
             <div class="step hidden" id="step-3">
-                <h2>Enter Address</h2>
+                <h2>Enter address</h2>
                 <div class="selection-history">
                     <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
                     <ul class="selection-list">
@@ -99,12 +116,18 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" name="address" id="address">
+                    <label for="startAddress">Start Address</label>
+                    <input id="startAddress" name="startAddress" placeholder="Input your address" type="text" class="address"></input>
+                    <div id="startMap" class="map"></div>
+                </div>
+                <div class="form-group">
+                    <label for="endAddress">End Address (Optional)</label>
+                    <input id="endAddress" name="endAddress" placeholder="Input your address" type="text" class="address"></input>
+                    <div id="endMap" class="map"></div>
                 </div>
             </div>
             <div class="step hidden" id="step-4">
-                <h2>Complete</h2>
+                <h2>Enter details</h2>
                 <div class="selection-history">
                     <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
                     <ul class="selection-list">
@@ -112,18 +135,21 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="notes">Notes</label>
+                    <label for="notes">Details</label>
                     <textarea name="" id="notes"></textarea>
                 </div>
-                <div class="form-group">
+                <!-- Try to move the location of submit button to next step button location -->
+                <!-- <div class="form-group">
                     <button type="submit">Submit</button>
-                </div>
+                </div> -->
             </div>
         </form>
 
         <div class="container form-navigation">
             <button id="previousStepBtn">Previous step</button>
             <button id="nextStepBtn">Next step</button>
+            <!-- Submit button will be visible in step 4 -->
+            <button id="submitBtn" class="hidden" type="submit" form="createTaskForm">Submit</button>
         </div>
 
         <!-- Summary Section -->
@@ -145,7 +171,7 @@
 
     </main>
     <!-- Footer -->
-  <footer id="footer"></footer>
+    <footer id="footer"></footer>
 </body>
 
 </html>

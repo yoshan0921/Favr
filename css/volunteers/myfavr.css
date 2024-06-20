@@ -4,17 +4,6 @@ img {
   display: block;
 }
 
-.user-profile img {
-  border-radius: 50%;
-}
-
-#backBtn,
-#cancelBtn,
-#acceptBtn,
-#confirmBtn {
-  cursor: pointer;
-}
-
 main.content {
   /* margin-top: 20rem; */
 }
@@ -87,8 +76,8 @@ main.content {
   padding: 0.2rem 2rem;
 }
 
-#confirm-overlay,
-#accept-overlay,
+#complete-confirm-overlay,
+#task-completed-overlay,
 #schedule-conflict {
   display: grid;
   align-content: center;
@@ -128,7 +117,7 @@ main {
   border-radius: 30px;
   height: 400px;
 
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: size) {
     width: 400px;
   }
 }
@@ -156,7 +145,7 @@ main {
   border-radius: 50px;
 }
 
-.confirm-wrapper .set #confirmBtn {
+.confirm-wrapper .set #completeBtn {
   background-color: rgb(184, 184, 184);
   flood-color: white;
 }

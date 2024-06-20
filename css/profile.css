@@ -17,7 +17,7 @@
 .profile-header > div {
     flex-grow: 1;
     width: 100%;
-    gap: 1.5rem;
+    gap: .5rem;
 }
 .user-name-picture,
 .user-name-edit{
@@ -39,8 +39,6 @@
     gap: 1rem;
 }
 .edit-page-btns .rounded-btn{
-    background-color: white;
-    border-color: var(--lightBorder);
     border-width: 2px;
     padding: .4rem .5rem;
     min-width: 80px;
@@ -146,10 +144,20 @@ form{
     width: 100%;
     max-width: 500px;
 }
-form > div{
+form > div:not(:last-child){
     display: grid;
     grid-template-columns: minmax(100px,1fr) 3fr;
     grid-template-rows: auto;
+}
+form .form-group:last-child{
+    display: flex;
+    justify-content: end;
+    margin: 1rem 0;
+}
+button{
+    min-width: 80px;
+    min-height: 30px;
+    justify-content: center;
 }
 form input,
 form textarea{

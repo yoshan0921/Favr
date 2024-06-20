@@ -22,12 +22,15 @@
 
   <!-- Main Content -->
   <main class="content">
+    <h2 id="taskName"></h2>
     <div class="user-profile-wrapper">
       <section class="user-profile">
-        <i class="fa-solid fa-user"></i>
+        <img id="elderPhoto">
+
+
         <div class="user-info">
-          <h3 class="name">Willuam Dubois</h3>
-          <p>Marpole Vancouver, BC</p>
+          <h3 id="elderName" class="name"></h3>
+          <p id="elderAddress"></p>
         </div>
         <button id="contactBtn">Contact</button>
       </section>
@@ -36,48 +39,87 @@
         <nav>
           <ul>
             <li>
-              <a href="#" aria-label="Location"><i class="fa-solid fa-location-dot" aria-hidden="true" title="Location"></i> Marpole Vancouver, BC</a>
+              <a href="#" aria-label="Location"><i class="fa-solid fa-location-dot" aria-hidden="true" title="Location"></i> <a id="taskAddress"></a></a>
             </li>
             <li>
-              <a href="#" aria-label="Calendar"><i class="fa-solid fa-calendar-days" aria-hidden="true" title="Calendar"></i> Tue, June 15, 2024<span>03:00 PM - 04:00 PM</span></a>
+              <a href="#" aria-label="Calendar"><i class="fa-solid fa-calendar-days" aria-hidden="true" title="Calendar"></i> <a id="taskTime"></a></a>
             </li>
           </ul>
         </nav>
       </section>
-      <section class="detail-instruction">
-        <h3>Detail instruction</h3>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio doloremque hic repellendus nisi laboriosam ipsum illum nostrum, dignissimos adipisci fugiat asperiores fugit distinctio dolorem voluptatum blanditiis ea accusamus numquam. Ex.</p>
+      <p>Note</p>
+      <section class="note">
+        <p id="taskNote"></p>
       </section>
       <section class="set">
         <button id="cancelBtn">Cancel</button>
-        <button id="completeBtn">Complete</button>
+        <button id="acceptBtn">Accept</button>
       </section>
     </div>
 
-    <div id="overlay">
+    <div id="confirm-overlay">
       <div class="confirm-wrapper">
-          <section class="message">
-              <h3>Confirm Favor Acceptance</h3>
-              <p>Are you willing to help William Dubois with this Delivery Favor?</p>
-          </section>
+        <section class="message">
+          <h2>Confirm Favor Acceptance</h2>
+          <p>Are you willing to help William Dubois with this Delivery Favor?</p>
+        </section>
 
-          <section class="user-profile">
-              <i class="fa-solid fa-user"></i>
-              <div class="user-info">
-                  <h3 class="name">Willuam Dubois</h3>
-                  <p>Marpole Vancouver, BC</p>
-              </div>
-          </section>
+        <section class="user-profile">
+          <i class="fa-solid fa-user"></i>
+          <div class="user-info">
+            <h3 id="elderName" class="name"></h3>
+            <p id="elderAddress"></p>
+          </div>
+        </section>
 
-          <section class="set">
-              <button id="backlBtn">Back</button>
-              <button id="confirmBtn">Confirm</button>
-          </section>    
+        <section class="set">
+          <button id="backBtn">Back</button>
+          <button id="confirmBtn">Confirm</button>
+        </section>
       </div>
-  </div>
+    </div>
 
-  </main> 
-  
+    <div id="accept-overlay">
+      <div class="confirm-wrapper">
+        <section class="message">
+          <h2>Favor Accepted</h2>
+          <i class="fa-solid fa-check"></i>
+          <p>You have agreed to help <span id="elderName"></span> with his <span id="taskName"></span> Favor on:</p>
+          <p id="taskTime"></p>
+        </section>
+
+        <section class="user-profile">
+          <i class="fa-solid fa-user"></i>
+          <div class="user-info">
+            <h3 id="elderName" class="name"></h3>
+            <p id="elderAddress"></p>
+          </div>
+        </section>
+
+        <section class="set">
+          <button id="homeBtn">Home</button>
+          <button id="myFavorsBtn">My Favors</button>
+        </section>
+      </div>
+    </div>
+
+    <div id="schedule-conflict">
+      <div class="confirm-wrapper">
+        <section class="message">
+          <h2>Schedule Conflict!</h2>
+          <i class="fa-regular fa-calendar-xmark"></i>
+          <p>You have another Favor going on during this time slot.</p>
+          <p>Do you still want to accept the Favor?</p>
+        </section>
+
+        <section class="set">
+          <button id="backBtn">Back</button>
+          <button id="confirmBtn">Confirm</button>
+        </section>
+      </div>
+    </div>
+  </main>
+
   <!-- Footer -->
   <footer id="footer"></footer>
 </body>

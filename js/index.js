@@ -15,6 +15,8 @@ import {
     handleError
 } from "./utils.js";
 
+resetLocalStorage();
+
 /**
  * This adds an event listener to the page that triggers once everything is done downloading. 
  * This is to prevent the code from trying to access an element from the page before it was
@@ -22,7 +24,6 @@ import {
  * 
  */
 document.addEventListener('DOMContentLoaded', function() {
-    resetLocalStorage();
     /*Getting all the important HTML elements */
     const signInForm = document.getElementById("login");
     const signUpForm = document.getElementById("signup");
@@ -57,13 +58,19 @@ document.addEventListener('DOMContentLoaded', function() {
         let email = document.getElementById("loginEmail").value;
         let password = document.getElementById("loginPassword").value;
 
-        try{
-            await authenticateUser(email,password);
-            redirect(`/dashboard.html`);
-        }catch(error){
+        authenticateUser(email,password)
+        .then(()=>{
+            getCurrentUserID();
+            return getCurrentUserRole();
+        })
+        .then((currentUserRole)=>{
+            console.log(currentUserRole);
+            redirect("/dashboard.html");
+        })
+        .catch((error)=>{
             errorsContainer.classList.remove("hidden");
             errorsContainer.innerText = error.message;
-        }
+        })
     }
     
     /**

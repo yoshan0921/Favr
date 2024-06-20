@@ -1,13 +1,31 @@
-import { redirect } from "../utils.js";
+import { 
+    redirect 
+} from "../utils.js";
+
 import {
     auth
 } from "./firebase.js";
+
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDocument } from "./firestore.js";
+
+import {    
+    getDocument 
+} from "./firestore.js";
+
+/**
+ * An object that maps a restricted page to its authorized user role.
+ * Ex.: A volunteer shouldn't be able to access the page for task creation
+ * even if they type the path to the page on the URL, because only elders
+ * are authorized to access it
+ */
+const pagesWithRestrictedAccess = {
+    "tasks/create.html" : "elder",
+    "/history.html": "elder"
+}
 
 /**
  * Creates user based on provided email and password
@@ -36,7 +54,7 @@ async function authenticateUser(email,password){
         let userCredential = await signInWithEmailAndPassword(auth, email,password)
         // Signed in
         getCurrentUserID();
-        getCurrentUserRole();
+        await getCurrentUserRole();
         return userCredential;
     }catch(error){
         throw error;
@@ -45,6 +63,7 @@ async function authenticateUser(email,password){
 
 /**
  * Checks if the user is authenticated or not
+ * 
  * @returns Promise
  */
 async function monitorAuthenticationState() {
@@ -55,41 +74,53 @@ async function monitorAuthenticationState() {
                 resolve(user);
             } else {
                 // Not logged
-                reject((redirect("/403.html")));
+                reject("Unauthenticated user");
             }
         })
     });
 }
 
 /**
- * Checks if the user is authenticated
+ * Checks if the user is authenticated and has access to the current page
  */
 async function checkUserAuthorization(){
-    monitorAuthenticationState()
-    .then((user)=>{
-        if(user.uid) currentUserID = user.uid;
-        console.log("Current user ID: "+ currentUserID);
-        return getDocument("users",currentUserID);
-    })
-    .then((userInfo)=>{
-        console.log(userInfo);
-        if(userInfo){
-            let currentUserRole = userInfo.role;
-            let currentPathName = window.location.pathname;
-            if((currentUserRole == "elder" && currentPathName.includes("volunteer"))
-                ||(currentUserRole == "volunteer" && currentPathName.includes("elder")) ){
-                throw new Error("User unauthorized to view page");
+    return new Promise((resolve, reject) => {
+        monitorAuthenticationState()
+        .then((user)=>{
+            if(user.uid){
+                console.log("Current user ID: "+ user.uid);
+                return getDocument("users",user.uid);
             }
-        }
-    })
-    .catch((error)=>{
-        console.log(error);
-        redirect("/403.html");
+        })
+        .then((userInfo)=>{
+            if(userInfo){
+                let currentPath = window.location.pathname;
+                for(let restrictedPage in pagesWithRestrictedAccess){
+                    if(currentPath.endsWith(restrictedPage)){
+                        if(pagesWithRestrictedAccess[restrictedPage] != userInfo.role){
+                            throw new Error("Unauthorized access");
+                        }
+                        break;
+                    }
+                }
+               resolve();
+            }else{
+                throw new Error("User has no info on the database");
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            reject(error);
+        })
     });
 }
 /**
+ * Gets the ID of the user that is currently logged in. On the first time this function
+ * is called, it gets this information from Firebase authentication, and add it to the local storage.
+ * The next time this function is called, it should get this information from the local storage
+ * instead.
  * 
- * @returns 
+ * @returns a string containing the current user's ID
  */
 function getCurrentUserID(){
     let currentUserID = localStorage.getItem("currentUserID");
@@ -102,25 +133,33 @@ function getCurrentUserID(){
     }
     return currentUserID;
 }
+/**
+ * Gets the role of the user that is currently logged in. On the first time this function
+ * is called, it goes to the database, gets this information, and add it to the local storage.
+ * The next time this function is called, it should get this information from the local storage
+ * instead.
+ * 
+ * @returns a string containing the current user's role
+ */
 async function getCurrentUserRole(){
-    try{
+    return new Promise((resolve,reject) =>{
         let currentUserRole = localStorage.getItem("currentUserRole");
         if(!currentUserRole){
             let currentUserID = localStorage.getItem("currentUserID");
-            if(!currentUserID) getCurrentUserID();
-            console.log(currentUserID);
-            await getDocument("users",currentUserID)
+            if(!currentUserID) currentUserID = getCurrentUserID();
+            getDocument("users",currentUserID)
             .then((userInfo)=>{
                 currentUserRole = userInfo.role;
                 localStorage.setItem("currentUserRole",currentUserRole);
-            }
-            )
+                resolve(currentUserRole);
+            })
+            .catch((e) => reject(e));
+        }else{
+            resolve(currentUserRole)
         }
-        return currentUserRole;
-    }catch(error){
-        console.log(error);
-    }
+    });
 }
+
 export {
     createUserWithEmail,
     authenticateUser,

@@ -1,9 +1,12 @@
-import {db} from "./testdb.js";
-import { signOut } from "./utils.js";
-import { registerUserFCM, checkUserPushSubscription, requestNotificationPermission, sendTokenToDB } from "./firebase/notifications.js";
-import { messaging } from "./firebase/firebase.js";
-import { onMessage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
-import { getCurrentUserID } from "./firebase/authentication.js";
+import { 
+  enableBackButton, 
+  redirect, 
+  signOut 
+} from "./utils.js";
+
+import { 
+  checkUserAuthorization 
+} from "./firebase/authentication.js";
 /**
  * An object that maps some pages to their title that will show to the user
  * on the page <header>
@@ -16,32 +19,39 @@ let pageTitles = {
   "tasks/details.html": "Task Details",
   "updates.html": "Updates",
   "tasks/accept.html": "Accept favor",
-  "support.html":"Get support"
+  "support.html": "Get support",
+  "tasks/tracking.html": "Favor Tracking"
 };
-
-loadCommonContent();
+const menuLinks = {
+  "dashboard.html" : "home-menu",
+  "updates.html":"updates-menu",
+  "profile.html":"profile-menu"
+}
+document.getElementsByTagName("body")[0].style.visibility = "hidden";
+checkUserAuthorization()
+.then(()=>{
+  loadCommonContent()
+  .then(()=>{
+    document.getElementsByTagName("body")[0].style.visibility = "visible";
+  })
+})
+.catch((error)=>redirect("403.html"));
 
 /**
  * Loads the header, the menu and the footer
  */
 async function loadCommonContent() {
-
-  loadPartial("_header", "header")
-    .then(loadPageTitle)
-    .catch((error) => console.log(error));
-
-  loadPartial("_sidebar", "leftside-column")
-    .then(addListenerToLogoutButton)
-    .catch((error) => console.log(error));
-
-  loadPartial("_footer", "footer")
+  Promise.all([
+    loadPartial("_header", "header"),
+    loadPartial("_sidebar", "leftside-column"),
+    loadPartial("_footer", "footer")
+  ])
+  .then(()=>{
+    loadPageTitle();
+    addListenerToLogoutButton();
+    activateMenuLinkAndBackButton();
+  })
   .catch((error) => console.log(error));
-
-  const backButton = document.getElementById("backBtn");
-  if (backButton)
-    backButton.addEventListener("click", (e) => {
-      window.history.back();
-    });
 
   //setUpNotifications();
   checkUserPushSubscription()
@@ -145,7 +155,25 @@ function closeModal(modal){
   modal.style.display = "none";
   removeEventListener("click", window);
 }
-
+/**
+ * 
+ */
+function activateMenuLinkAndBackButton(){
+  const currentPath = window.location.pathname.split("/").pop();
+  let currentPageRequiresBackButton = true;
+  for(let pathName in menuLinks){
+    if(pathName == currentPath){
+      const menuLink = document.getElementById(menuLinks[pathName]);
+      menuLink.classList.add("active");
+      currentPageRequiresBackButton = false;
+    }
+  }
+  if(currentPageRequiresBackButton){
+    enableBackButton();
+    const headerLogo = document.getElementsByClassName("logo-wrapper");
+    hdaderLogo.classList.add("disappear-mobile");
+  }
+}
 export { 
   loadPartial,
   openModal,
