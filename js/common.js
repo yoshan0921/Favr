@@ -4,6 +4,11 @@ import {
   signOut 
 } from "./utils.js";
 
+import {
+  checkUserPushSubscription,
+  requestNotificationPermission
+} from "./firebase/notifications.js";
+
 import { 
   checkUserAuthorization 
 } from "./firebase/authentication.js";
@@ -61,9 +66,8 @@ async function loadCommonContent() {
   })
   .catch((error)=> { //user is not subscribed
     console.log(error);
-    if("serviceWorker" in navigator){
-      requestNotificationPermission();
-    }
+    requestNotificationPermission();
+    
   })
   /*
   onMessage(messaging, (payload) => {

@@ -29,7 +29,8 @@ self.addEventListener("activate", async (e)=>{
     })
     .then(subscription =>{
         user_subscription = subscription;
-        console.log(`Subscription saved by service worker! \n ${subscription}`);
+        console.log(`Subscription saved by service worker!`);
+        console.log(subscription);
     })
     .catch((error)=>console.log(error));
 })

@@ -1,5 +1,7 @@
 import { messaging } from "../firebase/firebase.js";
 import { getToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+import { getDocument, updateDocument } from "./firestore.js";
+import { getCurrentUserID } from "./authentication.js";
 
 const API_KEY = 'BAa_0mfBX5XyXGJdq6hgYXnQBZEXGgcy1EQYLHjSTr0e-2QI8ztPWMMq0ureDp8Rlvle3kYg_JmMnVw6X-byaLU';
 
@@ -95,9 +97,11 @@ async function checkUserPushSubscription(){
 function requestNotificationPermission(){
     if("Notification" in window){
         if(Notification.permission !== "granted") {
+            console.log("here!!!!!");
             Notification.requestPermission()
             .then((permission) => {
                 // If the user accepts, create a token and send to server
+                console.log(permission);
                 if (permission === "granted") {
                     navigator.serviceWorker.getRegistration()
                     .then(reg => {
@@ -106,6 +110,13 @@ function requestNotificationPermission(){
                         })
                         .then(sub => {
                             console.log(sub.toJSON());
+                            return [sub, getDocument("users", getCurrentUserID())];
+                        })
+                        .then(response => {
+                            let sub = response[0];
+                            let user = response[1];
+                            user.notificationSubscriptions.push(sub);
+                            return updateDocument("users", getCurrentUserID(), user);
                         })
                         .catch((error)=>console.log(error));
                     })

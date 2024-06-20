@@ -62,7 +62,6 @@ function enableBackButton(){
     }
 
 }
-
 export {
     signOut,
     redirect,

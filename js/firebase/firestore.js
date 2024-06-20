@@ -44,6 +44,7 @@ class User{
         this.emergencyContactName = obj.emergencyContactName;
         this.emergencyContactNumber = obj.emergencyContactNumber;
         this.tasksList = obj.tasksList;
+        this.notificationsSubscription = obj.notificationsSubscription;
     }
 }
 /**
@@ -91,7 +92,8 @@ const userConverter = {
             favors:user.favors ? user.favors : 0,
             emergencyContactName:user.emergencyContactName ? user.emergencyContactName : null,
             emergencyContactNumber:user.emergencyContactNumber ? user.emergencyContactNumber : null,
-            tasksList : user.tasksList ? user.tasksList : null
+            tasksList : user.tasksList ? user.tasksList : null,
+            notificationsSubscription : user.notificationsSubscription ? user.notificationsSubscription : []
         };
     },
     fromFirestore: (snapshot, options) => {
@@ -115,7 +117,8 @@ const userConverter = {
             favors: data.favors,
             emergencyContactName:data.emergencyContactName,
             emergencyContactNumber:data.emergencyContactNumber,
-            tasksList : data.tasksList
+            tasksList : data.tasksList,
+            notificationsSubscription : (data.notificationsSubscription) ? data.notificationsSubscription : []
         });
     },
 };
