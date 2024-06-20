@@ -8,6 +8,11 @@
   justify-content: start;
 }
 
+/* For iOS zoom problem */
+#chat-content input {
+  font-size: 16px;
+}
+
 #messageHistory {
   flex: 1 1 auto;
   display: flex;
