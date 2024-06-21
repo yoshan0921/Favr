@@ -1,4 +1,4 @@
-import { closeModal, loadPartial, openModal } from "./common.js";
+import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
@@ -9,6 +9,12 @@ const { spherical } = await google.maps.importLibrary("geometry");
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
+// Task status
+const STATUS_WAITING = "Waiting to be accepted";
+const STATUS_ONGOING = "On going";
+const STATUS_PENDING = "Pending approval";
+const STATUS_COMPLETED = "Completed";
+const STATUS_CANCELLED = "Cancelled";
 
 let currentUserID;
 let currentUserRole;
@@ -28,10 +34,8 @@ window.addEventListener("load", function (event) {
  * That is why we need to check the readyState of the document.
  */
 if (document.readyState === "loading") {
-  //console.log("readyState = " + document.readyState);
   document.addEventListener("DOMContentLoaded", runFunction);
 } else {
-  //console.log("readyState = " + document.readyState);
   runFunction();
 }
 
@@ -54,16 +58,6 @@ async function runFunction() {
       await loadVolunteersDashboard();
     } else if (currentUserRole === "elder") {
       await loadEldersDashboard();
-    }
-
-    // Link to each tasb in the dashboard
-    let hash = window.location.hash;
-    if (hash === "#explore") {
-      tab1.click();
-    } else if (hash === "#myfavors") {
-      tab2.click();
-    } else if (hash === "#history") {
-      tab3.click();
     }
   });
 }
@@ -114,85 +108,33 @@ async function createTaskListForElders(allTasks) {
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
-        // FOR DEBUGGING
-        //console.log(requester);
-        //console.log(volunteer);
-        //console.log(taskDetails);
-
         // Check if the requester of the task is the current user
         if (taskDetails.requesterID !== currentUserID) return;
 
-        // Get task information
-        let taskName = taskDetails.name ?? "";
-        let taskStatus = taskDetails.status ?? "";
-        let taskDate = taskDetails.details["date"] ?? "";
-        let taskAddress = taskDetails.details["startAddress"] ?? "";
-        let taskNotes = taskDetails.notes ?? "";
-        let taskVolunteerPhoto;
-        try {
-          taskVolunteerPhoto = await getFile("profile/" + volunteer.profilePictureURL);
-        } catch (error) {
-          taskVolunteerPhoto = placeholderImage;
-        }
+        // Create task object for List & Map view
+        let taskObj = {
+          // Task Information
+          taskID: id,
+          taskName: taskDetails.name ?? "",
+          taskStatus: taskDetails.status ?? "",
+          taskDate: taskDetails.details["date"] ?? "",
+          taskTime: taskDetails.details["time"] ?? "",
+          taskNotes: taskDetails.notes ?? "",
+          taskAddress: taskDetails.details["startAddress"] ?? "",
+          taskEndAddress: taskDetails.details["endAddress"] ?? "",
+          taskLinkURL: "/tasks/tracking.html",
+          // Volunteer Information
+          taskVolunteerID: taskDetails.volunteerID ?? "",
+          taskVolunteerName: volunteer?.firstName && volunteer?.lastName ? `${volunteer.firstName} ${volunteer.lastName}` : "",
+          taskVolunteerInstitution: volunteer?.institution ?? "",
+          taskVolunteerPhoto: volunteer?.profilePictureURL ?? "", // For Performance Improvement
+          // Elder Information
+          taskRequesterName: requester.firstName && requester.lastName ? `${requester.firstName} ${requester.lastName}` : "",
+          taskRequesterAddress: requester.address ?? "",
+        };
 
-        let taskVolunteerFirstName;
-        let taskVolunteerLastName;
-        let taskVolunteerInstitution;
-        try {
-          taskVolunteerFirstName = volunteer.firstName ?? "";
-          taskVolunteerLastName = volunteer.lastName ?? "";
-          taskVolunteerInstitution = volunteer.institution ?? "";
-        } catch (error) {
-          taskVolunteerFirstName = "";
-          taskVolunteerLastName = "";
-          taskVolunteerInstitution = "";
-        }
-
-        // Create task card
-        const card = document.createElement("div");
-        card.classList.add("taskCard");
-        card.setAttribute("data-taskid", id);
-        card.setAttribute("data-favorType", taskName);
-        card.setAttribute("data-date", taskDate);
-        card.setAttribute("data-address", taskAddress);
-        card.innerHTML = `
-        <a href="/tasks/tracking.html?taskid=${id}"></a>
-        <h3 class="title">${taskName}</h3>
-        <p class="status"><span class="statusColor"></span>${taskStatus}</p>
-        <p class="notes">${taskNotes}</p>
-        `;
-        if (taskDetails.status != "Waiting to be accepted") {
-          card.innerHTML += `
-          <div class="requester">
-            <img class="photo" src="${taskVolunteerPhoto}">
-            <div class="profile">
-              <p class="name">${taskVolunteerFirstName} ${taskVolunteerLastName}</p>
-              <p class="address">${taskVolunteerInstitution}</p>
-            </div>
-          </div>
-          `;
-        }
-
-        // Append card to the correct list based on the task status
-        if (["Waiting to be accepted"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
-          list.appendChild(card);
-        } else if (["On going"].includes(taskDetails.status)) {
-          card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
-          list.appendChild(card);
-        } else if (["Pending approval", "Cancelled"].includes(taskDetails.status)) {
-          list.appendChild(card);
-          if (taskDetails.status === "Pending approval") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
-            card.setAttribute("data-status", "Pending approval");
-          } else if (taskDetails.status === "Completed") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
-            card.setAttribute("data-status", "Completed");
-          } else if (taskDetails.status === "Cancelled") {
-            card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
-            card.setAttribute("data-status", "Cancelled");
-          }
-        }
+        // Display task information on the list and map
+        createCardForElder(taskObj);
       })
       .catch((error) => {
         console.log(error);
@@ -202,8 +144,53 @@ async function createTaskListForElders(allTasks) {
   // Wait for all tasks to be processed
   await Promise.all(tasksPromises);
 
+  // Apply lazy loading to images
+  lazyLoadImages();
+
   // Sort the task cards by date (newest to oldest)
   sortTasksByDate("newest", document.querySelectorAll("#taskList .taskCard"), document.getElementById("taskList"));
+}
+
+/**
+ * Creates a task card and appends it to the appropriate list based on the task status.
+ *
+ * @param {Object} task - The task object containing details about the task.
+ */
+function createCardForElder(task) {
+  const list = document.getElementById("taskList");
+
+  const card = document.createElement("div");
+  card.classList.add("taskCard");
+  card.setAttribute("data-taskid", task.taskID);
+  card.setAttribute("data-favorType", task.taskName);
+  card.setAttribute("data-date", task.taskDate);
+  card.setAttribute("data-address", task.taskAddress);
+  card.innerHTML = `
+  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <h3 class="title">${task.taskName}</h3>
+  <p class="status"><span class="statusColor"></span>${task.taskStatus}</p>
+  <p class="notes">${task.taskNotes}</p>
+  `;
+  if (task.taskStatus != STATUS_WAITING) {
+    card.innerHTML += `
+    <div class="requester">
+    <img class="photo" src="${placeholderImage}" data-storage-path="profile/${task.taskVolunteerPhoto}">
+      <div class="profile">
+        <p class="name">${task.taskVolunteerName}</p>
+        <p class="address">${task.taskVolunteerInstitution}</p>
+      </div>
+    </div>
+    `;
+  }
+
+  // Append card to the correct list based on the task status
+  if ([STATUS_WAITING].includes(task.taskStatus)) {
+    card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
+    list.appendChild(card);
+  } else if ([STATUS_ONGOING].includes(task.taskStatus)) {
+    card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
+    list.appendChild(card);
+  }
 }
 
 // ============================================================
@@ -216,10 +203,19 @@ async function createTaskListForElders(allTasks) {
  * setting up the filter button and modal, and setting up the tab menu.
  */
 async function loadVolunteersDashboard() {
+  // Tab menu
+  showTabmenu();
+  // Link to each tasb in the dashboard
+  let hash = window.location.hash;
+  if (hash === "#explore") {
+    document.getElementById("tab1").click();
+  } else if (hash === "#myfavors") {
+    document.getElementById("tab2").click();
+  }
+
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
   displayTaskListForVolunteers().then(() => {
-    //loadingScreen.style.display = "none";
     main.classList.add("loaded");
   });
 
@@ -232,27 +228,6 @@ async function loadVolunteersDashboard() {
   const closeFilterBtn = document.getElementById("cancelFilter");
   const applyFilterBtn = document.getElementById("applyFilter");
   const cancelFilterBtn = document.getElementById("cancelFilter");
-  //Filter button (History tab)
-  const toggleCancelledCheckbox = document.getElementById("toggleCancelledCheckbox");
-  const togglePendingCheckbox = document.getElementById("togglePendingCheckbox");
-  const toggleCompletedCheckbox = document.getElementById("toggleCompletedCheckbox");
-
-  // Tab menu
-  const tabs = document.querySelectorAll(".tab");
-  const tabContents = document.querySelectorAll(".tab-content-item");
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      // Remove 'active' class from all tabs
-      tabs.forEach((tab) => tab.classList.remove("active"));
-      // Add 'active' class to the clicked tab
-      tab.classList.add("active");
-      // Remove 'hide' class from all tab contents
-      tabContents.forEach((content) => content.classList.add("hidden"));
-      // Add 'hide' class to the clicked tab's content
-      const contentId = `${tab.id}-content`;
-      document.getElementById(contentId).classList.remove("hidden");
-    });
-  });
 
   // Switch between map and list view (toggle hidden class)
   if (taskViewSwitch) {
@@ -289,38 +264,6 @@ async function loadVolunteersDashboard() {
     cancelFilterBtn.addEventListener("click", () => {
       console.log("Cancel Filter");
       closeModal(filterModal);
-    });
-  }
-
-  // Status filter checkboxes on the History tab
-  if (toggleCancelledCheckbox) {
-    toggleCancelledCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Cancelled") {
-          card.style.display = toggleCancelledCheckbox.checked ? "block" : "none";
-        }
-      });
-    });
-  }
-  if (togglePendingCheckbox) {
-    togglePendingCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Pending approval") {
-          card.style.display = togglePendingCheckbox.checked ? "block" : "none";
-        }
-      });
-    });
-  }
-  if (toggleCompletedCheckbox) {
-    toggleCompletedCheckbox.addEventListener("change", () => {
-      const cards = document.querySelectorAll("#taskListHistory .taskCard");
-      cards.forEach((card) => {
-        if (card.getAttribute("data-status") === "Completed") {
-          card.style.display = toggleCompletedCheckbox.checked ? "block" : "none";
-        }
-      });
     });
   }
 }
@@ -384,8 +327,6 @@ async function createTaskListForVolunteers(allTasks) {
     }
     latitude = position.latitude;
     longitude = position.longitude;
-    //console.log("Current Position: " + position);
-    //console.log(`Current Coordinates: ${latitude}, ${longitude}`);
 
     // Create Map
     map = new Map(mapElement, {
@@ -428,7 +369,7 @@ async function createTaskListForVolunteers(allTasks) {
         let requester = await getDocument("users", taskDetails.requesterID);
 
         // Get coordinates of the task location
-        if (["Waiting to be accepted"].includes(taskDetails.status)) {
+        if ([STATUS_WAITING].includes(taskDetails.status)) {
           try {
             let result = await getCoordinates(taskDetails.details["startAddress"]);
             markerLatLng = { lat: result.lat, lng: result.lng };
@@ -470,7 +411,7 @@ async function createTaskListForVolunteers(allTasks) {
         }
 
         // Set the link URL for the task card
-        if (taskDetails.status === "Waiting to be accepted") {
+        if (taskDetails.status === STATUS_WAITING) {
           linkURL = "/tasks/accept.html";
         } else if (taskDetails.status === "On going") {
           linkURL = "/tasks/myfavr.html";
@@ -480,6 +421,7 @@ async function createTaskListForVolunteers(allTasks) {
 
         // Create task object for List & Map view
         let taskObj = {
+          // Task Information
           taskID: id,
           taskName: taskDetails.name ?? "",
           taskStatus: taskDetails.status ?? "",
@@ -488,18 +430,19 @@ async function createTaskListForVolunteers(allTasks) {
           taskDuration: length,
           taskAddress: taskDetails.details["startAddress"] ?? "",
           taskEndAddress: taskDetails.details["endAddress"] ?? "",
-          taskVolunteerID: taskDetails.volunteerID ?? "",
-          taskRequesterName: `${requester.firstName} ${requester.lastName}` ?? "",
-          taskRequesterAddress: requester.address ?? "",
-          taskRequesterPhoto: `${requester.profilePictureURL}` ?? "", // For Performance Improvement
           taskMarkerLatLng: markerLatLng,
           taskDistance: distance,
           taskLinkURL: linkURL,
+          // Volunteer Information
+          taskVolunteerID: taskDetails.volunteerID ?? "",
+          // Elder Information
+          taskRequesterName: `${requester.firstName} ${requester.lastName}` ?? "",
+          taskRequesterAddress: requester.address ?? "",
+          taskRequesterPhoto: `${requester.profilePictureURL}` ?? "", // For Performance Improvement
         };
-        //console.log(taskObj);
 
         // Display task information on the list and map
-        createCard(taskObj);
+        createCardForVolunteer(taskObj);
         createMapMarker(taskObj, map, infoWindows);
       } catch (error) {
         console.log(error);
@@ -514,6 +457,7 @@ async function createTaskListForVolunteers(allTasks) {
 
   // Sort the task cards by date (newest to oldest)
   sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"), document.getElementById("taskListExplore"));
+  sortTasksByDate("newest", document.querySelectorAll("#taskListMyFavor .taskCard"), document.getElementById("taskListMyFavor"));
 
   // Apply lazy loading to images
   lazyLoadImages();
@@ -524,10 +468,10 @@ async function createTaskListForVolunteers(allTasks) {
  *
  * @param {Object} task - The task object containing details about the task.
  */
-function createCard(task) {
+function createCardForVolunteer(task) {
   const listExplore = document.getElementById("taskListExplore");
   const listMyFavor = document.getElementById("taskListMyFavor");
-  const listHistory = document.getElementById("taskListHistory");
+  // const listHistory = document.getElementById("taskListHistory");
   const listMyFavorCount = document.getElementById("favorCount");
 
   const card = document.createElement("div");
@@ -554,24 +498,11 @@ function createCard(task) {
   `;
 
   // Append card to the correct list based on the task status
-  if (["Waiting to be accepted"].includes(task.taskStatus)) {
+  if ([STATUS_WAITING].includes(task.taskStatus)) {
     listExplore.appendChild(card);
-  } else if (["On going"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
+  } else if ([STATUS_ONGOING].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listMyFavor.appendChild(card);
     listMyFavorCount.innerHTML = ++favorCount;
-  } else if (["Pending approval", "Completed", "Cancelled"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
-    listHistory.appendChild(card);
-    // Add data-status attribute to the card for status filtering
-    if (task.taskStatus === "Pending approval") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
-      card.setAttribute("data-status", "Pending approval");
-    } else if (task.taskStatus === "Completed") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
-      card.setAttribute("data-status", "Completed");
-    } else if (task.taskStatus === "Cancelled") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
-      card.setAttribute("data-status", "Cancelled");
-    }
   }
 }
 
@@ -585,7 +516,7 @@ function createCard(task) {
  */
 function createMapMarker(task, map, infoWindows) {
   // If the task is not "Waiting to be accepted", do not create a marker
-  if (!["Waiting to be accepted"].includes(task.taskStatus)) return;
+  if (![STATUS_WAITING].includes(task.taskStatus)) return;
 
   // FOR DEBUGGING
   // console.log(`createMapMarker: ${JSON.stringify(task)}`);
@@ -797,6 +728,7 @@ function applyFilter() {
   localStorage.setItem("savePreferenceCheckbox", savePreferenceCheckbox);
 }
 
+// TODO: Move this function to a common file
 // ============================================================
 // Utility Functions
 // ============================================================
@@ -839,8 +771,6 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
   taskCardsArray.forEach((card) => {
     target.appendChild(card);
   });
-
-  //console.log(`Sort by ${dateFilterValue}`);
 }
 
 /**
@@ -888,48 +818,4 @@ function readPreference() {
   document.getElementById("savePreferenceCheckbox").checked = savePreferenceCheckbox;
 }
 
-/**
- * Asynchronously loads images when they enter the viewport.
- *
- * This function uses the Intersection Observer API to lazily load images.
- * It observes all img elements with a `data-storage-path` attribute.
- * When an image enters the viewport, it fetches the image from the path specified in the `data-storage-path` attribute.
- * If the path is not 'profile/null', it fetches the image from Firebase Storage using the `getFile` function.
- * Once the image is fetched, it sets the image's src attribute to the fetched URL and removes the `data-storage-path` attribute.
- * If an error occurs while fetching the image, it logs the error to the console.
- * Regardless of whether the image fetch was successful or not, it stops observing the image after it has intersected.
- */
-async function lazyLoadImages() {
-  try {
-    const lazyImages = document.querySelectorAll("img[data-storage-path]");
-
-    if ("IntersectionObserver" in window) {
-      let lazyImageObserver = new IntersectionObserver(async function (entries, observer) {
-        for (let entry of entries) {
-          if (entry.isIntersecting) {
-            let lazyImage = entry.target;
-            let storagePath = lazyImage.getAttribute("data-storage-path");
-            if (storagePath != "profile/null") {
-              try {
-                const url = await getFile(storagePath);
-                lazyImage.src = url;
-                lazyImage.removeAttribute("data-storage-path");
-              } catch (error) {
-                console.error("Error getting image URL from Firebase Storage", error);
-              } finally {
-                // Always unobserve the image, whether the request succeeded or failed
-                lazyImageObserver.unobserve(lazyImage);
-              }
-            }
-          }
-        }
-      });
-
-      lazyImages.forEach(function (lazyImage) {
-        lazyImageObserver.observe(lazyImage);
-      });
-    }
-  } catch (error) {
-    console.error("Error in lazyLoadImages function", error);
-  }
-}
+export { sortTasksByDate };

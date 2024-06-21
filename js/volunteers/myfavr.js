@@ -29,6 +29,9 @@ function runFunction() {
   let taskTime = document.getElementById("taskTime");
   let taskNote = document.getElementById("taskNote");
 
+  let completedElderName = document.getElementById("completedElderName");
+  let approvedElderName = document.getElementById("approvedElderName");
+
   // Get the task data from the Firestore
   getDocument("tasks", taskID)
     .then((task) => {
@@ -46,6 +49,10 @@ function runFunction() {
         console.log(user.firstName);
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
         elderAddress.innerHTML = user.address;
+
+        completedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+        approvedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+      
 
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
@@ -83,7 +90,7 @@ function completeConfirmOn() {
   document.getElementById("complete-confirm-overlay").style.display = "block";
 }
 
-document.getElementById("completeBtn").addEventListener("click", function () {
+document.getElementById("confirmCompleteBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
   completeConfirmOn();
 });
@@ -95,7 +102,7 @@ function cancel() {
 }
 
 function taskCompletedOn() {
-  document.getElementById("complete-confirm-overlay").style.display = "block";
+  document.getElementById("task-completed-overlay").style.display = "block";
 }
 
 document.getElementById("completeBtn").addEventListener("click", function () {
@@ -103,16 +110,16 @@ document.getElementById("completeBtn").addEventListener("click", function () {
   taskCompletedOn();
 });
 
-function goHome() {
+function exploreFavors() {
   window.location.href = "/dashboard.html";
 }
 
-document.getElementById("homeBtn").addEventListener("click", function () {
+document.getElementById("exploreBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
-  goHome();
+  exploreFavors();
 });
 
 document.getElementById("cancelBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
-  goHome();
+  exploreFavors();
 });

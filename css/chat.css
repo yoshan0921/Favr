@@ -1,0 +1,70 @@
+/* -------------------------------------------------- */
+/* Chat                                               */
+/* -------------------------------------------------- */
+#chat-content {
+  display: flex;
+  gap: 1rem;
+  flex-flow: column nowrap;
+  justify-content: start;
+}
+
+/* For iOS zoom problem */
+#chat-content input {
+  font-size: 16px;
+}
+
+#messageHistory {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.messageBox {
+  background-color: var(--pureWhite);
+  border-radius: 15px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: auto;
+}
+
+.message-left {
+  align-self: start;
+}
+
+.message-right {
+  align-self: end;
+}
+
+.message-right .messageBox {
+  background-color: var(--primary);
+  color: white;
+}
+
+.sendTo {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sendMessage {
+  display: flex;
+  gap: 0.5rem;
+  align-content: center;
+  flex-flow: row nowrap;
+}
+
+.sendMessage .message {
+  flex: 1 1 auto;
+  border-radius: 50px;
+  border: solid 0.5px #ccc;
+  padding: 0.5rem;
+}
+
+.sendMessage .message:focus {
+  outline: none;
+}
+
+.sendMessage .button {
+  flex: 0 0 auto;
+  border-radius: 50%;
+}

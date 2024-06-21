@@ -110,14 +110,14 @@ main {
 }
 
 .confirm-wrapper {
-  margin: 0.5rem;
+  margin: auto;
   background-color: rgb(233, 233, 233);
   text-align: center;
-  padding: 3rem 5rem;
+  padding: 2rem 3rem;
   border-radius: 30px;
   height: 400px;
 
-  @media screen and (min-width: size) {
+  @media screen and (min-width: 800px) {
     width: 400px;
   }
 }
@@ -133,15 +133,21 @@ main {
   align-content: center;
 }
 
+.confirm-wrapper .icons {
+    font-size: 3rem;
+}
+
 .confirm-wrapper .set {
   display: flex;
-  justify-content: space-between;
+  flex-flow: column;
+  justify-content: center;
   margin-top: 1rem;
+  gap: 1.5rem;
 }
 
 .confirm-wrapper .set button {
   border: none;
-  padding: 0.2rem 1rem 0.2rem 1rem;
+  padding: 0.3rem;
   border-radius: 50px;
 }
 
