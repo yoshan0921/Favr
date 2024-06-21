@@ -5,6 +5,12 @@ import { redirect } from "./utils.js";
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
+// Task status
+const STATUS_WAITING = "Waiting to be accepted";
+const STATUS_ONGOING = "On going";
+const STATUS_PENDING = "Pending approval";
+const STATUS_COMPLETED = "Completed";
+const STATUS_CANCELLED = "Cancelled";
 
 let currentUserID;
 
@@ -287,11 +293,11 @@ async function createTaskListForVolunteers(allTasks) {
         if (taskDetails.volunteerID !== currentUserID) return;
 
         // Set the link URL for the task card
-        if (taskDetails.status === "Pending") {
+        if (taskDetails.status === STATUS_PENDING) {
           linkURL = "/tasks/taskDetailPending.html";
-        } else if (taskDetails.status === "Completed") {
+        } else if (taskDetails.status === STATUS_COMPLETED) {
           linkURL = "/tasks/taskDetailCompleted.html";
-        } else if (taskDetails.status === "Cancelled") {
+        } else if (taskDetails.status === STATUS_CANCELLED) {
           linkURL = "/tasks/taskDetailCancelled.html";
         } else {
           linkURL = "#";
@@ -373,11 +379,11 @@ function createCardForVolunteers(task) {
   `;
 
   // Append card to the correct list based on the task status
-  if (["Pending approval"].includes(task.taskStatus)) {
+  if ([STATUS_PENDING].includes(task.taskStatus)) {
     listPending.appendChild(card);
-  } else if (["Completed"].includes(task.taskStatus)) {
+  } else if ([STATUS_COMPLETED].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
-  } else if (["Cancelled"].includes(task.taskStatus)) {
+  } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
   }
 }
