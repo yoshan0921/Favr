@@ -104,7 +104,7 @@ async function createTaskListForElders(allTasks) {
       .then(async ([requester, volunteer]) => {
         // Check if the requester of the task is the current user
         if (taskDetails.requesterID !== currentUserID) return;
-        console.log(taskDetails);
+
         // Create task object for List & Map view
         let taskObj = {
           // Task Information

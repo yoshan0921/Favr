@@ -145,9 +145,9 @@ async function createTaskListForElders(allTasks) {
           taskLinkURL: linkURL,
           // Volunteer Information
           taskVolunteerID: taskDetails.volunteerID ?? "",
-          taskVolunteerName: `${volunteer.firstName} ${volunteer.lastName}` ?? "",
-          taskVolunteerInstitution: volunteer.institution ?? "",
-          taskVolunteerPhoto: `${volunteer.profilePictureURL}` ?? "", // For Performance Improvement
+          taskVolunteerName: volunteer?.firstName && volunteer?.lastName ? `${volunteer.firstName} ${volunteer.lastName}` : "",
+          taskVolunteerInstitution: volunteer?.institution ?? "",
+          taskVolunteerPhoto: volunteer?.profilePictureURL ?? "", // For Performance Improvement
           // Elder Information
           taskRequesterName: `${requester.firstName} ${requester.lastName}` ?? "",
           taskRequesterAddress: requester.address ?? "",
