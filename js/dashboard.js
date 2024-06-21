@@ -9,6 +9,12 @@ const { spherical } = await google.maps.importLibrary("geometry");
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
+// Task status
+const STATUS_WAITING = "Waiting to be accepted";
+const STATUS_ONGOING = "On going";
+const STATUS_PENDING = "Pending approval";
+const STATUS_COMPLETED = "Completed";
+const STATUS_CANCELLED = "Cancelled";
 
 let currentUserID;
 let currentUserRole;
@@ -165,7 +171,7 @@ function createCardForElder(task) {
   <p class="status"><span class="statusColor"></span>${task.taskStatus}</p>
   <p class="notes">${task.taskNotes}</p>
   `;
-  if (task.taskStatus != "Waiting to be accepted") {
+  if (task.taskStatus != STATUS_WAITING) {
     card.innerHTML += `
     <div class="requester">
     <img class="photo" src="${placeholderImage}" data-storage-path="profile/${task.taskVolunteerPhoto}">
@@ -178,10 +184,10 @@ function createCardForElder(task) {
   }
 
   // Append card to the correct list based on the task status
-  if (["Waiting to be accepted"].includes(task.taskStatus)) {
+  if ([STATUS_WAITING].includes(task.taskStatus)) {
     card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
     list.appendChild(card);
-  } else if (["On going"].includes(task.taskStatus)) {
+  } else if ([STATUS_ONGOING].includes(task.taskStatus)) {
     card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
     list.appendChild(card);
   }
@@ -222,10 +228,6 @@ async function loadVolunteersDashboard() {
   const closeFilterBtn = document.getElementById("cancelFilter");
   const applyFilterBtn = document.getElementById("applyFilter");
   const cancelFilterBtn = document.getElementById("cancelFilter");
-  //Filter button (History tab)
-  // const toggleCancelledCheckbox = document.getElementById("toggleCancelledCheckbox");
-  // const togglePendingCheckbox = document.getElementById("togglePendingCheckbox");
-  // const toggleCompletedCheckbox = document.getElementById("toggleCompletedCheckbox");
 
   // Switch between map and list view (toggle hidden class)
   if (taskViewSwitch) {
@@ -367,7 +369,7 @@ async function createTaskListForVolunteers(allTasks) {
         let requester = await getDocument("users", taskDetails.requesterID);
 
         // Get coordinates of the task location
-        if (["Waiting to be accepted"].includes(taskDetails.status)) {
+        if ([STATUS_WAITING].includes(taskDetails.status)) {
           try {
             let result = await getCoordinates(taskDetails.details["startAddress"]);
             markerLatLng = { lat: result.lat, lng: result.lng };
@@ -409,7 +411,7 @@ async function createTaskListForVolunteers(allTasks) {
         }
 
         // Set the link URL for the task card
-        if (taskDetails.status === "Waiting to be accepted") {
+        if (taskDetails.status === STATUS_WAITING) {
           linkURL = "/tasks/accept.html";
         } else if (taskDetails.status === "On going") {
           linkURL = "/tasks/myfavr.html";
@@ -496,9 +498,9 @@ function createCardForVolunteer(task) {
   `;
 
   // Append card to the correct list based on the task status
-  if (["Waiting to be accepted"].includes(task.taskStatus)) {
+  if ([STATUS_WAITING].includes(task.taskStatus)) {
     listExplore.appendChild(card);
-  } else if (["On going"].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
+  } else if ([STATUS_ONGOING].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listMyFavor.appendChild(card);
     listMyFavorCount.innerHTML = ++favorCount;
   }
@@ -514,7 +516,7 @@ function createCardForVolunteer(task) {
  */
 function createMapMarker(task, map, infoWindows) {
   // If the task is not "Waiting to be accepted", do not create a marker
-  if (!["Waiting to be accepted"].includes(task.taskStatus)) return;
+  if (![STATUS_WAITING].includes(task.taskStatus)) return;
 
   // FOR DEBUGGING
   // console.log(`createMapMarker: ${JSON.stringify(task)}`);
