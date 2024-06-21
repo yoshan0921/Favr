@@ -42,7 +42,7 @@
     padding: 0;
 }
 .support-options-wrapper .row .support-option .icon::after{
-    filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
+    filter: unset;
 }
 hr {
     color: var(--disabledText);

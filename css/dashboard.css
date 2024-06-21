@@ -84,6 +84,24 @@
 /* -------------------------------------------------- */
 /* Elder: Favor List View                             */
 /* -------------------------------------------------- */
+.create-button-wrapper .add-icon{
+  align-content: center;
+  border: 1px solid var(--pureWhite);
+  border-radius: 50%;
+}
+.create-button-wrapper .add-icon::after{
+  filter: invert(100%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+
+  align-self: center;
+  position: relative;
+  top: 2px;
+  display: flex;
+  height: 100%;
+  aspect-ratio: 1;
+  justify-content: center;
+  position: relative;
+  top: 2px;
+}
 .elder h2 {
   padding: 0;
 }
