@@ -1,38 +1,4 @@
 /* -------------------------------------------------- */
-/* Tab Menu                                           */
-/* -------------------------------------------------- */
-.tabs {
-  display: flex;
-  margin-bottom: 1rem;
-}
-
-.tabs .tab {
-  flex: 1 0 33.3%;
-  cursor: pointer;
-  padding-bottom: 0.5rem;
-  text-align: center;
-}
-
-.tabs .tab {
-  border-bottom: 2px solid var(--disabledText);
-  color: var(--disabledText);
-}
-
-.tabs .tab.active {
-  border-bottom: 3px solid var(--primary);
-  font-weight: bold;
-  color: var(--primary);
-}
-
-.tabs .tab-content-item {
-  padding: 10px;
-}
-
-.hide {
-  display: none !important;
-}
-
-/* -------------------------------------------------- */
 /* Map                                                */
 /* -------------------------------------------------- */
 .tab-content .mapContainer {
@@ -116,62 +82,6 @@
 }
 
 /* -------------------------------------------------- */
-/* Task Card                                          */
-/* -------------------------------------------------- */
-.taskCard {
-  transition: all 0.2s ease-out;
-  background-color: var(--pureWhite);
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  padding: 1rem;
-  position: relative;
-}
-
-.taskCard:hover {
-  transform: translateY(-5px);
-}
-
-.taskCard a {
-  border-radius: 10px;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-
-.taskCard a:hover {
-  opacity: 0.1;
-}
-
-.taskCard .title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.taskCard .requester,
-.taskCard .vounteer {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  align-items: center;
-}
-
-.taskCard .requester .photo,
-.taskCard .vounteer .photo {
-  display: block;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-}
-
-.taskCard .requester .name,
-.taskCard .vounteer .name {
-  font-weight: bold;
-}
-
-/* -------------------------------------------------- */
 /* Elder: Favor List View                             */
 /* -------------------------------------------------- */
 .elder h2 {
@@ -195,7 +105,7 @@
 }
 
 /* -------------------------------------------------- */
-/* Volunteer: Explore Favor List View                 */
+/* Volunteer: Favor List View                         */
 /* -------------------------------------------------- */
 .volunteer .viewSwitcher {
   display: flex;
@@ -223,7 +133,7 @@
 }
 
 /* -------------------------------------------------- */
-/* Volunteer: Explore Favor Filter                    */
+/* Volunteer: Favor Filter                            */
 /* -------------------------------------------------- */
 #filterModal .modal-content {
   min-height: 80vh;
