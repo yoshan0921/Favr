@@ -335,9 +335,11 @@ main .page-header {
   justify-content: flex-end;
   align-items: center;
 }
-.chat-icon-wrapper a,
-.chat-icon-wrapper i {
+.chat-icon-wrapper a {
   color: var(--primary);
+}
+.chat-icon-wrapper .icon::after{
+  filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
 }
 
 a,
@@ -516,6 +518,49 @@ Modal
 #savedMessageModal .icon-wrapper i {
   font-size: 5rem;
 }
+/*======================
+Icons
+========================*/
+.icon{
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+  min-width: 20px;
+  min-height: 20px;
+}
+.icon::after{
+  filter: invert(65%) sepia(0%) saturate(1%) hue-rotate(197deg) brightness(97%) contrast(88%);
+}
+.home-icon::after{
+  content: url('../assets/icons/home.svg') !important;
+}
+.profile-icon::after{
+  content: url('../assets/icons/profile.svg') !important;
+}
+.updates-icon::after{
+  content: url('../assets/icons/updates.svg') !important;
+}
+.history-icon::after{
+  content: url('../assets/icons/history.svg') !important;
+}
+.filter-icon::after{
+  content: url('../assets/icons/filter.svg') !important;
+}
+.chat-icon::after{
+  content: url('../assets/icons/chat.svg') !important;
+}
+.question-icon::after{
+  content: url('../assets/icons/question.svg') !important;
+}
+.phone-icon::after{
+  content: url('../assets/icons/phone.svg') !important;
+}
+.email-icon::after{
+  content: url('../assets/icons/email.svg') !important;
+}
 /*
 =========================
 Media queries
@@ -646,6 +691,10 @@ Media queries
   .sidebar a:hover,
   #logoutBtn:hover {
     color: var(--primary);
+  }
+  .sidebar a.active .icon::after,
+  .sidebar a:hover .icon::after{
+    filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
   }
 
   .sidebar a i,

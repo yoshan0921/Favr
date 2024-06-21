@@ -1,0 +1,50 @@
+.support-options-wrapper{
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+}
+.support-options-wrapper .row{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+.support-options-wrapper .img-wrapper{
+    aspect-ratio: 16 / 9;
+}
+.support-options-wrapper img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.support-options-wrapper .row > :is(.img-wrapper, .support-option){
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.support-options-wrapper .row .support-option{
+    background-color: var(--pureWhite);
+    padding: 1rem 2rem;
+    color: var(--primary);
+    display: flex;
+    gap: .5rem;
+    flex-flow: column wrap;
+    padding: 1rem;
+}
+.support-options-wrapper .row .support-option *{
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+.support-options-wrapper .row .support-option .icon::after{
+    filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
+}
+hr {
+    color: var(--disabledText);
+    background-color: var(--disabledText);
+}
