@@ -98,23 +98,13 @@ async function createTaskListForElders(allTasks) {
     // for (let task of allTasks) {
     let id = task[0]; // Task ID
     let taskDetails = task[1]; // Task detail data
-    let linkURL = "#"; // Link URL for the task card
 
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
         // Check if the requester of the task is the current user
         if (taskDetails.requesterID !== currentUserID) return;
-
-        // Set the link URL for the task card
-        if (taskDetails.status === "Completed") {
-          linkURL = "/tasks/completedHistory.html";
-        } else if (taskDetails.status === "Cancelled") {
-          linkURL = "/tasks/cancelledHistory.html";
-        } else {
-          linkURL = "#";
-        }
-
+        console.log(taskDetails);
         // Create task object for List & Map view
         let taskObj = {
           // Task Information
@@ -126,14 +116,14 @@ async function createTaskListForElders(allTasks) {
           taskNotes: taskDetails.notes ?? "",
           taskAddress: taskDetails.details["startAddress"] ?? "",
           taskEndAddress: taskDetails.details["endAddress"] ?? "",
-          taskLinkURL: linkURL,
+          taskLinkURL: "/tasks/tracking.html",
           // Volunteer Information
           taskVolunteerID: taskDetails.volunteerID ?? "",
-          taskVolunteerName: `${volunteer.firstName} ${volunteer.lastName}` ?? "",
-          taskVolunteerInstitution: volunteer.institution ?? "",
-          taskVolunteerPhoto: `${volunteer.profilePictureURL}` ?? "", // For Performance Improvement
+          taskVolunteerName: volunteer?.firstName && volunteer?.lastName ? `${volunteer.firstName} ${volunteer.lastName}` : "",
+          taskVolunteerInstitution: volunteer?.institution ?? "",
+          taskVolunteerPhoto: volunteer?.profilePictureURL ?? "", // For Performance Improvement
           // Elder Information
-          taskRequesterName: `${requester.firstName} ${requester.lastName}` ?? "",
+          taskRequesterName: requester.firstName && requester.lastName ? `${requester.firstName} ${requester.lastName}` : "",
           taskRequesterAddress: requester.address ?? "",
         };
 
@@ -170,7 +160,7 @@ function createCardForElder(task) {
   card.setAttribute("data-date", task.taskDate);
   card.setAttribute("data-address", task.taskAddress);
   card.innerHTML = `
-  <a href="/tasks/tracking.html?taskid=${task.taskID}"></a>
+  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <p class="status"><span class="statusColor"></span>${task.taskStatus}</p>
   <p class="notes">${task.taskNotes}</p>
@@ -194,18 +184,6 @@ function createCardForElder(task) {
   } else if (["On going"].includes(task.taskStatus)) {
     card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
     list.appendChild(card);
-  } else if (["Pending approval", "Cancelled"].includes(task.taskStatus)) {
-    list.appendChild(card);
-    if (task.taskStatus === "Pending approval") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
-      card.setAttribute("data-status", "Pending approval");
-    } else if (task.taskStatus === "Completed") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#44c451";
-      card.setAttribute("data-status", "Completed");
-    } else if (task.taskStatus === "Cancelled") {
-      card.querySelector(".taskCard .statusColor").style.backgroundColor = "#f24822";
-      card.setAttribute("data-status", "Cancelled");
-    }
   }
 }
 
