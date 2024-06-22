@@ -174,6 +174,9 @@ sendMessage.addEventListener("submit", function (event) {
   // Prevent the form from submitting
   event.preventDefault();
 
+  // Check if the message is empty
+  if (message.value === "") return;
+
   push(ref(database, chatRoom), {
     name: loginUserID,
     message: message.value,
