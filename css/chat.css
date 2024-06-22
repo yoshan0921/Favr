@@ -4,9 +4,10 @@
 .contact {
   display: flex;
   gap: 1rem;
-  margin-top: 0.5rem;
   align-items: center;
   cursor: pointer;
+  border-bottom: solid 1px var(--lightBorder);
+  padding: 1.5rem 0rem;
 }
 
 .contact .title {
