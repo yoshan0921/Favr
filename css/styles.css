@@ -284,7 +284,7 @@ header .container {
 }
 header .container div {
   flex-grow: 0;
-  align-content: center;
+  align-items: center;
 }
 header .container > div {
   padding: 0.5rem;
@@ -725,7 +725,7 @@ main.loaded .loading-screen {
   }
   header .container div {
     flex-grow: 0;
-    align-content: center;
+    align-items: center;
     flex-basis: calc(240px - 0.5rem);
     text-align: right;
   }

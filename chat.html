@@ -22,14 +22,9 @@
 
   <!-- Main Content -->
   <main class="content" id="chat-content">
-    <div class=".sendTo">
-      <p>Login User: <span id="loginUserName"></span></p>
-      <span>Send to: </span><select id="chatWith"></select>
-    </div>
-
-    <div id="messageHistory"></div>
-
-    <form class="sendMessage">
+    <div id="chatWith"></div>
+    <div id="messageHistory" class="hide"></div>
+    <form id="sendMessage" class="hide">
       <input id="message" class="message"></input>
       <button id="send" class="button" type="submit">+</button>
     </form>

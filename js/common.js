@@ -11,11 +11,13 @@ let pageTitles = {
   "history.html": "History",
   "profile/edit.html": "Profile",
   "tasks/create.html": "Request favor",
+  "tasks/tracking.html": "Favor Tracking",
   "tasks/details.html": "Task Details",
   "tasks/updates.html": "Updates",
-  "tasks/accept.html": "Accept favor",
+  "tasks/accept.html": "Accept Favor",
+  "tasks/myfavr.html": "Ongoing Favor",
   "support.html": "Get support",
-  "tasks/tracking.html": "Favor Tracking",
+  "chat.html": "Messages",
 };
 const menuLinks = {
   "dashboard.html": "home-menu",
@@ -180,7 +182,7 @@ async function lazyLoadImages() {
           if (entry.isIntersecting) {
             let lazyImage = entry.target;
             let storagePath = lazyImage.getAttribute("data-storage-path");
-            if (storagePath != "profile/null") {
+            if (storagePath != "profile/null" && storagePath != "profile/" && storagePath != "profile/undefined") {
               try {
                 const url = await getFile(storagePath);
                 lazyImage.src = url;
