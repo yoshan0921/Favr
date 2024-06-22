@@ -46,6 +46,11 @@
   flex: 1 1 auto;
   display: flex;
   flex-flow: column wrap;
+  padding-top: 1rem;
+
+  @media screen and (min-width: 800px) {
+    padding-top: 0px;
+  }
 }
 
 .messageBox {
