@@ -3,14 +3,25 @@ import { getToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-me
 import { getDocument, updateDocument } from "./firestore.js";
 import { getCurrentUserID } from "./authentication.js";
 
-const API_KEY = 'BAa_0mfBX5XyXGJdq6hgYXnQBZEXGgcy1EQYLHjSTr0e-2QI8ztPWMMq0ureDp8Rlvle3kYg_JmMnVw6X-byaLU';
+const VAPID_KEY = 'BAa_0mfBX5XyXGJdq6hgYXnQBZEXGgcy1EQYLHjSTr0e-2QI8ztPWMMq0ureDp8Rlvle3kYg_JmMnVw6X-byaLU';
+const API_KEY = 'AIzaSyA98KYP3hvGX8q7uk1WNdEStxMo1S85HmA';
 
 async function sendTokenToDB(done) {
     getToken(messaging, {
-        vapidKey: API_KEY
-    }).then((currentToken) => {
+        vapidKey: VAPID_KEY
+    }).then(async (currentToken) => {
         if (currentToken) {
             console.log('current token for client: ', currentToken);
+            const currentUser = await getDocument("users", getCurrentUserID());
+            if(currentUser.notificationsSubscription){
+                if(!currentUser.notificationsSubscription.includes(currentToken)){
+                    currentUser.notificationsSubscription.push(currentToken);
+                }
+            }else{
+                currentUser.notificationsSubscription = [currentToken];
+            }
+            updateDocument("users", getCurrentUserID(), currentUser);
+
             // Track the token -> client mapping, by sending to backend server
             // show on the UI that permission is secured
             // ... add you logic to send token to server
@@ -37,33 +48,35 @@ async function onNotification(notification) {
 
         if ('serviceWorker' in navigator) {
         // this will register the service worker or update it. More on service worker soon
-            navigator.serviceWorker.register('../../ firebase-messaging-sw.js', { scope: '../../' }).then(function (registration) {
+            navigator.serviceWorker.register('../../firebase-messaging-sw.js', { scope: '../../' })
+            .then(function (registration) {
                 console.log("Service Worker Registered");
                 setTimeout(() => {
                     // display the notificaiton
                     registration.showNotification(title, { ...notification_options, ...options })
                     .then(done => {
                         console.log(done);
-                        console.log("Sent notification to user", title);
                         //const audio = new Audio("./util/sound/one_soft_knock.mp3"); // only works on windows chrome
                         //audio.play();
+                        registration.update();
+                        resolve(`Sent notification to user: ${title}`);
                     })
                     .catch(err => {
-                        console.error("Error sending notification to user", err);
+                        reject(`Error sending notification to user: ${err}`);
                     });
-                    registration.update();
+                    //registration.update();
                 }, 100);
             }).catch(function (err) {
-                console.log("Service Worker Failed to Register", err);
+                reject(`Service Worker Failed to Register: ${err}`);
             });
         }else{
-            console.log("No service worker");
+            reject("No service worker");
         }
     })
 }
 async function getMessagingToken(){
     return new Promise((reject,resolve), ()=> {
-        getToken(messaging, { vapidKey: API_KEY})
+        getToken(messaging, { vapidKey: VAPID_KEY})
         .then((currentToken) => {
             if (currentToken) {
             // Send the token to your server and update the UI if necessary
@@ -97,7 +110,6 @@ async function checkUserPushSubscription(){
 function requestNotificationPermission(){
     if("Notification" in window){
         if(Notification.permission !== "granted") {
-            console.log("here!!!!!");
             Notification.requestPermission()
             .then((permission) => {
                 // If the user accepts, create a token and send to server
@@ -135,25 +147,25 @@ function requestNotificationPermission(){
     }
 }
 function registerUserFCM() {
-    console.log(Notification.permission);
     if (!("Notification" in window)) {
         // Check if the browser supports notifications
+        console.log("Browser does not support notifications");
     } else if (Notification.permission === "granted") {
         // Check whether notification permissions have already been granted;
         // if so, create a token for that user and send to server
         sendTokenToDB(done => {
-            console.log("done", done);
+            console.log("done sending token to db", done);
             if (done) {
-                onNotification({ title: "Successful", body: "Your device has been register", tag: "welcome" });
+                onNotification({ title: "Successful", body: "Your device has been registered", tag: "welcome" });
             }
         });
-    } else if (Notification.permission !== "denied") {
+    } else {//if (Notification.permission !== "denied") {
         // We need to ask the user for permission
         Notification.requestPermission().then((permission) => {
             // If the user accepts, create a token and send to server
             if (permission === "granted") {
                 sendTokenToDB(done => {
-                    console.log("done", done);
+                    console.log("done sending token to db", done);
                     if (done) {
                         onNotification({ title: "Successful", body: "Your device has been register", tag: "welcome" });
                     }
@@ -165,10 +177,26 @@ function registerUserFCM() {
     }
 }
 
+async function sendNotification(receiverID, message){
+    const receiver = await getDocument("users", receiverID);
+    for(let token of receiver.notificationsSubscription){
+        message["to"] = token;
+        messaging.send(message)
+        .then((response) => {
+          // Response is a message ID string.
+          console.log('Successfully sent message:', response);
+          })
+          .catch((error) => {
+            console.log('Error sending message:', error);
+          });
+      }
+}
+
 export {
     getMessagingToken,
     sendTokenToDB,
     registerUserFCM,
     checkUserPushSubscription,
-    requestNotificationPermission
+    requestNotificationPermission,
+    sendNotification
 }

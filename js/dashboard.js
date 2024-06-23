@@ -1,6 +1,7 @@
 import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAll, getDocument, getFile } from "./firebase/firestore.js";
+import { registerUserFCM } from "./firebase/notifications.js";
 import { redirect } from "./utils.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -47,7 +48,8 @@ if (document.readyState === "loading") {
 async function runFunction() {
   // Get Login user information
   currentUserID = getCurrentUserID();
-  getCurrentUserRole().then(async (currentUserRole) => {
+  getCurrentUserRole()
+  .then(async (currentUserRole) => {
     console.log("Current User ID: " + currentUserID);
     console.log("Current User Role: " + currentUserRole);
 
@@ -59,6 +61,7 @@ async function runFunction() {
     } else if (currentUserRole === "elder") {
       await loadEldersDashboard();
     }
+    registerUserFCM();
   });
 }
 

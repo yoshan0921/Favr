@@ -1,8 +1,9 @@
-self.importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js')
+self.importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+self.importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
 self.importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
 
-const APP_SERVER_KEY = "BAa_0mfBX5XyXGJdq6hgYXnQBZEXGgcy1EQYLHjSTr0e-2QI8ztPWMMq0ureDp8Rlvle3kYg_JmMnVw6X-byaLU";
-const PRIVATE_KEY = "oZNtr0UE5JjU_7-eZAIAeBhB0ZOiQ5wKMnF0LoFYkTM";
+const API_KEY = 'AIzaSyA98KYP3hvGX8q7uk1WNdEStxMo1S85HmA';
+const VAPID_KEY = "BAa_0mfBX5XyXGJdq6hgYXnQBZEXGgcy1EQYLHjSTr0e-2QI8ztPWMMq0ureDp8Rlvle3kYg_JmMnVw6X-byaLU";
 var user_subscription = {};
 
 const firebaseConfig = {
@@ -18,6 +19,31 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
+const firestore = firebase.firestore();
+
+async function getDocument(id){
+    const documentReference = doc(firestore, `users/${id}`);
+    try {
+        const docSnap = await getDoc(documentReference);
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            console.log("No such document!");
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+        return null
+    }
+}
+function setDocument(object, id){
+    try {
+        const documentReference = doc(firestore, "users", id);
+        return setDoc(documentReference, object);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 self.addEventListener("fetch", (e)=>{
 
@@ -25,10 +51,13 @@ self.addEventListener("fetch", (e)=>{
 self.addEventListener("activate", async (e)=>{
     self.registration.pushManager.subscribe({
         userVisibleOnly : true,
-        applicationServerKey: urlBase64ToUint8Array(APP_SERVER_KEY)
+        applicationServerKey: urlBase64ToUint8Array(VAPID_KEY)
     })
     .then(subscription =>{
         user_subscription = subscription;
+        const userID = window.localStorage.getItem("currentUserID");
+        const user = getDocument(userID);
+        console.log(user);
         console.log(`Subscription saved by service worker!`);
         console.log(subscription);
     })
@@ -70,7 +99,7 @@ async function onNotification(notification) {
     })
 }
 
-messaging.getToken( { vapidKey: APP_SERVER_KEY}) //'AIzaSyA98KYP3hvGX8q7uk1WNdEStxMo1S85HmA'
+messaging.getToken( { vapidKey: VAPID_KEY}) //'AIzaSyA98KYP3hvGX8q7uk1WNdEStxMo1S85HmA'
 .then((currentToken) => { return new Promise((resolve,reject)), ()=> {
     if (currentToken) {
         resolve(currentToken);

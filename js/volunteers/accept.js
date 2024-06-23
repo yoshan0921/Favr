@@ -1,4 +1,5 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
+import { messaging } from "../firebase/firebase.js";
 import { updateDocument, getDocument, getFile } from "../firebase/firestore.js";
 
 let taskID;
@@ -51,6 +52,7 @@ function runFunction() {
       // Save the task data to a global variable
       taskData = task;
       getDocument("users", task.requesterID).then((user) => {
+        elder = user;
         // ToDo: Display task data on the page
         // Code here...
 
@@ -106,14 +108,35 @@ async function acceptTask(taskID, taskData) {
   taskData.status = "On going";
   console.log(taskData);
 
+  const volunteer = await getDocument("users", volunteerID);
+  let message = {
+      "notification": {
+          "title": "Your task was accepted!",
+          "body": `${volunteer.firstName} has accepted your ${taskData.title} favour`,
+          "click_action": "http://localhost:5500/dashboard.html"
+      }
+  }
+  sendNotification(taskData.requesterID, message)
   // Update the task data on the Firestore
-  updateDocument("tasks", taskID, taskData)
-    .then(() => {
-      console.log("Task accepted!");
+  /*
+  updateDocument("tasks", taskID, taskData).then(async () => {console.log("Task accepted!");
+      /*
+      const volunteer = await getDocument("users", getCurrentUserID());
+      let message = {
+        "notification": {
+            "title": "Your task was accepted!",
+            "body": `${volunteer.firstName} has accepted your ${taskData.title} favour`,
+            "click_action": "http://localhost:5500/dashboard.html"
+        },
+        "to": `${token}`
+    }
+      sendNotification(taskData.requesterID, message)
+      * /
     })
     .catch((error) => {
       console.log(error);
     });
+    */
 }
 
 // function cancel() {
