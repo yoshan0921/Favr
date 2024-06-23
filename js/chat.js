@@ -279,7 +279,7 @@ function showChatRoomTitle(chatRoomID) {
 
       let address = document.createElement("p");
       address.classList.add("address");
-      address.textContent = `${user.address}`;
+      address.textContent = user.address ?? "";
 
       let requesterInfo = document.createElement("div");
       requesterInfo.appendChild(requesterName);
