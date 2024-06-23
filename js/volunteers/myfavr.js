@@ -3,6 +3,7 @@ import { updateDocument, getDocument } from "../firebase/firestore.js";
 
 let taskID;
 let taskData = {};
+let chatRoomID;
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
@@ -52,12 +53,14 @@ function runFunction() {
 
         completedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         approvedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
-      
 
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
         taskNote.innerHTML = taskData.notes;
+
+        // Create chat room name from sorted two user IDs
+        chatRoomID = [getCurrentUserID(), taskData.requesterID].sort().join("-");
       });
     })
     .catch((error) => {
@@ -122,4 +125,9 @@ document.getElementById("exploreBtn").addEventListener("click", function () {
 document.getElementById("cancelBtn").addEventListener("click", function () {
   //   acceptTask(taskID, taskData);
   exploreFavors();
+});
+
+// Link to chat room
+document.getElementById("contactBtn").addEventListener("click", function () {
+  window.location.href = `/chat.html?crid=${chatRoomID}`;
 });

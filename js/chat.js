@@ -15,7 +15,7 @@ const STATUS_CANCELLED = "Cancelled";
 
 let loginUserID;
 let loginUserRole;
-let chatRoom;
+let chatRoomID;
 let filterCondition;
 const contactList = document.getElementById("chatWith");
 const messageHistory = document.getElementById("messageHistory");
@@ -47,6 +47,8 @@ if (document.readyState === "loading") {
 async function runFunction() {
   // Get Login user information
   loginUserID = getCurrentUserID();
+
+  // Get the current user role
   await getCurrentUserRole().then(async (currentUserRole) => {
     loginUserRole = currentUserRole;
     console.log("Current User ID: " + loginUserID);
@@ -115,6 +117,7 @@ async function runFunction() {
           requesterName.textContent = `${user.firstName} ${user.lastName}`;
 
           let lastMessage = document.createElement("p");
+          lastMessage.classList.add("lastMessage");
           lastMessage.textContent = `*** The last message here (under construction) ***`;
 
           let requesterInfo = document.createElement("div");
@@ -132,38 +135,36 @@ async function runFunction() {
       // Add event listener to each contact
       contact.addEventListener("click", async function () {
         // Create chat room name from sorted two user IDs
-        chatRoom = [loginUserID, this.getAttribute("data-contactID")].sort().join("-");
-        messageHistory.innerHTML = "";
+        chatRoomID = [loginUserID, this.getAttribute("data-contactID")].sort().join("-");
+        console.log("Chat Room ID: " + chatRoomID);
 
-        chatWith.classList.add("hide");
-        messageHistory.classList.remove("hide");
+        // Load chat room
+        loadChatRoom(chatRoomID, this);
 
         // Check if chat message is allowed to sent.
-        if (await checkChatRoomAvailability(loginUserID, this.getAttribute("data-contactID"))) {
-          sendMessage.classList.remove("hide");
-        } else {
-          console.log("Chat message is not allowed to sent.");
-        }
+        checkChatRoomAvailability(chatRoomID);
 
-        onChildAdded(ref(database, chatRoom), function (data) {
-          const v = data.val();
-          const messageItem = document.createElement("div");
-
-          if (v.name === loginUserID) {
-            messageItem.classList.add("message-right");
-          } else {
-            messageItem.classList.add("message-left");
-          }
-          messageItem.innerHTML = `<div class="messageBox">${v.message}</div>`;
-          messageHistory.appendChild(messageItem);
-
-          window.scrollTo(0, document.body.scrollHeight);
-        });
+        // Replace h1#page-title with the selected elder/colunteer information
+        showChatRoomTitle(chatRoomID);
       });
     });
 
     // Wait for all getDocument calls to finish
     Promise.all(promises).then(() => {
+      // If crid is specified in the URL, load the chat room
+      const urlParams = new URLSearchParams(window.location.search);
+      chatRoomID = urlParams.get("crid");
+      if (chatRoomID) {
+        loadChatRoom(chatRoomID);
+        checkChatRoomAvailability(chatRoomID);
+        showChatRoomTitle(chatRoomID);
+        return;
+      }
+
+      // Show contact list and show message history
+      contactList.classList.remove("hide");
+
+      // Load firebase storage images
       lazyLoadImages();
     });
   });
@@ -177,7 +178,7 @@ sendMessage.addEventListener("submit", function (event) {
   // Check if the message is empty
   if (message.value === "") return;
 
-  push(ref(database, chatRoom), {
+  push(ref(database, chatRoomID), {
     name: loginUserID,
     message: message.value,
   });
@@ -185,9 +186,42 @@ sendMessage.addEventListener("submit", function (event) {
   message.value = "";
 });
 
+async function loadChatRoom(chatRoomID) {
+  // Hide contact list and show message history
+  contactList.classList.add("hide");
+  messageHistory.classList.remove("hide");
+
+  // Load chat room messages
+  loadChatRoomMessages(chatRoomID);
+}
+
+function loadChatRoomMessages(chatRoomID) {
+  // Clear the message history area
+  messageHistory.innerHTML = "";
+
+  // Load chat room messages
+  onChildAdded(ref(database, chatRoomID), function (data) {
+    const v = data.val();
+    const messageItem = document.createElement("div");
+
+    if (v.name === loginUserID) {
+      messageItem.classList.add("message-right");
+    } else {
+      messageItem.classList.add("message-left");
+    }
+    messageItem.innerHTML = `<div class="messageBox">${v.message}</div>`;
+    messageHistory.appendChild(messageItem);
+
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+}
+
 // If there are the tasks with "On going" or "Pending approval" between the two users,
 // the chat message can be sent. Otherwise, the chat message cannot be sent.
-async function checkChatRoomAvailability(userID1, userID2) {
+async function checkChatRoomAvailability(chatRoomID) {
+  let userID1 = chatRoomID.split("-")[0];
+  let userID2 = chatRoomID.split("-")[1];
+
   // Set filter condition
   filterCondition = [
     {
@@ -208,5 +242,52 @@ async function checkChatRoomAvailability(userID1, userID2) {
   ];
 
   const collection = await getAllWithFilter("tasks", filterCondition);
-  return collection.length > 0;
+  if (collection.length > 0) {
+    sendMessage.classList.remove("hide");
+  }
+}
+
+function showChatRoomTitle(chatRoomID) {
+  let pageTitle = document.getElementById("page-title");
+  let currentUserID = getCurrentUserID();
+  let userID1 = chatRoomID.split("-")[0];
+  let userID2 = chatRoomID.split("-")[1];
+  let contactUserID;
+
+  if (currentUserID === userID1) {
+    contactUserID = userID2;
+  } else {
+    contactUserID = userID1;
+  }
+
+  // Create chat room title
+  let contact = document.createElement("div");
+  contact.classList.add("contactHeader");
+
+  // Get the user's information
+  getDocument("users", contactUserID)
+    .then((user) => {
+      let profileImage = document.createElement("img");
+      profileImage.classList.add("photo");
+      profileImage.setAttribute("src", `${placeholderImage}`);
+      profileImage.setAttribute("data-storage-path", `profile/${user.profilePictureURL}`);
+      contact.appendChild(profileImage);
+
+      let requesterName = document.createElement("p");
+      requesterName.classList.add("name");
+      requesterName.textContent = `${user.firstName} ${user.lastName}`;
+
+      let address = document.createElement("p");
+      address.classList.add("address");
+      address.textContent = `${user.address}`;
+
+      let requesterInfo = document.createElement("div");
+      requesterInfo.appendChild(requesterName);
+      requesterInfo.appendChild(address);
+      contact.appendChild(requesterInfo);
+      pageTitle.outerHTML = contact.outerHTML;
+
+      lazyLoadImages();
+    })
+    .catch((error) => console.log(error));
 }

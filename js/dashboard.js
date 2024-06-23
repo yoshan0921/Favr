@@ -17,7 +17,6 @@ const STATUS_COMPLETED = "Completed";
 const STATUS_CANCELLED = "Cancelled";
 
 let currentUserID;
-// let currentUserRole;
 let favorCount = 0;
 let markers = {}; // For Google Map
 let infoWindows = []; // For Google Map
