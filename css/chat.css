@@ -99,3 +99,37 @@
   flex: 0 0 auto;
   border-radius: 50%;
 }
+
+/* -------------------------------------------------- */
+/* Chat Page Header                                   */
+/* -------------------------------------------------- */
+.contactHeader {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  @media screen and (min-width: 800px) {
+    padding-left: 2rem;
+  }
+}
+
+.contactHeader .title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.contactHeader .photo {
+  display: block;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.contactHeader .name {
+  text-align: left;
+  font-weight: bold;
+}
+
+.contactHeader .address {
+  text-align: left;
+}
