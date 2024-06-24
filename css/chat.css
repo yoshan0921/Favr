@@ -177,8 +177,9 @@ header .container .contactHeader {
 }
 
 .contactHeader .information .name {
-  text-align: left;
   font-weight: bold;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .contactHeader .information .address {
