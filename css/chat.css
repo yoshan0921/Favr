@@ -185,4 +185,5 @@ header .container .contactHeader {
 .contactHeader .information .address {
   text-align: left;
   white-space: nowrap;
+  max-width: 150px;
 }
