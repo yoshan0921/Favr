@@ -2,7 +2,7 @@ import { lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
 import { database } from "./firebase/firebase.js";
-import { ref, push, onChildAdded, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { ref, child, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
@@ -116,15 +116,45 @@ async function runFunction() {
           requesterName.classList.add("name");
           requesterName.textContent = `${user.firstName} ${user.lastName}`;
 
+          let lastMessageTime = document.createElement("p");
+          lastMessageTime.classList.add("lastMessageTime");
+
           let lastMessage = document.createElement("p");
           lastMessage.classList.add("lastMessage");
-          lastMessage.textContent = `*** The last message here (under construction) ***`;
 
-          let requesterInfo = document.createElement("div");
-          requesterInfo.appendChild(requesterName);
-          requesterInfo.appendChild(lastMessage);
-          contact.appendChild(requesterInfo);
+          // Get the last message in the chat room
+          const chatRef = ref(database, `${[loginUserID, user.id].sort().join("-")}`);
+          const queryConstraints = query(chatRef, orderByKey(), limitToLast(1));
+          get(queryConstraints)
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                const key = snapshot.key;
+                const data = snapshot.val();
+                for (let item in data) {
+                  lastMessage.textContent = data[item].message;
+                  // If month date is not equal to today, display the date + time
+                  let now = new Date();
+                  if (`${data[item].month} ${data[item].day}` !== `${now.toLocaleString("en-US", { month: "long" })} ${now.getDate()}`) {
+                    lastMessageTime.textContent = `${data[item].month} ${data[item].day}`;
+                  } else {
+                    lastMessageTime.textContent = data[item].time;
+                  }
+                }
+              } else {
+                console.log("No message found.");
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+          // lastMessage.textContent = `*** The last message here (under construction) ***`;
 
+          let userInfo = document.createElement("div");
+          userInfo.classList.add("userInfo");
+          userInfo.appendChild(requesterName);
+          userInfo.appendChild(lastMessageTime);
+          userInfo.appendChild(lastMessage);
+          contact.appendChild(userInfo);
           contactList.appendChild(contact);
         })
         .catch((error) => console.log(error));
@@ -178,11 +208,19 @@ sendMessage.addEventListener("submit", function (event) {
   // Check if the message is empty
   if (message.value === "") return;
 
+  const now = new Date();
   push(ref(database, chatRoomID), {
+    year: now.getFullYear(),
+    month: now.toLocaleString("en-US", { month: "long" }),
+    day: now.getDate(),
+    dayOfWeek: now.toLocaleString("en-US", { weekday: "long" }),
+    time: now.toTimeString().split(":")[0] + ":" + now.toTimeString().split(":")[1], // HH:MM
     name: loginUserID,
     message: message.value,
+  }).catch((error) => {
+    console.error("Failed to save data:", error);
   });
-  // Clear the message box
+  // Clear the message balloon
   message.value = "";
 });
 
@@ -199,17 +237,38 @@ function loadChatRoomMessages(chatRoomID) {
   // Clear the message history area
   messageHistory.innerHTML = "";
 
+  let previousDate = "";
+
   // Load chat room messages
   onChildAdded(ref(database, chatRoomID), function (data) {
     const v = data.val();
     const messageItem = document.createElement("div");
-
     if (v.name === loginUserID) {
       messageItem.classList.add("message-right");
     } else {
       messageItem.classList.add("message-left");
     }
-    messageItem.innerHTML = `<div class="messageBox">${v.message}</div>`;
+
+    if (previousDate !== `${v.year}-${v.month}-${v.day}`) {
+      previousDate = `${v.year}-${v.month}-${v.day}`;
+      const date = document.createElement("div");
+      date.classList.add("date");
+      const dateText = document.createElement("span");
+      dateText.textContent = `${v.dayOfWeek}, ${v.month} ${v.day}`;
+      date.appendChild(dateText);
+      messageHistory.appendChild(date);
+    }
+
+    const messageTime = document.createElement("div");
+    messageTime.classList.add("time");
+    messageTime.textContent = v.time;
+
+    const messageBalloon = document.createElement("div");
+    messageBalloon.classList.add("messageBalloon");
+    messageBalloon.textContent = v.message;
+
+    messageItem.appendChild(messageTime);
+    messageItem.appendChild(messageBalloon);
     messageHistory.appendChild(messageItem);
 
     window.scrollTo(0, document.body.scrollHeight);
@@ -262,7 +321,7 @@ function showChatRoomTitle(chatRoomID) {
 
   // Create chat room title
   let contact = document.createElement("div");
-  contact.classList.add("contactHeader");
+  contact.classList.add("contactHeader", "page-title");
 
   // Get the user's information
   getDocument("users", contactUserID)
@@ -282,6 +341,7 @@ function showChatRoomTitle(chatRoomID) {
       address.textContent = user.address ?? "";
 
       let requesterInfo = document.createElement("div");
+      requesterInfo.classList.add("information");
       requesterInfo.appendChild(requesterName);
       requesterInfo.appendChild(address);
       contact.appendChild(requesterInfo);
