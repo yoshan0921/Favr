@@ -84,7 +84,6 @@
 }
 
 #messageHistory .time {
-  margin-left: auto;
   width: fit-content;
 }
 
@@ -106,6 +105,11 @@
 #messageHistory .message-right {
   align-self: end;
   max-width: 90%;
+}
+
+#messageHistory .message-right .time {
+  margin-left: auto;
+  width: fit-content;
 }
 
 #messageHistory .message-right .messageBalloon {
