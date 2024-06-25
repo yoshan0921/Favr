@@ -9,6 +9,11 @@
   gap: 0.5rem;
   align-items: center;
 }
+
+.hide-steps-counter {
+  display: none;
+}
+
 .step1,
 .step2,
 .step3,
@@ -57,20 +62,21 @@ ul.selection-list {
   margin-bottom: 1rem;
 
   li {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border-left: 4px solid var(--primary);
     padding-left: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: bold;
   }
 }
 
 form {
-  border: thin solid gray;
+  /* border: thin solid gray; */
   margin: auto;
   min-width: 400px;
   min-height: 50vh;
   width: 100%;
-  max-width: 90vw;
+  /* max-width: 90vw; */
   display: flex;
   flex-flow: column wrap;
   gap: 2rem;
@@ -115,34 +121,100 @@ form {
 #step-2 .form-group select,
 #step-3 .form-group input,
 #step-3 .form-group select {
-  height: 30px;
+  height: 50px;
+  padding: .5rem;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  border: 1px solid var(--primary);
+}
+
+#step-4 .form-group textarea {
+  padding: .5rem;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  border: 1px solid var(--primary);
+}
+
+#step-2 .form-group input:focus,
+#step-3 .form-group input:focus,
+#step-4 .form-group textarea:focus {
+  outline: none;
+  border: 1px solid var(--primary);
+  background-color: #D0E1E7;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+#step-2 .form-group input:not(:placeholder-shown),
+#step-3 .form-group input:not(:placeholder-shown) {
+  /* background-color: #D0E1E7; */
+}
+
+#step-2 .form-group label,
+#step-3 .form-group label,
+#step-4 .form-group label {
+  display: block;
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem 0;
 }
 
 #step-4 textarea {
   display: flex;
   width: 100%;
-  max-width: 400px;
+  /* max-width: 400px; */
   height: 100px;
   margin-bottom: 1rem;
+}
+
+.summary {
+  padding: 1rem;
 }
 
 .summary h2 {
   text-align: center;
 }
 
+.favor-summary {
+  padding: 0 1rem 1rem 1rem;
+  border: 1px solid var(--primary);
+  margin: 2rem 0;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
 #statusList {
   display: flex;
-  justify-content: space-evenly;
+  flex-flow: column nowrap;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+/* Default status when creating a task */
+.statusColor {
+  display: inline-block;
+  background-color: #ffcd29;
+  border-radius: 50%;
+  height: 14px;
+  width: 14px;
+  margin-right: 0.5rem;
 }
 
 ul#summaryList {
   margin-bottom: 1rem;
 
   li {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border-left: 4px solid var(--primary);
     padding-left: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: bold;
   }
 }
 
@@ -154,10 +226,12 @@ ul#summaryList {
   flex: 1;
   box-sizing: border-box;
   text-align: center;
-  border: thin solid gray;
+  /* border: thin solid gray; */
   padding: 1rem 2rem;
   border-radius: 10px;
   transition: 0.25s;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 
   /* Center text */
   display: flex;
@@ -171,11 +245,50 @@ ul#summaryList {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  padding: 1rem;
 }
 .favorOption:hover {
   cursor: pointer;
   color: white;
   background-color: var(--primary);
+}
+
+.favor-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.favor-buttons button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0 1rem;
+}
+
+.btn-active {
+  color: white !important;
+  background-color: var(--primary) !important;
+}
+
+.home-button {
+  display: flex;
+  justify-content: center;
+}
+
+#errorMsg {
+  text-align: center;
+  color: red;
+  position: relative;
+  top: -10px;
+}
+
+#errorMsg2 {
+  color: red;
+  position: relative;
+  top: -20px;
+}
+
+.mapHidden {
+  display: none;
 }
 
 @media only screen and (min-width: 800px) {
@@ -186,17 +299,17 @@ ul#summaryList {
 
   #step-2 .form-group,
   #step-3 .form-group {
-    flex-flow: row nowrap;
+    /* flex-flow: row nowrap; */
   }
 
   #step-2 .form-group input,
   #step-3 .form-group input {
-    margin-right: 2rem;
+    /* margin-right: 2rem; */
   }
 
   #step-2 .form-group label,
   #step-3 .form-group label {
-    margin-right: 0.5rem;
+    /* margin-right: 0.5rem; */
   }
 
   .favorOption {
@@ -206,6 +319,16 @@ ul#summaryList {
   .stepText {
     display: block;
   }
+
+  #statusList {
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+  }
+
+  .home-button {
+    justify-content: end;
+  }
+
 }
 
 /* Cocoy, please adjust the folloeing CSS             */

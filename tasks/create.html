@@ -53,6 +53,7 @@
             <!-- Step 1 -->
             <div class="step" id="step-1">
                 <h2>Select a favor type</h2>
+                <div id="errorMsg"></div>
                 <div class="selection-history">
                     <!--This is the list that register all the user's inputs on each step. Each step div will have this list and all of them should be updated when the "next step" button is clicked. I left hints on createTask.js on how to do this-->
                     <ul class="selection-list">
@@ -92,11 +93,11 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="favorDate">Date</label>
+                    <label for="favorDate">Select date</label>
                     <input type="date" name="favorDate" id="favorDate">
-                    <label for="favorTime">Start Time</label>
+                    <label for="favorTime">Select time</label>
                     <input type="time" name="favorTime" id="favorTime">
-                    <label for="favorLength">Duration</label>
+                    <!-- <label for="favorLength">Duration</label>
                     <select id="favorLength" name="favorLength">
                         <option value="30 mins" selected>30 mins</option>
                         <option value="1 hr">1 hr</option>
@@ -104,7 +105,7 @@
                         <option value="2 hrs">2 hrs</option>
                         <option value="2.5 hrs">2.5 hrs</option>
                         <option value="3 hrs">3 hrs</option>
-                    </select>
+                    </select> -->
                 </div>
             </div>
             <div class="step hidden" id="step-3">
@@ -118,12 +119,13 @@
                 <div class="form-group">
                     <label for="startAddress">Start Address</label>
                     <input id="startAddress" name="startAddress" placeholder="Input your address" type="text" class="address"></input>
-                    <div id="startMap" class="map"></div>
+                    <div id="errorMsg2"></div>
+                    <div id="startMap" class="map mapHidden"></div>
                 </div>
                 <div class="form-group">
                     <label for="endAddress">End Address (Optional)</label>
                     <input id="endAddress" name="endAddress" placeholder="Input your address" type="text" class="address"></input>
-                    <div id="endMap" class="map"></div>
+                    <div id="endMap" class="map mapHidden"></div>
                 </div>
             </div>
             <div class="step hidden" id="step-4">
@@ -135,7 +137,7 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="notes">Details</label>
+                    <label for="notes">Note (optional)</label>
                     <textarea name="" id="notes"></textarea>
                 </div>
                 <!-- Try to move the location of submit button to next step button location -->
@@ -146,10 +148,10 @@
         </form>
 
         <div class="container form-navigation">
-            <button id="previousStepBtn">Previous step</button>
-            <button id="nextStepBtn">Next step</button>
+            <button id="previousStepBtn" class="rounded-btn link-btn outlined-btn">&lt; Previous</button>
+            <button id="nextStepBtn" class="rounded-btn link-btn outlined-btn">Next step &gt;</button>
             <!-- Submit button will be visible in step 4 -->
-            <button id="submitBtn" class="hidden" type="submit" form="createTaskForm">Submit</button>
+            <button id="submitBtn" class="hidden rounded-btn link-btn outlined-btn btn-active" type="submit" form="createTaskForm">Submit</button>
         </div>
 
         <!-- Summary Section -->
@@ -159,13 +161,20 @@
             <div id="statusList">
                 <!-- Status will be added here -->
             </div>
-
-            <h2>Favor Summary</h2>
-            <ul id="summaryList">
-                <!-- Summary items will be added here -->
-            </ul>
-
-            <button id="backToHome">Homepage</button>
+            
+            <div class="favor-summary">
+                <h2>Favor Summary</h2>
+                <ul id="summaryList">
+                    <!-- Summary items will be added here -->
+                </ul>
+                <div class="favor-buttons">
+                    <button id="cancelFavor" class="rounded-btn link-btn outlined-btn">Cancel Favor</button>
+                    <button id="editFavor" class="rounded-btn link-btn outlined-btn btn-active">Edit</button>
+                </div>
+            </div>
+            <div class="home-button">
+                <button id="backToHome">Homepage</button>
+            </div>
 
         </div>
 
