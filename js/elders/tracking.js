@@ -147,6 +147,9 @@ const cancelFavorBtn = document.getElementById("cancelFavor");
 cancelFavorBtn.addEventListener("click", () => {
   const modal = document.getElementById("confirmModal");
   openModal(modal); // Call openModal with modal element
+  const modalFavor = document.getElementById("modalFavor");
+  const modalFavorSpan = modalFavor.querySelector("span");
+  modalFavorSpan.innerText = taskData.name;
 });
 
 // Event listener for modal back button
@@ -154,6 +157,12 @@ const modalBackBtn = document.getElementById("modalBackBtn");
 modalBackBtn.addEventListener("click", () => {
   const modal = document.getElementById("confirmModal");
   closeModal(modal);
+});
+
+// Event listener to go back to home
+const homeBtn = document.getElementById("homeBtn");
+homeBtn.addEventListener("click", () => {
+  window.location.href = "../dashboard.html"; // Navigate to dashboard.html
 });
 
 // Update task status to cancelled
@@ -181,8 +190,9 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     });
     console.log("Task status updated");
 
-    // Display alert confirming favor cancellation
-    alert("Favor Cancelled");
+    // Display the success modal
+    const successModal = document.getElementById("successModal");
+    openModal(successModal);
 
     // Close the modal after updating task status
     const modal = document.getElementById("confirmModal");

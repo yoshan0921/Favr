@@ -164,7 +164,8 @@ function runFunction() {
             // selectionHistory.push(`Favor Length: ${favorLength}`);
             canProceed = true;
           } else {
-            alert("Enter a date and time.");
+            // alert("Enter a date and time.");
+            console.log("Enter a date and time");
           }
           break;
 
