@@ -197,6 +197,10 @@ async function runFunction() {
       // Load firebase storage images
       lazyLoadImages();
     });
+
+    // Loading icon
+    const main = document.getElementsByTagName("main")[0];
+    main.classList.add("loaded");
   });
 }
 
