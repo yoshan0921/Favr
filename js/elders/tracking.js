@@ -1,5 +1,5 @@
 import { getDocument, updateDocument, deleteDocument } from "../firebase/firestore.js";
-import { openModal, closeModal } from "../common.js";
+import { openModal, closeModal, lazyLoadImages } from "../common.js";
 import { enableBackButton } from "../utils.js";
 
 // TODO: Need to define placeholder image properly
@@ -42,8 +42,7 @@ function runFunction() {
 }
 
 // Display summary
-displayTaskSummary(taskID)
-.then(()=>{
+displayTaskSummary(taskID).then(() => {
   const main = document.getElementsByTagName("main")[0];
   main.classList.add("loaded");
   enableBackButton();
@@ -69,27 +68,27 @@ async function displayTaskSummary(taskID) {
     // Change color of statusColor depending on status
     const statusColor = document.querySelector(".statusColor");
     if (task.status == "Waiting to be accepted") {
-        statusColor.style.backgroundColor = "red";
+      statusColor.style.backgroundColor = "red";
     }
 
-    switch(task.status) {
-        case "Waiting to be accepted":
-            statusColor.style.backgroundColor = "#ffcd29";
-            break;
-        case "On going":
-            statusColor.style.backgroundColor = "#0D99FF";
-            break;
-        case "Pending approval":
-            statusColor.style.backgroundColor = "#ffcd29";
-            break;
-        case "Completed":
-            statusColor.style.backgroundColor = "#44c451";
-            break;
-        case "Cancelled":
-            statusColor.style.backgroundColor = "#f24822";
-            break;
-        default:
-            statusColor.style.backgroundColor = "white";
+    switch (task.status) {
+      case "Waiting to be accepted":
+        statusColor.style.backgroundColor = "#ffcd29";
+        break;
+      case "On going":
+        statusColor.style.backgroundColor = "#0D99FF";
+        break;
+      case "Pending approval":
+        statusColor.style.backgroundColor = "#ffcd29";
+        break;
+      case "Completed":
+        statusColor.style.backgroundColor = "#44c451";
+        break;
+      case "Cancelled":
+        statusColor.style.backgroundColor = "#f24822";
+        break;
+      default:
+        statusColor.style.backgroundColor = "white";
     }
 
     console.log(task.status);
@@ -105,12 +104,12 @@ async function displayTaskSummary(taskID) {
       dateData.innerHTML = task.cancelledDate;
       timeData.innerHTML = task.cancelledTime;
 
-    // Update Date and Time if it is completed
+      // Update Date and Time if it is completed
     } else if (task.status == "Completed" && task.completedDate) {
       dateData.innerHTML = task.completedDate;
       timeData.innerHTML = task.completedTime;
 
-    // Default
+      // Default
     } else {
       dateData.innerHTML = task.details.date;
       timeData.innerHTML = task.details.time;
@@ -136,8 +135,8 @@ async function displayTaskSummary(taskID) {
       `;
     }
 
-    console.log(volunteer.profilePictureURL);
-
+    // Apply lazy loading to images
+    lazyLoadImages();
   } catch (error) {
     console.log("Error fetching task:", error);
   }
@@ -163,22 +162,22 @@ modalCancelFavorBtn.addEventListener("click", async () => {
   try {
     // Get the current date and time, formatted with international format
     const now = new Date();
-    const cancelledDate = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit'
+    const cancelledDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
     }).format(now);
-    const cancelledTime = now.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
+    const cancelledTime = now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
     });
-    
+
     // Update task status to "Cancelled" in Firestore
     await updateDocument("tasks", taskID, {
       status: "Cancelled",
       cancelledDate: cancelledDate,
-      cancelledTime: cancelledTime
+      cancelledTime: cancelledTime,
     });
     console.log("Task status updated");
 
