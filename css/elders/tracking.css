@@ -5,9 +5,9 @@
     .trackingHeader {
         display: flex;
         flex-flow: column nowrap;
-        align-items: center;
+        /* align-items: center; */
         gap: 1rem;
-        border-bottom: 1px solid black;
+        /* border-bottom: 1px solid black; */
 
         h2 {
             padding: 0;
@@ -39,16 +39,21 @@
         padding: 0;
 
         li {
+            font-size: 1.1rem;
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 1rem;
             padding: 1rem 0;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid var(--primary);
             align-items: center;
 
             p:nth-child(2) {
-                font-weight: bold;
+                /* font-weight: bold; */
             }
+        }
+
+        li:first-child {
+            border-top: 1px solid var(--primary);
         }
 
         li > *:nth-child(2) {
@@ -62,6 +67,62 @@
     justify-content: center;
     gap: 2rem;
 
+}
+
+/* Volunteer Information */
+.requester {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.requester .photo {
+    display: block;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+
+.requester .name {
+    font-weight: bold;
+}
+
+/* Modal Styles */
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+  
+.modal-content {
+    background-color: #fefefe;
+    padding: 2rem;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    position: relative;
+
+    h2 {
+        text-align: center;
+    }
+}
+
+.modal button {
+    font-size: 1.1rem;
+    padding: .25rem 2rem;
+}
+
+.btn-active {
+    color: white !important;
+    background-color: var(--primary) !important;
 }
 
 @media only screen and (min-width: 800px) {
@@ -81,7 +142,7 @@
 
         ul {
             li {
-                grid-template-columns: 1fr 5fr;
+                grid-template-columns: 120px 5fr;
             }
 
             li > *:nth-child(2) {
