@@ -5,12 +5,6 @@ import { redirect } from "./utils.js";
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
-// Task status
-const STATUS_WAITING = "Waiting to be accepted";
-const STATUS_ONGOING = "On going";
-const STATUS_PENDING = "Pending approval";
-const STATUS_COMPLETED = "Completed";
-const STATUS_CANCELLED = "Cancelled";
 
 let currentUserID;
 let favorCountCompleted = 0;
@@ -294,6 +288,7 @@ async function createTaskListForVolunteers(allTasks) {
     let taskDetails = task[1]; // Task detail data
     let linkURL = "#"; // Link URL for the task card
 
+
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
@@ -302,11 +297,11 @@ async function createTaskListForVolunteers(allTasks) {
 
         // Set the link URL for the task card
         if (taskDetails.status === STATUS_PENDING) {
-          linkURL = "/tasks/taskDetailPending.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else if (taskDetails.status === STATUS_COMPLETED) {
-          linkURL = "/tasks/taskDetailCompleted.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else if (taskDetails.status === STATUS_CANCELLED) {
-          linkURL = "/tasks/taskDetailCancelled.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else {
           linkURL = "#";
         }
@@ -440,3 +435,4 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
     target.appendChild(card);
   });
 }
+ 

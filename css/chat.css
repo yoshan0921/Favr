@@ -13,8 +13,8 @@
 .contact .photo {
   display: block;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
 }
 
 .contact .userInfo {
@@ -171,6 +171,7 @@ header .container .contactHeader {
   border-radius: 50%;
   width: 60px;
   height: 60px;
+  margin: 4px;
 }
 
 .contactHeader .information {
