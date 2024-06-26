@@ -21,7 +21,7 @@ let pageTitles = {
   "history.html": "History",
   "profile/edit.html": "Profile",
   "tasks/create.html": "Request favor",
-  "tasks/tracking.html": "Favor Tracking",
+  "tasks/elder-favor.html": "Favor Tracking",
   "tasks/details.html": "Task Details",
   "tasks/updates.html": "Updates",
   "tasks/accept.html": "Accept Favor",
@@ -146,8 +146,10 @@ function activateMenuLinkAndBackButton() {
   }
   if (currentPageRequiresBackButton) {
     enableBackButton();
-    const headerLogo = document.getElementsByClassName("logo-wrapper");
+    const headerLogo = document.getElementsByClassName("logo-wrapper")[0];
     headerLogo.classList.add("disappear-mobile");
+    const menu = document.getElementsByClassName("sidebar")[0];
+    menu.classList.add("disappear-mobile");
   }
 }
 /**
