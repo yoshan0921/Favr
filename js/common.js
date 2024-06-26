@@ -22,10 +22,8 @@ let pageTitles = {
   "profile/edit.html": "Profile",
   "tasks/create.html": "Request favor",
   "tasks/elder-favor.html": "Favor Tracking",
-  "tasks/details.html": "Task Details",
+  "tasks/volunteer-favr.html": "Favor Details",
   "tasks/updates.html": "Updates",
-  "tasks/accept.html": "Accept Favor",
-  "tasks/myfavr.html": "Ongoing Favor",
   "support.html": "Get support",
   "chat.html": "Messages",
 };
