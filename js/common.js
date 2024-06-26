@@ -1,6 +1,16 @@
 import { enableBackButton, redirect, signOut } from "./utils.js";
 import { getFile } from "./firebase/firestore.js";
 import { checkUserAuthorization } from "./firebase/authentication.js";
+
+/**
+ * GLOBAL VARIABLES: Task Status
+ */
+Object.defineProperty(window, "STATUS_WAITING", { value: "Waiting to be accepted", writable: false });
+Object.defineProperty(window, "STATUS_ONGOING", { value: "On going", writable: false });
+Object.defineProperty(window, "STATUS_PENDING", { value: "Pending approval", writable: false });
+Object.defineProperty(window, "STATUS_COMPLETED", { value: "Completed", writable: false });
+Object.defineProperty(window, "STATUS_CANCELLED", { value: "Cancelled", writable: false });
+
 /**
  * An object that maps some pages to their title that will show to the user
  * on the page <header>

@@ -299,6 +299,7 @@ header .container .logo-wrapper #desktopLogo {
   display: none;
   min-width: 50px;
   max-width: 150px;
+  height: 68px;
 }
 header .container .logo-wrapper #mobileLogo {
   min-width: 40px;
@@ -311,8 +312,8 @@ header .container .page-title-wrapper {
   flex-grow: 1;
   display: flex;
 }
-header .container .page-title-wrapper h1{
-  font-size: clamp(1.8rem,5vw,2.5rem);
+header .container .page-title-wrapper h1 {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
 }
 header .container .page-title-wrapper .back-btn-wrapper {
   display: none;
@@ -345,7 +346,7 @@ main .page-header {
 .chat-icon-wrapper a span {
   display: none;
 }
-.chat-icon-wrapper .icon::after{
+.chat-icon-wrapper .icon::after {
   filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
 }
 
@@ -633,8 +634,8 @@ main.loaded .loading-screen {
 .filter-icon::after {
   content: url("../assets/icons/filter.svg") !important;
 }
-.chat-icon::after{
-  content: url('../assets/icons/chat.svg') !important;
+.chat-icon::after {
+  content: url("../assets/icons/chat.svg") !important;
   filter: none !important;
 }
 .question-icon::after {
@@ -646,8 +647,8 @@ main.loaded .loading-screen {
 .email-icon::after {
   content: url("../assets/icons/email.svg") !important;
 }
-.add-icon::after{
-  content: url('../assets/icons/add.svg') !important;
+.add-icon::after {
+  content: url("../assets/icons/add.svg") !important;
 }
 /*
 =========================
@@ -695,7 +696,7 @@ Media queries
   header .container > div {
     padding: 0.5rem;
   }
-  header .chat-icon-wrapper a span{
+  header .chat-icon-wrapper a span {
     display: block;
   }
   #btn,
@@ -725,7 +726,7 @@ Media queries
   }
   header .container .logo-wrapper a {
     width: 70%;
-    align-self: end;
+    align-self: center;
   }
   header .container .logo-wrapper .img-wrapper {
     display: flex;
