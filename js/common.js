@@ -1,6 +1,16 @@
 import { enableBackButton, redirect, signOut } from "./utils.js";
 import { getFile } from "./firebase/firestore.js";
 import { checkUserAuthorization } from "./firebase/authentication.js";
+
+/**
+ * GLOBAL VARIABLES: Task Status
+ */
+Object.defineProperty(window, "STATUS_WAITING", { value: "Waiting to be accepted", writable: false });
+Object.defineProperty(window, "STATUS_ONGOING", { value: "On going", writable: false });
+Object.defineProperty(window, "STATUS_PENDING", { value: "Pending approval", writable: false });
+Object.defineProperty(window, "STATUS_COMPLETED", { value: "Completed", writable: false });
+Object.defineProperty(window, "STATUS_CANCELLED", { value: "Cancelled", writable: false });
+
 /**
  * An object that maps some pages to their title that will show to the user
  * on the page <header>
@@ -11,7 +21,7 @@ let pageTitles = {
   "history.html": "History",
   "profile/edit.html": "Profile",
   "tasks/create.html": "Request favor",
-  "tasks/tracking.html": "Favor Tracking",
+  "tasks/elder-favor.html": "Favor Tracking",
   "tasks/details.html": "Task Details",
   "tasks/updates.html": "Updates",
   "tasks/accept.html": "Accept Favor",
@@ -136,8 +146,10 @@ function activateMenuLinkAndBackButton() {
   }
   if (currentPageRequiresBackButton) {
     enableBackButton();
-    const headerLogo = document.getElementsByClassName("logo-wrapper");
+    const headerLogo = document.getElementsByClassName("logo-wrapper")[0];
     headerLogo.classList.add("disappear-mobile");
+    const menu = document.getElementsByClassName("sidebar")[0];
+    menu.classList.add("disappear-mobile");
   }
 }
 /**

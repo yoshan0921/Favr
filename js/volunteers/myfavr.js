@@ -3,6 +3,7 @@ import { updateDocument, getDocument, getFile } from "../firebase/firestore.js";
 
 let taskID;
 let taskData = {};
+let chatRoomID;
 
 
 /**
@@ -53,6 +54,7 @@ function runFunction() {
 
         completedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         approvedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
+
         
         getFile("profile/" + user.profilePictureURL)
         .then((url) => {
@@ -67,6 +69,9 @@ function runFunction() {
         taskAddress.innerHTML = taskData.details.startAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
         taskNote.innerHTML = taskData.notes;
+
+        // Create chat room name from sorted two user IDs
+        chatRoomID = [getCurrentUserID(), taskData.requesterID].sort().join("-");
       });
     })
     .catch((error) => {
@@ -154,3 +159,7 @@ document.getElementById("cancelBtn").addEventListener("click", async function ()
 
 });
 
+// Link to chat room
+document.getElementById("contactBtn").addEventListener("click", function () {
+  window.location.href = `/chat.html?crid=${chatRoomID}`;
+});

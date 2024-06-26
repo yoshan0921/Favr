@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" src="../js/common.js"></script>
   <script type="module" src="../js/elders/tracking.js"></script>
+  <!-- <script type="module" src="../js/history.js"></script> -->
   <link rel="stylesheet" type="text/css" href="../css/styles.css">
   <link rel="stylesheet" type="text/css" href="../css/elders/tracking.css">
   <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
@@ -34,23 +35,25 @@
           <h2><span id="favorTypeH2"></span></h2>
           <h3><span class="statusColor"></span><span id="taskStatus"></span></h3>
         </div>
+        <div id="volunteerInfo"></div>
+        
         <ul>
-          <li>
+          <!-- <li>
             <p class="label">Favor Type:</p>
             <p id="favorType"></p>
-          </li>
+          </li> -->
           <li>
-            <p class="label">Date:</p>
+            <p id="dateLabel" class="label">Date:</p>
             <p id="date"></p>
           </li>
           <li>
-            <p class="label">Start Time:</p>
+            <p id="timeLabel" class="label">Time:</p>
             <p id="time"></p>          
           </li>
-          <li>
+          <!-- <li>
             <p class="label">Duration:</p>
             <p id="favorLength"></p>          
-          </li>
+          </li> -->
           <li>
             <p class="label">Start Address:</p>
             <p id="startAddress"></p>
@@ -59,19 +62,19 @@
             <p class="label">End Address:</p>
             <p id="endAddress"></p>
           </li>
-          <li>
+          <!-- <li>
             <p class="label">Favor ID:</p>
             <p id="taskID"></p>
-          </li>
+          </li> -->
           <li>
-            <p class="label">Details:</p>
+            <p class="label">Note:</p>
             <p id="notes"></p>
           </li>
         </ul>
       </div>
 
       <div class="buttonRow">
-        <a href="#" class="rounded-btn link-btn outlined-btn">Cancel</a>
+        <a id="cancelFavor" href="#" class="rounded-btn link-btn outlined-btn">Cancel Favor</a>
         <a href="../support.html" class="rounded-btn link-btn outlined-btn">Get Support</a>
       </div>
     </div>
@@ -80,6 +83,27 @@
 
   <!-- Footer -->
   <footer id="footer"></footer>
+
+  <!-- Modal to confirm delete -->
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <h2 id="modalFavor">Are you sure you want to cancel the <span>current</span> Favor?</h2>
+      <div class="buttonRow">
+        <button id="modalBackBtn" class="rounded-btn link-btn outlined-btn">Back</button>
+        <button id="modalCancelFavor" class="rounded-btn link-btn outlined-btn btn-active">Yes!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal to acknowledge successful cancel of favor -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <h2>Favor Cancelled Successfully</h2>
+      <div class="buttonRow">
+        <button id="homeBtn" class="rounded-btn link-btn outlined-btn btn-active">Homepage</button>
+      </div>
+    </div>
+  </div>
 
 </body>
 

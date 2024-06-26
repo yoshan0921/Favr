@@ -84,13 +84,11 @@
 /* -------------------------------------------------- */
 /* Elder: Favor List View                             */
 /* -------------------------------------------------- */
-.create-button-wrapper .add-icon{
+.create-button-wrapper .add-icon {
   align-content: center;
-  border: 1px solid var(--pureWhite);
-  border-radius: 50%;
 }
-.create-button-wrapper .add-icon::after{
-  filter: invert(100%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+.create-button-wrapper .add-icon::after {
+  filter: invert(0%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
 
   align-self: center;
   position: relative;
@@ -100,7 +98,7 @@
   aspect-ratio: 1;
   justify-content: center;
   position: relative;
-  top: 2px;
+  top: 0px;
 }
 .elder h2 {
   padding: 0;
@@ -115,11 +113,26 @@
 
 .elder .taskCard .statusColor {
   display: inline-block;
-  background-color: #fff;
   border-radius: 50%;
   height: 10px;
   width: 10px;
   margin-right: 0.5rem;
+}
+
+.statusWaiting {
+  background-color: var(--statusYellow);
+}
+
+.statusOngoing {
+  background-color: var(--statusBlue);
+}
+
+.statusPending {
+  background-color: var(--warmRed);
+}
+
+.statusOhers {
+  background-color: var(--pureWhite);
 }
 
 /* -------------------------------------------------- */

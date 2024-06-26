@@ -1,6 +1,6 @@
 import { firestore, storage } from "./firebase.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-import { getDocs, doc, addDoc, setDoc, getDoc, deleteDoc, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocs, doc, addDoc, setDoc, getDoc, deleteDoc, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ======================
 // Classes (data models)
@@ -186,7 +186,8 @@ async function createDocument(collectionPath, object) {
 async function updateDocument(collectionPath, id, object) {
   try {
     const documentReference = doc(firestore, collectionPath, id).withConverter(selectDataConverter(collectionPath));
-    return setDoc(documentReference, object);
+    // return setDoc(documentReference, object); // setDoc overwrites all document values to null, so changed to updateDoc
+    return updateDoc(documentReference, object);
   } catch (error) {
     throw error;
   }

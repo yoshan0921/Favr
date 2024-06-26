@@ -5,14 +5,10 @@ import { redirect } from "./utils.js";
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
-// Task status
-const STATUS_WAITING = "Waiting to be accepted";
-const STATUS_ONGOING = "On going";
-const STATUS_PENDING = "Pending approval";
-const STATUS_COMPLETED = "Completed";
-const STATUS_CANCELLED = "Cancelled";
 
 let currentUserID;
+let favorCountCompleted = 0;
+let favorCountCancelled = 0;
 
 window.addEventListener("load", function (event) {
   // Check if the user is logged in
@@ -130,9 +126,11 @@ async function createTaskListForElders(allTasks) {
 
         // Set the link URL for the task card
         if (taskDetails.status === "Completed") {
-          linkURL = "/tasks/volunteer-favor.html";
+          // linkURL = "/tasks/taskDetailCompleted.html";
+          linkURL = "/tasks/elder-favor.html";
         } else if (taskDetails.status === "Cancelled") {
-          linkURL = "/tasks/volunteer-favor.html";
+          // linkURL = "/tasks/taskDetailCancelled.html";
+          linkURL = "/tasks/elder-favor.html";
         } else {
           linkURL = "#";
         }
@@ -186,6 +184,8 @@ async function createTaskListForElders(allTasks) {
 function createCardForElder(task) {
   const listCompleted = document.getElementById("taskListCompleted");
   const listCancelled = document.getElementById("taskListCancelled");
+  const listMyFavorCountCompleted = document.getElementById("favorCountCompleted");
+  const listMyFavorCountCancelled = document.getElementById("favorCountCancelled");
 
   const card = document.createElement("div");
   card.classList.add("taskCard");
@@ -213,8 +213,10 @@ function createCardForElder(task) {
   // Append card to the correct list based on the task status
   if (["Completed"].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
+    listMyFavorCountCompleted.innerHTML = ++favorCountCompleted;
   } else if (["Cancelled"].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
+    listMyFavorCountCancelled.innerHTML = ++favorCountCancelled;
   }
 }
 

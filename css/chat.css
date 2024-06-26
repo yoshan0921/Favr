@@ -1,5 +1,5 @@
 /* -------------------------------------------------- */
-/* Task Card                                          */
+/* Contact List                                       */
 /* -------------------------------------------------- */
 .contact {
   display: flex;
@@ -10,21 +10,31 @@
   padding: 1.5rem 0rem;
 }
 
-.contact .title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
 .contact .photo {
   display: block;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
 }
 
-.contact .name {
+.contact .userInfo {
+  display: flex;
+  flex: 1 1 auto;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.contact .userInfo .name {
   font-weight: bold;
+  flex: 1 1 50%;
+}
+
+.contact .userInfo .lastMessageTime {
+  flex: 0 1 auto;
+}
+
+.contact .userInfo .lastMessage {
+  flex: 1 1 100%;
 }
 
 /* -------------------------------------------------- */
@@ -53,26 +63,56 @@
   }
 }
 
-.messageBox {
+#messageHistory .date {
+  display: flex;
+  align-items: center;
+  border-radius: 15px;
+}
+
+#messageHistory .date:before,
+#messageHistory .date:after {
+  content: "";
+  height: 1px;
+  flex-grow: 1;
+  background-color: var(--lightBorder);
+}
+
+#messageHistory .date span {
+  border: 1px solid var(--lightBorder);
+  border-radius: 15px;
+  padding: 0.2rem 0.5rem;
+}
+
+#messageHistory .time {
+  width: fit-content;
+}
+
+#messageHistory .messageBalloon {
   background-color: var(--pureWhite);
   border-radius: 15px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   padding: 0.2rem 0.5rem;
   margin-bottom: 0.5rem;
-  width: auto;
+  margin-left: auto;
+  width: fit-content;
 }
 
-.message-left {
+#messageHistory .message-left {
   align-self: start;
   max-width: 90%;
 }
 
-.message-right {
+#messageHistory .message-right {
   align-self: end;
   max-width: 90%;
 }
 
-.message-right .messageBox {
+#messageHistory .message-right .time {
+  margin-left: auto;
+  width: fit-content;
+}
+
+#messageHistory .message-right .messageBalloon {
   background-color: var(--primary);
   color: white;
 }
@@ -82,6 +122,12 @@
   gap: 0.5rem;
   align-content: center;
   flex-flow: row nowrap;
+
+  /* position: fixed;
+  bottom: calc(2rem + 45px);
+  right: 2rem;
+  margin-left: 240px;
+  width: calc(100% - 240px - 4rem); */
 }
 
 #sendMessage .message {
@@ -98,4 +144,51 @@
 #sendMessage .button {
   flex: 0 0 auto;
   border-radius: 50%;
+}
+
+/* -------------------------------------------------- */
+/* Chat Page Header                                   */
+/* -------------------------------------------------- */
+header .container .contactHeader {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  @media screen and (min-width: 800px) {
+    padding-left: 2rem;
+    flex: 1 1 auto;
+    flex-flow: row nowrap;
+  }
+}
+
+.contactHeader .title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.contactHeader .photo {
+  display: block;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin: 4px;
+}
+
+.contactHeader .information {
+  display: flex;
+  flex: 1 1 auto;
+  flex-flow: column nowrap;
+  align-items: start;
+}
+
+.contactHeader .information .name {
+  font-weight: bold;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.contactHeader .information .address {
+  text-align: left;
+  white-space: nowrap;
+  max-width: 100px;
 }

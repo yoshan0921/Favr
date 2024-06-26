@@ -43,8 +43,11 @@ body {
 .min-height-100vh {
   min-height: 100vh;
 }
-.disappear-mobile {
-  display: none;
+.disappear-mobile{
+  padding: 0 !important;
+}
+header .container .disappear-mobile a{
+  display: none !important;
 }
 
 ul {
@@ -52,7 +55,7 @@ ul {
 }
 
 body {
-  background-color: var(--background-gray);
+  background-color: var(--background);
   color: var(--text);
   font-size: 16px;
   line-height: 1.75em;
@@ -108,6 +111,7 @@ h3.light {
   font-size: 2rem;
 }
 #backBtn span {
+  display: none;
   font-size: 1rem;
 }
 button,
@@ -248,7 +252,7 @@ body:not(#indexBody) {
   grid-template-rows: auto 1fr auto;
 }
 header {
-  background-color: var(--background);
+  background-color: var(--pureWhite);
   z-index: 4;
   position: fixed;
   left: 0;
@@ -256,6 +260,7 @@ header {
   top: 0;
   grid-row: 1;
   grid-column: 1 / 3;
+  border-bottom: 1px solid color-mix(in hsl, var(--primary) 40%, var(--pureWhite) 100%);
 }
 
 #leftside-column {
@@ -299,6 +304,7 @@ header .container .logo-wrapper #desktopLogo {
   display: none;
   min-width: 50px;
   max-width: 150px;
+  height: 68px;
 }
 header .container .logo-wrapper #mobileLogo {
   min-width: 40px;
@@ -312,7 +318,7 @@ header .container .page-title-wrapper {
   display: flex;
 }
 header .container .page-title-wrapper h1{
-  font-size: clamp(1.8rem,5vw,2.5rem);
+  font-size: clamp(1.6rem, 5vw,2rem);
 }
 header .container .page-title-wrapper .back-btn-wrapper {
   display: none;
@@ -345,7 +351,7 @@ main .page-header {
 .chat-icon-wrapper a span {
   display: none;
 }
-.chat-icon-wrapper .icon::after{
+.chat-icon-wrapper .icon::after {
   filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
 }
 
@@ -427,6 +433,9 @@ main.loaded .loading-screen {
   padding: 10px;
   z-index: 3; /* Bring sidebar front in mobile screen */
   border-top: 2px solid var(--primary);
+}
+.sidebar.disappear-mobile{
+  display: none;
 }
 .sidebar ul {
   list-style: none;
@@ -633,8 +642,8 @@ main.loaded .loading-screen {
 .filter-icon::after {
   content: url("../assets/icons/filter.svg") !important;
 }
-.chat-icon::after{
-  content: url('../assets/icons/chat.svg') !important;
+.chat-icon::after {
+  content: url("../assets/icons/chat.svg") !important;
   filter: none !important;
 }
 .question-icon::after {
@@ -646,8 +655,8 @@ main.loaded .loading-screen {
 .email-icon::after {
   content: url("../assets/icons/email.svg") !important;
 }
-.add-icon::after{
-  content: url('../assets/icons/add.svg') !important;
+.add-icon::after {
+  content: url("../assets/icons/add.svg") !important;
 }
 /*
 =========================
@@ -678,8 +687,11 @@ Media queries
   main {
     grid-column: 2/-1;
   }
-  .disappear-mobile {
-    display: block;
+  header .container .disappear-mobile a{
+    display: block !important;
+  }
+  .sidebar.disappear-mobile{
+    display: flex;
   }
   .sidebar {
     grid-row: 1/-1;
@@ -695,7 +707,7 @@ Media queries
   header .container > div {
     padding: 0.5rem;
   }
-  header .chat-icon-wrapper a span{
+  header .chat-icon-wrapper a span {
     display: block;
   }
   #btn,
@@ -720,12 +732,13 @@ Media queries
     flex-flow: row nowrap;
   }
   header .container .back-btn-wrapper #backBtn span {
+    display: block;
     font-size: 1.5rem;
     font-weight: 700;
   }
   header .container .logo-wrapper a {
     width: 70%;
-    align-self: end;
+    align-self: center;
   }
   header .container .logo-wrapper .img-wrapper {
     display: flex;
@@ -758,7 +771,7 @@ Media queries
 
   .content {
     position: relative;
-    padding: 2rem;
+    padding: 1rem 2rem;
     /* height: 100%; */
   }
 
