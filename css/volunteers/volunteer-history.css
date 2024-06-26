@@ -3,25 +3,32 @@ img {
   height: auto;
   display: block;
 }
-
+  
 .user-profile img {
   border-radius: 50%;
 }
-
+  
+#backBtn,
+#cancelBtn,
+#acceptBtn,
+#confirmBtn {
+  cursor: pointer;
+}
+  
 main.content {
   /* margin-top: 20rem; */
 }
-
+  
 .user-profile-wrapper {
   display: block;
   margin: auto;
   width: 100%;
-
+  
   @media screen and (min-width: 800px) {
     width: 400px;
   }
 }
-
+  
 .user-profile-wrapper .user-profile {
   display: grid;
   grid-template-columns: 5rem 1fr;
@@ -30,28 +37,28 @@ main.content {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
-
+  
 .user-profile-wrapper .user-profile i {
   grid-column: span 1;
   align-self: center;
   text-align: center;
   font-size: 2rem;
 }
-
+  
 .user-profile-wrapper .user-profile .user-info {
   grid-row: span 1;
   align-self: center;
 }
-
+  
 .user-profile-wrapper .user-profile .user-info h3 {
   font-weight: bold;
   font-size: clamp(2rem 4vw 4rem);
 }
-
+  
 .user-profile-wrapper .user-profile .user-info p {
   font-size: clamp(0.5rem 2vw 2.5rem);
 }
-
+  
 .user-profile-wrapper .user-profile #contactBtn {
   /* grid-column: 2; */
   margin-top: 1rem;
@@ -60,7 +67,7 @@ main.content {
   border: none;
   background-color: rgb(184, 184, 184);
 }
-
+  
 .note {
   margin-bottom: 2rem;
   padding: 2rem;
@@ -69,19 +76,30 @@ main.content {
   background-color: rgb(184, 184, 184);
 }
 
+#icons {
+  visibility: hidden;
+  text-align: center;
+  font-size: 3rem;
+
+  i {
+      margin-left: 2rem; 
+      margin-right: 2rem;
+  }
+}
+  
 .user-profile-wrapper .set {
   display: flex;
   justify-content: space-between;
 }
-
+  
 .user-profile-wrapper .set button {
   border-radius: 50px;
   border: none;
   padding: 0.2rem 2rem;
 }
-
-#complete-confirm-overlay,
-#task-completed-overlay,
+  
+#confirm-overlay,
+#accept-overlay,
 #schedule-conflict {
   display: grid;
   align-content: center;
@@ -97,65 +115,54 @@ main.content {
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
 }
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
+  
 main {
   margin-top: 10rem;
-
+  
   @media screen and (min-width: 800px) {
     margin-left: auto;
     margin-right: auto;
   }
 }
-
+  
 .confirm-wrapper {
   margin: auto;
   background-color: rgb(233, 233, 233);
   text-align: center;
-  padding: 2rem 3rem;
+  padding: 3rem 5rem;
   border-radius: 30px;
   height: 400px;
-
+  
   @media screen and (min-width: 800px) {
     width: 400px;
   }
 }
-
+  
 .confirm-wrapper .user-profile {
   display: grid;
   grid-template-columns: 1rem 1fr;
   margin-top: 1rem;
 }
-
+  
 .confirm-wrapper .user-profile i {
   grid-column: 1 / 2;
   align-content: center;
 }
-
-.confirm-wrapper .icons {
-    font-size: 3rem;
-}
-
+  
 .confirm-wrapper .set {
   display: flex;
-  flex-flow: column;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 1rem;
-  gap: 1.5rem;
 }
-
+  
 .confirm-wrapper .set button {
   border: none;
-  padding: 0.3rem;
+  padding: 0.2rem 1rem 0.2rem 1rem;
   border-radius: 50px;
 }
-
-.confirm-wrapper .set #completeBtn {
+  
+.confirm-wrapper .set #confirmBtn {
   background-color: rgb(184, 184, 184);
   flood-color: white;
 }
+  
