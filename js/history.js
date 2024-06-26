@@ -5,12 +5,6 @@ import { redirect } from "./utils.js";
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
-// Task status
-const STATUS_WAITING = "Waiting to be accepted";
-const STATUS_ONGOING = "On going";
-const STATUS_PENDING = "Pending approval";
-const STATUS_COMPLETED = "Completed";
-const STATUS_CANCELLED = "Cancelled";
 
 let currentUserID;
 let favorCountCompleted = 0;
