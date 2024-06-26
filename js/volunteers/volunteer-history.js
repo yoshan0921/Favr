@@ -73,7 +73,7 @@ function runFunction() {
           icons.style.visibility = "visible";
         }
 
-        if (task.status === "Completedl") {
+        if (task.status === "Completed") {
           let icons = document.getElementById("icons");
           icons.style.visibility = "visible";
         }

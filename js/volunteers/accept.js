@@ -83,6 +83,9 @@ function runFunction() {
             document.getElementById("elderPhoto").src = placeholderImage;
           });
 
+
+
+
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
@@ -107,14 +110,31 @@ async function acceptTask(taskID, taskData) {
   console.log(taskData);
 
   // Update the task data on the Firestore
-  updateDocument("tasks", taskID, taskData)
-    .then(() => {
-      console.log("Task accepted!");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+//   await updateDocument("tasks", taskID, taskData)
+//     .then(() => {
+//       console.log(taskData, taskID);
+//       console.log("Task accepted!");
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// console.log(taskData);
+
+      await updateDocument("tasks", taskID, {
+        volunteerID: volunteerID,
+        status: "On going"
+      })
+      .then(() => {
+        console.log(taskData, taskID);
+        console.log("Task accepted!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      console.log(taskData);
+
 }
+
 
 // function cancel() {
 //   document.getElementById("cancelBtn").addEventListener("click", function () {
@@ -145,8 +165,9 @@ function acceptOn() {
   document.getElementById("accept-overlay").style.display = "block";
 }
 
-document.getElementById("confirmBtn").addEventListener("click", function () {
-  acceptTask(taskID, taskData);
+document.getElementById("confirmBtn").addEventListener("click", async function () {
+  await acceptTask(taskID, taskData);
+  console.log(taskData);
   acceptOn();
 });
 
