@@ -1,6 +1,6 @@
 import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAll, getDocument, getFile } from "./firebase/firestore.js";
+import { getAll, getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -78,7 +78,14 @@ async function loadEldersDashboard() {
 async function displayTaskListForElders() {
   try {
     // Retrieve tasks from the Firestore
-    let allTasks = await getAll("tasks");
+    let filterCondition = [
+      {
+        key: "status",
+        operator: "in",
+        value: [STATUS_ONGOING, STATUS_WAITING, STATUS_PENDING],
+      },
+    ];
+    let allTasks = await getAllWithFilter("tasks", filterCondition);
     // Create card view
     await createTaskListForElders(allTasks);
   } catch (error) {
@@ -178,12 +185,15 @@ function createCardForElder(task) {
 
   // Append card to the correct list based on the task status
   if ([STATUS_WAITING].includes(task.taskStatus)) {
-    card.querySelector(".taskCard .statusColor").style.backgroundColor = "#ffcd29";
-    list.appendChild(card);
+    card.querySelector(".taskCard .statusColor").classList.add("statusWaiting");
   } else if ([STATUS_ONGOING].includes(task.taskStatus)) {
-    card.querySelector(".taskCard .statusColor").style.backgroundColor = "#0D99FF";
-    list.appendChild(card);
+    card.querySelector(".taskCard .statusColor").classList.add("statusOngoing");
+  } else if ([STATUS_PENDING].includes(task.taskStatus)) {
+    card.querySelector(".taskCard .statusColor").classList.add("statusPending");
+  } else {
+    card.querySelector(".taskCard .statusColor").classList.add("statusOthers");
   }
+  list.appendChild(card);
 }
 
 // ============================================================
@@ -271,7 +281,14 @@ async function displayTaskListForVolunteers() {
   return new Promise(async (resolve, reject) => {
     try {
       // Retrieve tasks from the Firestore
-      let allTasks = await getAll("tasks");
+      let filterCondition = [
+        {
+          key: "status",
+          operator: "in",
+          value: [STATUS_ONGOING, STATUS_WAITING],
+        },
+      ];
+      let allTasks = await getAllWithFilter("tasks", filterCondition);
 
       // Create List View (including Map View)
       createTaskListForVolunteers(allTasks)
