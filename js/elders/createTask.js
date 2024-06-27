@@ -2,6 +2,10 @@ import { getCurrentUserID } from "../firebase/authentication.js";
 import { createDocument } from "../firebase/firestore.js";
 import { enableBackButton } from "../utils.js";
 
+const { Map } = await google.maps.importLibrary("maps");
+const { Autocomplete } = await google.maps.importLibrary("places");
+const { Marker } = await google.maps.importLibrary("marker");
+
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
  * This is to prevent the code from trying to access an element from the page before it was
@@ -42,7 +46,7 @@ function runFunction() {
   const radioButtons = document.querySelectorAll('input[name="favorOption"]');
 
   // Add event listener to radio buttons to clear error message
-  radioButtons.forEach(radioButton => {
+  radioButtons.forEach((radioButton) => {
     radioButton.addEventListener("click", () => {
       let showErrorMsg = document.getElementById("errorMsg");
       showErrorMsg.innerHTML = ""; // Clear error message on radio button click
@@ -80,47 +84,47 @@ function runFunction() {
 
   // Function to format date as MonthName Day, Year
   function formatDate(dateString) {
-    const [year, month, day] = dateString.split('-');
+    const [year, month, day] = dateString.split("-");
     let monthName;
     switch (month) {
-      case '01':
-        monthName = 'Jan';
+      case "01":
+        monthName = "Jan";
         break;
-      case '02':
-        monthName = 'Feb';
+      case "02":
+        monthName = "Feb";
         break;
-      case '03':
-        monthName = 'Mar';
+      case "03":
+        monthName = "Mar";
         break;
-      case '04':
-        monthName = 'Apr';
+      case "04":
+        monthName = "Apr";
         break;
-      case '05':
-        monthName = 'May';
+      case "05":
+        monthName = "May";
         break;
-      case '06':
-        monthName = 'Jun';
+      case "06":
+        monthName = "Jun";
         break;
-      case '07':
-        monthName = 'Jul';
+      case "07":
+        monthName = "Jul";
         break;
-      case '08':
-        monthName = 'Aug';
+      case "08":
+        monthName = "Aug";
         break;
-      case '09':
-        monthName = 'Sep';
+      case "09":
+        monthName = "Sep";
         break;
-      case '10':
-        monthName = 'Oct';
+      case "10":
+        monthName = "Oct";
         break;
-      case '11':
-        monthName = 'Nov';
+      case "11":
+        monthName = "Nov";
         break;
-      case '12':
-        monthName = 'Dec';
+      case "12":
+        monthName = "Dec";
         break;
       default:
-        monthName = ''; // Handle unexpected cases gracefully
+        monthName = ""; // Handle unexpected cases gracefully
         break;
     }
     return `${monthName} ${day}, ${year}`;
@@ -377,16 +381,13 @@ function runFunction() {
  * Sets up two maps and autocomplete inputs for start and end addresses.
  */
 async function initMap() {
-  const { Map } = await google.maps.importLibrary("maps");
-  const { Autocomplete } = await google.maps.importLibrary("places");
-  const { Marker } = await google.maps.importLibrary("marker");
-
   /**
    * Sets up the autocomplete functionality for a given input field and map.
    * @param {string} inputId - The ID of the input element for address autocomplete.
    * @param {string} mapId - The ID of the map element where the address will be displayed.
    */
   function setupAutocomplete(inputId, mapId) {
+    console.log("setupAutocomplete");
     let map = new Map(document.getElementById(mapId), {
       zoom: 6,
       center: { lat: 53.7267, lng: -127.6476 }, // Center on British Columbia
@@ -402,32 +403,70 @@ async function initMap() {
     });
 
     addressInput.addListener("place_changed", () => {
-      const place = addressInput.getPlace();
+      try {
+        console.log("Place changed");
+        const place = addressInput.getPlace();
 
-      if (!place.geometry) {
-        document.getElementById(inputId).placeholder = "Enter a place";
-        return;
+        if (!place.geometry) {
+          document.getElementById(inputId).placeholder = "Enter a place";
+          return;
+        }
+
+        document.getElementById(inputId).value = place.formatted_address;
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(17);
+        }
+
+        marker.setPosition(place.geometry.location);
+
+        // Show the map div when a place is selected in the dropdown
+        document.getElementById(mapId).classList.remove("mapHidden");
+
+        // Clear error message
+        document.getElementById("errorMsg2").innerHTML = "";
+      } catch (error) {
+        console.log(error);
       }
-
-      document.getElementById(inputId).value = place.formatted_address;
-      if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
-      } else {
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);
-      }
-
-      marker.setPosition(place.geometry.location);
-
-      // Show the map div when a place is selected in the dropdown
-      document.getElementById(mapId).classList.remove("mapHidden");
-
-      // Clear error message
-      document.getElementById("errorMsg2").innerHTML = "";
-
     });
   }
 
   setupAutocomplete("startAddress", "startMap");
   setupAutocomplete("endAddress", "endMap");
 }
+
+// Speech to Text for address fields
+const startAddress = document.getElementById("startAddress");
+const endAddress = document.getElementById("endAddress");
+const micForStartAddress = document.getElementById("micForStartAddress");
+const micForEndAddress = document.getElementById("micForEndAddress");
+
+micForStartAddress.addEventListener("click", () => {
+  console.log("click");
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.continuous = false;
+  startAddress.value = "";
+
+  recognition.onresult = ({ results }) => {
+    startAddress.value = results[0][0].transcript;
+    startAddress.focus();
+  };
+  recognition.start();
+});
+
+micForEndAddress.addEventListener("click", () => {
+  console.log("click");
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.continuous = false;
+  endAddress.value = "";
+
+  recognition.onresult = ({ results }) => {
+    endAddress.value = results[0][0].transcript;
+    endAddress.focus();
+  };
+  recognition.start();
+});
