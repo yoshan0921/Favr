@@ -14,6 +14,7 @@ const contactList = document.getElementById("chatWith");
 const messageHistory = document.getElementById("messageHistory");
 const sendMessage = document.getElementById("sendMessage");
 const message = document.getElementById("message");
+const send = document.getElementById("send");
 
 window.addEventListener("load", function (event) {
   // Check if the user is logged in

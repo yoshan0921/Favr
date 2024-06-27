@@ -2,16 +2,53 @@
 
 :root {
   --text: #333333;
+  --textBlack500: #333333;
+  --textBlack400: #5c5c5c;
+  --textBlack300: #858585;
+  --textBlack200: #adadad;
+  --textBlack100: #d6d6d6;
+
   --disabledText: #9c9c9c;
   --background: #fafafa;
   --background-gray: #f1f3f3;
   --background-dark: #1a1a1a;
   --lightBorder: #d1d1d1;
+
   --primary: #156a85;
+  --trustworthyBlue500: #156a85;
+  --trustworthyBlue400: #44889d;
+  --trustworthyBlue300: #73a6b6;
+  --trustworthyBlue200: #a1c3ce;
+  --trustworthyBlue100: #d0e1e7;
+
   --caringOrange: #e98872;
+  --caringOrange500: #e98872;
+  --caringOrange400: #eda08e;
+  --caringOrange300: #f2b8aa;
+  --caringOrange200: #f6cfc7;
+  --caringOrange100: #fbe7e3;
+
   --brown: #e7d4c0;
+  --brown500: #e7d4c0;
+  --brown400: #ecddec;
+  --brown300: #f1e5d9;
+  --brown200: #f5eee6;
+  --brown100: #faf6f2;
+
   --helpfulBlue: #78b8d8;
+  --helpfulBlue500: #78b8d8;
+  --helpfulBlue400: #93c6e0;
+  --helpfulBlue300: #aed4e8;
+  --helpfulBlue200: #c9e3ef;
+  --helpfulBlue100: #e4f1f7;
+
   --warmRed: #e43f3f;
+  --warmRed500: #e43f3f;
+  --warmRed400: #e96565;
+  --warmRed300: #ef8c8c;
+  --warmRed200: #f4b2b2;
+  --warmRed100: #fad9d9;
+
   --pureWhite: #ffffff;
   --statusYellow: #ffcd29;
   --statusGreen: #44c451;
@@ -43,9 +80,10 @@ body {
 .min-height-100vh {
   min-height: 100vh;
 }
-.disappear-mobile{
+.disappear-mobile {
   padding: 0 !important;
 }
+
 .shadow-box{
   box-shadow: 0px 0px 18px -6px rgba(0,0,0,.2);
 }
@@ -66,6 +104,9 @@ body {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   /* To avoid overlaying content to menubar in mobile layout */
   padding-bottom: 100px;
+}
+body:has(.sidebar.disappear-mobile) {
+  padding-bottom: 0;
 }
 img {
   max-width: 100%;
@@ -320,8 +361,8 @@ header .container .page-title-wrapper {
   flex-grow: 1;
   display: flex;
 }
-header .container .page-title-wrapper h1{
-  font-size: clamp(1.6rem, 5vw,2rem);
+header .container .page-title-wrapper h1 {
+  font-size: clamp(1.6rem, 5vw, 2rem);
 }
 header .container .page-title-wrapper .back-btn-wrapper {
   display: none;
@@ -437,7 +478,7 @@ main.loaded .loading-screen {
   z-index: 3; /* Bring sidebar front in mobile screen */
   border-top: 2px solid var(--disabledText);
 }
-.sidebar.disappear-mobile{
+.sidebar.disappear-mobile {
   display: none;
 }
 .sidebar ul {
@@ -688,10 +729,10 @@ Media queries
   main {
     grid-column: 2/-1;
   }
-  header .container .disappear-mobile a{
+  header .container .disappear-mobile a {
     display: block !important;
   }
-  .sidebar.disappear-mobile{
+  .sidebar.disappear-mobile {
     display: flex;
   }
   .sidebar {
