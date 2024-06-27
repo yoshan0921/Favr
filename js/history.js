@@ -113,7 +113,6 @@ async function displayTaskListForElders() {
  */
 async function createTaskListForElders(allTasks) {
   const tasksPromises = allTasks.map(async (task) => {
-    // for (let task of allTasks) {
     let id = task[0]; // Task ID
     let taskDetails = task[1]; // Task detail data
     let linkURL = "#"; // Link URL for the task card
@@ -125,11 +124,9 @@ async function createTaskListForElders(allTasks) {
         if (taskDetails.requesterID !== currentUserID) return;
 
         // Set the link URL for the task card
-        if (taskDetails.status === "Completed") {
-          // linkURL = "/tasks/taskDetailCompleted.html";
+        if (taskDetails.status === STATUS_COMPLETED) {
           linkURL = "/tasks/elder-favor.html";
-        } else if (taskDetails.status === "Cancelled") {
-          // linkURL = "/tasks/taskDetailCancelled.html";
+        } else if (taskDetails.status === STATUS_CANCELLED) {
           linkURL = "/tasks/elder-favor.html";
         } else {
           linkURL = "#";
@@ -288,7 +285,6 @@ async function createTaskListForVolunteers(allTasks) {
     let taskDetails = task[1]; // Task detail data
     let linkURL = "#"; // Link URL for the task card
 
-
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
@@ -435,4 +431,3 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
     target.appendChild(card);
   });
 }
- 

@@ -84,10 +84,10 @@ body {
   padding: 0 !important;
 }
 
-.shadow-box{
-  box-shadow: 0px 0px 18px -6px rgba(0,0,0,.2);
+.shadow-box {
+  box-shadow: 0px 0px 18px -6px rgba(0, 0, 0, 0.2);
 }
-header .container .disappear-mobile a{
+header .container .disappear-mobile a {
   display: none !important;
 }
 
@@ -699,6 +699,9 @@ main.loaded .loading-screen {
 }
 .add-icon::after {
   content: url("../assets/icons/add.svg") !important;
+}
+.mic-icon::after {
+  content: url("../assets/icons/mic.svg") !important;
 }
 /*
 =========================

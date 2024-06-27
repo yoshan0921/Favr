@@ -122,14 +122,14 @@ form {
 #step-3 .form-group input,
 #step-3 .form-group select {
   height: 50px;
-  padding: .5rem;
+  padding: 0.5rem;
   font-size: 1.2rem;
   border-radius: 6px;
   border: 1px solid var(--primary);
 }
 
 #step-4 .form-group textarea {
-  padding: .5rem;
+  padding: 0.5rem;
   font-size: 1.2rem;
   border-radius: 6px;
   border: 1px solid var(--primary);
@@ -140,7 +140,7 @@ form {
 #step-4 .form-group textarea:focus {
   outline: none;
   border: 1px solid var(--primary);
-  background-color: #D0E1E7;
+  background-color: #d0e1e7;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
@@ -330,7 +330,6 @@ ul#summaryList {
   .home-button {
     justify-content: end;
   }
-
 }
 
 /* Cocoy, please adjust the folloeing CSS             */
@@ -363,4 +362,26 @@ ul#summaryList {
 
 #step-3 .form-group .map {
   flex: 0 0 100%;
+}
+
+/* Cocoy, please adjust the folloeing CSS             */
+/* -------------------------------------------------- */
+/* Mic                                                */
+/* -------------------------------------------------- */
+.form-group {
+  position: relative;
+}
+
+.mic {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 78px;
+  right: 0.5rem;
 }
