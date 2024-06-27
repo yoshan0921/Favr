@@ -186,8 +186,7 @@ async function createDocument(collectionPath, object) {
 async function updateDocument(collectionPath, id, object) {
   try {
     const documentReference = doc(firestore, collectionPath, id).withConverter(selectDataConverter(collectionPath));
-    // return setDoc(documentReference, object); // setDoc overwrites all document values to null, so changed to updateDoc
-    return updateDoc(documentReference, object);
+    return setDoc(documentReference, object);
   } catch (error) {
     throw error;
   }

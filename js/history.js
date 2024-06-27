@@ -288,6 +288,7 @@ async function createTaskListForVolunteers(allTasks) {
     let taskDetails = task[1]; // Task detail data
     let linkURL = "#"; // Link URL for the task card
 
+
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
@@ -296,11 +297,11 @@ async function createTaskListForVolunteers(allTasks) {
 
         // Set the link URL for the task card
         if (taskDetails.status === STATUS_PENDING) {
-          linkURL = "/tasks/taskDetailPending.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else if (taskDetails.status === STATUS_COMPLETED) {
-          linkURL = "/tasks/taskDetailCompleted.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else if (taskDetails.status === STATUS_CANCELLED) {
-          linkURL = "/tasks/taskDetailCancelled.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else {
           linkURL = "#";
         }
@@ -434,3 +435,4 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
     target.appendChild(card);
   });
 }
+ 
