@@ -20,6 +20,10 @@ if (document.readyState === "loading") {
 }
 
 function runFunction() {
+  window.addEventListener("fetch", e=>{
+    e.preventDefault();
+    console.log(e);
+  });
   let currentStep = 1; // this counter keeps track of which step of the creation process the user is seeing at the moment. By default, it starts with 1
   let selectionHistory = []; // this array will contain the strings that summarizes the user's selections on each step
 
