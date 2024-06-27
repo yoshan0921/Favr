@@ -22,16 +22,14 @@
 
   <!-- Main Content -->
   <main class="content" id="chat-content">
-    <div class=".sendTo">
-      <p>Login User: <span id="loginUserName"></span></p>
-      <span>Send to: </span><select id="chatWith"></select>
+    <div class="loading-screen">
+      <i class="fa-solid fa-spinner fa-spin-pulse"></i>
     </div>
-
-    <div id="messageHistory"></div>
-
-    <form class="sendMessage">
-      <input id="message" class="message"></input>
-      <button id="send" class="button" type="submit">+</button>
+    <div id="chatWith" class="hide"></div>
+    <div id="messageHistory" class="hide"></div>
+    <form id="sendMessage" class="hide">
+      <input id="message" class="message" placeholder="Type a message"></input>
+      <button id="send" class="send" type="submit"><i class="icon add-icon" aria-hidden="true"></i></button>
     </form>
   </main>
 

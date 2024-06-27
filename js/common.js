@@ -1,6 +1,16 @@
 import { enableBackButton, redirect, signOut } from "./utils.js";
 import { getFile } from "./firebase/firestore.js";
 import { checkUserAuthorization } from "./firebase/authentication.js";
+
+/**
+ * GLOBAL VARIABLES: Task Status
+ */
+Object.defineProperty(window, "STATUS_WAITING", { value: "Waiting to be accepted", writable: false });
+Object.defineProperty(window, "STATUS_ONGOING", { value: "On going", writable: false });
+Object.defineProperty(window, "STATUS_PENDING", { value: "Pending approval", writable: false });
+Object.defineProperty(window, "STATUS_COMPLETED", { value: "Completed", writable: false });
+Object.defineProperty(window, "STATUS_CANCELLED", { value: "Cancelled", writable: false });
+
 import {
   checkUserPushSubscription,
   requestNotificationPermission
@@ -15,11 +25,13 @@ let pageTitles = {
   "history.html": "History",
   "profile/edit.html": "Profile",
   "tasks/create.html": "Request favor",
-  "tasks/details.html": "Task Details",
-  "updates.html": "Updates",
-  "tasks/accept.html": "Accept favor",
+  "tasks/elder-favor.html": "Favor Tracking",
+  "tasks/accept.html": "Favor Details",
+  "tasks/myfavr.html": "My Favor",
+  "tasks/volunteer-favor.html": "My Favor",
+  "tasks/updates.html": "Updates",
   "support.html": "Get support",
-  "tasks/tracking.html": "Favor Tracking",
+  "chat.html": "Messages",
 };
 const menuLinks = {
   "dashboard.html": "home-menu",
@@ -168,8 +180,10 @@ function activateMenuLinkAndBackButton() {
   }
   if (currentPageRequiresBackButton) {
     enableBackButton();
-    const headerLogo = document.getElementsByClassName("logo-wrapper");
+    const headerLogo = document.getElementsByClassName("logo-wrapper")[0];
     headerLogo.classList.add("disappear-mobile");
+    const menu = document.getElementsByClassName("sidebar")[0];
+    menu.classList.add("disappear-mobile");
   }
 }
 /**
@@ -214,7 +228,7 @@ async function lazyLoadImages() {
           if (entry.isIntersecting) {
             let lazyImage = entry.target;
             let storagePath = lazyImage.getAttribute("data-storage-path");
-            if (storagePath != "profile/null") {
+            if (storagePath != "profile/null" && storagePath != "profile/" && storagePath != "profile/undefined") {
               try {
                 const url = await getFile(storagePath);
                 lazyImage.src = url;

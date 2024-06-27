@@ -12,10 +12,12 @@ import{
 import {
     redirect,
     resetLocalStorage,
-    handleError
+    handleError,
+    installServiceWorkers
 } from "./utils.js";
 
 resetLocalStorage();
+installServiceWorkers();
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading. 

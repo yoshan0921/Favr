@@ -84,7 +84,6 @@
     justify-content: end;
 }
 .accomplishment{
-    border: thin solid var(--lightBorder);
     border-radius: 10px;
     flex-grow: 1;
     max-width: 200px !important;
@@ -97,10 +96,14 @@
 .accomplishment *{
     display: block;
 }
+.accomplishment i{
+    color: var(--primary);
+}
 .accomplishment .accomplishment-number{
     font-size: 3rem;
     font-weight: 800;
     padding: 1rem 0;
+    color: var(--caringOrange);
 }
 
 .profile-details{
