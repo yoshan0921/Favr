@@ -62,11 +62,24 @@ function enableBackButton(){
     }
 
 }
+function installServiceWorkers(){
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("../sw.js")
+          .then(serviceWorker => {
+            console.log("Service Worker registered: ", serviceWorker);
+          })
+          .catch(error => {
+            console.error("Error registering the Service Worker: ", error);
+          });
+      }
+}
 
 export {
     signOut,
     redirect,
     handleError,
     resetLocalStorage,
-    enableBackButton
+    enableBackButton,
+    installServiceWorkers
 }
