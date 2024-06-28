@@ -7,6 +7,7 @@ import { redirect } from "./utils.js";
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
 let currentUserID;
+let favorCountPending = 0;
 let favorCountCompleted = 0;
 let favorCountCancelled = 0;
 
@@ -181,6 +182,14 @@ async function createTaskListForElders(allTasks) {
   sortTasksByDate("newest", document.querySelectorAll("#listCompleted .taskCard"), document.getElementById("listCompleted"));
   sortTasksByDate("newest", document.querySelectorAll("#listCancelled .taskCard"), document.getElementById("listCancelled"));
 
+  // No items message
+  if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
+  }
+
   // Apply lazy loading to images
   lazyLoadImages();
 }
@@ -222,10 +231,10 @@ function createCardForElder(task) {
   // Append card to the correct list based on the task status
   if ([STATUS_COMPLETED].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
-    listMyFavorCountCompleted.innerHTML = ++favorCountCompleted;
+    listMyFavorCountCompleted.textContent = ++favorCountCompleted;
   } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
-    listMyFavorCountCancelled.innerHTML = ++favorCountCancelled;
+    listMyFavorCountCancelled.textContent = ++favorCountCancelled;
   }
 }
 
@@ -364,6 +373,17 @@ async function createTaskListForVolunteers(allTasks) {
   sortTasksByDate("newest", document.querySelectorAll("#taskListCompleted .taskCard"), document.getElementById("taskListCompleted"));
   sortTasksByDate("newest", document.querySelectorAll("#taskListCancelled .taskCard"), document.getElementById("taskListCancelled"));
 
+  // No items message
+  if (document.querySelectorAll("#taskListPending .taskCard").length === 0) {
+    document.querySelector("#taskListPending + .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
+  }
+
   // Apply lazy loading to images
   lazyLoadImages();
 }
@@ -377,6 +397,9 @@ function createCardForVolunteers(task) {
   const listPending = document.getElementById("taskListPending");
   const listCompleted = document.getElementById("taskListCompleted");
   const listCancelled = document.getElementById("taskListCancelled");
+  const listMyFavorCountPending = document.getElementById("favorCountPending");
+  const listMyFavorCountCompleted = document.getElementById("favorCountCompleted");
+  const listMyFavorCountCancelled = document.getElementById("favorCountCancelled");
 
   const card = document.createElement("div");
   card.classList.add("taskCard");
@@ -404,10 +427,13 @@ function createCardForVolunteers(task) {
   // Append card to the correct list based on the task status
   if ([STATUS_PENDING].includes(task.taskStatus)) {
     listPending.appendChild(card);
+    listMyFavorCountPending.textContent = ++favorCountPending;
   } else if ([STATUS_COMPLETED].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
+    listMyFavorCountCompleted.textContent = ++favorCountCompleted;
   } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
+    listMyFavorCountCancelled.textContent = ++favorCountCancelled;
   }
 }
 

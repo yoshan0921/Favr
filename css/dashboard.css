@@ -141,7 +141,8 @@
 .volunteer .viewSwitcher {
   display: flex;
   gap: 1rem;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  justify-content: end;
 }
 
 .volunteer .viewSwitcher button {
@@ -328,4 +329,16 @@ button#cancelFilter {
 .volunteer.tab-content .viewSwitcher .statusFilter {
   display: flex;
   gap: 0.5rem;
+}
+
+/* -------------------------------------------------- */
+/* Volunteer: No Task Message                         */
+/* -------------------------------------------------- */
+.elder .noItemsMessage,
+.volunteer .noItemsMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: var(--disabledText);
 }
