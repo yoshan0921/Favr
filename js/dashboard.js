@@ -1,6 +1,6 @@
 import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAll, getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
+import { getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");

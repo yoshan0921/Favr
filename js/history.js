@@ -1,6 +1,6 @@
-import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
+import { loadPartial, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAll, getDocument } from "./firebase/firestore.js";
+import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
 
 // TODO: Need to define placeholder image properly
@@ -89,7 +89,19 @@ async function displayTaskListForElders() {
   return new Promise(async (resolve, reject) => {
     try {
       // Retrieve tasks from the Firestore
-      let allTasks = await getAll("tasks");
+      let filterCondition = [
+        {
+          key: "requesterID",
+          operator: "==",
+          value: currentUserID,
+        },
+        {
+          key: "status",
+          operator: "in",
+          value: [STATUS_COMPLETED, STATUS_CANCELLED],
+        },
+      ];
+      let allTasks = await getAllWithFilter("tasks", filterCondition);
 
       // Create List View (including Map View)
       createTaskListForElders(allTasks)
@@ -208,10 +220,10 @@ function createCardForElder(task) {
   }
 
   // Append card to the correct list based on the task status
-  if (["Completed"].includes(task.taskStatus)) {
+  if ([STATUS_COMPLETED].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
     listMyFavorCountCompleted.innerHTML = ++favorCountCompleted;
-  } else if (["Cancelled"].includes(task.taskStatus)) {
+  } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
     listMyFavorCountCancelled.innerHTML = ++favorCountCancelled;
   }
@@ -256,7 +268,19 @@ async function displayTaskListForVolunteers() {
   return new Promise(async (resolve, reject) => {
     try {
       // Retrieve tasks from the Firestore
-      let allTasks = await getAll("tasks");
+      let filterCondition = [
+        {
+          key: "volunteerID",
+          operator: "==",
+          value: currentUserID,
+        },
+        {
+          key: "status",
+          operator: "in",
+          value: [STATUS_PENDING, STATUS_COMPLETED, STATUS_CANCELLED],
+        },
+      ];
+      let allTasks = await getAllWithFilter("tasks", filterCondition);
 
       // Create List View (including Map View)
       createTaskListForVolunteers(allTasks)
