@@ -1,6 +1,7 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { createDocument } from "../firebase/firestore.js";
 import { enableBackButton } from "../utils.js";
+import { openModal, closeModal } from "../common.js";
 
 const { Map } = await google.maps.importLibrary("maps");
 const { Autocomplete } = await google.maps.importLibrary("places");
@@ -371,6 +372,7 @@ function runFunction() {
     document.querySelector(`.step4 .stepNumber span`).textContent = "✔";
   }
 
+  const backToHome = document.getElementById("backToHome");
   backToHome.addEventListener("click", (e) => {
     window.location.href = "/dashboard.html";
   });
