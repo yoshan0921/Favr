@@ -105,6 +105,11 @@ async function createTaskListForElders(allTasks) {
     let id = task[0]; // Task ID
     let taskDetails = task[1]; // Task detail data
 
+    // Ifvolunteer ID = "", set null instead of ""
+    if (taskDetails.volunteerID === "") {
+      taskDetails.volunteerID = null;
+    }
+
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
@@ -225,7 +230,7 @@ async function loadVolunteersDashboard() {
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
 
-  //Filter button (Explore tab)
+  // Filter button (Explore tab)
   const filterBtn = document.getElementById("openFilterBtn");
   const filterModal = document.getElementById("filterModal");
   const closeFilterBtn = document.getElementById("cancelFilter");
@@ -469,6 +474,14 @@ async function createTaskListForVolunteers(allTasks) {
   sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"), document.getElementById("taskListExplore"));
   sortTasksByDate("newest", document.querySelectorAll("#taskListMyFavor .taskCard"), document.getElementById("taskListMyFavor"));
 
+  // No items message
+  if (document.querySelectorAll("#taskListExplore .taskCard").length === 0) {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListMyFavor .taskCard").length === 0) {
+    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.remove("noResult");
+  }
+
   // Apply lazy loading to images
   lazyLoadImages();
 }
@@ -512,7 +525,7 @@ function createCardForVolunteer(task) {
     listExplore.appendChild(card);
   } else if ([STATUS_ONGOING].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listMyFavor.appendChild(card);
-    listMyFavorCount.innerHTML = ++favorCount;
+    listMyFavorCount.textContent = ++favorCount;
   }
 }
 
@@ -700,13 +713,13 @@ function applyFilter() {
     // Distance filter
     if (distanceFilterValue != 10000 && distance > distanceFilterValue) {
       displayStatus = false;
-      console.log("Distance filter applied");
+      // console.log("Distance filter applied");
     }
 
     // Length filter
     if (length > lengthFilterValue) {
       displayStatus = false;
-      console.log("Length filter applied");
+      // console.log("Length filter applied");
     }
 
     // Task type filter
@@ -719,16 +732,28 @@ function applyFilter() {
       (favorType === "Transportation" && !transportation)
     ) {
       displayStatus = false;
-      console.log("Task type filter applied");
+      // console.log("Task type filter applied");
     }
 
     // Set display status
-    card.style.display = displayStatus ? "block" : "none";
+    // card.style.display = displayStatus ? "block" : "none";
+    card.style.display = displayStatus ? card.classList.remove("hide") : card.classList.add("hide");
     if (marker) marker.element.style.visibility = displayStatus ? "visible" : "hidden";
   });
 
   // Task sort by date (newest or oldest)
   sortTasksByDate(dateFilterValue, taskCards, document.getElementById("taskListExplore"));
+
+  // No items message
+  if (document.querySelectorAll("#taskListExplore .taskCard:not(.hide)").length === 0) {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
+    document.getElementById("taskListExplore").classList.add("noResult");
+    document.getElementById("taskMapExplore").classList.add("noResult");
+  } else {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("noResult");
+    document.getElementById("taskListExplore").classList.remove("noResult");
+    document.getElementById("taskMapExplore").classList.remove("noResult");
+  }
 
   // When inforWindow is open on the Google Map, close all infoWindows
   closeAllInfoWindows(infoWindows);
