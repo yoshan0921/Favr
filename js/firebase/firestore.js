@@ -1,6 +1,6 @@
 import { firestore, storage } from "./firebase.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-import { getDocs, doc, addDoc, setDoc, getDoc, deleteDoc, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocs, doc, addDoc, setDoc, getDoc, deleteDoc, collection, query, where, updateDoc, FieldValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ======================
 // Classes (data models)
@@ -204,7 +204,7 @@ async function updateDocument(collectionPath, id, object) {
 async function updateProperty(collectionPath, id, object) {
   try {
     const documentReference = doc(firestore, collectionPath, id).withConverter(selectDataConverter(collectionPath));
-    return updateDoc(documentReference, object);
+    return updateDoc(documentReference, object, { merge: true });
   } catch (error) {
     throw error;
   }
