@@ -191,6 +191,25 @@ async function updateDocument(collectionPath, id, object) {
     throw error;
   }
 }
+
+/**
+ * Updates a specific document property without overwriting all other properties to null
+ *
+ * @param {string} collectionPath - the relative path to a collection or subcollection
+ * @param {string} id
+ * @param {Object} object - object that represents the updated document
+ *
+ * * @return Promise
+ */
+async function updateProperty(collectionPath, id, object) {
+  try {
+    const documentReference = doc(firestore, collectionPath, id).withConverter(selectDataConverter(collectionPath));
+    return updateDoc(documentReference, object);
+  } catch (error) {
+    throw error;
+  }
+}
+
 /**
  * Deletes a document from the provided collection based on the document ID
  * @param {string} collectionPath  - the relative path to a collection or subcollection
@@ -206,6 +225,7 @@ async function deleteDocument(collectionPath, id) {
     throw error;
   }
 }
+
 /**
  * Get an indiviual document from the provided collection based on the document ID
  * @param {string} collectionPath
@@ -316,4 +336,4 @@ async function getFile(path) {
       });
   });
 }
-export { createDocument, updateDocument, deleteDocument, getDocument, getAll, getAllWithFilter, uploadFile, getFile };
+export { createDocument, updateDocument, deleteDocument, getDocument, getAll, getAllWithFilter, uploadFile, getFile, updateProperty };

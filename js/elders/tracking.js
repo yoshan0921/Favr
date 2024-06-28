@@ -1,4 +1,4 @@
-import { getDocument, updateDocument, deleteDocument } from "../firebase/firestore.js";
+import { getDocument, updateDocument, deleteDocument, updateProperty } from "../firebase/firestore.js";
 import { openModal, closeModal, lazyLoadImages } from "../common.js";
 import { enableBackButton } from "../utils.js";
 
@@ -97,12 +97,13 @@ async function displayTaskSummary(taskID) {
     favorTypeH2Data.innerHTML = `${task.name} Favor`;
     taskStatusData.innerHTML = task.status;
     // favorTypeData.innerHTML = task.name;
-
+    
     // TODO: UNDEFINED, NOT WORKING
     // Update Date and Time if it is cancelled
-    if (task.status == "Cancelled" && task.cancelledDate) {
-      dateData.innerHTML = task.cancelledDate;
-      timeData.innerHTML = task.cancelledTime;
+    if (task.status == "Cancelled")  {
+      dateData.innerHTML = task.date;
+      timeData.innerHTML = taskData.cancelledTime;
+      console.log(taskData);
 
       // Update Date and Time if it is completed
     } else if (task.status == "Completed" && task.completedDate) {
@@ -183,7 +184,7 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     });
 
     // Update task status to "Cancelled" in Firestore
-    await updateDocument("tasks", taskID, {
+    await updateProperty("tasks", taskID, {
       status: "Cancelled",
       cancelledDate: cancelledDate,
       cancelledTime: cancelledTime,
