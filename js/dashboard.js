@@ -42,9 +42,6 @@ async function runFunction() {
   currentUserID = getCurrentUserID();
   getCurrentUserRole()
   .then(async (currentUserRole) => {
-    console.log("Current User ID: " + currentUserID);
-    console.log("Current User Role: " + currentUserRole);
-
     // Load dashboard partil html
     await loadPartial(`dashboard/_${currentUserRole}Dashboard`, "dashboard-content");
     // Load the dashboard based on the user's role
@@ -53,7 +50,7 @@ async function runFunction() {
     } else if (currentUserRole === "elder") {
       await loadEldersDashboard();
     }
-    registerUserFCM();
+    //registerUserFCM();
   });
 }
 

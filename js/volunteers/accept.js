@@ -61,8 +61,6 @@ function runFunction() {
         confirmTaskName.innerHTML = taskData.name;
         acceptTaskName.innerHTML = taskData.name;
 
-
-
         // Retrieve Elder's name and address=====================
         console.log(user.firstName);
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
@@ -84,10 +82,6 @@ function runFunction() {
             console.log(error);
             document.getElementById("elderPhoto").src = placeholderImage;
           });
-
-
-
-
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
@@ -110,39 +104,19 @@ async function acceptTask(taskID, taskData) {
   taskData.volunteerID = volunteerID;
   taskData.status = "On going";
   console.log(taskData);
+  const task = await getDocument("tasks", taskID);
+  task.volunteerID = volunteerID;
+  task.status = "On going";
 
-  const volunteer = await getDocument("users", volunteerID);
-  let message = {
-      "notification": {
-          "title": "Your task was accepted!",
-          "body": `${volunteer.firstName} has accepted your ${taskData.title} favour`,
-          "click_action": "http://localhost:5500/dashboard.html"
-      }
-  }
-  sendNotification(taskData.requesterID, message)
-  // Update the task data on the Firestore
-//   await updateDocument("tasks", taskID, taskData)
-//     .then(() => {
-//       console.log(taskData, taskID);
-//       console.log("Task accepted!");
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// console.log(taskData);
-
-      await updateDocument("tasks", taskID, {
-        volunteerID: volunteerID,
-        status: "On going"
-      })
-      .then(() => {
-        console.log(taskData, taskID);
-        console.log("Task accepted!");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      console.log(taskData);
+  await updateDocument("tasks", taskID, task)
+  .then(() => {
+    console.log(taskData, taskID);
+    console.log("Task accepted!");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  console.log(taskData);
 
 }
 

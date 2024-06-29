@@ -1,10 +1,13 @@
 self.importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
 self.importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
 self.importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
+self.importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js");
 
 const API_KEY = 'AIzaSyA98KYP3hvGX8q7uk1WNdEStxMo1S85HmA';
 const VAPID_KEY = "BAa_0mfBX5XyXGJdq6hgYXnQBZEXGgcy1EQYLHjSTr0e-2QI8ztPWMMq0ureDp8Rlvle3kYg_JmMnVw6X-byaLU";
 var user_subscription = {};
+var snapshotSubscription = null;
+var currentUserID = null;
 
 const firebaseConfig = {
     apiKey: "AIzaSyA98KYP3hvGX8q7uk1WNdEStxMo1S85HmA",
@@ -20,30 +23,7 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 const firestore = firebase.firestore();
-
-async function getDocument(id){
-    const documentReference = doc(firestore, `users/${id}`);
-    try {
-        const docSnap = await getDoc(documentReference);
-        if (docSnap.exists()) {
-            return docSnap.data();
-        } else {
-            console.log("No such document!");
-            return null;
-        }
-    } catch (error) {
-        console.log(error);
-        return null
-    }
-}
-function setDocument(object, id){
-    try {
-        const documentReference = doc(firestore, "users", id);
-        return setDoc(documentReference, object);
-    } catch (error) {
-        console.log(error);
-    }
-}
+const auth = firebase.auth();
 
 self.addEventListener("fetch", (e)=>{
 
@@ -53,13 +33,28 @@ self.addEventListener("activate", async (e)=>{
         userVisibleOnly : true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_KEY)
     })
-    .then(subscription =>{
+    .then(async (subscription) =>{
         user_subscription = subscription;
-        const userID = window.localStorage.getItem("currentUserID");
-        const user = getDocument(userID);
-        console.log(user);
         console.log(`Subscription saved by service worker!`);
         console.log(subscription);
+        currentUserID = auth.currentUser.uid;
+        //return addSnapshotListener();
+        const tasks = [];
+        firestore.collection("tasks")
+        .where("status","==","Waiting to be accepted")
+        .where("requesterID", "==", auth.currentUser.uid)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.docChanges().forEach((change) => {
+                console.log(change.type);
+                if (change.type === "modified") {
+                    console.log("Modified task: ", change.doc.data());
+                }
+                tasks.push(change.doc.data());
+            });
+            console.log("Current tasks waiting to be accepted: ");
+            console.log(tasks);
+        });
     })
     .catch((error)=>console.log(error));
 })
@@ -67,7 +62,23 @@ self.addEventListener("push", event => {
     const title = event.data.text();
     self.registration.showNotification(title);
 })
-
+async function addSnapshotListener(){
+    return new Promise((resolve,reject)=>{
+        const q = firestore.query(firestore.collection(firestore, "tasks"), firestore.where("status", "==", "Waiting to be accepted"));
+        console.log(q);
+        snapshotSubscription = firestore.onSnapshot(q, (querySnapshot) => {
+            try{
+                const tasks = [];
+                querySnapshot.forEach((doc) => {
+                    tasks.push(doc.data().id);
+                });
+                resolve(tasks);
+            }catch(e){
+                reject(e);
+            }
+        });
+    });
+}
 async function onNotification(notification) {
     return new Promise((resolve, reject) => {
         const { title, link_url, ...options } = notification;

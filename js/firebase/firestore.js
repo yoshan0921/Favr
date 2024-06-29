@@ -221,8 +221,6 @@ async function getDocument(collectionPath, id) {
     if (docSnap.exists()) {
       //console.log("Document data:", docSnap.data());
       return docSnap.data();
-    } else {
-      console.log("No such document!");
     }
   } catch (error) {
     console.log(error);
