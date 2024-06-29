@@ -110,28 +110,16 @@ async function acceptTask(taskID, taskData) {
   console.log(taskData);
 
   // Update the task data on the Firestore
-//   await updateDocument("tasks", taskID, taskData)
-//     .then(() => {
-//       console.log(taskData, taskID);
-//       console.log("Task accepted!");
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// console.log(taskData);
+  await updateDocument("tasks", taskID, taskData)
+    .then(() => {
+      console.log(taskData, taskID);
+      console.log("Task accepted!");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    console.log(taskData);
 
-      await updateDocument("tasks", taskID, {
-        volunteerID: volunteerID,
-        status: "On going"
-      })
-      .then(() => {
-        console.log(taskData, taskID);
-        console.log("Task accepted!");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      console.log(taskData);
 
 }
 
