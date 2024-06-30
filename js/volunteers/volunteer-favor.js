@@ -1,7 +1,6 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { updateDocument, getDocument, getFile } from "../firebase/firestore.js";
 
-
 let taskID;
 let taskData = {};
 
@@ -25,7 +24,6 @@ function runFunction() {
   const urlParams = new URLSearchParams(window.location.search);
   taskID = urlParams.get("taskid");
   console.log(taskID);
-
 
   // On Common Display===========
   let taskName = document.getElementById("taskName");
@@ -51,8 +49,6 @@ function runFunction() {
   // On Task Completed Overlay Display===========
   let completedElderName = document.getElementById("completedElderName");
   let approvedElderName = document.getElementById("approvedElderName");
-
-
 
   // Get the task data from the Firestore
   getDocument("tasks", taskID)
@@ -88,8 +84,6 @@ function runFunction() {
         completedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         approvedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
 
-
-
         getFile("profile/" + user.profilePictureURL)
           .then((url) => {
             document.getElementById("elderPhoto").src = url;
@@ -116,7 +110,7 @@ function runFunction() {
           comOrCanBtn.remove();
           icons.remove();
         }
-        
+
         if (task.status === "On going") {
           contactBtn.style.visibility = "visible";
           comOrCanBtn.style.visibility = "visible";
@@ -128,7 +122,7 @@ function runFunction() {
           contactBtn.style.visibility = "visible";
           icons.style.visibility = "visible";
         }
-        
+
         if (task.status === "Completed") {
           contactBtn.remove();
           icons.style.visibility = "visible";
@@ -186,16 +180,22 @@ async function cancelTask(taskID, taskData) {
     })
     .catch((error) => {
       console.log(error);
-    });    
+    });
 }
-
 
 // Link to chat room
 document.getElementById("contactBtn").addEventListener("click", function () {
-  window.location.href = `/chat.html?crid=${chatRoomID}`;
+  getDocument("tasks", taskID)
+    .then((task) => {
+      let loginUserID = getCurrentUserID();
+      let requesterID = task.requesterID;
+      let chatRoomID = [loginUserID, requesterID].sort().join("-");
+      window.location.href = `/chat.html?crid=${chatRoomID}`;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
-
-
 
 // On "Favor Details"===============
 
@@ -284,7 +284,6 @@ document.getElementById("cancelBtn").addEventListener("click", async function ()
   exploreFavors();
 });
 
-
 // Create click events on each icons=============
 document.getElementById("thumsDown").addEventListener("click", function () {
   exploreFavors();
@@ -301,5 +300,3 @@ document.getElementById("thumsDown-overlay").addEventListener("click", function 
 document.getElementById("thumsUp-overlay").addEventListener("click", function () {
   exploreFavors();
 });
-
-

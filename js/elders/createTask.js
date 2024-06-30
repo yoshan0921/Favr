@@ -75,12 +75,15 @@ function runFunction() {
         date: formatDate(document.getElementById("favorDate").value),
         time: document.getElementById("favorTime").value,
         // favorLength: document.getElementById("favorLength").value,
-        startAddress: document.getElementById("startAddress").value,
-        endAddress: document.getElementById("endAddress").value || "None",
+        startAddress: document.getElementById("startAddress").value || null,
+        startAddressLat: document.getElementById("startAddressLat").value || null,
+        startAddressLng: document.getElementById("startAddressLng").value || null,
+        endAddress: document.getElementById("endAddress").value || null,
+        startAddressLat: document.getElementById("startAddressLat").value || null,
+        startAddressLng: document.getElementById("startAddressLng").value || null,
       },
     };
     createTask(task);
-    //console.log(task);
   });
 
   // Function to format date as MonthName Day, Year
@@ -389,7 +392,6 @@ async function initMap() {
    * @param {string} mapId - The ID of the map element where the address will be displayed.
    */
   function setupAutocomplete(inputId, mapId) {
-    console.log("setupAutocomplete");
     let map = new Map(document.getElementById(mapId), {
       zoom: 6,
       center: { lat: 53.7267, lng: -127.6476 }, // Center on British Columbia
@@ -406,14 +408,14 @@ async function initMap() {
 
     addressInput.addListener("place_changed", () => {
       try {
-        console.log("Place changed");
+        // Get the formatted address from google maps API
         const place = addressInput.getPlace();
-
         if (!place.geometry) {
           document.getElementById(inputId).placeholder = "Enter a place";
           return;
         }
 
+        // Set the formatted address to the input field of address
         document.getElementById(inputId).value = place.formatted_address;
         if (place.geometry.viewport) {
           map.fitBounds(place.geometry.viewport);
@@ -422,7 +424,12 @@ async function initMap() {
           map.setZoom(17);
         }
 
+        // Set the marker on the map
         marker.setPosition(place.geometry.location);
+
+        // Set the coordinates data to hidden input fields
+        document.getElementById(`${inputId}Lat`).value = place.geometry.location.lat();
+        document.getElementById(`${inputId}Lng`).value = place.geometry.location.lng();
 
         // Show the map div when a place is selected in the dropdown
         document.getElementById(mapId).classList.remove("mapHidden");
@@ -434,41 +441,46 @@ async function initMap() {
       }
     });
   }
-
   setupAutocomplete("startAddress", "startMap");
   setupAutocomplete("endAddress", "endMap");
 }
 
-// Speech to Text for address fields
+/**
+ * Speech to Text for address fields
+ */
 const startAddress = document.getElementById("startAddress");
 const endAddress = document.getElementById("endAddress");
 const micForStartAddress = document.getElementById("micForStartAddress");
 const micForEndAddress = document.getElementById("micForEndAddress");
 
-micForStartAddress.addEventListener("click", () => {
-  console.log("click");
-  const recognition = new webkitSpeechRecognition();
-  recognition.lang = "en-US";
-  recognition.continuous = false;
-  startAddress.value = "";
+if (micForStartAddress) {
+  micForStartAddress.addEventListener("click", () => {
+    console.log("click");
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    startAddress.value = "";
 
-  recognition.onresult = ({ results }) => {
-    startAddress.value = results[0][0].transcript;
-    startAddress.focus();
-  };
-  recognition.start();
-});
+    recognition.onresult = ({ results }) => {
+      startAddress.value = results[0][0].transcript;
+      startAddress.focus();
+    };
+    recognition.start();
+  });
+}
 
-micForEndAddress.addEventListener("click", () => {
-  console.log("click");
-  const recognition = new webkitSpeechRecognition();
-  recognition.lang = "en-US";
-  recognition.continuous = false;
-  endAddress.value = "";
+if (micForEndAddress) {
+  micForEndAddress.addEventListener("click", () => {
+    console.log("click");
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    endAddress.value = "";
 
-  recognition.onresult = ({ results }) => {
-    endAddress.value = results[0][0].transcript;
-    endAddress.focus();
-  };
-  recognition.start();
-});
+    recognition.onresult = ({ results }) => {
+      endAddress.value = results[0][0].transcript;
+      endAddress.focus();
+    };
+    recognition.start();
+  });
+}

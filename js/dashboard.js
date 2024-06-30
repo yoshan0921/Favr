@@ -447,14 +447,11 @@ async function createTaskListForVolunteers(allTasks) {
         // Get coordinates of the task location
         if ([STATUS_WAITING].includes(taskDetails.status)) {
           try {
-            let result = await getCoordinates(taskDetails.details["startAddress"]);
-            markerLatLng = { lat: result.lat, lng: result.lng };
-
-            // Calculate the distance between the current location and the task location
+            // Get the task location (coordinates) and calculate the distance
+            markerLatLng = { lat: Number(taskDetails.details["startAddressLat"]), lng: Number(taskDetails.details["startAddressLng"]) };
             distance = await spherical.computeDistanceBetween(new google.maps.LatLng(latitude, longitude), new google.maps.LatLng(markerLatLng));
           } catch (error) {
             console.log(error);
-            // console.log(requester);
             console.log(taskDetails);
           }
         }
