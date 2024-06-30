@@ -1,12 +1,15 @@
-import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
+import { firestore } from "./firebase/firebase.js";
+import { onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { loadPartial, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAll, getDocument } from "./firebase/firestore.js";
+import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
 let currentUserID;
+let favorCountPending = 0;
 let favorCountCompleted = 0;
 let favorCountCancelled = 0;
 
@@ -86,23 +89,46 @@ async function loadEldersHistory() {
  * TODO: Not all data should be retrieved here, but the target of retrieval should be narrowed down with a where clause.
  */
 async function displayTaskListForElders() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Retrieve tasks from the Firestore
-      let allTasks = await getAll("tasks");
+  // Get DB reference
+  const dbref = collection(firestore, "tasks");
+  // Define the filter condition for the query
+  const q = query(dbref, where("status", "in", [STATUS_COMPLETED, STATUS_CANCELLED]), where("requesterID", "==", currentUserID));
+  // Array for storing all tasks
+  let allTasks = [];
 
-      // Create List View (including Map View)
-      createTaskListForElders(allTasks)
-        .then(() => resolve())
-        .catch((error) => {
-          console.log(error);
-          reject(error);
+  // Listen for real-time updates with onSnapshot
+  const unsubscribe = onSnapshot(
+    q,
+    async (querySnapshot) => {
+      try {
+        // Monitor the tasks registration in real-time
+        querySnapshot.docChanges().forEach((change) => {
+          const task = {
+            id: change.doc.id,
+            data: change.doc.data(),
+          };
+
+          if (change.type === "added") {
+            allTasks.push(task);
+          } else if (change.type === "modified") {
+            allTasks = allTasks.map((t) => (t.id === task.id ? task : t));
+          } else if (change.type === "removed") {
+            console.log("Removed task: ", task.id, " => ", task.data);
+            allTasks = allTasks.filter((t) => t.id !== task.id);
+          }
         });
-    } catch (error) {
-      console.log(error);
-      reject(error);
+        console.log(allTasks);
+        await createTaskListForElders(allTasks);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    (error) => {
+      console.error(error);
     }
-  });
+  );
+  // TODO:
+  // Consider calling unsubscribe() when appropriate to stop listening for updates
 }
 
 /**
@@ -113,24 +139,14 @@ async function displayTaskListForElders() {
  */
 async function createTaskListForElders(allTasks) {
   const tasksPromises = allTasks.map(async (task) => {
-    let id = task[0]; // Task ID
-    let taskDetails = task[1]; // Task detail data
-    let linkURL = "#"; // Link URL for the task card
+    let id = task.id; // Task ID
+    let taskDetails = task.data; // Task detail data
 
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
       .then(async ([requester, volunteer]) => {
         // Check if the requester of the task is the current user
         if (taskDetails.requesterID !== currentUserID) return;
-
-        // Set the link URL for the task card
-        if (taskDetails.status === STATUS_COMPLETED) {
-          linkURL = "/tasks/elder-favor.html";
-        } else if (taskDetails.status === STATUS_CANCELLED) {
-          linkURL = "/tasks/elder-favor.html";
-        } else {
-          linkURL = "#";
-        }
 
         // Create task object for List & Map view
         let taskObj = {
@@ -143,7 +159,7 @@ async function createTaskListForElders(allTasks) {
           taskNotes: taskDetails.notes ?? "",
           taskAddress: taskDetails.details["startAddress"] ?? "",
           taskEndAddress: taskDetails.details["endAddress"] ?? "",
-          taskLinkURL: linkURL,
+          taskLinkURL: "/tasks/elder-favor.html",
           // Volunteer Information
           taskVolunteerID: taskDetails.volunteerID ?? "",
           taskVolunteerName: volunteer?.firstName && volunteer?.lastName ? `${volunteer.firstName} ${volunteer.lastName}` : "",
@@ -168,6 +184,14 @@ async function createTaskListForElders(allTasks) {
   // Sort the task cards by date (newest to oldest)
   sortTasksByDate("newest", document.querySelectorAll("#listCompleted .taskCard"), document.getElementById("listCompleted"));
   sortTasksByDate("newest", document.querySelectorAll("#listCancelled .taskCard"), document.getElementById("listCancelled"));
+
+  // No items message
+  if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
+  }
 
   // Apply lazy loading to images
   lazyLoadImages();
@@ -208,12 +232,12 @@ function createCardForElder(task) {
   }
 
   // Append card to the correct list based on the task status
-  if (["Completed"].includes(task.taskStatus)) {
+  if ([STATUS_COMPLETED].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
-    listMyFavorCountCompleted.innerHTML = ++favorCountCompleted;
-  } else if (["Cancelled"].includes(task.taskStatus)) {
+    listMyFavorCountCompleted.textContent = ++favorCountCompleted;
+  } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
-    listMyFavorCountCancelled.innerHTML = ++favorCountCancelled;
+    listMyFavorCountCancelled.textContent = ++favorCountCancelled;
   }
 }
 
@@ -241,9 +265,8 @@ async function loadVolunteersHistory() {
 
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
-  displayTaskListForVolunteers().then(() => {
-    main.classList.add("loaded");
-  });
+  await displayTaskListForVolunteers();
+  main.classList.add("loaded");
 }
 
 /**
@@ -253,23 +276,46 @@ async function loadVolunteersHistory() {
  * TODO: Not all data should be retrieved here, but the target of retrieval should be narrowed down with a where clause.
  */
 async function displayTaskListForVolunteers() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Retrieve tasks from the Firestore
-      let allTasks = await getAll("tasks");
+  // Get DB reference
+  const dbref = collection(firestore, "tasks");
+  // Define the filter condition for the query
+  const q = query(dbref, where("status", "in", [STATUS_PENDING, STATUS_COMPLETED, STATUS_CANCELLED]), where("volunteerID", "==", currentUserID));
+  // Array for storing all tasks
+  let allTasks = [];
 
-      // Create List View (including Map View)
-      createTaskListForVolunteers(allTasks)
-        .then(() => resolve())
-        .catch((error) => {
-          console.log(error);
-          reject(error);
+  // Listen for real-time updates with onSnapshot
+  const unsubscribe = onSnapshot(
+    q,
+    async (querySnapshot) => {
+      try {
+        // Monitor the tasks registration in real-time
+        querySnapshot.docChanges().forEach((change) => {
+          const task = {
+            id: change.doc.id,
+            data: change.doc.data(),
+          };
+
+          if (change.type === "added") {
+            allTasks.push(task);
+          } else if (change.type === "modified") {
+            allTasks = allTasks.map((t) => (t.id === task.id ? task : t));
+          } else if (change.type === "removed") {
+            console.log("Removed task: ", task.id, " => ", task.data);
+            allTasks = allTasks.filter((t) => t.id !== task.id);
+          }
         });
-    } catch (error) {
-      console.log(error);
-      reject(error);
+        console.log(allTasks);
+        await createTaskListForVolunteers(allTasks);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    (error) => {
+      console.error(error);
     }
-  });
+  );
+  // TODO:
+  // Consider calling unsubscribe() when appropriate to stop listening for updates
 }
 
 /**
@@ -279,11 +325,27 @@ async function displayTaskListForVolunteers() {
  * @param {Array} allTasks - An array of all tasks.
  */
 async function createTaskListForVolunteers(allTasks) {
+  // Clear the task list
+  const taskListPending = document.getElementById("taskListPending");
+  const taskListCompleted = document.getElementById("taskListCompleted");
+  const taskListCancelled = document.getElementById("taskListCancelled");
+  taskListPending.innerHTML = "";
+  taskListCompleted.innerHTML = "";
+  taskListCancelled.innerHTML = "";
+  const listMyFavorCountPending = document.getElementById("favorCountPending");
+  const listMyFavorCountCompleted = document.getElementById("favorCountCompleted");
+  const listMyFavorCountCancelled = document.getElementById("favorCountCancelled");
+  listMyFavorCountPending.textContent = 0;
+  listMyFavorCountCompleted.textContent = 0;
+  listMyFavorCountCancelled.textContent = 0;
+  favorCountPending = 0;
+  favorCountCompleted = 0;
+  favorCountCancelled = 0;
+
   const tasksPromises = allTasks.map(async (task) => {
     // for (let task of allTasks) {
-    let id = task[0]; // Task ID
-    let taskDetails = task[1]; // Task detail data
-    let linkURL = "#"; // Link URL for the task card
+    let id = task.id; // Task ID
+    let taskDetails = task.data; // Task detail data
 
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
@@ -291,16 +353,9 @@ async function createTaskListForVolunteers(allTasks) {
         // Check if the volunteer of the task is the current user
         if (taskDetails.volunteerID !== currentUserID) return;
 
-        // Set the link URL for the task card
-        if (taskDetails.status === STATUS_PENDING) {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else if (taskDetails.status === STATUS_COMPLETED) {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else if (taskDetails.status === STATUS_CANCELLED) {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else {
-          linkURL = "#";
-        }
+        // Estimate favor length
+        // TODO: The following code is only for tentative until the favor length value is revised.
+        let length = 1.0;
 
         // Create task object for List & Map view
         let taskObj = {
@@ -308,12 +363,14 @@ async function createTaskListForVolunteers(allTasks) {
           taskID: id,
           taskName: taskDetails.name ?? "",
           taskStatus: taskDetails.status ?? "",
-          taskDate: taskDetails.details["date"] ?? "",
+          // taskDate: taskDetails.details["date"] ?? "",
+          taskDate: new Date(taskDetails.details["date"]).toLocaleDateString("en-us", { day: "numeric", month: "short" }) ?? "",
           taskTime: taskDetails.details["time"] ?? "",
+          taskDuration: length,
           taskNotes: taskDetails.notes ?? "",
           taskAddress: taskDetails.details["startAddress"] ?? "",
           taskEndAddress: taskDetails.details["endAddress"] ?? "",
-          taskLinkURL: linkURL,
+          taskLinkURL: "/tasks/volunteer-favor.html",
           // Volunteer Information
           taskVolunteerID: taskDetails.volunteerID ?? "",
           taskVolunteerName: `${volunteer.firstName} ${volunteer.lastName}` ?? "",
@@ -336,9 +393,20 @@ async function createTaskListForVolunteers(allTasks) {
   await Promise.all(tasksPromises);
 
   // Sort the task cards by date (newest to oldest)
-  sortTasksByDate("newest", document.querySelectorAll("#taskListPending .taskCard"), document.getElementById("taskListPending"));
-  sortTasksByDate("newest", document.querySelectorAll("#taskListCompleted .taskCard"), document.getElementById("taskListCompleted"));
-  sortTasksByDate("newest", document.querySelectorAll("#taskListCancelled .taskCard"), document.getElementById("taskListCancelled"));
+  sortTasksByDate("newest", document.querySelectorAll("#taskListPending .taskCard"), taskListPending);
+  sortTasksByDate("newest", document.querySelectorAll("#taskListCompleted .taskCard"), taskListCompleted);
+  sortTasksByDate("newest", document.querySelectorAll("#taskListCancelled .taskCard"), taskListCancelled);
+
+  // No items message
+  if (document.querySelectorAll("#taskListPending .taskCard").length === 0) {
+    document.querySelector("#taskListPending + .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
+  }
 
   // Apply lazy loading to images
   lazyLoadImages();
@@ -353,6 +421,9 @@ function createCardForVolunteers(task) {
   const listPending = document.getElementById("taskListPending");
   const listCompleted = document.getElementById("taskListCompleted");
   const listCancelled = document.getElementById("taskListCancelled");
+  const listMyFavorCountPending = document.getElementById("favorCountPending");
+  const listMyFavorCountCompleted = document.getElementById("favorCountCompleted");
+  const listMyFavorCountCancelled = document.getElementById("favorCountCancelled");
 
   const card = document.createElement("div");
   card.classList.add("taskCard");
@@ -380,10 +451,13 @@ function createCardForVolunteers(task) {
   // Append card to the correct list based on the task status
   if ([STATUS_PENDING].includes(task.taskStatus)) {
     listPending.appendChild(card);
+    listMyFavorCountPending.textContent = ++favorCountPending;
   } else if ([STATUS_COMPLETED].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
+    listMyFavorCountCompleted.textContent = ++favorCountCompleted;
   } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
+    listMyFavorCountCancelled.textContent = ++favorCountCancelled;
   }
 }
 

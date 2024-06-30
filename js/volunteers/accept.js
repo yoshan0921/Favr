@@ -59,8 +59,6 @@ function runFunction() {
         confirmTaskName.innerHTML = taskData.name;
         acceptTaskName.innerHTML = taskData.name;
 
-
-
         // Retrieve Elder's name and address=====================
         console.log(user.firstName);
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
@@ -83,14 +81,10 @@ function runFunction() {
             document.getElementById("elderPhoto").src = placeholderImage;
           });
 
-
-
-
         // Retrieve Task address, date and note=====================
         taskAddress.innerHTML = taskData.details.startAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
         taskNote.innerHTML = taskData.notes;
-
       });
     })
     .catch((error) => {
@@ -110,31 +104,29 @@ async function acceptTask(taskID, taskData) {
   console.log(taskData);
 
   // Update the task data on the Firestore
-//   await updateDocument("tasks", taskID, taskData)
-//     .then(() => {
-//       console.log(taskData, taskID);
-//       console.log("Task accepted!");
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// console.log(taskData);
+  await updateDocument("tasks", taskID, taskData)
+    .then(() => {
+      console.log(taskData, taskID);
+      console.log("Task accepted!");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  console.log(taskData);
 
-      await updateDocument("tasks", taskID, {
-        volunteerID: volunteerID,
-        status: "On going"
-      })
-      .then(() => {
-        console.log(taskData, taskID);
-        console.log("Task accepted!");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      console.log(taskData);
-
+  // await updateDocument("tasks", taskID, {
+  //   volunteerID: volunteerID,
+  //   status: "On going"
+  // })
+  // .then(() => {
+  //   console.log(taskData, taskID);
+  //   console.log("Task accepted!");
+  // })
+  // .catch((error) => {
+  //   console.log(error);
+  // });
+  // console.log(taskData);
 }
-
 
 // function cancel() {
 //   document.getElementById("cancelBtn").addEventListener("click", function () {

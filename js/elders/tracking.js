@@ -1,4 +1,4 @@
-import { getDocument, updateDocument, deleteDocument } from "../firebase/firestore.js";
+import { getDocument, updateDocument, deleteDocument, updateProperty } from "../firebase/firestore.js";
 import { openModal, closeModal, lazyLoadImages } from "../common.js";
 import { enableBackButton } from "../utils.js";
 
@@ -59,6 +59,9 @@ async function displayTaskSummary(taskID) {
     // const favorTypeData = document.getElementById("favorType");
     const dateData = document.getElementById("date");
     const timeData = document.getElementById("time");
+    const dateLabel = document.getElementById("dateLabel");
+    const timeLabel = document.getElementById("timeLabel");
+    
     // const favorLengthData = document.getElementById("favorLength");
     const startAddressData = document.getElementById("startAddress");
     const endAddressData = document.getElementById("endAddress");
@@ -98,16 +101,19 @@ async function displayTaskSummary(taskID) {
     taskStatusData.innerHTML = task.status;
     // favorTypeData.innerHTML = task.name;
 
-    // TODO: UNDEFINED, NOT WORKING
     // Update Date and Time if it is cancelled
-    if (task.status == "Cancelled" && task.cancelledDate) {
-      dateData.innerHTML = task.cancelledDate;
-      timeData.innerHTML = task.cancelledTime;
+    if (task.status == "Cancelled" && task.details.cancelledDate) {
+      dateData.innerHTML = task.details.cancelledDate;
+      timeData.innerHTML = task.details.cancelledTime;
+      dateLabel.innerText = "Cancelled Date";
+      timeLabel.innerText = "Cancelled Time";
 
       // Update Date and Time if it is completed
-    } else if (task.status == "Completed" && task.completedDate) {
-      dateData.innerHTML = task.completedDate;
-      timeData.innerHTML = task.completedTime;
+    } else if (task.status == "Completed" && task.details.completedDate) {
+      dateData.innerHTML = task.details.completedDate;
+      timeData.innerHTML = task.details.completedTime;
+      dateLabel.innerText = "Completed Date";
+      timeLabel.innerText = "Completed Time";
 
       // Default
     } else {
@@ -142,7 +148,7 @@ async function displayTaskSummary(taskID) {
   }
 }
 
-// Attach event listener to cancelFavor button
+// Event listener for cancelFavor button
 const cancelFavorBtn = document.getElementById("cancelFavor");
 cancelFavorBtn.addEventListener("click", () => {
   const modal = document.getElementById("confirmModal");
@@ -160,9 +166,9 @@ modalBackBtn.addEventListener("click", () => {
 });
 
 // Event listener to go back to home
-const homeBtn = document.getElementById("homeBtn");
-homeBtn.addEventListener("click", () => {
-  window.location.href = "../dashboard.html"; // Navigate to dashboard.html
+const backToHome = document.getElementById("backToHome");
+backToHome.addEventListener("click", () => {
+  window.location.href = "../dashboard.html";
 });
 
 // Update task status to cancelled
@@ -183,12 +189,11 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     });
 
     // Update task status to "Cancelled" in Firestore
-    await updateDocument("tasks", taskID, {
+    await updateProperty("tasks", taskID, {
       status: "Cancelled",
-      cancelledDate: cancelledDate,
-      cancelledTime: cancelledTime,
+      "details.cancelledDate": cancelledDate,
+      "details.cancelledTime": cancelledTime,
     });
-    console.log("Task status updated");
 
     // Display the success modal
     const successModal = document.getElementById("successModal");
@@ -201,14 +206,3 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     console.error("Error updating task status:", error);
   }
 });
-
-// Event listener to cancel favor and remove entire document from database
-// const cancelFavorBtn = document.getElementById("cancelFavor");
-// cancelFavorBtn.addEventListener("click", async () => {
-//   try {
-//     await deleteDocument("tasks", taskID);
-//     console.log("Task deleted successfully!");
-//   } catch (error) {
-//     console.error("Error deleting task:", error);
-//   }
-// });

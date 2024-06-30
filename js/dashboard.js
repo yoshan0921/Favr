@@ -1,6 +1,8 @@
+import { firestore } from "./firebase/firebase.js";
+import { onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAll, getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
+import { getDocument, getFile } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -12,6 +14,8 @@ const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sa
 
 let currentUserID;
 let favorCount = 0;
+let filterAppliedFlg = false;
+let map; // For Google Map
 let markers = {}; // For Google Map
 let infoWindows = []; // For Google Map
 
@@ -76,21 +80,46 @@ async function loadEldersDashboard() {
  * Also creates a card view for the tasks.
  */
 async function displayTaskListForElders() {
-  try {
-    // Retrieve tasks from the Firestore
-    let filterCondition = [
-      {
-        key: "status",
-        operator: "in",
-        value: [STATUS_ONGOING, STATUS_WAITING, STATUS_PENDING],
-      },
-    ];
-    let allTasks = await getAllWithFilter("tasks", filterCondition);
-    // Create card view
-    await createTaskListForElders(allTasks);
-  } catch (error) {
-    console.log(error);
-  }
+  // Get DB reference
+  const dbref = collection(firestore, "tasks");
+  // Define the filter condition for the query
+  const q = query(dbref, where("status", "in", [STATUS_ONGOING, STATUS_WAITING, STATUS_PENDING]), where("requesterID", "==", currentUserID));
+  // Array for storing all tasks
+  let allTasks = [];
+
+  // Listen for real-time updates with onSnapshot
+  const unsubscribe = onSnapshot(
+    q,
+    (querySnapshot) => {
+      querySnapshot.docChanges().forEach((change) => {
+        const task = {
+          id: change.doc.id,
+          data: change.doc.data(),
+        };
+
+        if (change.type === "added") {
+          // Add the task to the allTasks array
+          allTasks.push(task);
+        }
+        if (change.type === "modified") {
+          // Replace the task in the allTasks array with the updated task
+          allTasks = allTasks.map((t) => (t.id === task.id ? task : t));
+        }
+        if (change.type === "removed") {
+          console.log("Removed task: ", task.id, " => ", task.data);
+          // Delete the task in the allTasks array if it was removed
+          allTasks = allTasks.filter((t) => t.id !== task.id);
+        }
+      });
+      console.log(allTasks);
+      createTaskListForElders(allTasks);
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
+  // TODO:
+  // Consider calling unsubscribe() when appropriate to stop listening for updates
 }
 
 /**
@@ -99,11 +128,18 @@ async function displayTaskListForElders() {
  * @param {Array} allTasks - An array of all tasks.
  */
 async function createTaskListForElders(allTasks) {
+  // Clear the task list
   const list = document.getElementById("taskList");
+  list.innerHTML = "";
+
   const tasksPromises = allTasks.map(async (task) => {
-    // for (let task of allTasks) {
-    let id = task[0]; // Task ID
-    let taskDetails = task[1]; // Task detail data
+    let id = task.id; // Task ID
+    let taskDetails = task.data; // Task detail data
+
+    // Ifvolunteer ID = "", set null instead of ""
+    if (taskDetails.volunteerID === "") {
+      taskDetails.volunteerID = null;
+    }
 
     // Get requester's information
     return Promise.all([getDocument("users", taskDetails.requesterID), getDocument("users", taskDetails.volunteerID)])
@@ -163,7 +199,7 @@ function createCardForElder(task) {
   card.classList.add("taskCard");
   card.setAttribute("data-taskid", task.taskID);
   card.setAttribute("data-favorType", task.taskName);
-  card.setAttribute("data-date", task.taskDate);
+  card.setAttribute("data-date", `${task.taskDate} ${task.taskTime}`);
   card.setAttribute("data-address", task.taskAddress);
   card.innerHTML = `
   <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
@@ -218,14 +254,13 @@ async function loadVolunteersDashboard() {
 
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
-  displayTaskListForVolunteers().then(() => {
-    main.classList.add("loaded");
-  });
+  displayTaskListForVolunteers();
+  main.classList.add("loaded");
 
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
 
-  //Filter button (Explore tab)
+  // Filter button (Explore tab)
   const filterBtn = document.getElementById("openFilterBtn");
   const filterModal = document.getElementById("filterModal");
   const closeFilterBtn = document.getElementById("cancelFilter");
@@ -249,7 +284,7 @@ async function loadVolunteersDashboard() {
   if (filterBtn) {
     filterBtn.addEventListener("click", () => {
       openModal(filterModal);
-      readPreference();
+      readSavedPreference();
     });
   }
   if (closeFilterBtn) {
@@ -259,7 +294,7 @@ async function loadVolunteersDashboard() {
   }
   if (applyFilterBtn) {
     applyFilterBtn.addEventListener("click", () => {
-      applyFilter();
+      applyFilter(false);
       closeModal(filterModal);
     });
   }
@@ -275,33 +310,56 @@ async function loadVolunteersDashboard() {
  * Retrieves all tasks from the Firestore and populates the task list for volunteers.
  * Also creates a list view (including map view) for the tasks.
  *
- * TODO: Not all data should be retrieved here, but the target of retrieval should be narrowed down with a where clause.
  */
-async function displayTaskListForVolunteers() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Retrieve tasks from the Firestore
-      let filterCondition = [
-        {
-          key: "status",
-          operator: "in",
-          value: [STATUS_ONGOING, STATUS_WAITING],
-        },
-      ];
-      let allTasks = await getAllWithFilter("tasks", filterCondition);
+function displayTaskListForVolunteers() {
+  // Get DB reference
+  const dbref = collection(firestore, "tasks");
+  // Define the filter condition for the query
+  const q = query(dbref, where("status", "in", [STATUS_ONGOING, STATUS_WAITING]));
+  // Array for storing all tasks
+  let allTasks = [];
 
-      // Create List View (including Map View)
-      createTaskListForVolunteers(allTasks)
-        .then(() => resolve())
-        .catch((error) => {
-          console.log(error);
-          reject(error);
+  // Listen for real-time updates with onSnapshot
+  const unsubscribe = onSnapshot(
+    q,
+    async (querySnapshot) => {
+      try {
+        // Monitor the tasks registration in real-time
+        querySnapshot.docChanges().forEach((change) => {
+          const task = {
+            id: change.doc.id,
+            data: change.doc.data(),
+          };
+
+          if (change.type === "added") {
+            // Add the task to the allTasks array
+            allTasks.push(task);
+          } else if (change.type === "modified") {
+            // Replace the task in the allTasks array with the updated task
+            allTasks = allTasks.map((t) => (t.id === task.id ? task : t));
+          } else if (change.type === "removed") {
+            console.log("Removed task: ", task.id, " => ", task.data);
+            // Delete the task in the allTasks array if it was removed
+            allTasks = allTasks.filter((t) => t.id !== task.id);
+          }
         });
-    } catch (error) {
-      console.log(error);
-      reject(error);
+        console.log(allTasks);
+        await createTaskListForVolunteers(allTasks);
+      } catch (error) {
+        console.error(error);
+      }
+
+      // If the filter is already applied, reapply the filter to keep it
+      if (filterAppliedFlg) {
+        applyFilter(true);
+      }
+    },
+    (error) => {
+      console.error(error);
     }
-  });
+  );
+  // TODO:
+  // Consider calling unsubscribe() when appropriate to stop listening for updates
 }
 
 /**
@@ -311,16 +369,19 @@ async function displayTaskListForVolunteers() {
  * @param {Array} allTasks - An array of all tasks.
  */
 async function createTaskListForVolunteers(allTasks) {
+  // Clear the task list
+  const taskListExplore = document.getElementById("taskListExplore");
+  const taskListMyFavor = document.getElementById("taskListMyFavor");
+  taskListExplore.innerHTML = "";
+  taskListMyFavor.innerHTML = "";
+
+  // Clear the task map
   const mapElement = document.getElementById("map");
-  let map; // For Google Map
+  markers = [];
   let latitude;
   let longitude;
 
   try {
-    // Memo:
-    // Sometimes, getCurrentPosition takes a long time to get the return.
-    // So, geoPosition data is stored in sessionStorage to avoid the delay for the next time.
-
     // Get current location (If it's not first time in the session, get the location from sessionStorage)
     let position = sessionStorage.getItem("currentPosition");
     if (!position) {
@@ -339,11 +400,13 @@ async function createTaskListForVolunteers(allTasks) {
     longitude = position.longitude;
 
     // Create Map
-    map = new Map(mapElement, {
-      zoom: 14,
-      center: { lat: latitude, lng: longitude },
-      mapId: "DEMO_MAP_ID",
-    });
+    if (!map) {
+      map = new Map(mapElement, {
+        zoom: 14,
+        center: { lat: latitude, lng: longitude },
+        mapId: "DEMO_MAP_ID",
+      });
+    }
 
     // Close all info windows when the map is clicked
     map.addListener("click", function () {
@@ -367,9 +430,8 @@ async function createTaskListForVolunteers(allTasks) {
 
   let tasksPromises = allTasks.map((task) => {
     return new Promise(async (resolve) => {
-      // Wrap the task in a new Promise
-      let id = task[0]; // Task ID
-      let taskDetails = task[1]; // Task detail data
+      let id = task.id; // Task ID
+      let taskDetails = task.data; // Task detail data
       let markerLatLng = {}; // Task location (Marker position)
       let distance = 0; // Distance between the current location and the task location
       let linkURL = "#"; // Link URL for the task card
@@ -388,37 +450,14 @@ async function createTaskListForVolunteers(allTasks) {
             distance = await spherical.computeDistanceBetween(new google.maps.LatLng(latitude, longitude), new google.maps.LatLng(markerLatLng));
           } catch (error) {
             console.log(error);
-            console.log(requester);
+            // console.log(requester);
             console.log(taskDetails);
           }
         }
 
-        // Get favor length
+        // Estimate favor length
         // TODO: The following code is only for tentative until the favor length value is revised.
-        let length = taskDetails.details["favorLength"];
-        switch (length) {
-          case "30 mins":
-            length = 0.5;
-            break;
-          case "1 hrs":
-            length = 1;
-            break;
-          case "1.5 hrs":
-            length = 1.5;
-            break;
-          case "2 hrs":
-            length = 2;
-            break;
-          case "2.5 hrs":
-            length = 2.5;
-            break;
-          case "3 hrs":
-            length = 3;
-            break;
-          default:
-            length = "N/A";
-            break;
-        }
+        let length = 1.0;
 
         // Set the link URL for the task card
         if (taskDetails.status === STATUS_WAITING) {
@@ -435,7 +474,7 @@ async function createTaskListForVolunteers(allTasks) {
           taskID: id,
           taskName: taskDetails.name ?? "",
           taskStatus: taskDetails.status ?? "",
-          taskDate: taskDetails.details["date"] ?? "",
+          taskDate: new Date(taskDetails.details["date"]).toLocaleDateString("en-us", { day: "numeric", month: "short" }) ?? "",
           taskTime: taskDetails.details["time"] ?? "",
           taskDuration: length,
           taskAddress: taskDetails.details["startAddress"] ?? "",
@@ -464,10 +503,19 @@ async function createTaskListForVolunteers(allTasks) {
 
   // Wait for all Promises to resolve
   await Promise.all(tasksPromises);
+  console.log(`Number of markers: ${Object.keys(markers).length}`);
 
   // Sort the task cards by date (newest to oldest)
-  sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"), document.getElementById("taskListExplore"));
-  sortTasksByDate("newest", document.querySelectorAll("#taskListMyFavor .taskCard"), document.getElementById("taskListMyFavor"));
+  sortTasksByDate("newest", document.querySelectorAll("#taskListExplore .taskCard"), taskListExplore);
+  sortTasksByDate("newest", document.querySelectorAll("#taskListMyFavor .taskCard"), taskListMyFavor);
+
+  // No items message
+  if (document.querySelectorAll("#taskListExplore .taskCard").length === 0) {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
+  }
+  if (document.querySelectorAll("#taskListMyFavor .taskCard").length === 0) {
+    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.remove("noResult");
+  }
 
   // Apply lazy loading to images
   lazyLoadImages();
@@ -481,14 +529,13 @@ async function createTaskListForVolunteers(allTasks) {
 function createCardForVolunteer(task) {
   const listExplore = document.getElementById("taskListExplore");
   const listMyFavor = document.getElementById("taskListMyFavor");
-  // const listHistory = document.getElementById("taskListHistory");
   const listMyFavorCount = document.getElementById("favorCount");
 
   const card = document.createElement("div");
   card.classList.add("taskCard");
   card.setAttribute("data-taskid", task.taskID);
   card.setAttribute("data-favorType", task.taskName);
-  card.setAttribute("data-date", task.taskDate);
+  card.setAttribute("data-date", `${task.taskDate} ${task.taskTime}`);
   card.setAttribute("data-address", task.taskAddress);
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
@@ -512,7 +559,7 @@ function createCardForVolunteer(task) {
     listExplore.appendChild(card);
   } else if ([STATUS_ONGOING].includes(task.taskStatus) && task.taskVolunteerID === currentUserID) {
     listMyFavor.appendChild(card);
-    listMyFavorCount.innerHTML = ++favorCount;
+    listMyFavorCount.textContent = ++favorCount;
   }
 }
 
@@ -527,9 +574,6 @@ function createCardForVolunteer(task) {
 function createMapMarker(task, map, infoWindows) {
   // If the task is not "Waiting to be accepted", do not create a marker
   if (![STATUS_WAITING].includes(task.taskStatus)) return;
-
-  // FOR DEBUGGING
-  // console.log(`createMapMarker: ${JSON.stringify(task)}`);
 
   // Create a marker for the task
   const marker = new AdvancedMarkerElement({
@@ -645,45 +689,79 @@ function getCurrentPosition() {
  * Apply filters to a list of tasks.
  * It filters tasks by distance, length, favor type, and date.
  * After applying the filters, it hides the tasks that do not meet the filter conditions.
+ *
+ * @param {boolean} redo - A flag to indicate whether the filter is applied again.
  */
-function applyFilter() {
-  // Get the specified filter conditions
-  let distanceFilterValue = Number(document.getElementById("distanceFilter").value);
-  let lengthFilterValue = Number(document.getElementById("lengthFilter").value);
-  let groceryShopping = document.getElementById("groceryShopping").checked;
-  let mailPackages = document.getElementById("mailPackages").checked;
-  let medsPickup = document.getElementById("medsPickup").checked;
-  let techHelp = document.getElementById("techHelp").checked;
-  let petCare = document.getElementById("petCare").checked;
-  let transportation = document.getElementById("transportation").checked;
-  let dateFilterValue;
-  // Get all radio buttons with the name 'dateFilter'
-  let radios = document.getElementsByName("dateFilter");
-  for (let radio of radios) {
-    // If the radio button is selected, get its value
-    if (radio.checked) {
-      dateFilterValue = radio.value;
-      break;
+function applyFilter(redo) {
+  // Define the filter condition object
+  let filterConditions = {
+    distanceFilterValue: 10000,
+    lengthFilterValue: 2.5,
+    groceryShopping: true,
+    mailPackages: true,
+    medsPickup: true,
+    techHelp: true,
+    petCare: true,
+    transportation: true,
+    dateFilterValue: "newest",
+  };
+
+  // Set the filterApplied flag to true
+  if (redo) {
+    filterConditions = readPreviousFilterSetting(filterConditions);
+  } else {
+    filterAppliedFlg = true;
+
+    // Get the specified filter conditions
+    filterConditions.distanceFilterValue = Number(document.getElementById("distanceFilter").value);
+    filterConditions.lengthFilterValue = Number(document.getElementById("lengthFilter").value);
+    filterConditions.groceryShopping = document.getElementById("groceryShopping").checked;
+    filterConditions.mailPackages = document.getElementById("mailPackages").checked;
+    filterConditions.medsPickup = document.getElementById("medsPickup").checked;
+    filterConditions.techHelp = document.getElementById("techHelp").checked;
+    filterConditions.petCare = document.getElementById("petCare").checked;
+    filterConditions.transportation = document.getElementById("transportation").checked;
+
+    // Get all radio buttons with the name 'dateFilter'
+    let radios = document.getElementsByName("dateFilter");
+    for (let radio of radios) {
+      // If the radio button is selected, get its value
+      if (radio.checked) {
+        filterConditions.dateFilterValue = radio.value;
+        break;
+      }
+    }
+
+    // For filter history:
+    // Store the filter conditions in sessionStorage
+    sessionStorage.setItem("distanceFilter", filterConditions.distanceFilterValue);
+    sessionStorage.setItem("lengthFilter", filterConditions.lengthFilterValue);
+    sessionStorage.setItem("groceryShopping", filterConditions.groceryShopping);
+    sessionStorage.setItem("mailPackages", filterConditions.mailPackages);
+    sessionStorage.setItem("medsPickup", filterConditions.medsPickup);
+    sessionStorage.setItem("techHelp", filterConditions.techHelp);
+    sessionStorage.setItem("petCare", filterConditions.petCare);
+    sessionStorage.setItem("transportation", filterConditions.transportation);
+    sessionStorage.setItem("dateFilter", filterConditions.dateFilterValue);
+
+    // For save preference checkbox:
+    // Store the filter conditions in localStorage
+    if (document.getElementById("savePreferenceCheckbox").checked) {
+      localStorage.setItem("distanceFilter", filterConditions.distanceFilterValue);
+      localStorage.setItem("lengthFilter", filterConditions.lengthFilterValue);
+      localStorage.setItem("groceryShopping", filterConditions.groceryShopping);
+      localStorage.setItem("mailPackages", filterConditions.mailPackages);
+      localStorage.setItem("medsPickup", filterConditions.medsPickup);
+      localStorage.setItem("techHelp", filterConditions.techHelp);
+      localStorage.setItem("petCare", filterConditions.petCare);
+      localStorage.setItem("transportation", filterConditions.transportation);
+      localStorage.setItem("dateFilter", filterConditions.dateFilterValue);
     }
   }
-
-  // Store the filter conditions in localStorage
-  if (document.getElementById("savePreferenceCheckbox").checked) {
-    localStorage.setItem("distanceFilter", distanceFilterValue);
-    localStorage.setItem("lengthFilter", lengthFilterValue);
-    localStorage.setItem("groceryShopping", groceryShopping);
-    localStorage.setItem("mailPackages", mailPackages);
-    localStorage.setItem("medsPickup", medsPickup);
-    localStorage.setItem("techHelp", techHelp);
-    localStorage.setItem("petCare", petCare);
-    localStorage.setItem("transportation", transportation);
-    localStorage.setItem("dateFilter", dateFilterValue);
-    console.log("Filter Conditions Saved");
-  }
+  console.log(filterConditions);
 
   // Evaluate each task card with "Waiting to be accepted"
   let taskCards = document.querySelectorAll("#taskListExplore .taskCard");
-  //console.log(taskCards);
 
   // Hide the task card that does not meet the filter conditions
   taskCards.forEach((card) => {
@@ -692,43 +770,50 @@ function applyFilter() {
     let favorType = card.getAttribute("data-favorType");
     let distance = Number(card.getAttribute("data-distance"));
     let length = Number(card.getAttribute("data-length"));
-    //console.log(`taskID: ${taskID} favorType: ${favorType}, distance: ${distance}, length: ${length}, marker: ${marker}`);
 
     // Initialize display status as true
     let displayStatus = true;
 
     // Distance filter
-    if (distanceFilterValue != 10000 && distance > distanceFilterValue) {
+    if (filterConditions.distanceFilterValue != 10000 && distance > filterConditions.distanceFilterValue) {
       displayStatus = false;
-      console.log("Distance filter applied");
     }
 
     // Length filter
-    if (length > lengthFilterValue) {
+    if (length > filterConditions.lengthFilterValue) {
       displayStatus = false;
-      console.log("Length filter applied");
     }
 
     // Task type filter
     if (
-      (favorType === "Grocery Shopping" && !groceryShopping) ||
-      (favorType === "Mail & Packages" && !mailPackages) ||
-      (favorType === "Meds Pickup" && !medsPickup) ||
-      (favorType === "Tech Help" && !techHelp) ||
-      (favorType === "Pet Care" && !petCare) ||
-      (favorType === "Transportation" && !transportation)
+      (favorType === "Grocery Shopping" && !filterConditions.groceryShopping) ||
+      (favorType === "Mail & Packages" && !filterConditions.mailPackages) ||
+      (favorType === "Meds Pickup" && !filterConditions.medsPickup) ||
+      (favorType === "Tech Help" && !filterConditions.techHelp) ||
+      (favorType === "Pet Care" && !filterConditions.petCare) ||
+      (favorType === "Transportation" && !filterConditions.transportation)
     ) {
       displayStatus = false;
-      console.log("Task type filter applied");
     }
 
     // Set display status
-    card.style.display = displayStatus ? "block" : "none";
+    card.style.display = displayStatus ? card.classList.remove("hide") : card.classList.add("hide");
     if (marker) marker.element.style.visibility = displayStatus ? "visible" : "hidden";
   });
 
   // Task sort by date (newest or oldest)
-  sortTasksByDate(dateFilterValue, taskCards, document.getElementById("taskListExplore"));
+  sortTasksByDate(filterConditions.dateFilterValue, taskCards, document.getElementById("taskListExplore"));
+
+  // No items message
+  if (document.querySelectorAll("#taskListExplore .taskCard:not(.hide)").length === 0) {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
+    document.getElementById("taskListExplore").classList.add("noResult");
+    document.getElementById("taskMapExplore").classList.add("noResult");
+  } else {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("noResult");
+    document.getElementById("taskListExplore").classList.remove("noResult");
+    document.getElementById("taskMapExplore").classList.remove("noResult");
+  }
 
   // When inforWindow is open on the Google Map, close all infoWindows
   closeAllInfoWindows(infoWindows);
@@ -738,10 +823,63 @@ function applyFilter() {
   localStorage.setItem("savePreferenceCheckbox", savePreferenceCheckbox);
 }
 
-// TODO: Move this function to a common file
-// ============================================================
-// Utility Functions
-// ============================================================
+/**
+ * The `readPreference` function retrieves saved user settings from localStorage,
+ * and sets the state of various fields in an HTML form based on these settings.
+ *
+ * The following settings are retrieved from localStorage:
+ * - dateFilter: The value for a date filter
+ * - distanceFilter: The value for a distance filter
+ * - lengthFilter: The value for a length filter
+ * - groceryShopping: The state of a 'Grocery Shopping' checkbox
+ * - mailPackages: The state of a 'Mail Packages' checkbox
+ * - medsPickup: The state of a 'Medication Pickup' checkbox
+ * - techHelp: The state of a 'Tech Help' checkbox
+ * - petCare: The state of a 'Pet Care' checkbox
+ * - transportation: The state of a 'Transportation' checkbox
+ * - savePreferenceCheckbox: The state of a 'Save Preference' checkbox
+ */
+function readSavedPreference() {
+  // If there is a saved preference, get the filter conditions from localStorage
+  let dateFilterValue = localStorage.getItem("dateFilter");
+  let distanceFilterValue = localStorage.getItem("distanceFilter");
+  let lengthFilterValue = localStorage.getItem("lengthFilter");
+  let groceryShopping = localStorage.getItem("groceryShopping") === "true";
+  let mailPackages = localStorage.getItem("mailPackages") === "true";
+  let medsPickup = localStorage.getItem("medsPickup") === "true";
+  let techHelp = localStorage.getItem("techHelp") === "true";
+  let petCare = localStorage.getItem("petCare") === "true";
+  let transportation = localStorage.getItem("transportation") === "true";
+  let savePreferenceCheckbox = localStorage.getItem("savePreferenceCheckbox") === "true";
+
+  // Set the filter conditions
+  let dateSortFilters = document.getElementsByName("dateFilter");
+  dateSortFilters[0].checked = true; //the first option is always checked by default
+  if (dateSortFilters[1].getAttribute("id") == dateFilterValue) dateSortFilters[1].checked = true;
+  document.getElementById("distanceFilter").value = distanceFilterValue;
+  document.getElementById("lengthFilter").value = lengthFilterValue;
+  document.getElementById("groceryShopping").checked = groceryShopping;
+  document.getElementById("mailPackages").checked = mailPackages;
+  document.getElementById("medsPickup").checked = medsPickup;
+  document.getElementById("techHelp").checked = techHelp;
+  document.getElementById("petCare").checked = petCare;
+  document.getElementById("transportation").checked = transportation;
+  document.getElementById("savePreferenceCheckbox").checked = savePreferenceCheckbox;
+}
+
+function readPreviousFilterSetting(filterConditions) {
+  // If there is a saved preference, get the filter conditions from localStorage
+  filterConditions.distanceFilterValue = sessionStorage.getItem("distanceFilter");
+  filterConditions.lengthFilterValue = sessionStorage.getItem("lengthFilter");
+  filterConditions.groceryShopping = sessionStorage.getItem("groceryShopping") === "true";
+  filterConditions.mailPackages = sessionStorage.getItem("mailPackages") === "true";
+  filterConditions.medsPickup = sessionStorage.getItem("medsPickup") === "true";
+  filterConditions.techHelp = sessionStorage.getItem("techHelp") === "true";
+  filterConditions.petCare = sessionStorage.getItem("petCare") === "true";
+  filterConditions.transportation = sessionStorage.getItem("transportation") === "true";
+  filterConditions.dateFilterValue = sessionStorage.getItem("dateFilter");
+  return filterConditions;
+}
 
 /**
  * Sorts the given task cards based on the provided date filter value.
@@ -781,51 +919,6 @@ function sortTasksByDate(dateFilterValue, taskCards, target) {
   taskCardsArray.forEach((card) => {
     target.appendChild(card);
   });
-}
-
-/**
- * The `readPreference` function retrieves saved user settings from localStorage,
- * and sets the state of various fields in an HTML form based on these settings.
- *
- * The following settings are retrieved from localStorage:
- * - dateFilter: The value for a date filter
- * - distanceFilter: The value for a distance filter
- * - lengthFilter: The value for a length filter
- * - groceryShopping: The state of a 'Grocery Shopping' checkbox
- * - mailPackages: The state of a 'Mail Packages' checkbox
- * - medsPickup: The state of a 'Medication Pickup' checkbox
- * - techHelp: The state of a 'Tech Help' checkbox
- * - petCare: The state of a 'Pet Care' checkbox
- * - transportation: The state of a 'Transportation' checkbox
- * - savePreferenceCheckbox: The state of a 'Save Preference' checkbox
- */
-function readPreference() {
-  //console.log("Read Preference");
-  // If there is a saved preference, get the filter conditions from localStorage
-  let dateFilterValue = localStorage.getItem("dateFilter");
-  let distanceFilterValue = localStorage.getItem("distanceFilter");
-  let lengthFilterValue = localStorage.getItem("lengthFilter");
-  let groceryShopping = localStorage.getItem("groceryShopping") === "true";
-  let mailPackages = localStorage.getItem("mailPackages") === "true";
-  let medsPickup = localStorage.getItem("medsPickup") === "true";
-  let techHelp = localStorage.getItem("techHelp") === "true";
-  let petCare = localStorage.getItem("petCare") === "true";
-  let transportation = localStorage.getItem("transportation") === "true";
-  let savePreferenceCheckbox = localStorage.getItem("savePreferenceCheckbox") === "true";
-
-  // Set the filter conditions
-  let dateSortFilters = document.getElementsByName("dateFilter");
-  dateSortFilters[0].checked = true; //the first option is always checked by default
-  if (dateSortFilters[1].getAttribute("id") == dateFilterValue) dateSortFilters[1].checked = true;
-  document.getElementById("distanceFilter").value = distanceFilterValue;
-  document.getElementById("lengthFilter").value = lengthFilterValue;
-  document.getElementById("groceryShopping").checked = groceryShopping;
-  document.getElementById("mailPackages").checked = mailPackages;
-  document.getElementById("medsPickup").checked = medsPickup;
-  document.getElementById("techHelp").checked = techHelp;
-  document.getElementById("petCare").checked = petCare;
-  document.getElementById("transportation").checked = transportation;
-  document.getElementById("savePreferenceCheckbox").checked = savePreferenceCheckbox;
 }
 
 export { sortTasksByDate };

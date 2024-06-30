@@ -19,7 +19,8 @@
                 </label>
                 <label for="view" id="mapView">Map</label>
             </div>
-            <button type="button" id="openFilterBtn"><i class="fa-solid fa-sliders"></i></button>
+            <i class="icon filter-icon" aria-label="Filter" id="openFilterBtn"></i>
+            <!-- <button type="button" id="openFilterBtn"><i class="fa-solid fa-sliders"></i></button> -->
         </div>
         <!-- taskinfo containers (List) -->
         <div id="taskListExplore" class="gridContainer"></div>
@@ -27,10 +28,12 @@
         <div id="taskMapExplore" class="mapContainer hidden">
             <div id="map" class="map"></div>
         </div>
+        <div class="noItemsMessage noResult">No Favors to show</div>
     </div>
     <div id="tab2-content" class="tab-content-item hidden">
         <!-- taskinfo containers (List) -->
         <div id="taskListMyFavor" class="gridContainer"></div>
+        <div class="noItemsMessage noResult">No Ongoing Favors to show</div>
     </div>
 </div>
 
