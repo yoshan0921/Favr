@@ -15,6 +15,7 @@ const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sa
 let currentUserID;
 let favorCount = 0;
 let filterAppliedFlg = false;
+let position;
 let map; // For Google Map
 let markers = {}; // For Google Map
 let infoWindows = []; // For Google Map
@@ -252,10 +253,27 @@ async function loadVolunteersDashboard() {
     document.getElementById("tab2").click();
   }
 
+  // Get current location (If it's not first time in the session, get the location from sessionStorage)
+  position = sessionStorage.getItem("currentPosition");
+  if (!position) {
+    let geoPosition = await getCurrentPosition();
+    position = {
+      latitude: geoPosition.coords.latitude,
+      longitude: geoPosition.coords.longitude,
+    };
+    // Store the position as a string
+    sessionStorage.setItem("currentPosition", JSON.stringify(position));
+  } else {
+    // Parse the position back into an object
+    position = JSON.parse(position);
+  }
+
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
-  displayTaskListForVolunteers();
-  main.classList.add("loaded");
+  displayTaskListForVolunteers().then(() => {
+    console.log("Tasks loaded successfully.");
+    main.classList.add("loaded");
+  });
 
   // View switcher radio buttons
   const taskViewSwitch = document.getElementById("taskViewSwitch");
@@ -311,7 +329,7 @@ async function loadVolunteersDashboard() {
  * Also creates a list view (including map view) for the tasks.
  *
  */
-function displayTaskListForVolunteers() {
+async function displayTaskListForVolunteers() {
   // Get DB reference
   const dbref = collection(firestore, "tasks");
   // Define the filter condition for the query
@@ -382,20 +400,6 @@ async function createTaskListForVolunteers(allTasks) {
   let longitude;
 
   try {
-    // Get current location (If it's not first time in the session, get the location from sessionStorage)
-    let position = sessionStorage.getItem("currentPosition");
-    if (!position) {
-      let geoPosition = await getCurrentPosition();
-      position = {
-        latitude: geoPosition.coords.latitude,
-        longitude: geoPosition.coords.longitude,
-      };
-      // Store the position as a string
-      sessionStorage.setItem("currentPosition", JSON.stringify(position));
-    } else {
-      // Parse the position back into an object
-      position = JSON.parse(position);
-    }
     latitude = position.latitude;
     longitude = position.longitude;
 
@@ -474,7 +478,7 @@ async function createTaskListForVolunteers(allTasks) {
           taskID: id,
           taskName: taskDetails.name ?? "",
           taskStatus: taskDetails.status ?? "",
-          taskDate: new Date(taskDetails.details["date"]).toLocaleDateString("en-us", { day: "numeric", month: "short" }) ?? "",
+          taskDate: new Date(taskDetails.details["date"]).toLocaleDateString("en-us", { day: "numeric", month: "short", year: "numeric" }) ?? "",
           taskTime: taskDetails.details["time"] ?? "",
           taskDuration: length,
           taskAddress: taskDetails.details["startAddress"] ?? "",
@@ -796,8 +800,13 @@ function applyFilter(redo) {
       displayStatus = false;
     }
 
-    // Set display status
-    card.style.display = displayStatus ? card.classList.remove("hide") : card.classList.add("hide");
+    // Set display status for the list (card)
+    if (displayStatus) {
+      card.classList.remove("hide");
+    } else {
+      card.classList.add("hide");
+    }
+    // Set display status for the map (marker)
     if (marker) marker.element.style.visibility = displayStatus ? "visible" : "hidden";
   });
 
@@ -826,18 +835,6 @@ function applyFilter(redo) {
 /**
  * The `readPreference` function retrieves saved user settings from localStorage,
  * and sets the state of various fields in an HTML form based on these settings.
- *
- * The following settings are retrieved from localStorage:
- * - dateFilter: The value for a date filter
- * - distanceFilter: The value for a distance filter
- * - lengthFilter: The value for a length filter
- * - groceryShopping: The state of a 'Grocery Shopping' checkbox
- * - mailPackages: The state of a 'Mail Packages' checkbox
- * - medsPickup: The state of a 'Medication Pickup' checkbox
- * - techHelp: The state of a 'Tech Help' checkbox
- * - petCare: The state of a 'Pet Care' checkbox
- * - transportation: The state of a 'Transportation' checkbox
- * - savePreferenceCheckbox: The state of a 'Save Preference' checkbox
  */
 function readSavedPreference() {
   // If there is a saved preference, get the filter conditions from localStorage
@@ -887,10 +884,8 @@ function readPreviousFilterSetting(filterConditions) {
  * @param {string} dateFilterValue - The value of the date filter. It can be 'newest' or 'oldest'.
  * @param {NodeList} taskCards - The task cards to be sorted. Each task card is a DOM node.
  *
- * The function first converts the NodeList of task cards into an array. It then sorts the array based on the date attribute of each task card.
  * If the date filter value is 'newest', the task cards are sorted from newest to oldest.
  * If the date filter value is 'oldest', the task cards are sorted from oldest to newest.
- * After sorting, the function replaces the old NodeList in the DOM with the sorted array of task cards.
  */
 function sortTasksByDate(dateFilterValue, taskCards, target) {
   // Convert NodeList to Array

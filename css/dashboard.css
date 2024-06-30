@@ -291,6 +291,7 @@ button#applyFilter,
 button#cancelFilter {
   cursor: pointer;
   flex-grow: 1;
+  font-size: 16px;
 }
 
 /* -------------------------------------------------- */
@@ -364,4 +365,70 @@ button#cancelFilter {
   justify-content: center;
   height: 50vh;
   color: var(--disabledText);
+}
+
+/* -------------------------------------------------- */
+/* Date Range Picker *Library Customize               */
+/* -------------------------------------------------- */
+.daterangepicker {
+  background-color: var(--background-gray) !important;
+  right: 0.5rem !important;
+  padding: 2rem !important;
+  width: auto !important;
+
+  @media screen and (min-width: 800px) {
+    right: 2rem !important;
+    width: auto !important;
+  }
+}
+
+.daterangepicker:before,
+.daterangepicker:after {
+  content: none !important;
+  display: none !important;
+}
+
+.daterangepicker * {
+  font-size: 16px !important;
+  font-weight: normal !important;
+}
+
+.daterangepicker .calendar-table,
+.daterangepicker .calendar-table .off {
+  background-color: var(--background-gray) !important;
+  border: none !important;
+}
+
+.daterangepicker td.in-range {
+  background-color: var(--helpfulBlue300) !important;
+}
+
+.daterangepicker td.active {
+  background-color: var(--primary) !important;
+}
+
+.daterangepicker .drp-selected {
+  display: block !important;
+  padding: 1rem 0rem !important;
+}
+
+.daterangepicker button {
+  font-weight: bold !important;
+  display: inline-block !important;
+  border: 2px solid var(--primary) !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.daterangepicker button.cancelBtn {
+  background-color: transparent !important;
+  color: var(--primary) !important;
+}
+
+.daterangepicker button.cancelBtn:hover {
+  background-color: var(--hoverOutlinedButtonBackground) !important;
+}
+
+.daterangepicker button:disabled {
+  background-color: var(--primary) !important;
+  display: inline-block !important;
 }
