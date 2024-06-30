@@ -465,9 +465,9 @@ async function createTaskListForVolunteers(allTasks) {
 
         // Set the link URL for the task card
         if (taskDetails.status === STATUS_WAITING) {
-          linkURL = "/tasks/accept.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else if (taskDetails.status === "On going") {
-          linkURL = "/tasks/myfavr.html";
+          linkURL = "/tasks/volunteer-favor.html";
         } else {
           linkURL = "#";
         }

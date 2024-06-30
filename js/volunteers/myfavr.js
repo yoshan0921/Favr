@@ -155,11 +155,11 @@ document.getElementById("cancelBtn").addEventListener("click", async function ()
   console.log(taskData);
   await cancelTask(taskID, taskData);
   exploreFavors();
-
-
 });
 
 // Link to chat room
 document.getElementById("contactBtn").addEventListener("click", function () {
   window.location.href = `/chat.html?crid=${chatRoomID}`;
 });
+
+

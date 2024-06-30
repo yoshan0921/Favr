@@ -15,10 +15,6 @@ img {
   cursor: pointer;
 }
   
-main.content {
-  /* margin-top: 20rem; */
-}
-  
 .user-profile-wrapper {
   display: block;
   margin: auto;
@@ -31,53 +27,57 @@ main.content {
   
 .user-profile-wrapper .user-profile {
   display: grid;
-  grid-template-columns: 5rem 1fr;
-  grid-template-rows: 5rem 40%;
+  grid-template-columns: 3.3rem repeat(3, 1fr);
+  /* grid-template-rows: 5rem 40%; */
   gap: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }
-  
-.user-profile-wrapper .user-profile i {
-  grid-column: span 1;
-  align-self: center;
-  text-align: center;
-  font-size: 2rem;
-}
-  
+
 .user-profile-wrapper .user-profile .user-info {
-  grid-row: span 1;
-  align-self: center;
+  grid-column: 2 / -1;
 }
   
-.user-profile-wrapper .user-profile .user-info h3 {
-  font-weight: bold;
-  font-size: clamp(2rem 4vw 4rem);
+.user-profile-wrapper .user-profile button {
+  grid-column: 2 / 3;
+  justify-content: center;
 }
-  
-.user-profile-wrapper .user-profile .user-info p {
-  font-size: clamp(0.5rem 2vw 2.5rem);
-}
+    
   
 .user-profile-wrapper .user-profile #contactBtn {
-  /* grid-column: 2; */
-  margin-top: 1rem;
+  visibility: hidden;
+  padding: .1rem 1.3rem;
+  margin-top: 0;
   margin-bottom: 1rem;
   border-radius: 20px;
   border: none;
-  background-color: rgb(184, 184, 184);
+  background-color: var(--primary);
 }
   
-.note {
-  margin-bottom: 2rem;
-  padding: 2rem;
-  border-radius: 10px;
-  border: none;
-  background-color: rgb(184, 184, 184);
+.schedule nav {
+  margin: 1.5rem 0;
 }
 
-#icons {
+
+.schedule nav li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 0.2rem solid var(--background-gray);
+  padding: 1rem 0;
+}
+
+.schedule nav li:last-child {
+  border-bottom: 0.2rem solid var(--background-gray);
+}
+
+.user-profile-wrapper #icons,
+.user-profile-wrapper #acOrDecBtn,
+.user-profile-wrapper #comOrCanBtn
+ {
   visibility: hidden;
+} 
+
+#icons {
   text-align: center;
   font-size: 3rem;
 
@@ -86,10 +86,14 @@ main.content {
       margin-right: 2rem;
   }
 }
-  
-.user-profile-wrapper .set {
+
+.user-profile-wrapper .set,
+#confirm-overlay .set,
+#accept-overlay .set,
+#schedule-conflict .set {
   display: flex;
   justify-content: space-between;
+  margin-top: 1rem;
 }
   
 .user-profile-wrapper .set button {
@@ -100,7 +104,9 @@ main.content {
   
 #confirm-overlay,
 #accept-overlay,
-#schedule-conflict {
+#schedule-conflict,
+#complete-confirm-overlay,
+#task-completed-overlay {
   display: grid;
   align-content: center;
   position: fixed; /* Sit on top of the page content */
@@ -129,7 +135,7 @@ main {
   margin: auto;
   background-color: rgb(233, 233, 233);
   text-align: center;
-  padding: 3rem 5rem;
+  padding: 2rem 3rem;
   border-radius: 30px;
   height: 400px;
   
@@ -148,13 +154,7 @@ main {
   grid-column: 1 / 2;
   align-content: center;
 }
-  
-.confirm-wrapper .set {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
-  
+    
 .confirm-wrapper .set button {
   border: none;
   padding: 0.2rem 1rem 0.2rem 1rem;
@@ -165,4 +165,14 @@ main {
   background-color: rgb(184, 184, 184);
   flood-color: white;
 }
-  
+
+#icons-overlay {
+  font-size: 3rem;
+}
+
+#complete-confirm-overlay .set,
+#task-completed-overlay .set {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}

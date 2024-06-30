@@ -19,6 +19,11 @@ main.content {
   /* margin-top: 20rem; */
 }
 
+
+#contactBtn {
+  visibility: hidden;
+}
+
 .user-profile-wrapper {
   display: block;
   margin: auto;

@@ -1,65 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="module" src="../js/common.js"></script>
-  <script type="module" src="../js/volunteers/volunteer-history.js"></script>
-  <link rel="stylesheet" type="text/css" href="../css/styles.css">
-  <link rel="stylesheet" type="text/css" href="../css/volunteers/volunteer-history.css">
-  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  <title>Pending History</title>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="../js/common.js"></script>
+    <script type="module" src="../js/volunteers/volunteer-favor.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+    <link rel="stylesheet" type="text/css" href="../css/volunteers/volunteer-favor.css">
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <title>Pending History</title>
+  </head>
 
-<body>
-  <!-- Left Column -->
-  <header id="header"></header>
+  <body>
+    <!-- Left Column -->
+    <header id="header"></header>
 
-  <!-- Left Column -->
-  <div id="leftside-column"></div>
+    <!-- Left Column -->
+    <div id="leftside-column"></div>
 
-  <!-- Main Content -->
-  <main class="content">
-    <h2 id="taskName"></h2>
-    <div class="user-profile-wrapper">
-      <section class="user-profile">
-        <img id="elderPhoto">
+    <!-- Main Content -->
+    <main class="content">
+      <h1 id="taskName"></h1>
+      <div class="user-profile-wrapper">
+
+        <section class="user-profile">
+          <img id="elderPhoto">
+          <div class="user-info">
+            <h3 id="elderName" class="name"></h3>
+            <p id="elderAddress"></p>
+          </div>
+          <button id="contactBtn">Contact&nbsp;&nbsp;&nbsp;&nbsp;></button>
+        </section>
+
+        <section class="schedule">
+          <nav>
+            <ul>
+              <li>
+                <a href="#">Time:</a>
+                <p id="taskTime"></p>
+              </li>
+              <li>
+                <a href="#">Start<br>Location:</a>
+                <p id="taskAddress"></p>
+              </li>
+              <li>
+                <a href="#">End<br>Location:</a>
+                <p id="taskTime"></p>
+              </li>
+              <li>
+                <a href="#">Instruction:</a>
+                <p id="taskNote"></p>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+        <section class="icons" id="icons">
+          <i class="fa-regular fa-thumbs-down" id="thumsDown"></i>
+          <i class="fa-regular fa-thumbs-up" id="thumsUp"></i>
+        </section>
+
+        <section class="set" id="acOrDecBtn">
+          <button id="declineBtn">Decline</button>
+          <button id="acceptBtn">Accept</button>
+        </section>
+
+        <section class="set" id="comOrCanBtn">
+          <button id="cancelBtn">Cancel</button>
+          <button id="confirmCompleteBtn">Complete</button>
+        </section>
 
 
-        <div class="user-info">
-          <h3 id="elderName" class="name"></h3>
-          <p id="elderAddress"></p>
+      </div>
+
+
+
+
+      <!-- Confirm task Overlay Display=============== -->
+      <div id="confirm-overlay">
+        <div class="confirm-wrapper">
+          <section class="message">
+            <h2>Confirm Favor Acceptance</h2>
+            <p>Are you willing to help <span id="confirmWrapperElderName"></span> with this <span id="confirmTaskName"></span> Favor?</p>
+          </section>
+
+          <section class="user-profile">
+            <i class="fa-solid fa-user"></i>
+            <div class="user-info">
+              <h3 id="confirmElderName" class="name"></h3>
+              <p id="confirmElderAddress"></p>
+            </div>
+          </section>
+
+          <section class="set">
+            <button id="backBtn">Back</button>
+            <button id="confirmBtn">Confirm</button>
+          </section>
         </div>
-      </section>
+      </div>
 
-      <section class="schedule">
-        <nav>
-          <ul>
-            <li>
-              <a href="#" aria-label="Location"><i class="fa-solid fa-location-dot" aria-hidden="true" title="Location"></i> <a id="taskAddress"></a></a>
-            </li>
-            <li>
-              <a href="#" aria-label="Calendar"><i class="fa-solid fa-calendar-days" aria-hidden="true" title="Calendar"></i> <a id="taskTime"></a></a>
-            </li>
-          </ul>
-        </nav>
-      </section>
-      
-      <p>Instruction</p>
-      <section class="note">
-        <p id="taskNote"></p>
-      </section>
+      <!-- Accept task Overlay Display=============== -->
+      <div id="accept-overlay">
+        <div class="confirm-wrapper">
+          <section class="message">
+            <h2>Favor Accepted</h2>
+            <i class="fa-solid fa-check"></i>
+            <p>You have agreed to help <span id="acceptWrapperElderName"></span> with his <span id="acceptTaskName"></span> Favor on:</p>
+            <p id="acceptTaskTime"></p>
+          </section>
 
-      <section class="icons" id="icons">
-        <i class="fa-regular fa-thumbs-down"></i>
-        <i class="fa-regular fa-thumbs-up"></i>
-      </section>
+          <section class="user-profile">
+            <i class="fa-solid fa-user"></i>
+            <div class="user-info">
+              <h3 id="acceptElderName" class="name"></h3>
+              <p id="acceptElderAddress"></p>
+            </div>
+          </section>
 
-    </div>
-  </main>
+          <section class="set">
+            <button id="homeBtn">Home</button>
+            <button id="myFavorsBtn">My Favors</button>
+          </section>
+        </div>
+      </div>
 
-  <!-- Footer -->
-  <footer id="footer"></footer>
-</body>
+      <!-- Schedule Conflict Overlay Display=============== -->
+      <div id="schedule-conflict">
+        <div class="confirm-wrapper">
+          <section class="message">
+            <h2>Schedule Conflict!</h2>
+            <i class="fa-regular fa-calendar-xmark"></i>
+            <p>You have another Favor going on during this time slot.</p>
+            <p>Do you still want to accept the Favor?</p>
+          </section>
+
+          <section class="set">
+            <button id="backBtn">Back</button>
+            <button id="confirmBtn">Confirm</button>
+          </section>
+        </div>
+      </div>
+
+      <!-- Confirm Task Complete Overlay Display=============== -->
+      <div id="complete-confirm-overlay">
+        <div class="confirm-wrapper">
+          <section class="message">
+            <p>How do you rate this experience?</p>
+            <h2>Confirm Favor has been delivered successfully</h2>
+          </section>
+
+          <section class="icons-overlay" id="icons-overlay">
+            <i class="fa-regular fa-thumbs-down" id="thumsDown-overlay"></i>
+            <i class="fa-regular fa-thumbs-up" id="thumsUp-overlay"></i>
+          </section>
+
+          <section class="set">
+            <button id="completeBtn">Complete</button>
+          </section>
+        </div>
+      </div>
+
+      <!-- Task Completed Overlay Display=============== -->
+      <div id="task-completed-overlay">
+        <div class="confirm-wrapper">
+          <section class="message">
+            <i class="fa-solid fa-heart"></i>
+            <h2>Thank you for supporting <span id="completedElderName"></span> and our community!</h2>
+            <p>Request for approval has been sent to <span id="approvedElderName"></span> and will be updated to you after approved.</p>
+            <p>See more seniors you can help:</p>
+          </section>
+
+          <section class="set">
+            <button id="exploreBtn">Explore Favors</button>
+          </section>
+        </div>
+      </div>
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+  </body>
