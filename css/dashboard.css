@@ -10,6 +10,10 @@
   width: 100%;
 }
 
+.tab-content .map iframe {
+  outline: none;
+}
+
 .tab-content .map .you {
   background-color: var(--primary);
   border-radius: 8px;
@@ -111,6 +115,10 @@
   margin-top: 1rem;
 }
 
+.elder .taskCard .duration .bold {
+  font-weight: bold;
+}
+
 .elder .taskCard .statusColor {
   display: inline-block;
   border-radius: 50%;
@@ -164,16 +172,24 @@
   }
 }
 
+.volunteer .taskCard .duration .bold {
+  font-weight: bold;
+}
+
 /* -------------------------------------------------- */
 /* Volunteer: Favor Filter                            */
 /* -------------------------------------------------- */
 #filterModal .modal-content {
-  min-height: 80vh;
-  max-width: 330px;
-  margin-top: 1vh;
-  margin-right: 1rem;
   display: flex;
   flex-flow: column wrap;
+  min-height: 80vh;
+  width: 90%;
+
+  @media screen and (min-width: 800px) {
+    max-width: 330px;
+    margin-top: 1vh;
+    margin-right: 1rem;
+  }
 }
 
 .modal-form,
@@ -192,7 +208,7 @@
   display: flex;
   flex-flow: row wrap;
   gap: 0.5rem;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 #filterModal .form-group.sort label {
@@ -236,6 +252,7 @@
   display: flex;
   flex-flow: row wrap;
   gap: 0.5rem;
+  padding-top: 0.5rem;
 }
 
 .favorType + label::before {
@@ -262,6 +279,12 @@
 
 #savePreference {
   flex-basis: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#savePreference > input {
+  margin-right: 0.5rem;
 }
 
 button#applyFilter,
