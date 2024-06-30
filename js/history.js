@@ -1,6 +1,6 @@
 import { firestore } from "./firebase/firebase.js";
 import { onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { loadPartial, showTabmenu, lazyLoadImages } from "./common.js";
+import { loadPartial, showTabmenu, lazyLoadImages, openModal, closeModal } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
 import { redirect } from "./utils.js";
@@ -267,6 +267,9 @@ async function loadVolunteersHistory() {
   const main = document.getElementsByTagName("main")[0];
   await displayTaskListForVolunteers();
   main.classList.add("loaded");
+
+  // Date range picker
+  setupDateRangePicker();
 }
 
 /**
@@ -364,7 +367,7 @@ async function createTaskListForVolunteers(allTasks) {
           taskName: taskDetails.name ?? "",
           taskStatus: taskDetails.status ?? "",
           // taskDate: taskDetails.details["date"] ?? "",
-          taskDate: new Date(taskDetails.details["date"]).toLocaleDateString("en-us", { day: "numeric", month: "short" }) ?? "",
+          taskDate: new Date(taskDetails.details["date"]).toLocaleDateString("en-us", { day: "numeric", month: "short", year: "numeric" }) ?? "",
           taskTime: taskDetails.details["time"] ?? "",
           taskDuration: length,
           taskNotes: taskDetails.notes ?? "",
@@ -458,6 +461,83 @@ function createCardForVolunteers(task) {
   } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
     listCancelled.appendChild(card);
     listMyFavorCountCancelled.textContent = ++favorCountCancelled;
+  }
+}
+
+/**
+ * Initializes the date range picker and sets up event listeners for modal interactions.
+ */
+function setupDateRangePicker() {
+  const filterModal = document.getElementById("filterModal");
+
+  let pickers = $(".openDateRangeModal").daterangepicker({
+    locale: {
+      cancelLabel: "Clear",
+    },
+  });
+
+  document.querySelectorAll(".openDateRangeModal").forEach((element) => {
+    element.addEventListener("click", function (event) {
+      openModal(filterModal);
+    });
+  });
+
+  document.querySelectorAll(".daterangepicker .applyBtn").forEach((element, index) => {
+    element.addEventListener("click", function () {
+      let targetTab;
+      let dateRanges = document.querySelectorAll(".drp-selected");
+      let [startDate, endDate] = dateRanges[index].textContent.split(" - ");
+
+      if (index === 0) targetTab = document.getElementById("taskListPending");
+      else if (index === 1) targetTab = document.getElementById("taskListCompleted");
+      else if (index === 2) targetTab = document.getElementById("taskListCancelled");
+      applyDateRangeFilter(startDate, endDate, targetTab);
+      closeModal(filterModal);
+    });
+  });
+
+  document.querySelectorAll(".daterangepicker .cancelBtn").forEach((element, index) => {
+    element.addEventListener("click", function () {
+      let targetTab;
+      if (index === 0) targetTab = document.getElementById("taskListPending");
+      else if (index === 1) targetTab = document.getElementById("taskListCompleted");
+      else if (index === 2) targetTab = document.getElementById("taskListCancelled");
+
+      clearDateRangeFilter(targetTab);
+      clearDateRangePicker(index);
+      closeModal(filterModal);
+    });
+  });
+
+  function applyDateRangeFilter(start, end, targetTab) {
+    try {
+      const cards = targetTab.querySelectorAll(".taskCard");
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+
+      cards.forEach((card) => {
+        const date = new Date(card.getAttribute("data-date"));
+        card.classList.toggle("hide", !(date >= startDate && date <= endDate));
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function clearDateRangeFilter(targetTab) {
+    try {
+      const cards = targetTab.querySelectorAll(".taskCard");
+
+      cards.forEach((card) => {
+        card.classList.remove("hide");
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function clearDateRangePicker(index) {
+    // To be implemented
   }
 }
 

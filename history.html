@@ -6,14 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" src="./js/common.js"></script>
   <script type="module" src="./js/history.js"></script>
-
-  <!-- Need to create history.css -->
   <link rel="stylesheet" href="./css/dashboard.css">
-
   <link rel="stylesheet" href="./css/styles.css">
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  <title>Dashboard</title>
+  <!-- For Date Range Picker -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <title>Favr: History</title>
 </head>
 
 <body>
@@ -28,6 +30,9 @@
 
   <!-- Footer -->
   <footer id="footer"></footer>
+
+  <!-- Modal -->
+  <div id="filterModal" class="modal"></div>
 
 </body>
 
