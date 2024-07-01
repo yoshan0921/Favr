@@ -377,12 +377,17 @@ button#cancelFilter {
   width: 307px !important;
   margin: auto !important;
   padding: 2rem !important;
-  top: 50% !important;
-  left: 50% !important;
+  top: 45% !important;
   transform: translate(-50%, -50%) !important;
+  left: 50% !important;
   margin: auto !important;
 
+  /* left: unset !important; */
+  /* right: 0.5rem !important; */
+  /* transform: translate(0, -50%) !important; */
+
   @media screen and (min-width: 800px) {
+    top: 46% !important;
     width: 556px !important;
     left: unset !important;
     right: 2rem !important;
@@ -401,6 +406,10 @@ button#cancelFilter {
   font-weight: normal !important;
 }
 
+.daterangepicker .ranges {
+  display: none;
+}
+
 .daterangepicker .drp-calendar.left,
 .daterangepicker .drp-calendar.right {
   padding: 0.5rem !important;
@@ -413,11 +422,11 @@ button#cancelFilter {
 }
 
 .daterangepicker td.in-range {
-  background-color: var(--helpfulBlue300) !important;
+  background-color: var(--caringOrange100) !important;
 }
 
 .daterangepicker td.active {
-  background-color: var(--primary) !important;
+  background-color: var(--caringOrange500) !important;
 }
 
 .daterangepicker .drp-selected {
@@ -429,7 +438,7 @@ button#cancelFilter {
   font-weight: bold !important;
   display: inline-block !important;
   border: 2px solid var(--primary) !important;
-  padding: 0.5rem 1rem !important;
+  padding: 0rem 1rem !important;
 }
 
 .daterangepicker button.cancelBtn {
