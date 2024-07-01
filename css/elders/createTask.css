@@ -1,7 +1,10 @@
+body {
+  visibility: hidden;
+}
+
 /* -------------------------------------------------- */
 /* Styles for Step Wizard                             */
 /* -------------------------------------------------- */
-
 .steps-counter {
   position: relative;
   display: flex;
