@@ -45,6 +45,7 @@ class Task {
     this.completionTime = obj.completionTime;
     this.notes = obj.notes;
     this.details = obj.details; //an object with no strict structure (depends on task type)
+    this.duration = obj.duration;
   }
 }
 
@@ -115,6 +116,7 @@ const taskConverter = {
       closedDate: obj.closedDate ? obj.closedDate : null,
       completionTime: obj.completionTime ? obj.completionTime : null,
       notes: obj.notes ? obj.notes : null,
+      duration: obj.duration ? obj.duration : 0
     };
   },
   fromFirestore: (snapshot, options) => {
@@ -130,6 +132,7 @@ const taskConverter = {
       closedDate: data.closedDate,
       completionTime: data.completionTime,
       notes: data.notes,
+      duration: data.duration
     });
   },
 };
