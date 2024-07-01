@@ -1,6 +1,6 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { createDocument } from "../firebase/firestore.js";
-import { enableBackButton } from "../utils.js";
+import { disableConfirmRedirectDialog, enableBackButton, enableConfirmRedirectDialog } from "../utils.js";
 import { openModal, closeModal } from "../common.js";
 
 const { Map } = await google.maps.importLibrary("maps");
@@ -22,13 +22,7 @@ if (document.readyState === "loading") {
 
 function runFunction() {
   const favorSelectionOptions = document.getElementsByName("favorOption");
-  favorSelectionOptions.forEach(option => option.addEventListener("change",(e)=>{
-    window.addEventListener("beforeunload", (e)=>{
-      e.preventDefault();
-      // Included for legacy support, e.g. Chrome/Edge < 119
-      event.returnValue = true;
-    });
-  }))
+  favorSelectionOptions.forEach(option => option.addEventListener("change",enableConfirmRedirectDialog));
   let currentStep = 1; // this counter keeps track of which step of the creation process the user is seeing at the moment. By default, it starts with 1
   let selectionHistory = []; // this array will contain the strings that summarizes the user's selections on each step
 
@@ -321,6 +315,7 @@ function runFunction() {
     createDocument("tasks", task)
       .then(() => {
         displayTaskSummary(task);
+        disableConfirmRedirectDialog();
         // window.location.href = "/dashboard.html";
       })
       .catch((error) => {

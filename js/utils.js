@@ -74,12 +74,24 @@ function installServiceWorkers(){
           });
       }
 }
-
+function enableConfirmRedirectDialog(){
+    window.addEventListener("beforeunload", enableDialog);
+}
+function enableDialog(e){
+    e.preventDefault();
+    // Included for legacy support, e.g. Chrome/Edge < 119
+    event.returnValue = true;
+}
+function disableConfirmRedirectDialog(){
+    window.removeEventListener("beforeunload", enableDialog);
+}
 export {
     signOut,
     redirect,
     handleError,
     resetLocalStorage,
     enableBackButton,
-    installServiceWorkers
+    installServiceWorkers,
+    enableConfirmRedirectDialog,
+    disableConfirmRedirectDialog
 }
