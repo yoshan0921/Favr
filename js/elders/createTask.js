@@ -21,10 +21,14 @@ if (document.readyState === "loading") {
 }
 
 function runFunction() {
-  window.addEventListener("fetch", e=>{
-    e.preventDefault();
-    console.log(e);
-  });
+  const favorSelectionOptions = document.getElementsByName("favorOption");
+  favorSelectionOptions.forEach(option => option.addEventListener("change",(e)=>{
+    window.addEventListener("beforeunload", (e)=>{
+      e.preventDefault();
+      // Included for legacy support, e.g. Chrome/Edge < 119
+      event.returnValue = true;
+    });
+  }))
   let currentStep = 1; // this counter keeps track of which step of the creation process the user is seeing at the moment. By default, it starts with 1
   let selectionHistory = []; // this array will contain the strings that summarizes the user's selections on each step
 

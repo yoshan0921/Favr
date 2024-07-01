@@ -159,6 +159,14 @@ async function runFunction() {
         emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
       }
     });
+    const formInputs = Array.from(document.getElementsByTagName("input"));
+    formInputs.forEach(input => input.addEventListener("input",(e)=>{
+      window.addEventListener("beforeunload", (e)=>{
+        e.preventDefault();
+        // Included for legacy support, e.g. Chrome/Edge < 119
+        event.returnValue = true;
+      });
+    }))
   }
   /**
    * Adds static information about the user on the profile view page
