@@ -25,7 +25,7 @@ let pageTitles = {
   "tasks/accept.html": "Favor Details",
   "tasks/myfavr.html": "My Favor",
   "tasks/volunteer-favor.html": "My Favor",
-  "tasks/updates.html": "Updates",
+  "updates.html": "Updates",
   "support.html": "Get support",
   "chat.html": "Messages",
 };
