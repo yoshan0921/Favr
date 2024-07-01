@@ -4,7 +4,7 @@
 
 import { getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument, getAllWithFilter } from "./firebase/firestore.js";
-import { redirect } from "./utils.js";
+import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, redirect } from "./utils.js";
 import { closeModal, loadPartial, openModal } from "./common.js";
 
 if (document.readyState === "loading") {
@@ -159,6 +159,8 @@ async function runFunction() {
         emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
       }
     });
+    const formInputs = Array.from(document.querySelectorAll("form :is(input, textarea)"));
+    formInputs.forEach(input => input.addEventListener("input",enableConfirmRedirectDialog))
   }
   /**
    * Adds static information about the user on the profile view page
@@ -220,6 +222,7 @@ async function runFunction() {
     updateDocument("users", getCurrentUserID(), user)
       .then((response) => {
         console.log(response, "Update successful!");
+        disableConfirmRedirectDialog();
         loadUserInfo();
       })
       .catch((error) => {
