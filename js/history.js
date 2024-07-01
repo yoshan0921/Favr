@@ -470,41 +470,47 @@ function createCardForVolunteers(task) {
 function setupDateRangePicker() {
   const filterModal = document.getElementById("filterModal");
 
-  let pickers = $(".openDateRangeModal").daterangepicker({
-    locale: {
-      cancelLabel: "Clear",
-    },
+  // Pending tab
+  $(".dateRangeModal").daterangepicker({
+    parentEl: "#filterModal",
+    applyButtonClasses: "applyBtnForPending",
+    cancelButtonClasses: "cancelBtnForPending",
+    startDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
+    endDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
+    locale: { cancelLabel: "Clear" },
   });
 
-  document.querySelectorAll(".openDateRangeModal").forEach((element) => {
-    element.addEventListener("click", function (event) {
+  document.querySelectorAll(".dateRangeModal").forEach((drp) => {
+    drp.addEventListener("click", function (event) {
       openModal(filterModal);
     });
   });
 
-  document.querySelectorAll(".daterangepicker .applyBtn").forEach((element, index) => {
-    element.addEventListener("click", function () {
+  document.querySelectorAll(".applyBtnForPending").forEach((btn, index) => {
+    btn.addEventListener("click", function () {
       let targetTab;
       let dateRanges = document.querySelectorAll(".drp-selected");
       let [startDate, endDate] = dateRanges[index].textContent.split(" - ");
+      console.log(startDate, endDate);
 
       if (index === 0) targetTab = document.getElementById("taskListPending");
       else if (index === 1) targetTab = document.getElementById("taskListCompleted");
       else if (index === 2) targetTab = document.getElementById("taskListCancelled");
+
       applyDateRangeFilter(startDate, endDate, targetTab);
       closeModal(filterModal);
     });
   });
 
-  document.querySelectorAll(".daterangepicker .cancelBtn").forEach((element, index) => {
-    element.addEventListener("click", function () {
+  document.querySelectorAll(".cancelBtnForPending").forEach((btn, index) => {
+    btn.addEventListener("click", function () {
       let targetTab;
       if (index === 0) targetTab = document.getElementById("taskListPending");
       else if (index === 1) targetTab = document.getElementById("taskListCompleted");
       else if (index === 2) targetTab = document.getElementById("taskListCancelled");
 
       clearDateRangeFilter(targetTab);
-      clearDateRangePicker(index);
+      clearDateRangeCalendar(index);
       closeModal(filterModal);
     });
   });
@@ -514,7 +520,6 @@ function setupDateRangePicker() {
       const cards = targetTab.querySelectorAll(".taskCard");
       const startDate = new Date(start);
       const endDate = new Date(end);
-
       cards.forEach((card) => {
         const date = new Date(card.getAttribute("data-date"));
         card.classList.toggle("hide", !(date >= startDate && date <= endDate));
@@ -527,7 +532,6 @@ function setupDateRangePicker() {
   function clearDateRangeFilter(targetTab) {
     try {
       const cards = targetTab.querySelectorAll(".taskCard");
-
       cards.forEach((card) => {
         card.classList.remove("hide");
       });
@@ -536,8 +540,13 @@ function setupDateRangePicker() {
     }
   }
 
-  function clearDateRangePicker(index) {
-    // To be implemented
+  function clearDateRangeCalendar(index) {
+    setupDateRangePicker();
+    // let today = new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+    // let drp = $(".dateRangeModal").eq(index).data("daterangepicker");
+    // drp.setStartDate(today);
+    // drp.setEndDate(today);
+    // drp.updateView();
   }
 }
 

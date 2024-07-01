@@ -372,13 +372,21 @@ button#cancelFilter {
 /* -------------------------------------------------- */
 .daterangepicker {
   background-color: var(--background-gray) !important;
-  right: 0.5rem !important;
+  border-radius: 10px !important;
+  width: fit-content !important;
+  width: 307px !important;
+  margin: auto !important;
   padding: 2rem !important;
-  width: auto !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: auto !important;
 
   @media screen and (min-width: 800px) {
+    width: 556px !important;
+    left: unset !important;
     right: 2rem !important;
-    width: auto !important;
+    transform: translate(0, -50%) !important;
   }
 }
 
@@ -391,6 +399,11 @@ button#cancelFilter {
 .daterangepicker * {
   font-size: 16px !important;
   font-weight: normal !important;
+}
+
+.daterangepicker .drp-calendar.left,
+.daterangepicker .drp-calendar.right {
+  padding: 0.5rem !important;
 }
 
 .daterangepicker .calendar-table,
