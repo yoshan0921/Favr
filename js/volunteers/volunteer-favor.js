@@ -1,5 +1,6 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { updateDocument, getDocument, getFile } from "../firebase/firestore.js";
+import { sendNotification } from "../notification.js";
 
 let taskID;
 let taskData = {};
@@ -155,6 +156,13 @@ async function acceptTask(taskID, taskData) {
     .then(() => {
       console.log(taskData, taskID);
       console.log("Task accepted!");
+      sendNotification(
+        {
+          title: "Favor accepted!",
+          link: "#",
+          message: `A volunteer has accepted to help you with your ${taskData.name} favor!`
+        },
+        taskData.requesterID);
     })
     .catch((error) => {
       console.log(error);

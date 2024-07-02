@@ -3,6 +3,7 @@ import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from
 import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
 import { database } from "./firebase/firebase.js";
 import { ref, child, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { sendNotification } from "./notification.js";
 
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
@@ -41,6 +42,7 @@ if (document.readyState === "loading") {
 async function runFunction() {
   // Get Login user information
   loginUserID = getCurrentUserID();
+  var contactID = "";
 
   // Get the current user role
   await getCurrentUserRole().then(async (currentUserRole) => {
@@ -78,7 +80,6 @@ async function runFunction() {
   // Create user list
   getAllWithFilter("tasks", filterCondition).then((collection) => {
     let contactIDs = [];
-    let contactID = "";
     let promises = [];
 
     collection.forEach((doc) => {
@@ -196,31 +197,47 @@ async function runFunction() {
     const main = document.getElementsByTagName("main")[0];
     main.classList.add("loaded");
   });
+  // Send message
+  sendMessage.addEventListener("submit", function (event) {
+    // Prevent the form from submitting
+    event.preventDefault();
+
+    // Check if the message is empty
+    if (message.value === "") return;
+
+    const now = new Date();
+    push(ref(database, chatRoomID), {
+      year: now.getFullYear(),
+      month: now.toLocaleString("en-US", { month: "long" }),
+      day: now.getDate(),
+      dayOfWeek: now.toLocaleString("en-US", { weekday: "long" }),
+      time: now.toTimeString().split(":")[0] + ":" + now.toTimeString().split(":")[1], // HH:MM
+      name: loginUserID,
+      message: message.value,
+    })
+    .then(()=>{
+      const header = document.getElementsByClassName("contactHeader")[0];
+      if(header){
+        let receiverID = header.getAttribute("data-contactid");
+        sendNotification(
+          {
+            icon: "#",
+            title: "Someone sent you a message",
+            link: "#",
+            message: message.value
+          },
+          receiverID);
+      }
+    })
+    .catch((error) => {
+      console.error("Failed to save data:", error);
+    });
+    // Clear the message balloon
+    message.value = "";
+  });
+
 }
 
-// Send message
-sendMessage.addEventListener("submit", function (event) {
-  // Prevent the form from submitting
-  event.preventDefault();
-
-  // Check if the message is empty
-  if (message.value === "") return;
-
-  const now = new Date();
-  push(ref(database, chatRoomID), {
-    year: now.getFullYear(),
-    month: now.toLocaleString("en-US", { month: "long" }),
-    day: now.getDate(),
-    dayOfWeek: now.toLocaleString("en-US", { weekday: "long" }),
-    time: now.toTimeString().split(":")[0] + ":" + now.toTimeString().split(":")[1], // HH:MM
-    name: loginUserID,
-    message: message.value,
-  }).catch((error) => {
-    console.error("Failed to save data:", error);
-  });
-  // Clear the message balloon
-  message.value = "";
-});
 
 async function loadChatRoom(chatRoomID) {
   // Hide contact list and show message history
@@ -320,6 +337,7 @@ function showChatRoomTitle(chatRoomID) {
   // Create chat room title
   let contact = document.createElement("div");
   contact.classList.add("contactHeader", "page-title");
+  contact.setAttribute("data-contactid",contactUserID);
 
   // Get the user's information
   getDocument("users", contactUserID)
