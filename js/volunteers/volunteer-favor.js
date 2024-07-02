@@ -203,6 +203,27 @@ async function acceptTask(taskID, taskData) {
   console.log(taskData);
 }
 
+async function completeTask(taskID, taskData) {
+  console.log(taskData);
+
+  // Get the volunteer ID
+  const volunteerID = getCurrentUserID();
+
+  // Create updated task data object with the volunteer ID and status "On going"
+  taskData.volunteerID = volunteerID;
+  taskData.status = STATUS_PENDING;
+  console.log(taskData);
+
+  // Update the task data on the Firestore
+  updateDocument("tasks", taskID, taskData)
+    .then(() => {
+      console.log("Task accepted!");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 async function cancelTask(taskID, taskData) {
   console.log(taskData);
 
@@ -306,7 +327,7 @@ function taskCompletedOn() {
 }
 
 document.getElementById("completeBtn").addEventListener("click", function () {
-  acceptTask(taskID, taskData);
+  completeTask(taskID, taskData);
   taskCompletedOn();
 });
 
