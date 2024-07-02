@@ -242,7 +242,7 @@ document.getElementById("contactBtn").addEventListener("click", function () {
 
 // To display "confirm-overlay" ON
 function confirmOn() {
-  document.getElementById("schedule-conflict").style.display = "block";
+  document.getElementById("confirm-overlay").style.display = "block";
 }
 
 document.getElementById("acceptBtn").addEventListener("click", function () {
