@@ -479,7 +479,7 @@ main.loaded .loading-screen {
   display: flex;
   justify-content: space-around;
   background-color: var(--background-gray);
-  padding: 10px;
+  padding: 10px !important; /* To prevent padding from being removed on the second layer page (Need to find the correct way to revise.) */
   z-index: 3; /* Bring sidebar front in mobile screen */
   border-top: 2px solid var(--disabledText);
 }

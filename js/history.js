@@ -521,10 +521,18 @@ function setupDateRangePicker() {
       const cards = targetTab.querySelectorAll(".taskCard");
       const startDate = new Date(start);
       const endDate = new Date(end);
+
+      clearDateRangeFilter(targetTab);
       cards.forEach((card) => {
         const date = new Date(card.getAttribute("data-date"));
         card.classList.toggle("hide", !(date >= startDate && date <= endDate));
       });
+
+      // Show No items message if needed
+      if (targetTab.querySelectorAll(".taskCard:not(.hide)").length === 0) {
+        targetTab.nextElementSibling.classList.remove("noResult");
+        targetTab.classList.add("noResult");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -536,6 +544,9 @@ function setupDateRangePicker() {
       cards.forEach((card) => {
         card.classList.remove("hide");
       });
+      // Clear No items message
+      targetTab.nextElementSibling.classList.add("noResult");
+      targetTab.classList.remove("noResult");
     } catch (error) {
       console.error(error);
     }
