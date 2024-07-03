@@ -43,8 +43,9 @@ window.addEventListener("load", function (event) {
             notificationContent.classList.add("notification-content");
             notificationContent.innerHTML = `
             <h2 class="notification-title">${notification.title}</h2>
+            <p class="notification-text">${notification.message}</p>
             <span class="notification-time">${notification.time}</span>
-            <p class="notification-text">${notification.message}</p>`;
+            `;
 
             card.appendChild(notificationIcon)
             card.appendChild(notificationContent);
