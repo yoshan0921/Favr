@@ -571,7 +571,7 @@ main.loaded .loading-screen {
 .taskCard:hover {
   transform: translateY(-5px);
 }
-.taskCard a {
+.taskCard a.linkURL {
   border-radius: 10px;
   top: 0;
   left: 0;

@@ -104,6 +104,7 @@
   position: relative;
   top: 0px;
 }
+
 .elder h2 {
   padding: 0;
 }
@@ -113,6 +114,7 @@
   grid-gap: 1rem;
   grid-template-columns: repeat(1, 1fr);
   margin-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .elder .taskCard .duration .bold {
@@ -125,6 +127,12 @@
   height: 10px;
   width: 10px;
   margin-right: 0.5rem;
+}
+
+.taskCard .create-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .statusWaiting {
@@ -141,6 +149,10 @@
 
 .statusOhers {
   background-color: var(--pureWhite);
+}
+
+.createTask {
+  border-top: 1px solid var(--primary);
 }
 
 /* -------------------------------------------------- */
@@ -364,8 +376,16 @@ button#cancelFilter {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50vh;
+  height: 30vh;
   color: var(--disabledText);
+  flex-flow: column wrap;
+}
+
+.elder .noItemsMessage a,
+.volunteer .noItemsMessage a {
+  color: var(--primary);
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 /* -------------------------------------------------- */
