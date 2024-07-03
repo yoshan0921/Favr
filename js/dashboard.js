@@ -398,6 +398,7 @@ async function createTaskListForVolunteers(allTasks) {
   const taskListMyFavor = document.getElementById("taskListMyFavor");
   taskListExplore.innerHTML = "";
   taskListMyFavor.innerHTML = "";
+  favorCount = 0;
 
   // Clear the task map
   const mapElement = document.getElementById("map");
@@ -467,13 +468,7 @@ async function createTaskListForVolunteers(allTasks) {
         let length = 1.0;
 
         // Set the link URL for the task card
-        if (taskDetails.status === STATUS_WAITING) {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else if (taskDetails.status === "On going") {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else {
-          linkURL = "#";
-        }
+        linkURL = "/tasks/volunteer-favor.html";
 
         // Create task object for List & Map view
         let taskObj = {
