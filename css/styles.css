@@ -695,6 +695,7 @@ main.loaded .loading-screen {
   border-radius: 10px;
   width: 100%; /* Could be more or less, depending on screen size */
   max-width: 450px;
+  padding: 1rem;
 }
 
 /* The Close Button */
