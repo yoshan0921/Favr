@@ -215,7 +215,7 @@ function createCardForElder(task) {
   card.setAttribute("data-date", task.taskDate);
   card.setAttribute("data-address", task.taskAddress);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <p class="notes">${task.taskNotes}</p>
   `;
@@ -437,7 +437,7 @@ function createCardForVolunteers(task) {
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
@@ -473,11 +473,12 @@ function setupDateRangePicker() {
   // Pending tab
   $(".dateRangeModal").daterangepicker({
     parentEl: "#filterModal",
-    applyButtonClasses: "applyBtnForPending",
-    cancelButtonClasses: "cancelBtnForPending",
+    // singleDatePicker: true,
+    applyButtonClasses: "applyBtnForPending rounded-btn",
+    cancelButtonClasses: "cancelBtnForPending rounded-btn",
     startDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
     endDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
-    locale: { cancelLabel: "Clear" },
+    // locale: { cancelLabel: "Clear" },
   });
 
   document.querySelectorAll(".dateRangeModal").forEach((drp) => {
@@ -520,10 +521,18 @@ function setupDateRangePicker() {
       const cards = targetTab.querySelectorAll(".taskCard");
       const startDate = new Date(start);
       const endDate = new Date(end);
+
+      clearDateRangeFilter(targetTab);
       cards.forEach((card) => {
         const date = new Date(card.getAttribute("data-date"));
         card.classList.toggle("hide", !(date >= startDate && date <= endDate));
       });
+
+      // Show No items message if needed
+      if (targetTab.querySelectorAll(".taskCard:not(.hide)").length === 0) {
+        targetTab.nextElementSibling.classList.remove("noResult");
+        targetTab.classList.add("noResult");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -535,6 +544,9 @@ function setupDateRangePicker() {
       cards.forEach((card) => {
         card.classList.remove("hide");
       });
+      // Clear No items message
+      targetTab.nextElementSibling.classList.add("noResult");
+      targetTab.classList.remove("noResult");
     } catch (error) {
       console.error(error);
     }

@@ -72,6 +72,7 @@ async function loadEldersDashboard() {
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
   displayTaskListForElders().then(() => {
+    console.log("Tasks loaded successfully.");
     main.classList.add("loaded");
   });
 }
@@ -91,7 +92,7 @@ async function displayTaskListForElders() {
   // Listen for real-time updates with onSnapshot
   const unsubscribe = onSnapshot(
     q,
-    (querySnapshot) => {
+    async (querySnapshot) => {
       querySnapshot.docChanges().forEach((change) => {
         const task = {
           id: change.doc.id,
@@ -113,7 +114,7 @@ async function displayTaskListForElders() {
         }
       });
       console.log(allTasks);
-      createTaskListForElders(allTasks);
+      await createTaskListForElders(allTasks);
     },
     (error) => {
       console.error(error);
@@ -181,6 +182,11 @@ async function createTaskListForElders(allTasks) {
   // Wait for all tasks to be processed
   await Promise.all(tasksPromises);
 
+  // No items message
+  if (document.querySelectorAll("#taskList .taskCard").length === 0) {
+    document.querySelector("#taskList ~ .noItemsMessage").classList.remove("noResult");
+  }
+
   // Apply lazy loading to images
   lazyLoadImages();
 
@@ -203,7 +209,7 @@ function createCardForElder(task) {
   card.setAttribute("data-date", `${task.taskDate} ${task.taskTime}`);
   card.setAttribute("data-address", task.taskAddress);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <p class="status"><span class="statusColor"></span>${task.taskStatus}</p>
   <p class="notes">${task.taskNotes}</p>
@@ -392,6 +398,7 @@ async function createTaskListForVolunteers(allTasks) {
   const taskListMyFavor = document.getElementById("taskListMyFavor");
   taskListExplore.innerHTML = "";
   taskListMyFavor.innerHTML = "";
+  favorCount = 0;
 
   // Clear the task map
   const mapElement = document.getElementById("map");
@@ -461,13 +468,7 @@ async function createTaskListForVolunteers(allTasks) {
         let length = 1.0;
 
         // Set the link URL for the task card
-        if (taskDetails.status === STATUS_WAITING) {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else if (taskDetails.status === "On going") {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else {
-          linkURL = "#";
-        }
+        linkURL = "/tasks/volunteer-favor.html";
 
         // Create task object for List & Map view
         let taskObj = {
@@ -541,7 +542,7 @@ function createCardForVolunteer(task) {
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
@@ -611,7 +612,7 @@ function createMapMarker(task, map, infoWindows) {
         card.setAttribute("data-distance", task.taskDistance);
         card.setAttribute("data-length", task.taskDuration);
         card.innerHTML = `
-        <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+        <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
         <h3 class="title">${task.taskName}</h3>
         <div class="statusColor"></div>
         <p class="date">${task.taskDate}, ${task.taskTime}</p>

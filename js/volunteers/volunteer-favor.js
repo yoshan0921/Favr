@@ -1,5 +1,5 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
-import { updateDocument, getDocument, getFile } from "../firebase/firestore.js";
+import { updateDocument, getDocument, getFile, getAllWithFilter} from "../firebase/firestore.js";
 import { sendNotification } from "../notification.js";
 
 let taskID;
@@ -140,15 +140,56 @@ function runFunction() {
     });
 }
 
+
 async function acceptTask(taskID, taskData) {
   console.log(taskData);
 
   // Get the volunteer ID
   const volunteerID = getCurrentUserID();
 
+  // // Target task data
+  // let targetDate = taskData.details.date
+  // let targetTime = taskData.details.time
+  // // Check On going task
+  // let filterConditions = [
+  //   { key: 'volunteerID', operator: '==', value: volunteerID },
+  //   { key: 'status', operator: '==', value: STATUS_ONGOING },
+  // ];
+  
+  // let tasks = await getAllWithFilter("tasks", filterConditions);
+  // let tentativeDuration = 1; // This might be changed
+
+  
+  // tasks.forEach((task) => {
+
+  //   console.log(taskData.details.date);
+
+  //   let startTime = new Date(task.date, task.time);
+  //   console.log(startTime);
+  //   let endTime = new Date(task.date, task.time + tentativeDuration);
+  //   console.log(endTime);
+  //   let targetStartTime = new Date(targetDate, targetTime);
+  //   let targetEndTime = new Date(targetDate, targetTime + tentativeDuration);
+  
+  //   if (targetStartTime <= endTime || targetEndTime >= startTime) {
+  //     console.log("Schedule is conflicted");
+
+
+  //     // ToDo: Display conflict message popup
+  //     // Code here...
+
+  //     function scheduleConflictOn() {
+  //       document.getElementById("schedule-conflict").style.display = "block";
+  //     }
+    
+  //     return; 
+  //   }
+  // });
+  
+
   // Create updated task data object with the volunteer ID and status "On going"
   taskData.volunteerID = volunteerID;
-  taskData.status = "Pending approval";
+  taskData.status = STATUS_ONGOING;
   console.log(taskData);
 
   // Update the task data on the Firestore
@@ -168,6 +209,27 @@ async function acceptTask(taskID, taskData) {
       console.log(error);
     });
   console.log(taskData);
+}
+
+async function completeTask(taskID, taskData) {
+  console.log(taskData);
+
+  // Get the volunteer ID
+  const volunteerID = getCurrentUserID();
+
+  // Create updated task data object with the volunteer ID and status "On going"
+  taskData.volunteerID = volunteerID;
+  taskData.status = STATUS_PENDING;
+  console.log(taskData);
+
+  // Update the task data on the Firestore
+  updateDocument("tasks", taskID, taskData)
+    .then(() => {
+      console.log("Task accepted!");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 async function cancelTask(taskID, taskData) {
@@ -273,7 +335,7 @@ function taskCompletedOn() {
 }
 
 document.getElementById("completeBtn").addEventListener("click", function () {
-  acceptTask(taskID, taskData);
+  completeTask(taskID, taskData);
   taskCompletedOn();
 });
 

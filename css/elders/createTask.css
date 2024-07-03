@@ -1,17 +1,16 @@
+body {
+  visibility: hidden;
+}
+
 /* -------------------------------------------------- */
 /* Styles for Step Wizard                             */
 /* -------------------------------------------------- */
-
 .steps-counter {
   position: relative;
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
   align-items: center;
-}
-
-.hide-steps-counter {
-  display: none;
 }
 
 .step1,
