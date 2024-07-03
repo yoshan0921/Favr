@@ -8,10 +8,11 @@ const currentUserID = getCurrentUserID();
 function listenToNotifications(){
     onChildAdded(ref(database, currentUserID), async function (data) {
         const v = data.val();
-        console.log(v);
         if(v.isNew){
-            const updatesMenu = document.querySelector("#updates-menu");
-            if(!updatesMenu.classList.contains("has-updates"))updatesMenu.classList.add("has-updates");
+            const updatesMenu = document.querySelector("#updates-menu .icon-wrapper");
+            const chatMenu = document.querySelector("header .chat-icon-wrapper .icon-wrapper");
+            if(!updatesMenu.classList.contains("has-updates")) updatesMenu.classList.add("has-updates");
+            if(v.isMessage && !chatMenu.classList.contains("has-updates")) chatMenu.classList.add("has-updates");
             if(!v.wasSent){
                 await loadPartial("_notification", "body");
                 const notificationCard = document.getElementById("notificationCard");
@@ -22,7 +23,7 @@ function listenToNotifications(){
                 notificationLink.href = v.link;
                 if(v.icon && v.icon !== "#") notificationIcon.setAttribute("src",v.icon);
                 notificationTitle.innerText = v.title;
-                notificationText.innerText = JSON.stringify(v);
+                notificationText.innerText = v.message
                 notificationCard.classList.add("show");
                 const notificationCloseButton = document.getElementsByClassName("closeNotificationModal")[0];
                 notificationCloseButton.addEventListener("click",()=>{
@@ -31,50 +32,60 @@ function listenToNotifications(){
                 })
                 const updateObj = {};
                 v.wasSent = true;
-                updateObj[`/${currentUserID}/${v.notificationID}`] = v;
+                updateObj[`/${getCurrentUserID()}/${v.id}`] = v;
                 update(ref(database),updateObj);
             }
         }
     });
 }
 async function sendNotification(data,receiverID){
-    const notificationID = push(child(ref(database), receiverID)).key;
     const notificationObj = {
-        id: notificationID,
+        id: "",
         title: data.title,
         message: data.message,
-        icon: data.icon,
-        link: data.link,
+        icon: (data.icon) ? data.icon : "../assets/icons/icon-128x128.png",
+        link: (data.link) ? data.link : "#",
+        isMessage: (data.isMessage) ? data.isMessage : false,
         time: new Date(),
         isNew: true,
         wasSent: false
     }
+    const notificationID = push(ref(database, receiverID)).key;
     const updateObj = {};
+    notificationObj.id = notificationID;
     updateObj[`/${receiverID}/${notificationID}`] = notificationObj;
     update(ref(database),updateObj);
 }
 async function loadAllNotifications(userID){
-    return new Promise((resolve,reject)=>{
-        onValue(ref(database, userID), (snapshot) => {
-            try{
-                snapshot.forEach((childSnapshot) => {
-                    const childKey = childSnapshot.key;
-                    const childData = childSnapshot.val();
-                    console.log(childKey, childData);
-                    // ...
-                  });
-                resolve(snapshot);
-            }catch(e){
-                reject(e);
-            }
-        }, {
-            onlyOnce: true
+    return new Promise(async (resolve)=>{
+        let result = [];
+        await onChildAdded(ref(database, userID), function (data){
+            result.push(data.val());
         });
+        /*
+        onValue(ref(database, userID), (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+              const childKey = childSnapshot.key;
+              const childData = childSnapshot.val();
+              // ...
+              result.push(childSnapshot.val());
+            });
+          }, {
+            onlyOnce: true
+          });
+          */
+        resolve(result);
     })
 }
-    
+function updateNotificationStatus(receiverID, notification){
+    const updateObj = {};
+    notification.isNew = false;
+    updateObj[`/${receiverID}/${notification.id}`] = notification;
+    update(ref(database),updateObj);
+}
 export {
     listenToNotifications,
     sendNotification,
-    loadAllNotifications
+    loadAllNotifications,
+    updateNotificationStatus
 }

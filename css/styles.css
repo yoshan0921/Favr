@@ -483,12 +483,12 @@ footer a {
   position: absolute;
   z-index: 999;
   content: "";
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   top: 0;
-  right: 0;
+  right: 15px;
   border-radius: 50px;
-  background-color: var(--caringOrange);
+  background-color: var(--warmRed);
 }
 @keyframes moveIn {
   from {
@@ -569,6 +569,9 @@ main.loaded .loading-screen {
   padding: 0 10px;
   font-size: clamp(0.5rem, 5vw, 0.8rem);
   font-weight: 700;
+}
+.sidebar .icon-wrapper{
+  display: flex;
 }
 .sidebar button {
   border: none;
@@ -701,6 +704,8 @@ main.loaded .loading-screen {
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
+  position: relative;
+  z-index: 1000;
 }
 
 .closeModal:hover,

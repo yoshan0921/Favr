@@ -221,19 +221,21 @@ async function runFunction() {
         let receiverID = header.getAttribute("data-contactid");
         sendNotification(
           {
-            icon: "#",
             title: "Someone sent you a message",
-            link: "#",
+            //icon:"#",
+            isMessage: true,
+            //link:"#",
             message: message.value
           },
           receiverID);
       }
+          // Clear the message balloon
+      message.value = "";
     })
     .catch((error) => {
       console.error("Failed to save data:", error);
     });
-    // Clear the message balloon
-    message.value = "";
+
   });
 
 }
