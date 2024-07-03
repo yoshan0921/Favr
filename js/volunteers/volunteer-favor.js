@@ -29,7 +29,8 @@ function runFunction() {
   let taskName = document.getElementById("taskName");
   let elderName = document.getElementById("elderName");
   let elderAddress = document.getElementById("elderAddress");
-  let taskAddress = document.getElementById("taskAddress");
+  let startAddress = document.getElementById("startAddress");
+  let endAddress = document.getElementById("endAddress");
   let taskTime = document.getElementById("taskTime");
   let taskNote = document.getElementById("taskNote");
 
@@ -94,7 +95,8 @@ function runFunction() {
           });
 
         // Retrieve Task address, date and note=====================
-        taskAddress.innerHTML = taskData.details.startAddress;
+        startAddress.innerHTML = taskData.details.startAddress;
+        endAddress.innerHTML = taskData.details.endAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
         taskNote.innerHTML = taskData.notes;
 
