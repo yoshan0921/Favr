@@ -155,6 +155,10 @@
   border-top: 1px solid var(--primary);
 }
 
+.createTask .taskCard img {
+  margin: auto;
+}
+
 /* -------------------------------------------------- */
 /* Volunteer: Favor List View                         */
 /* -------------------------------------------------- */
