@@ -4,9 +4,7 @@ import {
 
 let localStorageItems = [
     "currentUserID",
-    "currentUserRole",
-    "errors",
-    "errors123"
+    "currentUserRole"
 ]
 /**
  * Redirects to the page specified on the path
@@ -44,7 +42,6 @@ function handleError(error){
  * 
  */
 function resetLocalStorage(){
-    console.log("here");
     for(let item of localStorageItems){
         window.localStorage.removeItem(item);
     }
