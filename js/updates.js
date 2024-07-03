@@ -2,11 +2,11 @@ import { getCurrentUserID } from "./firebase/authentication"
 import { loadAllNotifications } from "./notification.js";
 
 document.addEventListener("DOMContentLoaded",async ()=>{
-    var notifications = loadAllNotifications(getCurrentUserID());
-    const updatesList = document.getElementById("updates");
-    try{
+    var notifications = await loadAllNotifications(getCurrentUserID());
+    notifications.then((snapshot)=>{
+        const updatesList = document.getElementById("updates");
         updatesList.innerHTML = "";
-        notifications.forEach((notification)=>{
+        snapshot.forEach((notification)=>{
             const card = document.createElement("a");
             card.href = notification.link;
             const notificationIcon = document.createElement("div");
@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded",async ()=>{
             }
             updatesList.appendChild(card);
         })
-    }catch(e){
-        console.log(e);
-    }
+    })
+    notifications.catch(e=>console.log(e));
 })

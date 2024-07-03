@@ -11,7 +11,7 @@ function listenToNotifications(){
         console.log(v);
         if(v.isNew){
             const updatesMenu = document.querySelector("#updates-menu");
-            updatesMenu.classList.add("has-updates");
+            if(!updatesMenu.classList.contains("has-updates"))updatesMenu.classList.add("has-updates");
             if(!v.wasSent){
                 await loadPartial("_notification", "body");
                 const notificationCard = document.getElementById("notificationCard");
@@ -22,7 +22,7 @@ function listenToNotifications(){
                 notificationLink.href = v.link;
                 if(v.icon && v.icon !== "#") notificationIcon.setAttribute("src",v.icon);
                 notificationTitle.innerText = v.title;
-                notificationText.innerText = v.message;
+                notificationText.innerText = JSON.stringify(v);
                 notificationCard.classList.add("show");
                 const notificationCloseButton = document.getElementsByClassName("closeNotificationModal")[0];
                 notificationCloseButton.addEventListener("click",()=>{
@@ -38,8 +38,9 @@ function listenToNotifications(){
     });
 }
 async function sendNotification(data,receiverID){
+    const notificationID = push(child(ref(database), receiverID)).key;
     const notificationObj = {
-        id: "",
+        id: notificationID,
         title: data.title,
         message: data.message,
         icon: data.icon,
@@ -48,25 +49,30 @@ async function sendNotification(data,receiverID){
         isNew: true,
         wasSent: false
     }
-    const notificationID = push(child(ref(database), receiverID)).key;
-    notificationObj["id"] = notificationID;
     const updateObj = {};
     updateObj[`/${receiverID}/${notificationID}`] = notificationObj;
     update(ref(database),updateObj);
 }
-function loadAllNotifications(userID){
-    onValue(ref(database, userID), (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-          const childKey = childSnapshot.key;
-          const childData = childSnapshot.val();
-          console.log(childKey, childData);
-          // ...
+async function loadAllNotifications(userID){
+    return new Promise((resolve,reject)=>{
+        onValue(ref(database, userID), (snapshot) => {
+            try{
+                snapshot.forEach((childSnapshot) => {
+                    const childKey = childSnapshot.key;
+                    const childData = childSnapshot.val();
+                    console.log(childKey, childData);
+                    // ...
+                  });
+                resolve(snapshot);
+            }catch(e){
+                reject(e);
+            }
+        }, {
+            onlyOnce: true
         });
-        return snapshot;
-      }, {
-        onlyOnce: true
-      });
+    })
 }
+    
 export {
     listenToNotifications,
     sendNotification,
