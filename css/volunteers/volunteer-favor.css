@@ -4,7 +4,7 @@ img {
   display: block;
 }
   
-.user-profile img {
+.user-profile #elderPhoto {
   border-radius: 50%;
 }
   
@@ -78,10 +78,12 @@ img {
 } 
 
 #icons {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
   font-size: 3rem;
 
-  i {
+  img {
       margin-left: 2rem; 
       margin-right: 2rem;
   }
@@ -150,10 +152,10 @@ main {
   margin-top: 1rem;
 }
   
-.confirm-wrapper .user-profile i {
+/* .confirm-wrapper .user-profile i {
   grid-column: 1 / 2;
   align-content: center;
-}
+} */
     
 .confirm-wrapper .set button {
   border: none;
@@ -167,6 +169,9 @@ main {
 }
 
 #icons-overlay {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
   font-size: 3rem;
 }
 
@@ -175,4 +180,8 @@ main {
   display: flex;
   justify-content: center;
   padding-top: 1rem;
+}
+
+#schedule-conflict .set {
+  justify-content: center;
 }
