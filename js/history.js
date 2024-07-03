@@ -215,7 +215,7 @@ function createCardForElder(task) {
   card.setAttribute("data-date", task.taskDate);
   card.setAttribute("data-address", task.taskAddress);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <p class="notes">${task.taskNotes}</p>
   `;
@@ -437,7 +437,7 @@ function createCardForVolunteers(task) {
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
