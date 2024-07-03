@@ -1,4 +1,4 @@
-import { getDocument, updateDocument, deleteDocument, updateProperty } from "../firebase/firestore.js";
+import { getDocument, updateProperty } from "../firebase/firestore.js";
 import { openModal, closeModal, lazyLoadImages } from "../common.js";
 import { enableBackButton } from "../utils.js";
 
@@ -61,6 +61,7 @@ async function displayTaskSummary(taskID) {
     const timeData = document.getElementById("time");
     const dateLabel = document.getElementById("dateLabel");
     const timeLabel = document.getElementById("timeLabel");
+    const hideCancelFavor = document.getElementById("cancelFavor");
     
     // const favorLengthData = document.getElementById("favorLength");
     const startAddressData = document.getElementById("startAddress");
@@ -105,15 +106,21 @@ async function displayTaskSummary(taskID) {
     if (task.status == "Cancelled" && task.details.cancelledDate) {
       dateData.innerHTML = task.details.cancelledDate;
       timeData.innerHTML = task.details.cancelledTime;
+      // Change the Date and Time labels
       dateLabel.innerText = "Cancelled Date";
       timeLabel.innerText = "Cancelled Time";
+      // Hide cancelFavor button if a favor is cancelled
+      hideCancelFavor.classList.add("hidden");
 
       // Update Date and Time if it is completed
     } else if (task.status == "Completed" && task.details.completedDate) {
       dateData.innerHTML = task.details.completedDate;
       timeData.innerHTML = task.details.completedTime;
+      // Change the Date and Time labels
       dateLabel.innerText = "Completed Date";
       timeLabel.innerText = "Completed Time";
+      // Hide cancelFavor button if a favor is completed
+      hideCancelFavor.classList.add("hidden");
 
       // Default
     } else {

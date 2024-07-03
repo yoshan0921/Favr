@@ -13,10 +13,6 @@ body {
   align-items: center;
 }
 
-.hide-steps-counter {
-  display: none;
-}
-
 .step1,
 .step2,
 .step3,
