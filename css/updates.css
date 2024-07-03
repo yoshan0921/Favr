@@ -1,0 +1,45 @@
+.updates{
+    display: flex;
+    flex-flow: column nowrap;
+}
+.update{
+    display: flex;
+    gap: 1rem;
+    position: relative;
+    padding: .5rem;
+    border-bottom: 2px solid var(--textBlack100);
+}
+.update:hover{
+    background-color: var(--background-gray);
+}
+.update .notification-title{
+    margin: 0;
+    padding: 0;
+}
+.icon-wrapper{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 50px;
+    overflow: hidden;
+    border-radius: 50px;
+}
+.update .notification-content{
+    flex-grow: 1;
+    padding-right: 30px;
+    text-align: left;
+}
+.update.new * {
+    font-weight: bold;
+    color: black;
+}
+.update.new::after {
+    position: absolute;
+    content: "";
+    right: 10px;
+    top: 48%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    background-color: var(--caringOrange);
+}

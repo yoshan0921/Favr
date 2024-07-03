@@ -1,6 +1,7 @@
 import { enableBackButton, redirect, signOut } from "./utils.js";
 import { getFile } from "./firebase/firestore.js";
 import { checkUserAuthorization } from "./firebase/authentication.js";
+import { listenToNotifications } from "./notification.js";
 
 /**
  * GLOBAL VARIABLES: Task Status
@@ -53,6 +54,7 @@ async function loadCommonContent() {
       loadPageTitle();
       addListenerToLogoutButton();
       activateMenuLinkAndBackButton();
+      listenToNotifications();
     })
     .catch((error) => console.log(error));
 }
@@ -67,7 +69,8 @@ async function loadPartial(partial, destination) {
   const data = await response.text();
 
   return new Promise((resolve, reject) => {
-    const targetElement = document.getElementById(destination);
+    let targetElement = document.getElementById(destination);
+    if(!targetElement) targetElement = document.getElementsByTagName(destination)[0];
     if (targetElement) {
       const observer = new MutationObserver(() => {
         observer.disconnect();
@@ -75,9 +78,9 @@ async function loadPartial(partial, destination) {
       });
 
       observer.observe(targetElement, { childList: true });
-      targetElement.innerHTML = data;
+      targetElement.innerHTML+= data;
     } else {
-      reject(`Could not load "../partials/${partial}.html. There is no element with the id "${destination}"`);
+      reject(`Could not load "../partials/${partial}.html. There is no element with the id or tag name "${destination}"`);
     }
   });
 }
