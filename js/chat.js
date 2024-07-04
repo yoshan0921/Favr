@@ -14,6 +14,7 @@ let filterCondition;
 const contactList = document.getElementById("chatWith");
 const messageHistory = document.getElementById("messageHistory");
 const sendMessage = document.getElementById("sendMessage");
+const sendingMsgNotAvailable = document.getElementById("sendingMsgNotAvailable");
 const message = document.getElementById("message");
 const send = document.getElementById("send");
 
@@ -47,32 +48,16 @@ async function runFunction() {
   // Get the current user role
   await getCurrentUserRole().then(async (currentUserRole) => {
     loginUserRole = currentUserRole;
-    console.log("Current User ID: " + loginUserID);
-    console.log("Current User Role: " + loginUserRole);
 
     // Load the dashboard based on the user's role
     if (currentUserRole === "volunteer") {
       // Set filter condition
-      filterCondition = [
-        {
-          key: "volunteerID",
-          operator: "==",
-          value: loginUserID,
-        },
-      ];
+      filterCondition = [{ key: "volunteerID", operator: "==", value: loginUserID }];
     } else if (currentUserRole === "elder") {
       // Set filter condition
       filterCondition = [
-        {
-          key: "status",
-          operator: "!=",
-          value: STATUS_WAITING,
-        },
-        {
-          key: "requesterID",
-          operator: "==",
-          value: loginUserID,
-        },
+        { key: "status", operator: "!=", value: STATUS_WAITING },
+        { key: "requesterID", operator: "==", value: loginUserID },
       ];
     }
   });
@@ -142,7 +127,6 @@ async function runFunction() {
             .catch((error) => {
               console.error(error);
             });
-          // lastMessage.textContent = `*** The last message here (under construction) ***`;
 
           let userInfo = document.createElement("div");
           userInfo.classList.add("userInfo");
@@ -197,6 +181,7 @@ async function runFunction() {
     const main = document.getElementsByTagName("main")[0];
     main.classList.add("loaded");
   });
+
   // Send message
   sendMessage.addEventListener("submit", function (event) {
     // Prevent the form from submitting
@@ -215,31 +200,29 @@ async function runFunction() {
       name: loginUserID,
       message: message.value,
     })
-    .then(()=>{
-      const header = document.getElementsByClassName("contactHeader")[0];
-      if(header){
-        let receiverID = header.getAttribute("data-contactid");
-        sendNotification(
-          {
-            title: "Someone sent you a message",
-            //icon:"#",
-            isMessage: true,
-            //link:"#",
-            message: message.value
-          },
-          receiverID);
-      }
-          // Clear the message balloon
-      message.value = "";
-    })
-    .catch((error) => {
-      console.error("Failed to save data:", error);
-    });
-
+      .then(() => {
+        const header = document.getElementsByClassName("contactHeader")[0];
+        if (header) {
+          let receiverID = header.getAttribute("data-contactid");
+          sendNotification(
+            {
+              title: "Someone sent you a message",
+              //icon:"#",
+              isMessage: true,
+              //link:"#",
+              message: message.value,
+            },
+            receiverID
+          );
+        }
+        // Clear the message balloon
+        message.value = "";
+      })
+      .catch((error) => {
+        console.error("Failed to save data:", error);
+      });
   });
-
 }
-
 
 async function loadChatRoom(chatRoomID) {
   // Hide contact list and show message history
@@ -320,6 +303,11 @@ async function checkChatRoomAvailability(chatRoomID) {
   const collection = await getAllWithFilter("tasks", filterCondition);
   if (collection.length > 0) {
     sendMessage.classList.remove("hide");
+  } else {
+    sendingMsgNotAvailable.classList.remove("hide");
+    sendMessage.classList.remove("hide");
+    message.disabled = true;
+    send.disabled = true;
   }
 }
 
@@ -339,7 +327,7 @@ function showChatRoomTitle(chatRoomID) {
   // Create chat room title
   let contact = document.createElement("div");
   contact.classList.add("contactHeader", "page-title");
-  contact.setAttribute("data-contactid",contactUserID);
+  contact.setAttribute("data-contactid", contactUserID);
 
   // Get the user's information
   getDocument("users", contactUserID)
