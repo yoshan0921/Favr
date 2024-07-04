@@ -165,6 +165,10 @@
   filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
 }
 
+#sendingMsgNotAvailable {
+  color: var(--disabledText);
+}
+
 /* -------------------------------------------------- */
 /* Chat Page Header                                   */
 /* -------------------------------------------------- */
