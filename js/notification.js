@@ -6,7 +6,12 @@ import { ref, push, onChildAdded, update } from "https://www.gstatic.com/firebas
 const currentUserID = getCurrentUserID();
 
 /**
- * 
+ * A function that will listen to any updates on the realtime database.
+ * More especifically, it will listen to updates for the current user.
+ * When a new update is detected, it will display a notification for the user.
+ * OnChildAdded actually will be called for every document under the user's
+ * collection, even if they are not new. To avoid displaying notifications for
+ * old updates, the notification document has a isNew field
  */
 function listenToNotifications(){
     onChildAdded(ref(database, currentUserID), async function (data) {
@@ -42,15 +47,24 @@ function listenToNotifications(){
     });
 }
 /**
+ * Adds a new update to the realtime database. This will trigger listenToNotifications() on the recipient user
  * 
- * @param {*} data 
- * @param {*} receiverID 
+ * @param {Object} data - an object that contains the info about the update. The data object is can have these fields:
+ *  - title (string)
+ *  - message (string)
+ *  - icon (url to an image)
+ *  - link (url to somewhere in the app)
+ *  - isMessage (boolean) - set to true if the notification is from a new direct message (chat)
+ *
+ * If any of these are missing from the object, this function will use a default value for them
+ * 
+ * @param {string} receiverID - the ID of the user that will receive the notification
  */
 async function sendNotification(data,receiverID){
     const notificationObj = {
         id: "",
-        title: data.title,
-        message: data.message,
+        title: (data.title) ? data.title : "New update",
+        message: (data.message) ? data.message : "You received a new update",
         icon: (data.icon) ? data.icon : "../assets/icons/icon-128x128.png",
         link: (data.link) ? data.link : "#",
         isMessage: (data.isMessage) ? data.isMessage : false,
@@ -65,9 +79,10 @@ async function sendNotification(data,receiverID){
     update(ref(database),updateObj);
 }
 /**
+ * Will load all notifications for a given user
  * 
- * @param {*} userID 
- * @returns 
+ * @param {string} userID 
+ * @returns a Promise containing an array of notifications
  */
 async function loadAllNotifications(userID){
     return new Promise(async (resolve)=>{
@@ -79,15 +94,18 @@ async function loadAllNotifications(userID){
     })
 }
 /**
+ * Updates the notification status from new to not new (should be called when the notification is clicked on)
  * 
- * @param {*} receiverID 
- * @param {*} notification 
+ * @param {string} receiverID - the user under which this notification is stored on the realtime database
+ * @param {Object} notification - an object containing the notification (it should have ALL the expected fields for a notification, as in lines 65-73 of this file)
  */
 function updateNotificationStatus(receiverID, notification){
-    const updateObj = {};
-    notification.isNew = false;
-    updateObj[`/${receiverID}/${notification.id}`] = notification;
-    update(ref(database),updateObj);
+    if(notification.isNew){
+        const updateObj = {};
+        notification.isNew = false;
+        updateObj[`/${receiverID}/${notification.id}`] = notification;
+        update(ref(database),updateObj);
+    }
 }
 export {
     listenToNotifications,
