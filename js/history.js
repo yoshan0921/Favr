@@ -474,11 +474,11 @@ function setupDateRangePicker() {
   $(".dateRangeModal").daterangepicker({
     parentEl: "#filterModal",
     // singleDatePicker: true,
-    applyButtonClasses: "applyBtnForPending rounded-btn",
-    cancelButtonClasses: "cancelBtnForPending rounded-btn",
+    applyButtonClasses: "applyBtn rounded-btn",
+    cancelButtonClasses: "resetBtn rounded-btn",
     startDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
     endDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
-    // locale: { cancelLabel: "Clear" },
+    locale: { cancelLabel: "Reset" },
   });
 
   document.querySelectorAll(".dateRangeModal").forEach((drp) => {
@@ -487,7 +487,7 @@ function setupDateRangePicker() {
     });
   });
 
-  document.querySelectorAll(".applyBtnForPending").forEach((btn, index) => {
+  document.querySelectorAll(".applyBtn").forEach((btn, index) => {
     btn.addEventListener("click", function () {
       let targetTab;
       let dateRanges = document.querySelectorAll(".drp-selected");
@@ -503,7 +503,7 @@ function setupDateRangePicker() {
     });
   });
 
-  document.querySelectorAll(".cancelBtnForPending").forEach((btn, index) => {
+  document.querySelectorAll(".resetBtn").forEach((btn, index) => {
     btn.addEventListener("click", function () {
       let targetTab;
       if (index === 0) targetTab = document.getElementById("taskListPending");

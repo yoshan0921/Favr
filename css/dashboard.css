@@ -304,7 +304,7 @@
 }
 
 button#applyFilter,
-button#cancelFilter {
+button#resetFilter {
   cursor: pointer;
   flex-grow: 1;
   font-size: 16px;
@@ -407,10 +407,6 @@ button#cancelFilter {
   left: 50% !important;
   margin: auto !important;
 
-  /* left: unset !important; */
-  /* right: 0.5rem !important; */
-  /* transform: translate(0, -50%) !important; */
-
   @media screen and (min-width: 800px) {
     top: 185px !important;
     width: 556px !important;
@@ -492,12 +488,12 @@ button#cancelFilter {
   padding: 0rem 1rem !important;
 }
 
-.daterangepicker button.cancelBtn {
+.daterangepicker button.resetBtn {
   background-color: transparent !important;
   color: var(--primary) !important;
 }
 
-.daterangepicker button.cancelBtn:hover {
+.daterangepicker button.resetBtn:hover {
   background-color: var(--hoverOutlinedButtonBackground) !important;
 }
 
