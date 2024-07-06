@@ -52,7 +52,6 @@ async function loadCommonContent() {
   Promise.all([loadPartial("_header", "header"), loadPartial("_sidebar", "leftside-column"), loadPartial("_footer", "footer")])
     .then(() => {
       loadPageTitle();
-      addListenerToLogoutButton();
       activateMenuLinkAndBackButton();
       return Notification.requestPermission();
     })
@@ -62,11 +61,6 @@ async function loadCommonContent() {
       }
     })
     .catch((error) => console.log(error));
-}
-function userAllowedNotifications(){
-  if('Notification' in window){
-
-  }
 }
 /**
  *
@@ -110,13 +104,6 @@ function loadPageTitle() {
   }
   const pageTitle = document.getElementById("page-title");
   pageTitle.innerText = title;
-}
-/**
- * Self explanatory
- */
-function addListenerToLogoutButton() {
-  const logoutBtn = document.getElementById("logoutBtn");
-  logoutBtn.addEventListener("click", signOut);
 }
 
 // Get the <span> element that closes the modal

@@ -4,7 +4,7 @@
 
 import { getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument, getAllWithFilter } from "./firebase/firestore.js";
-import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, redirect } from "./utils.js";
+import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, redirect, signOut } from "./utils.js";
 import { closeModal, loadPartial, openModal } from "./common.js";
 
 if (document.readyState === "loading") {
@@ -25,7 +25,11 @@ async function runFunction() {
     currentUserRole = currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1); //capitalize
   }
   // Wait for loadPartial to complete
-  if (document.getElementById("profile-content")) await loadPartial(`profile/_${partialPrefix + currentUserRole}Profile`, "profile-content");
+  if (document.getElementById("profile-content")) {
+    await loadPartial(`profile/_${partialPrefix + currentUserRole}Profile`, "profile-content");
+    const logoutBtn = document.getElementById("logoutBtn");
+    if(logoutBtn) logoutBtn.addEventListener("click", signOut);
+  }
 
   const user = await getDocument("users", getCurrentUserID()); //gets the current user's info from the database as an object that will be used for filling the page with the user's info
   loadUserInfo().then(() => {
@@ -63,14 +67,6 @@ async function runFunction() {
       };
     }
   }
-  /*
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-  */
 
   //================
   // File Upload

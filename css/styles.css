@@ -171,8 +171,8 @@ button,
   line-height: 1.75em;
   font-weight: 600;
 }
-:is(button:not(#logoutBtn), .link-btn):hover,
-:is(button:not(#logoutBtn), .link-btn):active {
+:is(button, .link-btn):hover,
+:is(button, .link-btn):active {
   background-color: var(--hoverButtonBackground);
   cursor: pointer;
 }
@@ -406,8 +406,7 @@ main .page-header {
   filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
 }
 
-a,
-#logoutBtn {
+a {
   color: var(--disabledText);
   text-decoration: none;
   background-color: transparent;
@@ -554,8 +553,7 @@ main.loaded .loading-screen {
 .sidebar ul li {
   display: flex;
 }
-.sidebar a,
-#logoutBtn {
+.sidebar a {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -575,8 +573,7 @@ main.loaded .loading-screen {
 }
 
 .sidebar a.active,
-.sidebar a:hover,
-#logoutBtn:hover {
+.sidebar a:hover {
   color: var(--primary);
   cursor: pointer;
 }
@@ -812,8 +809,7 @@ Media queries
     grid-row: 1/-1;
     grid-column: 1;
   }
-  .sidebar a,
-  #logoutBtn {
+  .sidebar a{
     font-size: 1rem;
   }
   .sidebar ul {
@@ -890,8 +886,7 @@ Media queries
     /* height: 100%; */
   }
 
-  .sidebar a,
-  #logoutBtn {
+  .sidebar a {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -907,14 +902,12 @@ Media queries
     */
   }
 
-  .sidebar a i,
-  #logoutBtn i {
+  .sidebar a i {
     font-size: 1rem;
     margin-right: 16px;
   }
 
-  .sidebar a span,
-  #logoutBtn span {
+  .sidebar a span {
     letter-spacing: 1px;
   }
   .notification{

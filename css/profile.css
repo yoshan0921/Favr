@@ -14,6 +14,10 @@
     justify-content: space-between;
     flex-grow: 1;
 }
+.profile-header .buttons-wrapper{
+    display: flex;
+    gap: .5rem;
+}
 .profile-header > div {
     flex-grow: 1;
     width: 100%;
@@ -98,6 +102,7 @@
 }
 .accomplishment i{
     color: var(--primary);
+    font-size: 1.8rem;
 }
 .accomplishment .accomplishment-number{
     font-size: 3rem;
@@ -136,6 +141,9 @@
 }
 .profile-details .info-group table tr:not(:last-child){
     border-bottom: 1px solid lightgray;
+}
+#logoutBtn{
+    font-size: 16px;
 }
 
 /*
@@ -202,10 +210,6 @@ form textarea{
     .user-name-picture{
         flex-flow: row nowrap;
         justify-content: start;
-    }
-    .user-name-picture,
-    .user-name-edit{
-        gap: 1rem;
     }
     .user-name-edit{
         align-items: start;
