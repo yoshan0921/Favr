@@ -19,7 +19,7 @@
 
 .contact .userInfo {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1 10px;
   flex-flow: row wrap;
   align-items: center;
 }
@@ -35,6 +35,7 @@
 
 .contact .userInfo .lastMessage {
   flex: 1 1 100%;
+  min-height: 28px;
 }
 
 /* -------------------------------------------------- */

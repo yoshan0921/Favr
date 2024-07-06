@@ -1,6 +1,6 @@
 import { lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
+import { getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
 import { database } from "./firebase/firebase.js";
 import { ref, child, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { sendNotification } from "./notification.js";
@@ -43,6 +43,7 @@ if (document.readyState === "loading") {
 async function runFunction() {
   // Get Login user information
   loginUserID = getCurrentUserID();
+  const currentUser = await getDocument("users", loginUserID);
   var contactID = "";
 
   // Get the current user role
@@ -115,7 +116,7 @@ async function runFunction() {
                   // If month date is not equal to today, display the date + time
                   let now = new Date();
                   if (`${data[item].month} ${data[item].day}` !== `${now.toLocaleString("en-US", { month: "long" })} ${now.getDate()}`) {
-                    lastMessageTime.textContent = `${data[item].month} ${data[item].day}`;
+                    lastMessageTime.textContent = ` ${data[item].month} ${data[item].day}`;
                   } else {
                     lastMessageTime.textContent = data[item].time;
                   }
@@ -200,16 +201,20 @@ async function runFunction() {
       name: loginUserID,
       message: message.value,
     })
-      .then(() => {
+      .then(async () => {
         const header = document.getElementsByClassName("contactHeader")[0];
         if (header) {
           let receiverID = header.getAttribute("data-contactid");
+          let url = "#";
+          if (currentUser.profilePictureURL) {
+            url = await getFile(`profile/${currentUser.profilePictureURL}`);
+          }
           sendNotification(
             {
-              title: "Someone sent you a message",
-              //icon:"#",
+              title: `${currentUser.firstName} ${currentUser.lastName}`,
+              icon: url,
               isMessage: true,
-              //link:"#",
+              link:`/chat.html?crid=${chatRoomID}`,
               message: message.value,
             },
             receiverID

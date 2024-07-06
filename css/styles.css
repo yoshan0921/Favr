@@ -444,11 +444,11 @@ footer a {
 /* Notification modal                                */
 /* --------------------------------------------------*/
 .notification {
-  display: none;
   transition: all .5s ease-in-out;
   position: fixed;
   min-width: 100px;
-  right: -450px;
+  /*transform: translateX(-450px);*/
+  right: -100%;
   bottom: 100px;
   box-shadow: 1px 1px 10px 5px lightgray;
   border-radius: 10px;
@@ -474,9 +474,8 @@ footer a {
   color: var(--primary);
 }
 .notification.show{
-  animation: moveIn .5s both;
+  right: 0;
   z-index: 999;
-  display: block;
 }
 .has-updates{
   position: relative;
@@ -492,13 +491,9 @@ footer a {
   border-radius: 50px;
   background-color: var(--warmRed);
 }
-@keyframes moveIn {
-  from {
-    right: -450px;
-  }
-  to{
-    right: 2rem;
-  }
+.chat-icon-wrapper .icon-wrapper.has-updates::after{
+  right: 10px !important;
+  top: 2px;
 }
 
 /* --------------------------------------------------*/
