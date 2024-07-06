@@ -75,7 +75,9 @@
 
       <div class="buttonRow">
         <button id="cancelFavor" class="rounded-btn link-btn outlined-btn">Cancel Favor</button>
-        <button href="../support.html" class="rounded-btn link-btn outlined-btn">Get Support</button>
+        <button id="getSupport" class="rounded-btn link-btn outlined-btn">Get Support</button>
+        <button id="approveFavor" class="rounded-btn link-btn">Approve Favor</button>
+        <button id="createAgain" id="createAgain" class="rounded-btn link-btn">Create Again</button>
       </div>
     </div>
 
@@ -95,12 +97,23 @@
     </div>
   </div>
 
-  <!-- Modal to acknowledge successful cancel of favor -->
+  <!-- TEMPORARY/TODO: Modal to acknowledge successful cancel of favor -->
   <div id="successModal" class="modal">
     <div class="modal-content">
       <h2>Favor Cancelled Successfully</h2>
       <div class="buttonRow">
         <button id="backToHome" class="rounded-btn link-btn outlined-btn btn-active">Homepage</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEMPORARY/TODO: Modal to acknowledge approval of favor -->
+  <div id="approveSuccessModal" class="modal">
+    <div class="modal-content">
+      <h2>The Favor has been approved!</h2>
+      <div class="buttonRow">
+        <button id="favorDetail" class="rounded-btn link-btn outlined-btn btn-active">Detail</button>
+        <button id="backToHomeApproved" class="rounded-btn link-btn btn-active">Homepage</button>
       </div>
     </div>
   </div>

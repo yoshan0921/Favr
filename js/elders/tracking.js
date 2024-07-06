@@ -62,6 +62,8 @@ async function displayTaskSummary(taskID) {
     const dateLabel = document.getElementById("dateLabel");
     const timeLabel = document.getElementById("timeLabel");
     const hideCancelFavor = document.getElementById("cancelFavor");
+    const approveFavor = document.getElementById("approveFavor");
+    const createAgain = document.getElementById("createAgain");
     
     // const favorLengthData = document.getElementById("favorLength");
     const startAddressData = document.getElementById("startAddress");
@@ -111,6 +113,8 @@ async function displayTaskSummary(taskID) {
       timeLabel.innerText = "Cancelled Time";
       // Hide cancelFavor button if a favor is cancelled
       hideCancelFavor.classList.add("hidden");
+      // Hide approve button
+      approveFavor.classList.add("hidden");
 
       // Update Date and Time if it is completed
     } else if (task.status == "Completed" && task.details.completedDate) {
@@ -121,6 +125,32 @@ async function displayTaskSummary(taskID) {
       timeLabel.innerText = "Completed Time";
       // Hide cancelFavor button if a favor is completed
       hideCancelFavor.classList.add("hidden");
+      // Hide approve button
+      approveFavor.classList.add("hidden");
+
+      // Display these details when it is on going
+    } else if (task.status == "On going" && task.details.date) {
+      dateData.innerHTML = task.details.date;
+      timeData.innerHTML = task.details.time;
+      // Hide cancelFavor button if a favor is pending approval
+      approveFavor.classList.add("hidden");
+      createAgain.classList.add("hidden");
+
+      // Display these details when it is waiting to be accepted
+    } else if (task.status == "Waiting to be accepted" && task.details.date) {
+      dateData.innerHTML = task.details.date;
+      timeData.innerHTML = task.details.time;
+      // Hide cancelFavor button if a favor is pending approval
+      approveFavor.classList.add("hidden");
+      createAgain.classList.add("hidden");
+
+      // Display these details when it is pending approval
+    } else if (task.status == "Pending approval" && task.details.date) {
+      dateData.innerHTML = task.details.date;
+      timeData.innerHTML = task.details.time;
+      // Hide cancelFavor button if a favor is pending approval
+      hideCancelFavor.classList.add("hidden");
+      createAgain.classList.add("hidden");
 
       // Default
     } else {
@@ -178,6 +208,24 @@ backToHome.addEventListener("click", () => {
   window.location.href = "../dashboard.html";
 });
 
+// Event listener to go back to home from approving favor modal
+const backToHomeApproved = document.getElementById("backToHomeApproved");
+backToHomeApproved.addEventListener("click", () => {
+  window.location.href = "../dashboard.html";
+});
+
+// Event listener to go back to home from approving favor modal
+const createAgain = document.getElementById("createAgain");
+createAgain.addEventListener("click", () => {
+  window.location.href = "../tasks/create.html";
+});
+
+// Event listener to go to get support
+const getSupport = document.getElementById("getSupport");
+getSupport.addEventListener("click", () => {
+  window.location.href = "../support.html";
+});
+
 // Update task status to cancelled
 const modalCancelFavorBtn = document.getElementById("modalCancelFavor");
 modalCancelFavorBtn.addEventListener("click", async () => {
@@ -209,6 +257,42 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     // Close the modal after updating task status
     const modal = document.getElementById("confirmModal");
     closeModal(modal);
+  } catch (error) {
+    console.error("Error updating task status:", error);
+  }
+});
+
+// Update task status to Completed (from Pending Approval)
+const approveFavorBtn = document.getElementById("approveFavor");
+approveFavorBtn.addEventListener("click", async () => {
+  try {
+    // Get the current date and time, formatted with international format
+    const now = new Date();
+    const completedDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    }).format(now);
+    const completedTime = now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    // Update task status to "Cancelled" in Firestore
+    await updateProperty("tasks", taskID, {
+      status: "Completed",
+      "details.completedDate": completedDate,
+      "details.completedTime": completedTime,
+    });
+
+    // Display the success modal
+    // const approveSuccessModal = document.getElementById("approveSuccessModal");
+    // openModal(approveSuccessModal);
+
+    // Display complete favor page
+    window.location.href = "../tasks/complete.html";
+
   } catch (error) {
     console.error("Error updating task status:", error);
   }
