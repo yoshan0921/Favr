@@ -87,7 +87,7 @@ function runFunction() {
         startAddress: document.getElementById("startAddress").value || null,
         startAddressLat: document.getElementById("startAddressLat").value || null,
         startAddressLng: document.getElementById("startAddressLng").value || null,
-        endAddress: document.getElementById("endAddress").value || null,
+        endAddress: document.getElementById("endAddress").value || "None",
         startAddressLat: document.getElementById("startAddressLat").value || null,
         startAddressLng: document.getElementById("startAddressLng").value || null,
       },
