@@ -54,11 +54,20 @@ async function loadCommonContent() {
       loadPageTitle();
       addListenerToLogoutButton();
       activateMenuLinkAndBackButton();
-      listenToNotifications();
+      return Notification.requestPermission();
+    })
+    .then(permission => {
+      if(permission == 'granted'){
+        listenToNotifications();
+      }
     })
     .catch((error) => console.log(error));
 }
+function userAllowedNotifications(){
+  if('Notification' in window){
 
+  }
+}
 /**
  *
  * @param {string} partial - the name of the partial file (without .html)
