@@ -56,6 +56,9 @@
 
   --hoverButtonBackground: color-mix(in hsl, var(--primary) 85%, var(--pureWhite));
   --hoverOutlinedButtonBackground: color-mix(in hsl, var(--primary) 20%, var(--background-gray));
+
+  --notificationCount: "1";
+  --messagesCount: "1";
 }
 
 /* -------------------------------------------------- */
@@ -442,6 +445,7 @@ footer a {
 /* --------------------------------------------------*/
 /* Notification modal                                */
 /* --------------------------------------------------*/
+
 .notification {
   transition: all .5s ease-in-out;
   position: fixed;
@@ -449,7 +453,7 @@ footer a {
   /*transform: translateX(-450px);*/
   right: -100%;
   bottom: 100px;
-  box-shadow: 1px 1px 10px 5px lightgray;
+  box-shadow: 1px 1px 10px 5px rgba(0,0,0,0.3);
   border-radius: 10px;
 }
 .notification.modal-content{
@@ -478,21 +482,30 @@ footer a {
 }
 .has-updates{
   position: relative;
+  overflow: visible;
 }
 .has-updates::after{
   position: absolute;
   z-index: 999;
   content: "";
-  width: 10px;
-  height: 10px;
-  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  min-width: 15px;
+  min-height: 15px;
+  aspect-ratio: 1;
+  width: auto;
+  top: 0px;
   right: 15px;
   border-radius: 50px;
   background-color: var(--warmRed);
+  color: white;
 }
 .chat-icon-wrapper .icon-wrapper.has-updates::after{
   right: 10px !important;
   top: 2px;
+  content: var(--messagesCount);
 }
 
 /* --------------------------------------------------*/

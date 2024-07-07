@@ -30,10 +30,10 @@ window.addEventListener("load", function (event) {
     const updatesList = document.getElementById("updates");
     onValue(ref(database, getCurrentUserID()), (snapshot) => {
       let sortedArray = [];
-      if(snapshot.length>0) updatesList.innerHTML = "";
       snapshot.forEach((notification) => {
-        sortedArray.push(notification.val());
+        if(!notification.val().isMessage) sortedArray.push(notification.val());
     });
+    if(sortedArray.length>0) updatesList.innerHTML = "";
       sortedArray = sortedArray.sort((a,b)=>{
           if(a.time > b.time) return 1;
           if(a.time < b.time) return -1;
@@ -41,7 +41,6 @@ window.addEventListener("load", function (event) {
       });
       sortedArray.forEach((notification)=>{
         const card = document.createElement("div");
-        card.setAttribute("href",notification.link);
         card.classList.add("update");
         const notificationIcon = document.createElement("div");
         notificationIcon.classList.add("icon-wrapper");
@@ -64,7 +63,6 @@ window.addEventListener("load", function (event) {
             card.classList.add("new");
         }
         updatesList.appendChild(card);
-        console.log(notification.link);
         card.addEventListener("click",e=>{
             updateNotificationStatus(getCurrentUserID(), notification);
             document.getElementById(`link-${notification.id}`).click();
