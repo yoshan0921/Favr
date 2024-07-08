@@ -184,7 +184,11 @@ async function createTaskListForElders(allTasks) {
 
   // No items message
   if (document.querySelectorAll("#taskList .taskCard").length === 0) {
-    document.querySelector("#taskList ~ .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskList ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskList").classList.add("hide");
+  } else {
+    document.querySelector("#taskList ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskList").classList.remove("hide");
   }
 
   // Apply lazy loading to images
@@ -507,10 +511,21 @@ async function createTaskListForVolunteers(allTasks) {
 
   // No items message
   if (document.querySelectorAll("#taskListExplore .taskCard").length === 0) {
-    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListExplore").classList.add("hide");
+    document.getElementById("taskMapExplore").classList.add("hide");
+  } else {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListExplore").classList.remove("hide");
+    document.getElementById("taskMapExplore").classList.remove("hide");
   }
+
   if (document.querySelectorAll("#taskListMyFavor .taskCard").length === 0) {
-    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListMyFavor").classList.add("hide");
+  } else {
+    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListMyFavor").classList.remove("hide");
   }
 
   // Apply lazy loading to images
@@ -776,13 +791,13 @@ function applyFilter(resetFlg = false) {
 
   // No items message
   if (document.querySelectorAll("#taskListExplore .taskCard:not(.hide)").length === 0) {
-    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
-    document.getElementById("taskListExplore").classList.add("noResult");
-    document.getElementById("taskMapExplore").classList.add("noResult");
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListExplore").classList.add("hide");
+    document.getElementById("taskMapExplore").classList.add("hide");
   } else {
-    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("noResult");
-    document.getElementById("taskListExplore").classList.remove("noResult");
-    document.getElementById("taskMapExplore").classList.remove("noResult");
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListExplore").classList.remove("hide");
+    document.getElementById("taskMapExplore").classList.remove("hide");
   }
 
   // When inforWindow is open on the Google Map, close all infoWindows

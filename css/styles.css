@@ -445,7 +445,7 @@ footer a {
 /* --------------------------------------------------*/
 .notification {
   display: none;
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
   position: fixed;
   min-width: 100px;
   right: -450px;
@@ -453,35 +453,35 @@ footer a {
   box-shadow: 1px 1px 10px 5px lightgray;
   border-radius: 10px;
 }
-.notification.modal-content{
+.notification.modal-content {
   padding: 20px 15px;
   max-width: 380px;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
-.notification a{
+.notification a {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   gap: 1rem;
 }
-.notification .icon-wrapper{
+.notification .icon-wrapper {
   width: 50px;
   height: 100%;
   overflow: hidden;
   border-radius: 50px;
 }
-.notification h2{
+.notification h2 {
   color: var(--primary);
 }
-.notification.show{
-  animation: moveIn .5s both;
+.notification.show {
+  animation: moveIn 0.5s both;
   z-index: 999;
   display: block;
 }
-.has-updates{
+.has-updates {
   position: relative;
 }
-.has-updates::after{
+.has-updates::after {
   position: absolute;
   z-index: 999;
   content: "";
@@ -496,7 +496,7 @@ footer a {
   from {
     right: -450px;
   }
-  to{
+  to {
     right: 2rem;
   }
 }
@@ -572,7 +572,7 @@ main.loaded .loading-screen {
   font-size: clamp(0.5rem, 5vw, 0.8rem);
   font-weight: 700;
 }
-.sidebar .icon-wrapper{
+.sidebar .icon-wrapper {
   display: flex;
 }
 .sidebar button {
@@ -618,9 +618,9 @@ main.loaded .loading-screen {
 .hide {
   display: none !important;
 }
-.noResult {
+/* .noResult {
   display: none !important;
-}
+} */
 
 /* -------------------------------------------------- */
 /* Task Card                                          */
@@ -628,10 +628,15 @@ main.loaded .loading-screen {
 .taskCard {
   transition: all 0.2s ease-out;
   background-color: var(--pureWhite);
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
   padding: 1rem;
   position: relative;
+
+  box-shadow: 0px 12px 28px -6px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px; */
 }
 .taskCard:hover {
   transform: translateY(-5px);
@@ -699,7 +704,8 @@ main.loaded .loading-screen {
 }
 
 /* The Close Button */
-.closeModal, .closeNotificationModal {
+.closeModal,
+.closeNotificationModal {
   color: var(--disabledText);
   float: right;
   text-align: right;
@@ -922,7 +928,7 @@ Media queries
   #logoutBtn span {
     letter-spacing: 1px;
   }
-  .notification{
+  .notification {
     bottom: 10px;
   }
 }
