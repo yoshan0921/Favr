@@ -1,4 +1,19 @@
 /* -------------------------------------------------- */
+/* Common                                             */
+/* -------------------------------------------------- */
+#dashboard-content,
+#history-content {
+  background-image: url(/assets/images/background-mobile.png);
+  background-size: cover;
+  background-position: center;
+  /* background-attachment: fixed; */
+
+  @media screen and (min-width: 800px) {
+    background-image: url(/assets/images/background-desktop.png);
+  }
+}
+
+/* -------------------------------------------------- */
 /* Map                                                */
 /* -------------------------------------------------- */
 .tab-content .mapContainer {

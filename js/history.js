@@ -187,10 +187,18 @@ async function createTaskListForElders(allTasks) {
 
   // No items message
   if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
-    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListCompleted").classList.add("hide");
+  } else {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListCompleted").classList.remove("hide");
   }
   if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
-    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListCancelled").classList.add("hide");
+  } else {
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListCancelled").classList.remove("hide");
   }
 
   // Apply lazy loading to images
@@ -530,8 +538,8 @@ function setupDateRangePicker() {
 
       // Show No items message if needed
       if (targetTab.querySelectorAll(".taskCard:not(.hide)").length === 0) {
-        targetTab.nextElementSibling.classList.remove("noResult");
-        targetTab.classList.add("noResult");
+        targetTab.nextElementSibling.classList.remove("hide");
+        targetTab.classList.add("hide");
       }
     } catch (error) {
       console.error(error);
@@ -545,8 +553,8 @@ function setupDateRangePicker() {
         card.classList.remove("hide");
       });
       // Clear No items message
-      targetTab.nextElementSibling.classList.add("noResult");
-      targetTab.classList.remove("noResult");
+      targetTab.nextElementSibling.classList.add("hide");
+      targetTab.classList.remove("hide");
     } catch (error) {
       console.error(error);
     }
