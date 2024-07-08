@@ -148,44 +148,44 @@ async function acceptTask(taskID, taskData) {
   // Get the volunteer ID
   const volunteerID = getCurrentUserID();
 
-  // // Target task data
-  // let targetDate = taskData.details.date
-  // let targetTime = taskData.details.time
-  // // Check On going task
-  // let filterConditions = [
-  //   { key: 'volunteerID', operator: '==', value: volunteerID },
-  //   { key: 'status', operator: '==', value: STATUS_ONGOING },
-  // ];
+  // Target task data
+  let targetDate = taskData.details.date
+  let targetTime = taskData.details.time
+  // Check On going task
+  let filterConditions = [
+    { key: 'volunteerID', operator: '==', value: volunteerID },
+    { key: 'status', operator: '==', value: STATUS_ONGOING },
+  ];
   
-  // let tasks = await getAllWithFilter("tasks", filterConditions);
-  // let tentativeDuration = 1; // This might be changed
+  let tasks = await getAllWithFilter("tasks", filterConditions);
+  let tentativeDuration = 1; // This might be changed
 
   
-  // tasks.forEach((task) => {
+  tasks.forEach((task) => {
 
-  //   console.log(taskData.details.date);
+    console.log(taskData.details.date);
 
-  //   let startTime = new Date(task.date, task.time);
-  //   console.log(startTime);
-  //   let endTime = new Date(task.date, task.time + tentativeDuration);
-  //   console.log(endTime);
-  //   let targetStartTime = new Date(targetDate, targetTime);
-  //   let targetEndTime = new Date(targetDate, targetTime + tentativeDuration);
+    let startTime = new Date(task.date, task.time);
+    console.log(startTime);
+    let endTime = new Date(task.date, task.time + tentativeDuration);
+    console.log(endTime);
+    let targetStartTime = new Date(targetDate, targetTime);
+    let targetEndTime = new Date(targetDate, targetTime + tentativeDuration);
   
-  //   if (targetStartTime <= endTime || targetEndTime >= startTime) {
-  //     console.log("Schedule is conflicted");
+    if (targetStartTime <= endTime || targetEndTime >= startTime) {
+      console.log("Schedule is conflicted");
 
 
-  //     // ToDo: Display conflict message popup
-  //     // Code here...
+      // ToDo: Display conflict message popup
+      // Code here...
 
-  //     function scheduleConflictOn() {
-  //       document.getElementById("schedule-conflict").style.display = "block";
-  //     }
+      function scheduleConflictOn() {
+        document.getElementById("schedule-conflict").style.display = "block";
+      }
     
-  //     return; 
-  //   }
-  // });
+      return; 
+    }
+  });
   
 
   // Create updated task data object with the volunteer ID and status "On going"
@@ -273,13 +273,13 @@ document.getElementById("acceptBtn").addEventListener("click", function () {
 });
 
 // To display "confirm-overlay" OFF
-function confirmOff() {
-  document.getElementById("confirm-overlay").style.display = "none";
-}
+// function confirmOff() {
+//   document.getElementById("confirm-overlay").style.display = "none";
+// }
 
-document.getElementById("backBtn").addEventListener("click", function () {
-  confirmOff();
-});
+// document.getElementById("backBtn").addEventListener("click", function () {
+//   confirmOff();
+// });
 
 // To display "accept-overlay" ON
 function acceptOn() {
@@ -302,9 +302,9 @@ function goMyFavors() {
   window.location.href = "/dashboard.html#myfavors";
 }
 
-document.getElementById("homeBtn").addEventListener("click", function () {
-  goHome();
-});
+// document.getElementById("homeBtn").addEventListener("click", function () {
+//   goHome();
+// });
 
 document.getElementById("declineBtn").addEventListener("click", function () {
   goHome();

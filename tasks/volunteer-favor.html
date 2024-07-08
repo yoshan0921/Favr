@@ -15,10 +15,11 @@
 
   <body>
     <!-- Left Column -->
+    <div id="leftside-column"></div>
+
+    <!-- Header -->
     <header id="header"></header>
 
-    <!-- Left Column -->
-    <div id="leftside-column"></div>
 
     <!-- Main Content -->
     <main class="content">
@@ -39,19 +40,31 @@
           <nav>
             <ul>
               <li>
-                <a href="#">Time:</a>
+                <div class="content">
+                  <img src="../assets/icons/time.svg" alt="">
+                  <a href="#">Time:</a>
+                </div>
                 <p id="taskTime"></p>
               </li>
               <li>
-                <a href="#">Start<br>Location:</a>
+                <div class="content">
+                  <img src="../assets/icons/location.svg" alt="">
+                  <a href="#">From:</a>
+                </div>
                 <p id="startAddress"></p>
               </li>
               <li>
-                <a href="#">End<br>Location:</a>
+                <div class="content">
+                  <img src="../assets/icons/location.svg" alt="">
+                  <a href="#">End:</a>
+                </div>
                 <p id="endAddress"></p>
               </li>
               <li>
-                <a href="#">Instruction:</a>
+                <div class="content">
+                  <img src="../assets/icons/note.svg" alt="">
+                  <a href="#">Note:</a>
+                </div>
                 <p id="taskNote"></p>
               </li>
             </ul>
@@ -83,20 +96,22 @@
       <div id="confirm-overlay">
         <div class="confirm-wrapper">
           <section class="message">
-            <h2>Confirm Favor Acceptance</h2>
+            <img src="../assets/icons/question.svg" alt="question">
+            <h2>Confirm Favor</h2>
+
+            <section class="user-profile">
+              <i class="fa-solid fa-user"></i>
+              <div class="user-info">
+                <h3 id="confirmElderName" class="name"></h3>
+                <p id="confirmElderAddress"></p>
+              </div>
+            </section>
+  
             <p>Are you willing to help <span id="confirmWrapperElderName"></span> with this <span id="confirmTaskName"></span> Favor?</p>
           </section>
 
-          <section class="user-profile">
-            <i class="fa-solid fa-user"></i>
-            <div class="user-info">
-              <h3 id="confirmElderName" class="name"></h3>
-              <p id="confirmElderAddress"></p>
-            </div>
-          </section>
 
           <section class="set">
-            <button id="backBtn">Back</button>
             <button id="confirmBtn">Confirm</button>
           </section>
         </div>
@@ -106,35 +121,32 @@
       <div id="accept-overlay">
         <div class="confirm-wrapper">
           <section class="message">
+            <img src="../assets/icons/accepted.svg" alt="accepted">
             <h2>Favor Accepted</h2>
-            <i class="fa-solid fa-check"></i>
-            <p>You have agreed to help <span id="acceptWrapperElderName"></span> with his <span id="acceptTaskName"></span> Favor on:</p>
-            <p id="acceptTaskTime"></p>
-          </section>
 
-          <section class="user-profile">
-            <i class="fa-solid fa-user"></i>
-            <div class="user-info">
-              <h3 id="acceptElderName" class="name"></h3>
-              <p id="acceptElderAddress"></p>
-            </div>
+            <section class="user-profile">
+              <i class="fa-solid fa-user"></i>
+              <div class="user-info">
+                <h3 id="acceptElderName" class="name"></h3>
+                <p id="acceptElderAddress"></p>
+              </div>
+            </section>
+
+            <p>You have successfully accepted <span id="acceptWrapperElderName"></span>'s <span id="acceptTaskName"></span> Favor!</p>
           </section>
 
           <section class="set">
-            <button id="homeBtn">Home</button>
+            <!-- <button id="homeBtn">Home</button> -->
             <button id="myFavorsBtn">My Favors</button>
           </section>
         </div>
       </div>
 
       <!-- Schedule Conflict Overlay Display=============== -->
-      <div id="schedule-conflict">
+      <div id="cancell-confrim-overlay">
         <div class="confirm-wrapper">
           <section class="message">
-            <h2>Schedule Conflict!</h2>
-            <i class="fa-regular fa-calendar-xmark"></i>
-            <p>You have another Favor going on during this time slot.</p>
-            <p>Do you still want to accept the Favor?</p>
+            <p>You are cancelling the Favor. Are you comfortable sharing the reason with us?</p>
           </section>
 
           <section class="set">
@@ -142,6 +154,23 @@
           </section>
         </div>
       </div>
+
+      <!-- Schedule Conflict Overlay Display===============
+      <div id="schedule-conflict">
+        <div class="confirm-wrapper">
+          <section class="message">
+            <h2>Schedule Conflict!</h2>
+              <i class="fa-regular fa-calendar-xmark"></i>
+              <p>You have another Favor going on during this time slot.</p>
+              <p>Do you still want to accept the Favor?</p>
+          </section>
+      
+          <section class="set">
+            <button id="conflictConfirmBtn">Confirm</button>
+            </section>
+          </div>
+      </div> -->
+      
 
       <!-- Confirm Task Complete Overlay Display=============== -->
       <div id="complete-confirm-overlay">
@@ -166,7 +195,7 @@
       <div id="task-completed-overlay">
         <div class="confirm-wrapper">
           <section class="message">
-            <i class="fa-solid fa-heart"></i>
+            <img src="../assets/icons/heart.svg" alt="heart">
             <h2>Thank you for supporting <span id="completedElderName"></span> and our community!</h2>
             <p>Request for approval has been sent to <span id="approvedElderName"></span> and will be updated to you after approved.</p>
             <p>See more seniors you can help:</p>
