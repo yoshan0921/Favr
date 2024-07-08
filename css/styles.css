@@ -56,9 +56,6 @@
 
   --hoverButtonBackground: color-mix(in hsl, var(--primary) 85%, var(--pureWhite));
   --hoverOutlinedButtonBackground: color-mix(in hsl, var(--primary) 20%, var(--background-gray));
-
-  --notificationCount: "1";
-  --messagesCount: "1";
 }
 
 /* -------------------------------------------------- */
@@ -486,8 +483,7 @@ footer a {
 }
 .has-updates::after{
   position: absolute;
-  z-index: 999;
-  content: "";
+  z-index: " ";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -497,7 +493,7 @@ footer a {
   aspect-ratio: 1;
   width: auto;
   top: 0px;
-  right: 15px;
+  right: 0px;
   border-radius: 50px;
   background-color: var(--warmRed);
   color: white;
@@ -505,7 +501,6 @@ footer a {
 .chat-icon-wrapper .icon-wrapper.has-updates::after{
   right: 10px !important;
   top: 2px;
-  content: var(--messagesCount);
 }
 
 /* --------------------------------------------------*/
@@ -682,7 +677,7 @@ main.loaded .loading-screen {
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  z-index: 2000; /* Sit on top */
   align-content: center;
   left: 0;
   top: 0;
@@ -925,5 +920,8 @@ Media queries
   }
   .notification{
     bottom: 10px;
+  }
+  .has-updates::after{
+    right: 15px;
   }
 }

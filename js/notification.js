@@ -46,7 +46,7 @@ function listenToNotifications(){
                 const notificationCloseButton = document.getElementsByClassName("closeNotificationModal")[0];
                 notificationCloseButton.addEventListener("click",()=>{
                     notificationCard.classList.remove("show");
-                    setTimeout(()=>document.body.removeChild(notificationCard),1000)
+                    setTimeout(()=>document.body.removeChild(notificationCard),1000);
                     
                 })
                 const updateObj = {};
