@@ -251,12 +251,25 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     });
 
     // Display the success modal
-    const successModal = document.getElementById("successModal");
-    openModal(successModal);
+    // const successModal = document.getElementById("successModal");
+    // openModal(successModal);
 
     // Close the modal after updating task status
-    const modal = document.getElementById("confirmModal");
-    closeModal(modal);
+    // const modal = document.getElementById("confirmModal");
+    // closeModal(modal);
+
+    // Create a URLSearchParams object from the current URL
+    var urlParams = new URLSearchParams(window.location.search);
+
+    // Get the value of the 'taskid' parameter
+    var taskid = urlParams.get("taskid");
+
+    // Construct the URL for the new page with taskid parameter
+    var newURL = "../tasks/cancel.html?taskid=" + taskid;
+
+    // Display complete favor page
+    window.location.href = newURL;
+
   } catch (error) {
     console.error("Error updating task status:", error);
   }
@@ -290,8 +303,17 @@ approveFavorBtn.addEventListener("click", async () => {
     // const approveSuccessModal = document.getElementById("approveSuccessModal");
     // openModal(approveSuccessModal);
 
+    // Create a URLSearchParams object from the current URL
+    var urlParams = new URLSearchParams(window.location.search);
+
+    // Get the value of the 'taskid' parameter
+    var taskid = urlParams.get("taskid");
+
+    // Construct the URL for the new page with taskid parameter
+    var newURL = "../tasks/complete.html?taskid=" + taskid;
+
     // Display complete favor page
-    window.location.href = "../tasks/complete.html";
+    window.location.href = newURL;
 
   } catch (error) {
     console.error("Error updating task status:", error);

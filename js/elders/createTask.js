@@ -671,8 +671,11 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     });
 
     // Display the success modal
-    const successModal = document.getElementById("successModal");
-    openModal(successModal);
+    // const successModal = document.getElementById("successModal");
+    // openModal(successModal);
+
+    // Display favor cancel page
+    window.location.href = "../tasks/cancel.html?taskid=" + currentTaskID;
 
     // Close the modal after updating task status
     const modal = document.getElementById("confirmModal");

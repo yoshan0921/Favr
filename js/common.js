@@ -21,14 +21,16 @@ let pageTitles = {
   "profile.html": "Profile",
   "history.html": "History",
   "profile/edit.html": "Profile",
-  "tasks/create.html": "Request favor",
+  "tasks/create.html": "Create Favor",
   "tasks/elder-favor.html": "Favor Tracking",
   "tasks/accept.html": "Favor Details",
   "tasks/myfavr.html": "My Favor",
   "tasks/volunteer-favor.html": "My Favor",
   "updates.html": "Updates",
-  "support.html": "Get support",
+  "support.html": "Get Support",
   "chat.html": "Messages",
+  "complete.html": "Favor Tracking",
+  "cancel.html": "Favor Tracking",
 };
 const menuLinks = {
   "dashboard.html": "home-menu",
