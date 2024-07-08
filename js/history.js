@@ -483,7 +483,7 @@ function setupDateRangePicker() {
     parentEl: "#filterModal",
     // singleDatePicker: true,
     applyButtonClasses: "applyBtn rounded-btn",
-    cancelButtonClasses: "resetBtn rounded-btn",
+    cancelButtonClasses: "resetBtn rounded-btn outlined-btn",
     startDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
     endDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
     locale: { cancelLabel: "Reset" },

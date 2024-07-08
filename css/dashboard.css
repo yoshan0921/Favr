@@ -213,7 +213,7 @@
 #filterModal .modal-content {
   display: flex;
   flex-flow: column wrap;
-  min-height: 80vh;
+  /* min-height: 80vh; */
   width: 90%;
 
   @media screen and (min-width: 800px) {
@@ -221,6 +221,10 @@
     margin-top: 1vh;
     margin-right: 1rem;
   }
+}
+
+#filterForm {
+  gap: 1rem;
 }
 
 .modal-form,
@@ -306,6 +310,7 @@
   display: flex;
   flex-flow: row wrap;
   gap: 0.5rem;
+  padding-top: 1rem;
 }
 
 #savePreference {
@@ -504,7 +509,6 @@ button#resetFilter {
 }
 
 .daterangepicker button.resetBtn {
-  background-color: transparent !important;
   color: var(--primary) !important;
 }
 

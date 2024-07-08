@@ -170,6 +170,7 @@ button,
   padding: 0.5rem 1rem;
   line-height: 1.75em;
   font-weight: 600;
+  font-size: 16px;
 }
 :is(button, .link-btn):hover,
 :is(button, .link-btn):active {
@@ -188,7 +189,7 @@ button a {
 .rounded-btn {
   border-radius: 50px;
   padding: 1px 8px;
-  /* height: max-content; */
+  /* height: max-content; */ /* To align the button size in Flex Box */
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -444,13 +445,13 @@ footer a {
 /* --------------------------------------------------*/
 
 .notification {
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
   position: fixed;
   min-width: 100px;
   /*transform: translateX(-450px);*/
   right: -100%;
   bottom: 100px;
-  box-shadow: 1px 1px 10px 5px rgba(0,0,0,0.3);
+  box-shadow: 1px 1px 10px 5px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
 }
 .notification.modal-content {
@@ -473,7 +474,7 @@ footer a {
 .notification h2 {
   color: var(--primary);
 }
-.notification.show{
+.notification.show {
   right: 0;
   z-index: 999;
 }
@@ -498,7 +499,7 @@ footer a {
   background-color: var(--warmRed);
   color: white;
 }
-.chat-icon-wrapper .icon-wrapper.has-updates::after{
+.chat-icon-wrapper .icon-wrapper.has-updates::after {
   right: 10px !important;
   top: 2px;
 }
@@ -823,7 +824,7 @@ Media queries
     grid-row: 1/-1;
     grid-column: 1;
   }
-  .sidebar a{
+  .sidebar a {
     font-size: 1rem;
   }
   .sidebar ul {
@@ -927,7 +928,7 @@ Media queries
   .notification {
     bottom: 10px;
   }
-  .has-updates::after{
+  .has-updates::after {
     right: 15px;
   }
 }
