@@ -64,7 +64,7 @@ async function displayTaskSummary(taskID) {
     const hideCancelFavor = document.getElementById("cancelFavor");
     const approveFavor = document.getElementById("approveFavor");
     const createAgain = document.getElementById("createAgain");
-    
+
     // const favorLengthData = document.getElementById("favorLength");
     const startAddressData = document.getElementById("startAddress");
     const endAddressData = document.getElementById("endAddress");
@@ -85,7 +85,7 @@ async function displayTaskSummary(taskID) {
         statusColor.style.backgroundColor = "#0D99FF";
         break;
       case "Pending approval":
-        statusColor.style.backgroundColor = "#ffcd29";
+        statusColor.style.backgroundColor = "#e43f3f";
         break;
       case "Completed":
         statusColor.style.backgroundColor = "#44c451";
@@ -269,7 +269,6 @@ modalCancelFavorBtn.addEventListener("click", async () => {
 
     // Display complete favor page
     window.location.href = newURL;
-
   } catch (error) {
     console.error("Error updating task status:", error);
   }
@@ -314,7 +313,6 @@ approveFavorBtn.addEventListener("click", async () => {
 
     // Display complete favor page
     window.location.href = newURL;
-
   } catch (error) {
     console.error("Error updating task status:", error);
   }
