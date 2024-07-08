@@ -171,8 +171,8 @@ button,
   line-height: 1.75em;
   font-weight: 600;
 }
-:is(button:not(#logoutBtn), .link-btn):hover,
-:is(button:not(#logoutBtn), .link-btn):active {
+:is(button, .link-btn):hover,
+:is(button, .link-btn):active {
   background-color: var(--hoverButtonBackground);
   cursor: pointer;
 }
@@ -188,7 +188,7 @@ button a {
 .rounded-btn {
   border-radius: 50px;
   padding: 1px 8px;
-  height: max-content;
+  /* height: max-content; */
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -406,8 +406,7 @@ main .page-header {
   filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
 }
 
-a,
-#logoutBtn {
+a {
   color: var(--disabledText);
   text-decoration: none;
   background-color: transparent;
@@ -443,14 +442,15 @@ footer a {
 /* --------------------------------------------------*/
 /* Notification modal                                */
 /* --------------------------------------------------*/
+
 .notification {
-  display: none;
-  transition: all 0.5s ease-in-out;
+  transition: all .5s ease-in-out;
   position: fixed;
   min-width: 100px;
-  right: -450px;
+  /*transform: translateX(-450px);*/
+  right: -100%;
   bottom: 100px;
-  box-shadow: 1px 1px 10px 5px lightgray;
+  box-shadow: 1px 1px 10px 5px rgba(0,0,0,0.3);
   border-radius: 10px;
 }
 .notification.modal-content {
@@ -473,32 +473,34 @@ footer a {
 .notification h2 {
   color: var(--primary);
 }
-.notification.show {
-  animation: moveIn 0.5s both;
+.notification.show{
+  right: 0;
   z-index: 999;
-  display: block;
 }
 .has-updates {
   position: relative;
+  overflow: visible;
 }
 .has-updates::after {
   position: absolute;
-  z-index: 999;
-  content: "";
-  width: 10px;
-  height: 10px;
-  top: 0;
-  right: 15px;
+  z-index: " ";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  min-width: 15px;
+  min-height: 15px;
+  aspect-ratio: 1;
+  width: auto;
+  top: 0px;
+  right: 0px;
   border-radius: 50px;
   background-color: var(--warmRed);
+  color: white;
 }
-@keyframes moveIn {
-  from {
-    right: -450px;
-  }
-  to {
-    right: 2rem;
-  }
+.chat-icon-wrapper .icon-wrapper.has-updates::after{
+  right: 10px !important;
+  top: 2px;
 }
 
 /* --------------------------------------------------*/
@@ -559,8 +561,7 @@ main.loaded .loading-screen {
 .sidebar ul li {
   display: flex;
 }
-.sidebar a,
-#logoutBtn {
+.sidebar a {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -580,8 +581,7 @@ main.loaded .loading-screen {
 }
 
 .sidebar a.active,
-.sidebar a:hover,
-#logoutBtn:hover {
+.sidebar a:hover {
   color: var(--primary);
   cursor: pointer;
 }
@@ -682,7 +682,7 @@ main.loaded .loading-screen {
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  z-index: 2000; /* Sit on top */
   align-content: center;
   left: 0;
   top: 0;
@@ -823,8 +823,7 @@ Media queries
     grid-row: 1/-1;
     grid-column: 1;
   }
-  .sidebar a,
-  #logoutBtn {
+  .sidebar a{
     font-size: 1rem;
   }
   .sidebar ul {
@@ -901,8 +900,7 @@ Media queries
     /* height: 100%; */
   }
 
-  .sidebar a,
-  #logoutBtn {
+  .sidebar a {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -918,17 +916,18 @@ Media queries
     */
   }
 
-  .sidebar a i,
-  #logoutBtn i {
+  .sidebar a i {
     font-size: 1rem;
     margin-right: 16px;
   }
 
-  .sidebar a span,
-  #logoutBtn span {
+  .sidebar a span {
     letter-spacing: 1px;
   }
   .notification {
     bottom: 10px;
+  }
+  .has-updates::after{
+    right: 15px;
   }
 }

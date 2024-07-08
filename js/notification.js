@@ -1,7 +1,7 @@
 import { loadPartial } from "./common.js";
 import { getCurrentUserID } from "./firebase/authentication.js";
 import { database } from "./firebase/firebase.js";
-import { ref, push, onChildAdded, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { ref, push, onChildAdded, update, onValue,orderByKey } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const currentUserID = getCurrentUserID();
 
@@ -19,9 +19,13 @@ function listenToNotifications(){
         if(v.isNew){
             const updatesMenu = document.querySelector("#updates-menu .icon-wrapper");
             const chatMenu = document.querySelector("header .chat-icon-wrapper .icon-wrapper");
-            if(!updatesMenu.classList.contains("has-updates")) updatesMenu.classList.add("has-updates");
-            if(v.isMessage && !chatMenu.classList.contains("has-updates")) chatMenu.classList.add("has-updates");
-            if(!v.wasSent){
+            if(!updatesMenu.classList.contains("has-updates")) {
+                updatesMenu.classList.add("has-updates");
+            }
+            if(v.isMessage && !chatMenu.classList.contains("has-updates")){
+                chatMenu.classList.add("has-updates");
+            }  
+            if(!v.wasSent && !alreadyOnChatPage(v)){
                 await loadPartial("_notification", "body");
                 const notificationCard = document.getElementById("notificationCard");
                 const notificationLink = document.querySelector(".notification a");
@@ -32,11 +36,18 @@ function listenToNotifications(){
                 if(v.icon && v.icon !== "#") notificationIcon.setAttribute("src",v.icon);
                 notificationTitle.innerText = v.title;
                 notificationText.innerText = v.message
-                notificationCard.classList.add("show");
+                setTimeout(()=>{
+                    let notificationSound = new Audio("../assets/notification.mp3");
+                    notificationSound.play();
+                    notificationCard.classList.add("show");
+                }
+                ,500)
+                
                 const notificationCloseButton = document.getElementsByClassName("closeNotificationModal")[0];
                 notificationCloseButton.addEventListener("click",()=>{
                     notificationCard.classList.remove("show");
-                    document.body.removeChild(notificationCard);
+                    setTimeout(()=>document.body.removeChild(notificationCard),1000);
+                    
                 })
                 const updateObj = {};
                 v.wasSent = true;
@@ -68,7 +79,7 @@ async function sendNotification(data,receiverID){
         icon: (data.icon) ? data.icon : "../assets/icons/icon-128x128.png",
         link: (data.link) ? data.link : "#",
         isMessage: (data.isMessage) ? data.isMessage : false,
-        time: (new Date()).toLocaleString(),
+        time: new Date(),
         isNew: true,
         wasSent: false
     }
@@ -78,21 +89,7 @@ async function sendNotification(data,receiverID){
     updateObj[`/${receiverID}/${notificationID}`] = notificationObj;
     update(ref(database),updateObj);
 }
-/**
- * Will load all notifications for a given user
- * 
- * @param {string} userID 
- * @returns a Promise containing an array of notifications
- */
-async function loadAllNotifications(userID){
-    return new Promise(async (resolve)=>{
-        let result = [];
-        await onChildAdded(ref(database, userID), function (data){
-            result.push(data.val());
-        });
-        resolve(result);
-    })
-}
+
 /**
  * Updates the notification status from new to not new (should be called when the notification is clicked on)
  * 
@@ -107,9 +104,20 @@ function updateNotificationStatus(receiverID, notification){
         update(ref(database),updateObj);
     }
 }
+
+/**
+ * Check if the notification is from a new message and if the user is already on the chat page
+ * @param {Object} notification 
+ * @returns boolean value
+ */
+function alreadyOnChatPage(notification){
+    if(window.location.pathname.includes("chat.html") && notification.isMessage){
+        return true;
+    }
+    return false;
+}
 export {
     listenToNotifications,
     sendNotification,
-    loadAllNotifications,
     updateNotificationStatus
 }

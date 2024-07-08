@@ -250,8 +250,9 @@ ul#summaryList {
 }
 .favorOption:hover {
   cursor: pointer;
-  color: white;
-  background-color: var(--primary);
+  /* color: white; */
+  /* background-color: var(--primary); */
+  background-color: rgb(21 106 133 / .25);
 }
 
 .favor-buttons {
