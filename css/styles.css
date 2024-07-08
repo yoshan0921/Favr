@@ -188,7 +188,7 @@ button a {
 .rounded-btn {
   border-radius: 50px;
   padding: 1px 8px;
-  height: max-content;
+  /* height: max-content; */
   display: flex;
   align-items: center;
   gap: 0.5rem;
