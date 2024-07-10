@@ -6,10 +6,11 @@
   background-image: url(/assets/images/background-mobile.png);
   background-size: cover;
   background-position: center;
-  /* background-attachment: fixed; */
+  background-attachment: fixed;
 
   @media screen and (min-width: 800px) {
     background-image: url(/assets/images/background-desktop.png);
+    background-position: 120px center;
   }
 }
 
