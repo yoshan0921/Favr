@@ -11,6 +11,7 @@
     filter: none;
 }
 .update{
+    transition: all 0.2s ease-out;
     display: flex;
     gap: 1rem;
     position: relative;
@@ -23,6 +24,7 @@
 }
 .update:hover{
     cursor: pointer;
+    transform: translateY(-5px);
 }
 .update .notification-title{
     margin: 0;
