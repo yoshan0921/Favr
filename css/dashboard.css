@@ -400,9 +400,9 @@ button#resetFilter {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 30vh;
+  height: 55vh;
   color: var(--disabledText);
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
 }
 
 .elder .noItemsMessage a,
