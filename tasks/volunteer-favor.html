@@ -95,12 +95,13 @@
       <!-- Confirm task Overlay Display=============== -->
       <div id="confirm-overlay">
         <div class="confirm-wrapper">
-          <section class="message">
-            <img src="../assets/icons/question.svg" alt="question">
+
+            <span><i class="close-icon"></i></span>
+            <span><i class="question-icon"></i></span>
             <h2>Confirm Favor</h2>
 
             <section class="user-profile">
-              <i class="fa-solid fa-user"></i>
+              <img id="elderPhoto2">
               <div class="user-info">
                 <h3 id="confirmElderName" class="name"></h3>
                 <p id="confirmElderAddress"></p>
@@ -117,15 +118,33 @@
         </div>
       </div>
 
+      <!-- Schedule Conflict Overlay Display=============== -->
+      <div id="schedule-conflict">
+        <div class="confirm-wrapper">
+          <section class="message">
+            <span><i class="close-icon"></i></span>
+            <img src="../assets/icons/schedule-conflict.svg" alt="schedule-conflict">
+            <h2>Schedule Conflict!</h2>
+              <p>You have another Favor going on during this time slot.</p>
+              <p>Are you still willing to accept this Favor?</p>
+          </section>
+      
+          <section class="set">
+            <button id="conflictConfirmBtn">Confirm</button>
+            </section>
+          </div>
+      </div>
+
       <!-- Accept task Overlay Display=============== -->
       <div id="accept-overlay">
         <div class="confirm-wrapper">
           <section class="message">
+            <span><i class="close-icon"></i></span>
             <img src="../assets/icons/accepted.svg" alt="accepted">
             <h2>Favor Accepted</h2>
 
             <section class="user-profile">
-              <i class="fa-solid fa-user"></i>
+              <img id="elderPhoto3">
               <div class="user-info">
                 <h3 id="acceptElderName" class="name"></h3>
                 <p id="acceptElderAddress"></p>
@@ -142,7 +161,9 @@
         </div>
       </div>
 
-      <!-- Schedule Conflict Overlay Display=============== -->
+
+
+      <!-- Schedule Conflict Overlay Display===============
       <div id="cancell-confrim-overlay">
         <div class="confirm-wrapper">
           <section class="message">
@@ -153,23 +174,8 @@
             <button id="conflictConfirmBtn">Confirm</button>
           </section>
         </div>
-      </div>
-
-      <!-- Schedule Conflict Overlay Display===============
-      <div id="schedule-conflict">
-        <div class="confirm-wrapper">
-          <section class="message">
-            <h2>Schedule Conflict!</h2>
-              <i class="fa-regular fa-calendar-xmark"></i>
-              <p>You have another Favor going on during this time slot.</p>
-              <p>Do you still want to accept the Favor?</p>
-          </section>
-      
-          <section class="set">
-            <button id="conflictConfirmBtn">Confirm</button>
-            </section>
-          </div>
       </div> -->
+
       
 
       <!-- Confirm Task Complete Overlay Display=============== -->
@@ -181,7 +187,7 @@
           </section>
 
           <section class="icons-overlay" id="icons-overlay">
-            <img src="../assets/icons/thums-down.svg" alt="thums-down">
+            <span><i class="close-icon"></i></span>
             <img src="../assets/icons/thums-up.svg" alt="thums-up">
           </section>
 

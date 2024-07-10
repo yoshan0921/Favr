@@ -4,7 +4,9 @@ img {
   display: block;
 }
   
-.user-profile #elderPhoto {
+#elderPhoto,
+#elderPhoto2,
+#elderPhoto3 {
   border-radius: 50%;
 }
   
@@ -158,15 +160,27 @@ main {
   }
 }
 
-.confirm-wrapper img {
-  margin: auto;
-  width: 50.83px;
+.confirm-wrapper i {
+  display: block;
+  /* width: 50.83px; */
 }
+
+.close-icon {
+  text-align: right;
+}
+
+
+
   
 .confirm-wrapper .user-profile {
   display: grid;
-  grid-template-columns: 1rem 1fr;
-  margin-top: 1rem;
+  grid-template-columns: 3.5rem 1fr;
+  margin-bottom: 1rem;
+  gap: 1rem;
+
+  .user-info {
+    text-align: left;
+  }
 }
   
 .confirm-wrapper .user-profile i {

@@ -711,6 +711,30 @@ main.loaded .loading-screen {
 .mic-icon::after {
   content: url("../assets/icons/mic.svg") !important;
 }
+.close-icon::after {
+  content: url("../assets/icons/close.svg") !important;
+}
+.question-icon::after {
+  content: url("../assets/icons/question.svg") !important;
+}
+.conflict-icon::after {
+  content: url("../assets/icons/conflict.svg") !important;
+}
+.accepted-icon::after {
+  content: url("../assets/icons/accepted.svg") !important;
+}
+.heart-icon::after {
+  content: url("../assets/icons/accepted.svg") !important;
+}
+.thums-up-icon::after {
+  content: url("../assets/icons/thums-up.svg") !important;
+}
+
+.thums-down-icon::after {
+  content: url("../assets/icons/thums-down.svg") !important;
+}
+
+
 /*
 =========================
 Media queries
