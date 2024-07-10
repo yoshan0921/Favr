@@ -1,10 +1,11 @@
-.updates{
+#updates{
     display: flex;
     flex-flow: column nowrap;
+    gap: 1rem;
 }
 .update.new{
     border: none;
-    background-color: var(--background-gray);
+    background-color: var(--pureWhite);
 }
 .update.new .icon-wrapper img{
     filter: none;
@@ -14,10 +15,11 @@
     gap: 1rem;
     position: relative;
     padding: .5rem;
-    border-radius: 10px;
-    margin: .2rem 0;
+    border-radius: 12px;
     min-height: 102px;
     border: thin solid var(--textBlack100);
+    background-color: var(--background-gray);
+    box-shadow: 0px 12px 28px -6px rgba(0, 0, 0, 0.2);
 }
 .update:hover{
     cursor: pointer;
@@ -31,8 +33,34 @@
     align-items: center;
     width: 100%;
     max-width: 50px;
-    overflow: hidden;
     border-radius: 50px;
+    position: relative;
+
+}
+#updates .icon-wrapper::after{
+    position: absolute;
+    bottom: 15%;
+    right: -10%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    color: white;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#updates .icon-wrapper.info::after{
+    content: "\2714";
+    background-color: var(--primary);
+}
+#updates .icon-wrapper.warning::after {
+    content: "\2716";
+    background-color: var(--statusYellow);
+}
+#updates .icon-wrapper.danger::after {
+    content: "\0021";
+    background-color: var(--warmRed);
 }
 .icon-wrapper img{
     border-radius: 50px;
@@ -43,7 +71,7 @@
     padding-right: 30px;
     text-align: left;
 }
-.update.new * {
+.update.new span {
     font-weight: bold;
     color: black;
 }
@@ -51,7 +79,7 @@
     position: absolute;
     content: "";
     right: 10px;
-    top: 48%;
+    top: 10px;
     width: 10px;
     height: 10px;
     border-radius: 50px;

@@ -17,7 +17,7 @@
   --primary: #156a85;
   --trustworthyBlue500: #156a85;
   --trustworthyBlue400: #44889d;
-  --trustworthyBlue300: #73a6b6;
+  --trustworthyBlue300: #030404;
   --trustworthyBlue200: #a1c3ce;
   --trustworthyBlue100: #d0e1e7;
 
@@ -440,6 +440,17 @@ footer small {
 footer a {
   text-decoration: underline;
 }
+body {
+  background-image: url('../assets/images/background-mobile.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  @media screen and (min-width: 800px) {
+    background-image: url('../assets/images/background-desktop.png');
+    background-position: 120px center;
+  }
+}
 /* --------------------------------------------------*/
 /* Notification modal                                */
 /* --------------------------------------------------*/
@@ -447,7 +458,8 @@ footer a {
 .notification {
   transition: all 0.5s ease-in-out;
   position: fixed;
-  min-width: 100px;
+  min-width: 80px;
+  max-width: 90vw;
   /*transform: translateX(-450px);*/
   right: -100%;
   bottom: 100px;
@@ -468,7 +480,6 @@ footer a {
 .notification .icon-wrapper {
   width: 50px;
   height: 100%;
-  overflow: hidden;
   border-radius: 50px;
 }
 .notification h2 {
@@ -489,8 +500,8 @@ footer a {
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  min-width: 15px;
-  min-height: 15px;
+  min-width: 10px;
+  min-height: 10px;
   aspect-ratio: 1;
   width: auto;
   top: 0px;
@@ -747,6 +758,8 @@ main.loaded .loading-screen {
   text-rendering: auto;
   min-width: 20px;
   min-height: 20px;
+  display: flex;
+  justify-content: center;
 }
 .icon::after {
   filter: invert(65%) sepia(0%) saturate(1%) hue-rotate(197deg) brightness(97%) contrast(88%);

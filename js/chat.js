@@ -214,6 +214,7 @@ async function runFunction() {
               title: `${currentUser.firstName} ${currentUser.lastName}`,
               icon: url,
               isMessage: true,
+              updateType: "info",
               link:`/chat.html?crid=${chatRoomID}`,
               message: message.value,
             },

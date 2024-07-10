@@ -30,6 +30,11 @@ function listenToNotifications(){
             }
 
             if(!v.wasSent && !alreadyOnChatPage(v)){
+                const existingNotification = document.querySelector("#notificationCard");
+                if(existingNotification){
+                    existingNotification.classList.remove("show");
+                    setTimeout(()=>document.body.removeChild(existingNotification),1000);
+                }
                 await loadPartial("_notification", "body");
                 const notificationCard = document.getElementById("notificationCard");
                 const notificationLink = document.querySelector(".notification a");
@@ -38,8 +43,9 @@ function listenToNotifications(){
                 const notificationText = document.querySelector(".notification a .message");
                 notificationLink.href = v.link;
                 if(v.icon && v.icon !== "#") notificationIcon.setAttribute("src",v.icon);
+                notificationIcon.classList.add(v.updateType ? v.updateType : "info");
                 notificationTitle.innerText = v.title;
-                notificationText.innerText = v.message
+                notificationText.innerHTML = v.message
                 setTimeout(()=>{
                     let notificationSound = new Audio("../assets/notification.mp3");
                     notificationSound.play();
@@ -88,7 +94,7 @@ async function sendNotification(data,receiverID){
         icon: (data.icon) ? data.icon : "../assets/icons/icon-128x128.png",
         link: (data.link) ? data.link : "#",
         isMessage: (data.isMessage) ? data.isMessage : false,
-        time: (new Date()).toLocaleDateString(),
+        time: (new Date()).toLocaleString(),
         isNew: true,
         wasSent: false
     }

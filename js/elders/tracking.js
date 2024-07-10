@@ -277,7 +277,8 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     sendNotification(
       {
         title: "Task Cancelled",
-        message:`${currentUser.firstName} has cancelled their ${task.name} favour`,
+        message:`<span>${currentUser.firstName}</span> has cancelled their <span>${task.name}</span> favour`,
+        updateType : "warning",
         link: `../tasks/volunteer-favor.html?taskid=${taskID}`
       }
       ,task.volunteerID);
@@ -317,7 +318,8 @@ approveFavorBtn.addEventListener("click", async () => {
     sendNotification(
       {
         title: "Task Approved!",
-        message:`${currentUser.firstName} has approved your ${task.name} favour completion!`,
+        message:`<span>${currentUser.firstName}</span> has approved your <span>${task.name}</span> favour completion!`,
+        updateType : "info",
         link: `../tasks/volunteer-favor.html?taskid=${taskID}`
       }
       ,task.volunteerID);

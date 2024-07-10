@@ -44,6 +44,7 @@ window.addEventListener("load", function (event) {
           card.classList.add("update");
           const notificationIcon = document.createElement("div");
           notificationIcon.classList.add("icon-wrapper");
+          notificationIcon.classList.add(notification.updateType ? notification.updateType : "info");
           notificationIcon.innerHTML = `
               <img src="${notification.icon}" alt="Notification icon">
           `;
