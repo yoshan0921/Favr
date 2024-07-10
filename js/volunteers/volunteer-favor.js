@@ -312,11 +312,13 @@ document.getElementById("homeBtn").addEventListener("click", function () {
   goHome();
 });
 
-document.getElementById("declineBtn").addEventListener("click", function () {
+const declineBtn = document.getElementById("declineBtn");
+if(declineBtn) declineBtn.addEventListener("click", function () {
   goHome();
 });
 
-document.getElementById("myFavorsBtn").addEventListener("click", function () {
+const myFavorsBtn = document.getElementById("myFavorsBtn")
+if(myFavorsBtn) myFavorsBtn.addEventListener("click", function () {
   goMyFavors();
 });
 
@@ -355,18 +357,22 @@ document.getElementById("cancelBtn").addEventListener("click", async function ()
 });
 
 // Create click events on each icons=============
-document.getElementById("thumsDown").addEventListener("click", function () {
+const thumsDown = document.getElementById("thumsDown");
+if(thumsDown) thumsDown.addEventListener("click", function () {
   exploreFavors();
 });
 
-document.getElementById("thumsUp").addEventListener("click", function () {
+const thumsUp = document.getElementById("thumsUp");
+if(thumsUp) thumsUp.addEventListener("click", function () {
   exploreFavors();
 });
 
-document.getElementById("thumsDown-overlay").addEventListener("click", function () {
+const thumsDownOverlay = document.getElementById("thumsDown-overlay");
+if(thumsDownOverlay) thumsDownOverlay.addEventListener("click", function () {
   exploreFavors();
 });
 
-document.getElementById("thumsUp-overlay").addEventListener("click", function () {
+const thumsUpOverlay = document.getElementById("thumsUp-overlay");
+if(thumsUpOverlay) thumsUpOverlay.addEventListener("click", function () {
   exploreFavors();
 });

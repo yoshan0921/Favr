@@ -19,12 +19,16 @@ function listenToNotifications(){
         if(v.isNew){
             const updatesMenu = document.querySelector("#updates-menu .icon-wrapper");
             const chatMenu = document.querySelector("header .chat-icon-wrapper .icon-wrapper");
-            if(!updatesMenu.classList.contains("has-updates")) {
-                updatesMenu.classList.add("has-updates");
+            if(v.isMessage){
+                if(v.isMessage && !chatMenu.classList.contains("has-updates")){
+                    chatMenu.classList.add("has-updates");
+                }  
+            }else{
+                if(!updatesMenu.classList.contains("has-updates")) {
+                    updatesMenu.classList.add("has-updates");
+                }
             }
-            if(v.isMessage && !chatMenu.classList.contains("has-updates")){
-                chatMenu.classList.add("has-updates");
-            }  
+
             if(!v.wasSent && !alreadyOnChatPage(v)){
                 await loadPartial("_notification", "body");
                 const notificationCard = document.getElementById("notificationCard");
