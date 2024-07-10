@@ -274,11 +274,16 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     var newURL = "../tasks/cancel.html?taskid=" + taskid;
     const task = await getDocument("tasks", taskID);
     const currentUser = await getDocument("users", getCurrentUserID());
+    let url = "#";
+    if (currentUser.profilePictureURL) {
+      url = await getFile(`profile/${currentUser.profilePictureURL}`);
+    }
     sendNotification(
       {
         title: "Task Cancelled",
         message:`<span>${currentUser.firstName}</span> has cancelled their <span>${task.name}</span> favour`,
         updateType : "warning",
+        icon: url,
         link: `../tasks/volunteer-favor.html?taskid=${taskID}`
       }
       ,task.volunteerID);
@@ -315,11 +320,16 @@ approveFavorBtn.addEventListener("click", async () => {
     });
     const task = await getDocument("tasks", taskID);
     const currentUser = await getDocument("users", getCurrentUserID());
+    let url = "#";
+    if (currentUser.profilePictureURL) {
+      url = await getFile(`profile/${currentUser.profilePictureURL}`);
+    }
     sendNotification(
       {
         title: "Task Approved!",
         message:`<span>${currentUser.firstName}</span> has approved your <span>${task.name}</span> favour completion!`,
         updateType : "info",
+        icon: url,
         link: `../tasks/volunteer-favor.html?taskid=${taskID}`
       }
       ,task.volunteerID);
