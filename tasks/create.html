@@ -192,53 +192,35 @@
     </main>
     <!-- Footer -->
     <footer id="footer"></footer>
-
-    <!-- Modal to confirm delete -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modalFavor">Are you sure you want to cancel the <span>current</span> Favor?</h2>
-            <div class="buttonRow">
-                <button id="modalBackBtn" class="rounded-btn link-btn outlined-btn">Back</button>
-                <button id="modalCancelFavor" class="rounded-btn link-btn outlined-btn btn-active">Yes!</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal to acknowledge successful cancel of favor -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <h2>Favor Cancelled Successfully</h2>
-            <div class="buttonRow">
-                <button id="backToHomeModal" class="rounded-btn link-btn outlined-btn btn-active">Homepage</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal to confirm edit -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modalEditFavorName">Do you want to edit the <span>current</span> Favor?</h2>
-            <div class="buttonRow">
-                <button id="modalEditBack" class="rounded-btn link-btn outlined-btn">Back</button>
-                <button id="modalEditFavor" class="rounded-btn link-btn outlined-btn btn-active">Yes!</button>
-            </div>
-        </div>
-    </div>
-
 </body>
-<div id="confirmRedirectModal" class="modal">
-    <!-- Modal content -->
+
+<!-- Modal to acknowledge successful cancel of favor -->
+<div id="successModal" class="modal">
     <div class="modal-content">
-      <span class="closeModal">&times;</span>
-      <div class="modal-form">
-        <h2>Are you sure you want to leave this page?</h2>
-        <p>Your progress will be lost</p>
-        <div class="form-group">
-            <button type="button" id="cancelBtn" class="rounded-btn">No</button>
-            <button type="submit" id="confirmBtn" class="rounded-btn">Yes</button>
+        <h2>Favor Cancelled Successfully</h2>
+        <div class="buttonRow">
+            <button id="backToHomeModal" class="rounded-btn link-btn outlined-btn btn-active">Homepage</button>
         </div>
-      </div>
     </div>
-  
-  </div>
+</div>
+<!-- Modal to confirm edit -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalEditFavorName">Do you want to edit the <span>current</span> Favor?</h2>
+        <div class="buttonRow">
+            <button id="modalEditBack" class="rounded-btn link-btn outlined-btn">Back</button>
+            <button id="modalEditFavor" class="rounded-btn link-btn outlined-btn btn-active">Yes!</button>
+        </div>
+    </div>
+</div>
+<!-- Modal to confirm cancellation -->
+<div id="cancelFavor" class="modal">
+    <div class="modal-content">
+        <h2>Do you want to cancelthis Favor?</h2>
+        <div class="buttonRow">
+            <button class="rounded-btn link-btn outlined-btn">Back</button>
+            <button id="modalCancelFavor" class="rounded-btn link-btn outlined-btn btn-active">Yes!</button>
+        </div>
+    </div>
+</div>
 </html>

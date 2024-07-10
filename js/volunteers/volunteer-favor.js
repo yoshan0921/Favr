@@ -200,7 +200,7 @@ async function acceptTask(taskID, taskData) {
       sendNotification(
         {
           title: "Favor accepted!",
-          link: "#",
+          link: `../tasks/volunteer-favor.html?taskid=${taskID}`,
           message: `A volunteer has accepted to help you with your ${taskData.name} favor!`
         },
         taskData.requesterID);

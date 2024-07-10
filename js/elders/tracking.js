@@ -1,6 +1,8 @@
 import { getDocument, updateProperty } from "../firebase/firestore.js";
 import { openModal, closeModal, lazyLoadImages } from "../common.js";
-import { enableBackButton } from "../utils.js";
+import { enableBackButton, redirect } from "../utils.js";
+import { sendNotification } from "../notification.js";
+import { getCurrentUserID } from "../firebase/authentication.js";
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
@@ -210,25 +212,25 @@ modalBackBtn.addEventListener("click", () => {
 // Event listener to go back to home
 const backToHome = document.getElementById("backToHome");
 backToHome.addEventListener("click", () => {
-  window.location.href = "../dashboard.html";
+  redirect("../dashboard.html");
 });
 
 // Event listener to go back to home from approving favor modal
 const backToHomeApproved = document.getElementById("backToHomeApproved");
 backToHomeApproved.addEventListener("click", () => {
-  window.location.href = "../dashboard.html";
+  redirect("../dashboard.html");
 });
 
 // Event listener to go back to home from approving favor modal
 const createAgain = document.getElementById("createAgain");
 createAgain.addEventListener("click", () => {
-  window.location.href = "../tasks/create.html";
+  redirect("../tasks/create.html");
 });
 
 // Event listener to go to get support
 const getSupport = document.getElementById("getSupport");
 getSupport.addEventListener("click", () => {
-  window.location.href = "../support.html";
+  redirect("../support.html");
 });
 
 // Update task status to cancelled
@@ -254,7 +256,6 @@ modalCancelFavorBtn.addEventListener("click", async () => {
       "details.cancelledDate": cancelledDate,
       "details.cancelledTime": cancelledTime,
     });
-
     // Display the success modal
     // const successModal = document.getElementById("successModal");
     // openModal(successModal);
@@ -271,6 +272,15 @@ modalCancelFavorBtn.addEventListener("click", async () => {
 
     // Construct the URL for the new page with taskid parameter
     var newURL = "../tasks/cancel.html?taskid=" + taskid;
+    const task = await getDocument("tasks", taskID);
+    const currentUser = await getDocument("users", getCurrentUserID());
+    sendNotification(
+      {
+        title: "Task Cancelled",
+        message:`${currentUser.firstName} has cancelled their ${task.name} favour`,
+        link: `../tasks/volunteer-favor.html?taskid=${taskID}`
+      }
+      ,task.volunteerID);
 
     // Display complete favor page
     window.location.href = newURL;
@@ -302,6 +312,15 @@ approveFavorBtn.addEventListener("click", async () => {
       "details.completedDate": completedDate,
       "details.completedTime": completedTime,
     });
+    const task = await getDocument("tasks", taskID);
+    const currentUser = await getDocument("users", getCurrentUserID());
+    sendNotification(
+      {
+        title: "Task Approved!",
+        message:`${currentUser.firstName} has approved your ${task.name} favour completion!`,
+        link: `../tasks/volunteer-favor.html?taskid=${taskID}`
+      }
+      ,task.volunteerID);
 
     // Display the success modal
     // const approveSuccessModal = document.getElementById("approveSuccessModal");
@@ -317,7 +336,7 @@ approveFavorBtn.addEventListener("click", async () => {
     var newURL = "../tasks/complete.html?taskid=" + taskid;
 
     // Display complete favor page
-    window.location.href = newURL;
+    window.Location.href = newURL;
   } catch (error) {
     console.error("Error updating task status:", error);
   }

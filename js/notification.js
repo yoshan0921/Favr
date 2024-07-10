@@ -40,6 +40,11 @@ function listenToNotifications(){
                     let notificationSound = new Audio("../assets/notification.mp3");
                     notificationSound.play();
                     notificationCard.classList.add("show");
+                    setTimeout(()=>{
+                        notificationCard.classList.remove("show");
+                        setTimeout(()=>document.body.removeChild(notificationCard),1000);
+                    },
+                    5000)
                 }
                 ,500)
                 

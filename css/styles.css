@@ -484,7 +484,7 @@ footer a {
 }
 .has-updates::after {
   position: absolute;
-  z-index: " ";
+  content: " ";
   display: flex;
   align-items: center;
   justify-content: center;

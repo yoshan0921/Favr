@@ -629,10 +629,13 @@ cancelFavorBtn.addEventListener("click", () => {
 
 // Event listener for modal back button
 const modalBackBtn = document.getElementById("modalBackBtn");
-modalBackBtn.addEventListener("click", () => {
-  const modal = document.getElementById("confirmModal");
-  closeModal(modal);
-});
+if(modalBackBtn){
+  modalBackBtn.addEventListener("click", () => {
+    const modal = document.getElementById("confirmModal");
+    closeModal(modal);
+  });
+}
+
 
 // Event listener to go back to home
 const backToHome = document.getElementById("backToHome");
