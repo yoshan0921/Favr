@@ -45,7 +45,12 @@ function runFunction() {
 displayTaskSummary(taskID).then(() => {
   const main = document.getElementsByTagName("main")[0];
   main.classList.add("loaded");
-  enableBackButton();
+  // Note:
+  // The back button did not work correctly.
+  // Because enableBackButton function was also called another place,
+  // and addEventListener was added twice to the back button.
+  // So, I commented out the code below. (Yosuke)
+  // enableBackButton();
 });
 
 async function displayTaskSummary(taskID) {
