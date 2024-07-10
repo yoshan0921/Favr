@@ -84,7 +84,7 @@ async function sendNotification(data,receiverID){
         icon: (data.icon) ? data.icon : "../assets/icons/icon-128x128.png",
         link: (data.link) ? data.link : "#",
         isMessage: (data.isMessage) ? data.isMessage : false,
-        time: new Date(),
+        time: (new Date()).toLocaleDateString(),
         isNew: true,
         wasSent: false
     }
