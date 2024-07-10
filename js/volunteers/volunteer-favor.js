@@ -224,8 +224,23 @@ async function completeTask(taskID, taskData) {
 
   // Update the task data on the Firestore
   updateDocument("tasks", taskID, taskData)
-    .then(() => {
-      console.log("Task accepted!");
+    .then(async () => {
+      console.log("Task completed!");
+      let url = "#";
+      const currentUser = await getDocument("users", getCurrentUserID());
+      if (currentUser.profilePictureURL) {
+        url = await getFile(`profile/${currentUser.profilePictureURL}`);
+      }
+      sendNotification(
+        {
+          title: "Approval Required",
+          message: `<span>${currentUser.firstName}</span> has completed your <span>${taskData.name}</span> favor. Click here to approve now`,
+          icon: url,
+          link: "#",
+          updateType: "danger"
+        },
+        taskData.requesterID
+      )
     })
     .catch((error) => {
       console.log(error);
