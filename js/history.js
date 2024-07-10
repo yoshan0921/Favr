@@ -410,13 +410,25 @@ async function createTaskListForVolunteers(allTasks) {
 
   // No items message
   if (document.querySelectorAll("#taskListPending .taskCard").length === 0) {
-    document.querySelector("#taskListPending + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListPending + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListPending").classList.add("hide");
+  } else {
+    document.querySelector("#taskListPending + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListPending").classList.remove("hide");
   }
   if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
-    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListCompleted").classList.add("hide");
+  } else {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListCompleted").classList.remove("hide");
   }
   if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
-    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListCancelled").classList.add("hide");
+  } else {
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListCancelled").classList.remove("hide");
   }
 
   // Apply lazy loading to images
