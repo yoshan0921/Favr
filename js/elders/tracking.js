@@ -1,4 +1,4 @@
-import { getDocument, updateProperty } from "../firebase/firestore.js";
+import { getDocument, updateProperty, getFile } from "../firebase/firestore.js";
 import { openModal, closeModal, lazyLoadImages } from "../common.js";
 import { enableBackButton, redirect } from "../utils.js";
 import { sendNotification } from "../notification.js";
@@ -71,6 +71,8 @@ async function displayTaskSummary(taskID) {
     const hideCancelFavor = document.getElementById("cancelFavor");
     const approveFavor = document.getElementById("approveFavor");
     const createAgain = document.getElementById("createAgain");
+    const contactBtn = document.getElementById("contactBtn");
+    const displayStatus = document.getElementById("displayStatus");
 
     // const favorLengthData = document.getElementById("favorLength");
     const startAddressData = document.getElementById("startAddress");
@@ -89,10 +91,10 @@ async function displayTaskSummary(taskID) {
         statusColor.style.backgroundColor = "#ffcd29";
         break;
       case "On going":
-        statusColor.style.backgroundColor = "#0D99FF";
+        statusColor.style.backgroundColor = "#156A85";
         break;
       case "Pending approval":
-        statusColor.style.backgroundColor = "#e43f3f";
+        statusColor.style.backgroundColor = "#F24822";
         break;
       case "Completed":
         statusColor.style.backgroundColor = "#44c451";
@@ -122,6 +124,10 @@ async function displayTaskSummary(taskID) {
       hideCancelFavor.classList.add("hidden");
       // Hide approve button
       approveFavor.classList.add("hidden");
+      // Hide contactBtn
+      contactBtn.classList.add("hidden");
+      // Hide status
+      displayStatus.classList.add("hidden");
 
       // Update Date and Time if it is completed
     } else if (task.status == "Completed" && task.details.completedDate) {
@@ -134,6 +140,10 @@ async function displayTaskSummary(taskID) {
       hideCancelFavor.classList.add("hidden");
       // Hide approve button
       approveFavor.classList.add("hidden");
+      // Hide contactBtn
+      contactBtn.classList.add("hidden");
+      // Hide status
+      displayStatus.classList.add("hidden");
 
       // Display these details when it is on going
     } else if (task.status == "On going" && task.details.date) {
@@ -150,6 +160,8 @@ async function displayTaskSummary(taskID) {
       // Hide cancelFavor button if a favor is pending approval
       approveFavor.classList.add("hidden");
       createAgain.classList.add("hidden");
+      // Hide contactBtn
+      contactBtn.classList.add("hidden");
 
       // Display these details when it is pending approval
     } else if (task.status == "Pending approval" && task.details.date) {
@@ -348,8 +360,22 @@ approveFavorBtn.addEventListener("click", async () => {
     var newURL = "../tasks/complete.html?taskid=" + taskid;
 
     // Display complete favor page
-    window.Location.href = newURL;
+    window.location.href = newURL;
   } catch (error) {
     console.error("Error updating task status:", error);
   }
+});
+
+// Link to chat room
+document.getElementById("contactBtn").addEventListener("click", function () {
+  getDocument("tasks", taskID)
+    .then((task) => {
+      let loginUserID = getCurrentUserID();
+      let volunteerID = task.volunteerID;
+      let chatRoomID = [loginUserID, volunteerID].sort().join("-");
+      window.location.href = `/chat.html?crid=${chatRoomID}`;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
