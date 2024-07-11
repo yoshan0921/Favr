@@ -152,15 +152,15 @@
 }
 
 .statusWaiting {
-  background-color: var(--statusYellow);
+  background-color: var(--statusWaiting);
 }
 
 .statusOngoing {
-  background-color: var(--statusBlue);
+  background-color: var(--statusOngoing);
 }
 
 .statusPending {
-  background-color: var(--warmRed);
+  background-color: var(--statusPending);
 }
 
 .statusOhers {

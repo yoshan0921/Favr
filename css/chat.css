@@ -154,16 +154,17 @@
   justify-content: center;
 
   position: absolute;
-  top: 3px;
-  right: 0.5rem;
+  top: -7px;
+  right: -0.5rem;
 }
 
 #sendMessage .send:hover {
   background-color: transparent;
 }
 
-#sendMessage .send i {
-  filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
+#sendMessage .send i::after {
+  filter: none;
+  /* filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%); */
 }
 
 #sendingMsgNotAvailable {

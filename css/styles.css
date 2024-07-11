@@ -50,9 +50,9 @@
   --warmRed100: #fad9d9;
 
   --pureWhite: #ffffff;
-  --statusYellow: #ffcd29;
-  --statusGreen: #44c451;
-  --statusBlue: #0d99ff;
+  --statusOngoing: #156a85;
+  --statusWaiting: #ffcd29;
+  --statusPending: #e43f3f;
 
   --hoverButtonBackground: color-mix(in hsl, var(--primary) 85%, var(--pureWhite));
   --hoverOutlinedButtonBackground: color-mix(in hsl, var(--primary) 20%, var(--background-gray));
@@ -781,6 +781,9 @@ main.loaded .loading-screen {
 }
 .add-icon::after {
   content: url("../assets/icons/add.svg") !important;
+}
+.send-icon::after {
+  content: url("../assets/icons/send.svg") !important;
 }
 .mic-icon::after {
   content: url("../assets/icons/mic.svg") !important;
