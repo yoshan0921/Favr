@@ -253,6 +253,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   align-items: center;
   font-size: 1.1rem;
   font-weight: bold;
+
+  div:nth-of-type(2) {
+    font-weight: normal;
+  }
 }
 
 .status {
@@ -275,35 +279,33 @@ ul#summaryList {
 
   li {
     font-size: 1.1rem;
-    padding-left: 0.5rem;
-    margin-bottom: 0.75rem;
+    /* padding-left: 0.5rem; */
+    /* margin-bottom: 0.75rem; */
+    padding: .5rem 0 0 0;
     font-weight: bold;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-    border-bottom: 1px dotted var(--primary);
+    /* border-bottom: 1px dotted var(--primary); */
   }
 
-  li:last-child {
-    border-bottom: none;
+  div:nth-of-type(2) {
+    margin-left: 36px;
+    margin-top: -10px;
+    line-height: 1.2;
   }
 
   div {
     display: flex;
   }
 
-  div:nth-of-type(2) {
-    justify-content: end;
-    text-align: right;
-  }
-
   i {
-    margin-right: .5rem;
+    width: 30px;
     margin-top: -.15rem;
+    text-align: center;
+    margin-right: 6px;
   }
 
   span {
     font-weight: normal;
+    margin-top: 0;
   }
 }
 
@@ -366,6 +368,11 @@ ul#summaryList {
   justify-content: center;
 }
 
+#backToHome {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 #errorMsg {
   text-align: center;
   color: red;
@@ -422,6 +429,28 @@ ul#summaryList {
 
   ul#summaryList {
     padding: 0 4rem;
+
+    li {
+      border-bottom: 1px dotted var(--primary);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    div:nth-of-type(2) {
+      justify-content: end;
+      text-align: right;
+      margin-top: 0;
+    }
+
+    span {
+      margin-top: 3px;
+      margin-bottom: .5rem;
+    }
   }
 
   .stepNumber {
