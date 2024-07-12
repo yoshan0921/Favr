@@ -9,7 +9,7 @@ body {
   display: grid;
   grid-template-columns: auto 1fr auto 1fr auto 1fr auto;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 4rem;
 }
 
 .step1,
@@ -210,11 +210,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-#step-2 .form-group input:not(:placeholder-shown),
-#step-3 .form-group input:not(:placeholder-shown) {
-  /* background-color: #D0E1E7; */
-}
-
 #step-2 .form-group label,
 #step-3 .form-group label,
 #step-4 .form-group label {
@@ -228,7 +223,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 #step-4 textarea {
   display: flex;
   width: 100%;
-  /* max-width: 400px; */
   height: 100px;
   margin-bottom: 1rem;
 }
@@ -389,6 +383,20 @@ ul#summaryList {
   display: none;
 }
 
+.home-address {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+
+  #homeAddressBtn {
+    display: flex;
+    justify-self: end;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
 /* -------------------------------------------------- */
 /* Desktop                                            */
 /* -------------------------------------------------- */
@@ -397,21 +405,6 @@ ul#summaryList {
   #step-1 .form-group {
     flex-flow: row wrap;
     gap: 2rem;
-  }
-
-  #step-2 .form-group,
-  #step-3 .form-group {
-    /* flex-flow: row nowrap; */
-  }
-
-  #step-2 .form-group input,
-  #step-3 .form-group input {
-    /* margin-right: 2rem; */
-  }
-
-  #step-2 .form-group label,
-  #step-3 .form-group label {
-    /* margin-right: 0.5rem; */
   }
 
   .favorOption {
@@ -444,6 +437,11 @@ ul#summaryList {
   .stepLine4 {
     height: 2px;
   }
+
+  .steps-counter {
+    padding: 1rem;
+  }
+  
 }
 
 /* Cocoy, please adjust the folloeing CSS             */

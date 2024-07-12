@@ -367,7 +367,7 @@ approveFavorBtn.addEventListener("click", async () => {
 });
 
 // Link to chat room
-document.getElementById("contactBtn").addEventListener("click", function () {
+contactBtn.addEventListener("click", function () {
   getDocument("tasks", taskID)
     .then((task) => {
       let loginUserID = getCurrentUserID();
