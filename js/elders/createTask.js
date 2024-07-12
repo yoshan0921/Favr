@@ -699,3 +699,14 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     console.log(error);
   }
 });
+
+// Get current user's address to populate start address
+// TODO: If possible, autoclick the address result and display map
+const currentUser = await getDocument("users", getCurrentUserID());
+const homeAddressBtn = document.getElementById("homeAddressBtn");
+homeAddressBtn.addEventListener("click", async () => {
+  console.log(currentUser.address);
+  const startAddress = document.getElementById("startAddress");
+  startAddress.value = currentUser.address;
+  startAddress.focus();
+});
