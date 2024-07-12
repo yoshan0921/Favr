@@ -33,6 +33,22 @@
         }
     }
 
+    .volunteerRow {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        #contactBtn {
+            margin-top: -1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        a {
+            color: var(--text);
+        }
+    }
+
     ul {
         list-style-type: none;
         margin: 0;
