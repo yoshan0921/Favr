@@ -800,6 +800,21 @@ main.loaded .loading-screen {
 .mic-icon::after {
   content: url("../assets/icons/mic.svg") !important;
 }
+.date-icon::after {
+  content: url("../assets/icons/date.svg") !important;
+}
+.time-icon::after {
+  content: url("../assets/icons/time.svg") !important;
+}
+.address-icon::after {
+  content: url("../assets/icons/address.svg") !important;
+}
+.note-icon::after {
+  content: url("../assets/icons/note.svg") !important;
+}
+.favor-icon::after {
+  content: url("../assets/icons/favor.svg") !important;
+}
 /*
 =========================
 Media queries

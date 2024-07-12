@@ -87,7 +87,7 @@ function runFunction() {
         startAddress: document.getElementById("startAddress").value || null,
         startAddressLat: document.getElementById("startAddressLat").value || null,
         startAddressLng: document.getElementById("startAddressLng").value || null,
-        endAddress: document.getElementById("endAddress").value || "None",
+        endAddress: document.getElementById("endAddress").value || "Not provided",
         startAddressLat: document.getElementById("startAddressLat").value || null,
         startAddressLng: document.getElementById("startAddressLng").value || null,
       },
@@ -186,7 +186,7 @@ function runFunction() {
           );
           if (selectedOption) {
             selectionHistory.push(
-              `Favor Type Selected: ${selectedOption.value}`
+              `Favor Type: <span>${selectedOption.value}</span>`
             );
             canProceed = true;
           } else {
@@ -201,8 +201,8 @@ function runFunction() {
           if (favorDate && favorTime) {
             // selectionHistory.push(`Date: ${favorDate}`);
             // Push formatted date to firebase
-            selectionHistory.push(`Date: ${formatDate(favorDate)}`);
-            selectionHistory.push(`Time: ${favorTime}`);
+            selectionHistory.push(`Date: <span>${formatDate(favorDate)}</span>`);
+            selectionHistory.push(`Time: <span>${favorTime}</span>`);
             // selectionHistory.push(`Favor Length: ${favorLength}`);
             canProceed = true;
           } else {
@@ -214,11 +214,11 @@ function runFunction() {
         case 3:
           const startAddress = document.getElementById("startAddress").value;
           const endAddress =
-            document.getElementById("endAddress").value || "None";
+            document.getElementById("endAddress").value || "Not provided";
 
           if (startAddress) {
-            selectionHistory.push(`Start Address: ${startAddress}`);
-            selectionHistory.push(`End Address: ${endAddress}`);
+            selectionHistory.push(`Start Address: <span>${startAddress}</span>`);
+            selectionHistory.push(`End Address: <span>${endAddress}</span>`);
             canProceed = true;
           } else {
             showErrorMsg2.innerHTML = "Please enter a start address";
@@ -250,6 +250,9 @@ function runFunction() {
         document
           .querySelector(`.stepLine${currentStep}`)
           .classList.add("stepLineActive");
+        document
+          .querySelector(`.step${currentStep}`)
+          .classList.add("stepAnimate");
 
         // Replace the previous step number with a check mark
         document.querySelector(
@@ -316,6 +319,9 @@ function runFunction() {
         document
           .querySelector(`.stepLine${currentStep}`)
           .classList.remove("stepLineActive");
+        document
+          .querySelector(`.step${currentStep}`)
+          .classList.remove("stepAnimate");
 
         // Restore the original step number
         document.querySelector(
@@ -418,7 +424,13 @@ function runFunction() {
       for (let item of selectionHistory) {
         // create a <li> element, add the item of the selection history to it, then append the <li> to the list (which is a <ul>)
         let li = document.createElement("li");
-        li.textContent = item;
+  
+        // Use innerHTML if the item contains HTML tags
+        if (item.includes('<span>')) {
+          li.innerHTML = item;
+        } else {
+          li.textContent = item;
+        }
         list.appendChild(li);
       }
     }
@@ -450,12 +462,12 @@ function runFunction() {
 
     const summaryList = document.getElementById("summaryList");
     summaryList.innerHTML = `
-      <li>Favor Type Selected: ${task.name}</li>
-      <li>Date: ${task.details.date}</li>
-      <li>Time: ${task.details.time}</li>
-      <li>Start Address: ${task.details.startAddress}</li>
-      <li>End Address: ${task.details.endAddress}</li>
-      <li>Note: ${task.notes}</li>
+      <li><div><i class="favor-icon"></i>Favor Type:</div><div><span>${task.name}</span></div></li>
+      <li><div><i class="date-icon"></i>Date:</div><div><span>${task.details.date}</span></div></li>
+      <li><div><i class="time-icon"></i>Time:</div><div><span>${task.details.time}</span></div></li>
+      <li><div><i class="address-icon"></i>Start Address:</div><div><span>${task.details.startAddress}</span></div></li>
+      <li><div><i class="address-icon"></i>End Address:</div><div><span>${task.details.endAddress}</span></div></li>
+      <li><div><i class="note-icon"></i>Note:</div><div><span>${task.notes}</span></div></li>
     `;
     // Replace step4 number with check after submit
     document.querySelector(`.step4 .stepNumber span`).textContent = "✔";
