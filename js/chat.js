@@ -2,8 +2,8 @@ import { lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
 import { database } from "./firebase/firebase.js";
-import { ref, child, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { sendNotification, getNewMessagesCount } from "./notification.js";
+import { ref, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { sendNotification, updateNotificationStatus } from "./notification.js";
 
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
@@ -45,7 +45,7 @@ async function runFunction() {
   loginUserID = getCurrentUserID();
   const currentUser = await getDocument("users", loginUserID);
   var contactID = "";
-
+  var newMessagesByContact = {};
   // Get the current user role
   await getCurrentUserRole().then(async (currentUserRole) => {
     loginUserRole = currentUserRole;
@@ -67,7 +67,6 @@ async function runFunction() {
     let contactIDs = [];
     let promises = [];
     const updates = query(ref(database, loginUserID));
-    let newMessagesByContact = {};
     get(updates)
     .then((snapshot)=>{
         if(snapshot.exists()){
@@ -75,11 +74,12 @@ async function runFunction() {
                 let update = element.val();
                 if(update.isNew && update.isMessage && update.senderID){
                     if(update.senderID){
-                        if(update.senderID in newMessagesByContact){
-                            newMessagesByContact[update.senderID] += 1;
-                        }else{
-                            newMessagesByContact[update.senderID] = 1;
-                        }
+                      if(update.senderID in newMessagesByContact){
+                        newMessagesByContact[update.senderID][0].push(update.id);
+                        newMessagesByContact[update.senderID][1] += 1;
+                      }else{
+                          newMessagesByContact[update.senderID] = [[update.id], 0];
+                      }
                     }
                 }
             })
@@ -350,7 +350,7 @@ function showChatRoomTitle(chatRoomID) {
   } else {
     contactUserID = userID1;
   }
-
+  
   // Create chat room title
   let contact = document.createElement("div");
   contact.classList.add("contactHeader", "page-title");
@@ -381,6 +381,10 @@ function showChatRoomTitle(chatRoomID) {
       pageTitle.outerHTML = contact.outerHTML;
 
       lazyLoadImages();
+      let newMessages = newMessagesByContact[contactUserID][0];
+      newMessages.forEach((notificationID)=>{
+        updateNotificationStatus(currentUserID, notificationID);
+      })
     })
     .catch((error) => console.log(error));
 }
