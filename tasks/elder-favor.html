@@ -52,6 +52,10 @@
             <p id="timeLabel" class="label">Time:</p>
             <p id="time"></p>          
           </li>
+          <li>
+            <p id="reasonLabel" class="label">Reason:</p>
+            <p id="cancelReason"></p>          
+          </li>
           <!-- <li>
             <p class="label">Duration:</p>
             <p id="favorLength"></p>          
@@ -88,16 +92,41 @@
   <!-- Footer -->
   <footer id="footer"></footer>
 
-  <!-- Modal to confirm delete -->
-  <div id="confirmModal" class="modal">
-    <div class="modal-content">
-      <h2 id="modalFavor">Are you sure you want to cancel the <span>current</span> Favor?</h2>
-      <div class="buttonRow">
-        <button id="modalBackBtn" class="rounded-btn link-btn outlined-btn">Back</button>
-        <button id="modalCancelFavor" class="rounded-btn link-btn outlined-btn btn-active">Yes!</button>
+  <!-- Form modal to confirm delete -->
+  <!-- <form action="#" id="cancelReasons"> -->
+    <div id="confirmModal" class="modal">
+      <div class="modal-content">
+        <h2 id="modalFavor">Are you sure you want to cancel the <span>current</span> Favor?</h2>
+        <div class="reason-content">
+          <h3>Cancel Reason</h3>
+          <div class="reason-item">
+            <input type="radio" name="cancelReason" id="reasonComplex" value="Too complex">
+            <label for="reasonComplex">Too complex</label>
+          </div>
+          <div class="reason-item">
+            <input type="radio" name="cancelReason" id="reasonWait" value="Wait for too long">
+            <label for="reasonWait">Wait for too long</label>
+          </div>
+          <div class="reason-item">
+            <input type="radio" name="cancelReason" id="reasonAlternative" value="Found an alternative">
+            <label for="reasonAlternative">Found an alternative</label>
+          </div>
+          <div class="reason-item">
+            <input type="radio" name="cancelReason" id="reasonVolunteer" value="Volunteer's Issue">
+            <label for="reasonVolunteer">Volunteer's Issue</label>
+          </div>
+          <div class="reason-item">
+            <input type="radio" name="cancelReason" id="reasonOther" value="Other reason">
+            <label for="reasonOther">Other reason</label>
+          </div>
+        </div>
+        <div class="buttonRow">
+          <button id="modalBackBtn" class="rounded-btn link-btn outlined-btn">Back</button>
+          <button id="modalCancelFavor" class="rounded-btn link-btn outlined-btn btn-active">Yes!</button>
+        </div>
       </div>
     </div>
-  </div>
+  <!-- </form> -->
 
   <!-- Modal to acknowledge successful cancel of favor -->
   <div id="successModal" class="modal">
