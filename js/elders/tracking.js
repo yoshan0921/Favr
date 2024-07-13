@@ -73,6 +73,8 @@ async function displayTaskSummary(taskID) {
     const createAgain = document.getElementById("createAgain");
     const contactBtn = document.getElementById("contactBtn");
     const displayStatus = document.getElementById("displayStatus");
+    const cancelReason = document.getElementById("cancelReason")
+    let parentLi = cancelReason.parentElement;
 
     // const favorLengthData = document.getElementById("favorLength");
     const startAddressData = document.getElementById("startAddress");
@@ -117,6 +119,8 @@ async function displayTaskSummary(taskID) {
     if (task.status == "Cancelled" && task.details.cancelledDate) {
       dateData.innerHTML = task.details.cancelledDate;
       timeData.innerHTML = task.details.cancelledTime;
+      // Display cancel reason
+      cancelReason.innerHTML = task.details.cancelReason || "No reason given";
       // Change the Date and Time labels
       dateLabel.innerText = "Cancelled Date";
       timeLabel.innerText = "Cancelled Time";
@@ -136,6 +140,8 @@ async function displayTaskSummary(taskID) {
       // Change the Date and Time labels
       dateLabel.innerText = "Completed Date";
       timeLabel.innerText = "Completed Time";
+      // Hide cancel reason
+      parentLi.classList.add("hidden");
       // Hide cancelFavor button if a favor is completed
       hideCancelFavor.classList.add("hidden");
       // Hide approve button
@@ -149,6 +155,8 @@ async function displayTaskSummary(taskID) {
     } else if (task.status == "On going" && task.details.date) {
       dateData.innerHTML = task.details.date;
       timeData.innerHTML = task.details.time;
+      // Hide cancel reason
+      parentLi.classList.add("hidden");
       // Hide cancelFavor button if a favor is pending approval
       approveFavor.classList.add("hidden");
       createAgain.classList.add("hidden");
@@ -157,6 +165,8 @@ async function displayTaskSummary(taskID) {
     } else if (task.status == "Waiting to be accepted" && task.details.date) {
       dateData.innerHTML = task.details.date;
       timeData.innerHTML = task.details.time;
+      // Hide cancel reason
+      parentLi.classList.add("hidden");
       // Hide cancelFavor button if a favor is pending approval
       approveFavor.classList.add("hidden");
       createAgain.classList.add("hidden");
@@ -167,6 +177,8 @@ async function displayTaskSummary(taskID) {
     } else if (task.status == "Pending approval" && task.details.date) {
       dateData.innerHTML = task.details.date;
       timeData.innerHTML = task.details.time;
+      // Hide cancel reason
+      parentLi.classList.add("hidden");
       // Hide cancelFavor button if a favor is pending approval
       hideCancelFavor.classList.add("hidden");
       createAgain.classList.add("hidden");
@@ -262,11 +274,24 @@ modalCancelFavorBtn.addEventListener("click", async () => {
       hour12: false,
     });
 
+    // Get the selected cancel reason
+    let cancelReason;
+    let selectedReason = document.querySelector('input[name="cancelReason"]:checked');
+    if (selectedReason) {
+      cancelReason = selectedReason.value;
+      console.log(cancelReason)
+    } else {
+      cancelReason = "No reason given";
+      console.log(cancelReason)
+    }
+
     // Update task status to "Cancelled" in Firestore
     await updateProperty("tasks", taskID, {
       status: "Cancelled",
       "details.cancelledDate": cancelledDate,
       "details.cancelledTime": cancelledTime,
+      // Add the cancel reason
+      "details.cancelReason": cancelReason,
     });
     // Display the success modal
     // const successModal = document.getElementById("successModal");
@@ -381,3 +406,16 @@ contactBtn.addEventListener("click", function () {
       console.log(error);
     });
 });
+
+// TODO: Link to volunteer profile
+// const profileLink = document.getElementById("profileLink");
+// profileLink.addEventListener("click", () => {
+//   getDocument("tasks", taskID)
+//   .then((task) => {
+//     let volunteerID = task.volunteerID;
+//     window.location.href = `/profile.html?profile=${volunteerID}`;
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+// });
