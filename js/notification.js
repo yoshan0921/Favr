@@ -97,7 +97,7 @@ async function sendNotification(data,receiverID){
         time: (new Date()).toLocaleString(),
         isNew: true,
         wasSent: false,
-        details: (data.details) ? data.details : []
+        senderID: data.senderID ? data.senderID : ""
     }
     const notificationID = push(ref(database, receiverID)).key;
     const updateObj = {};
