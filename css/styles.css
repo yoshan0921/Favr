@@ -623,7 +623,21 @@ main.loaded .loading-screen {
 /* .noResult {
   display: none !important;
 } */
-
+/*----------------------------------------------------
+Floating cards
+------------------------------------------------------*/
+.floating-card{
+  transition: all 0.2s ease-out;
+  box-shadow: 0px 12px 28px -6px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  position: relative;
+  padding: .5rem;
+  min-height: 102px;
+  border: thin solid var(--textBlack100);
+}
+.floating-card:hover{
+  transform: translateY(-2px);
+}
 /* -------------------------------------------------- */
 /* Task Card                                          */
 /* -------------------------------------------------- */
