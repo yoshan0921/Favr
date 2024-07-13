@@ -41,7 +41,7 @@ window.addEventListener("load", function (event) {
         while(notificationsList.length>0){
           let notification = notificationsList.pop();
           const card = document.createElement("div");
-          card.classList.add("update");
+          card.classList.add("update", "floating-card");
           const notificationIcon = document.createElement("div");
           notificationIcon.classList.add("icon-wrapper");
           notificationIcon.classList.add(notification.updateType ? notification.updateType : "info");

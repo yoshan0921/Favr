@@ -6,8 +6,8 @@
   gap: 1rem;
   align-items: center;
   cursor: pointer;
-  border-bottom: solid 1px var(--lightBorder);
   padding: 1.5rem 0rem;
+  background-color: var(--background-gray);
 }
 
 .contact .photo {
@@ -15,6 +15,7 @@
   border-radius: 50%;
   width: 68px;
   height: 68px;
+  filter: grayscale(60%);
 }
 
 .contact .userInfo {
@@ -37,10 +38,27 @@
   flex: 1 1 100%;
   min-height: 28px;
 }
-
+.contact.has-updates{
+  background-color: var(--pureWhite);
+}
+.contact.has-updates{
+  font-weight: 600;
+}
+.contact.has-updates .photo{
+  filter: none;
+}
+.contact.has-updates::after{
+  top: 10px;
+  right: 10px;
+}
 /* -------------------------------------------------- */
 /* Chat                                               */
 /* -------------------------------------------------- */
+#chatWith{
+  display: flex;
+  flex-flow: column nowrap;
+  gap: .5rem;
+}
 #chat-content {
   display: flex;
   gap: 1rem;

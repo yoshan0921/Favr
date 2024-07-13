@@ -3,7 +3,7 @@ import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from
 import { getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
 import { database } from "./firebase/firebase.js";
 import { ref, child, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { sendNotification } from "./notification.js";
+import { sendNotification, getNewMessagesCount } from "./notification.js";
 
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
@@ -62,13 +62,29 @@ async function runFunction() {
       ];
     }
   });
-
-  // Create user list
-  getAllWithFilter("tasks", filterCondition).then((collection) => {
+    // Create user list
+  getAllWithFilter("tasks", filterCondition).then(async (collection) => {
     let contactIDs = [];
     let promises = [];
-
-    collection.forEach((doc) => {
+    const updates = query(ref(database, loginUserID));
+    let newMessagesByContact = {};
+    get(updates)
+    .then((snapshot)=>{
+        if(snapshot.exists()){
+            snapshot.forEach(element =>{
+                let update = element.val();
+                if(update.isNew && update.isMessage && update.senderID){
+                    if(update.senderID){
+                        if(update.senderID in newMessagesByContact){
+                            newMessagesByContact[update.senderID] += 1;
+                        }else{
+                            newMessagesByContact[update.senderID] = 1;
+                        }
+                    }
+                }
+            })
+        }
+    collection.forEach(async (doc) => {
       if (loginUserRole === "volunteer") {
         contactID = doc[1].requesterID;
       } else if (loginUserRole === "elder") {
@@ -81,7 +97,7 @@ async function runFunction() {
 
       // Create contact list
       let contact = document.createElement("div");
-      contact.classList.add("contact");
+      contact.classList.add("contact","floating-card");
       contact.setAttribute("data-contactID", contactID);
 
       // Get the user's information
@@ -96,6 +112,10 @@ async function runFunction() {
           let requesterName = document.createElement("p");
           requesterName.classList.add("name");
           requesterName.textContent = `${user.firstName} ${user.lastName}`;
+          console.log(newMessagesByContact, user.id);
+          if(newMessagesByContact[user.id] && newMessagesByContact[user.id] > 0){
+            contact.classList.add("has-updates");
+          }
 
           let lastMessageTime = document.createElement("p");
           lastMessageTime.classList.add("lastMessageTime");
@@ -158,29 +178,30 @@ async function runFunction() {
         showChatRoomTitle(chatRoomID);
       });
     });
+      // Wait for all getDocument calls to finish
+      Promise.all(promises).then(() => {
+        // If crid is specified in the URL, load the chat room
+        const urlParams = new URLSearchParams(window.location.search);
+        chatRoomID = urlParams.get("crid");
+        if (chatRoomID) {
+          loadChatRoom(chatRoomID);
+          checkChatRoomAvailability(chatRoomID);
+          showChatRoomTitle(chatRoomID);
+          return;
+        }
+  
+        // Show contact list and show message history
+        contactList.classList.remove("hide");
+  
+        // Load firebase storage images
+        lazyLoadImages();
+      });
+  
+      // Loading icon
+      const main = document.getElementsByTagName("main")[0];
+      main.classList.add("loaded");
+    })
 
-    // Wait for all getDocument calls to finish
-    Promise.all(promises).then(() => {
-      // If crid is specified in the URL, load the chat room
-      const urlParams = new URLSearchParams(window.location.search);
-      chatRoomID = urlParams.get("crid");
-      if (chatRoomID) {
-        loadChatRoom(chatRoomID);
-        checkChatRoomAvailability(chatRoomID);
-        showChatRoomTitle(chatRoomID);
-        return;
-      }
-
-      // Show contact list and show message history
-      contactList.classList.remove("hide");
-
-      // Load firebase storage images
-      lazyLoadImages();
-    });
-
-    // Loading icon
-    const main = document.getElementsByTagName("main")[0];
-    main.classList.add("loaded");
   });
 
   // Send message
@@ -217,6 +238,7 @@ async function runFunction() {
               updateType: "info",
               link:`/chat.html?crid=${chatRoomID}`,
               message: message.value,
+              senderID: currentUser.id
             },
             receiverID
           );
@@ -229,7 +251,6 @@ async function runFunction() {
       });
   });
 }
-
 async function loadChatRoom(chatRoomID) {
   // Hide contact list and show message history
   contactList.classList.add("hide");
