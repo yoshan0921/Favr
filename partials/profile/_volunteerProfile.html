@@ -2,75 +2,83 @@
   <i class="fa-solid fa-spinner fa-spin-pulse"></i>
 </div>
 <div class="profile-header">
-    <div class="user-name-picture">
-      <div class="img-wrapper user-picture-wrapper">
-        <img src="#" id="profilePic">
-      </div>
-      <div class="user-name-edit">
-        <h2 id="username"></h2>
-        <div class="buttons-wrapper">
-          <a href="./profile/edit.html" class="rounded-btn link-btn">Edit profile</a>
-          <button id="logoutBtn" class="rounded-btn outlined-btn" type="button">
-            <i class="fas fa-sign-out-alt fa-fw" aria-label="Logout"></i>
-            <span>Logout</span>
-          </button>
-        </div>
-      </div>
+  <div class="user-name-picture">
+    <div class="img-wrapper user-picture-wrapper">
+      <img src="#" id="profilePic">
     </div>
-    <div class="user-accomplishments">
-      <div class="accomplishment shadow-box">
-        <div class="icon-wrapper">
-          <i class="fa-solid fa-person-cane"></i>
-        </div>
-        <span class="accomplishment-number" id="accomplishmentElder">0</span>
-        <span class="accomplishment-title">Seniors</span>
-      </div>
-      <div class="accomplishment shadow-box">
-        <div class="icon-wrapper">
-          <i class="fa-regular fa-clock"></i>
-        </div>
-        <span class="accomplishment-number" id="accomplishmentHours">0</span>
-        <span class="accomplishment-title">Hours</span>
-      </div>
-      <div class="accomplishment shadow-box">
-        <div class="icon-wrapper">
-          <i class="fa-regular fa-note-sticky"></i>
-        </div>
-        <span class="accomplishment-number" id="accomplishmentFavors">0</span>
-        <span class="accomplishment-title">Favors</span>
+    <div class="user-name-edit">
+      <h2 id="username"></h2>
+      <div class="buttons-wrapper">
+        <a id="editBtn" href="./profile/edit.html" class="rounded-btn link-btn">Edit profile</a>
+        <button id="logoutBtn" class="rounded-btn outlined-btn" type="button">
+          <i class="fas fa-sign-out-alt fa-fw" aria-label="Logout"></i>
+          <span>Logout</span>
+        </button>
       </div>
     </div>
   </div>
-  <div class="profile-details">
-    <div class="info-group" id="personal">
-        <table>
-          <caption>Personal</caption>
-          <tr>
-            <th scope="row">Birthday</th>
-            <td id="birthday"></td>
-          </tr>
-          <tr>
-            <th scope="row">Bio</th>
-            <td id="bio"></td>
-          </tr>
-        </table>
-  
+  <div class="user-accomplishments">
+    <div class="accomplishment shadow-box">
+      <div class="icon-wrapper">
+        <i class="fa-solid fa-person-cane"></i>
       </div>
-      <div class="info-group" id="contact">
-        <table>
-          <caption>Contact</caption>
-          <tr>
-            <th scope="row">Phone</th>
-            <td id="phone"></td>
-          </tr>
-          <tr>
-            <th scope="row">Email</th>
-            <td id="email"></td>
-          </tr>
-          <tr>
-              <th scope="row">Address</th>
-              <td id="address"></td>
-            </tr>
-        </table>
+      <span class="accomplishment-number" id="accomplishmentElder">0</span>
+      <span class="accomplishment-title">Seniors</span>
+    </div>
+    <div class="accomplishment shadow-box">
+      <div class="icon-wrapper">
+        <i class="fa-regular fa-clock"></i>
       </div>
+      <span class="accomplishment-number" id="accomplishmentHours">0</span>
+      <span class="accomplishment-title">Hours</span>
+    </div>
+    <div class="accomplishment shadow-box">
+      <div class="icon-wrapper">
+        <i class="fa-regular fa-note-sticky"></i>
+      </div>
+      <span class="accomplishment-number" id="accomplishmentFavors">0</span>
+      <span class="accomplishment-title">Favors</span>
+    </div>
   </div>
+</div>
+<div class="profile-details">
+  <div class="info-group" id="personal">
+    <table>
+      <caption>Personal</caption>
+      <tr class="privacy-item">
+        <th scope="row">Birthday</th>
+        <td id="birthday"></td>
+      </tr>
+      <tr>
+        <th scope="row">Institution</th>
+        <td id="institution"></td>
+      </tr>
+      <tr>
+        <th scope="row">Languages</th>
+        <td id="languages"></td>
+      </tr>
+      <tr>
+        <th scope="row">Bio</th>
+        <td id="bio"></td>
+      </tr>
+    </table>
+
+  </div>
+  <div class="info-group privacy-item" id="contact">
+    <table>
+      <caption>Contact</caption>
+      <tr>
+        <th scope="row">Phone</th>
+        <td id="phone"></td>
+      </tr>
+      <tr>
+        <th scope="row">Email</th>
+        <td id="email"></td>
+      </tr>
+      <tr>
+        <th scope="row">Address</th>
+        <td id="address"></td>
+      </tr>
+    </table>
+  </div>
+</div>

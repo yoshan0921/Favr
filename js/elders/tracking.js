@@ -197,6 +197,10 @@ async function displayTaskSummary(taskID) {
       `;
     }
 
+    // Set the volunteer profile link
+    const volunteerProfileLink = document.getElementById("profileLink");
+    volunteerProfileLink.setAttribute("href", `/profile.html?userid=${task.volunteerID}`);
+
     // Apply lazy loading to images
     lazyLoadImages();
   } catch (error) {
@@ -293,12 +297,13 @@ modalCancelFavorBtn.addEventListener("click", async () => {
     sendNotification(
       {
         title: "Task Cancelled",
-        message:`<span>${currentUser.firstName}</span> has cancelled their <span>${task.name}</span> favour`,
-        updateType : "warning",
+        message: `<span>${currentUser.firstName}</span> has cancelled their <span>${task.name}</span> favour`,
+        updateType: "warning",
         icon: url,
-        link: `../tasks/volunteer-favor.html?taskid=${taskID}`
-      }
-      ,task.volunteerID);
+        link: `../tasks/volunteer-favor.html?taskid=${taskID}`,
+      },
+      task.volunteerID
+    );
 
     // Display complete favor page
     window.location.href = newURL;
@@ -339,12 +344,13 @@ approveFavorBtn.addEventListener("click", async () => {
     sendNotification(
       {
         title: "Task Approved!",
-        message:`<span>${currentUser.firstName}</span> has approved your <span>${task.name}</span> favour completion!`,
-        updateType : "info",
+        message: `<span>${currentUser.firstName}</span> has approved your <span>${task.name}</span> favour completion!`,
+        updateType: "info",
         icon: url,
-        link: `../tasks/volunteer-favor.html?taskid=${taskID}`
-      }
-      ,task.volunteerID);
+        link: `../tasks/volunteer-favor.html?taskid=${taskID}`,
+      },
+      task.volunteerID
+    );
 
     // Display the success modal
     // const approveSuccessModal = document.getElementById("approveSuccessModal");
