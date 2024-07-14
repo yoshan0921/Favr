@@ -805,11 +805,41 @@ Floating cards
 .mic-icon::after {
   content: url("../assets/icons/mic.svg") !important;
 }
+
+.close-icon::after {
+  content: url("../assets/icons/close.svg") !important;
+}
+.question-icon::after {
+  content: url("../assets/icons/question.svg") !important;
+}
+.conflict-icon::after {
+  content: url("../assets/icons/conflict.svg") !important;
+}
+.accepted-icon::after {
+  content: url("../assets/icons/accepted.svg") !important;
+}
+.heart-icon::after {
+  content: url("../assets/icons/heart.svg") !important;
+}
+.thumbs-up-icon::after {
+  content: url("../assets/icons/thumbs-up.svg") !important;
+}
+.thumbs-up-white::after {
+  content: url("../assets/icons/thums-upWhite.svg") !important;
+}
+
+.thumbs-down-icon::after {
+  content: url("../assets/icons/thumbs-down.svg") !important;
+}
 .date-icon::after {
   content: url("../assets/icons/date.svg") !important;
 }
 .time-icon::after {
   content: url("../assets/icons/time.svg") !important;
+}
+
+.location-icon::after {
+  content: url("../assets/icons/location.svg") !important;
 }
 .address-icon::after {
   content: url("../assets/icons/address.svg") !important;
@@ -817,9 +847,11 @@ Floating cards
 .note-icon::after {
   content: url("../assets/icons/note.svg") !important;
 }
+
 .favor-icon::after {
   content: url("../assets/icons/favor.svg") !important;
 }
+
 /*
 =========================
 Media queries

@@ -30,7 +30,8 @@ function runFunction() {
   let taskName = document.getElementById("taskName");
   let elderName = document.getElementById("elderName");
   let elderAddress = document.getElementById("elderAddress");
-  let taskAddress = document.getElementById("taskAddress");
+  let startAddress = document.getElementById("startAddress");
+  let endAddress = document.getElementById("endAddress");
   let taskTime = document.getElementById("taskTime");
   let taskNote = document.getElementById("taskNote");
 
@@ -88,14 +89,31 @@ function runFunction() {
         getFile("profile/" + user.profilePictureURL)
           .then((url) => {
             document.getElementById("elderPhoto").src = url;
+            document.getElementById("elderPhoto2").src = url;
+            document.getElementById("elderPhoto3").src = url;
           })
           .catch((error) => {
             console.log(error);
             document.getElementById("elderPhoto").src = placeholderImage;
+            document.getElementById("elderPhoto2").src = placeholderImage;
+            document.getElementById("elderPhoto3").src = placeholderImage;
+
+
           });
 
+          // getFile("profile/" + user.profilePictureURL)
+          // .then((url) => {
+          //   document.getElementById("elderPhoto2").src = url;
+          // })
+          // .catch((error) => {
+          //   console.log(error);
+          //   document.getElementById("elderPhoto2").src = placeholderImage;
+          // });
+
+
         // Retrieve Task address, date and note=====================
-        taskAddress.innerHTML = taskData.details.startAddress;
+        startAddress.innerHTML = taskData.details.startAddress;
+        endAddress.innerHTML = taskData.details.endAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
         taskNote.innerHTML = taskData.notes;
 
@@ -143,49 +161,7 @@ function runFunction() {
 
 async function acceptTask(taskID, taskData) {
   console.log(taskData);
-
-  // Get the volunteer ID
   const volunteerID = getCurrentUserID();
-
-  // // Target task data
-  // let targetDate = taskData.details.date
-  // let targetTime = taskData.details.time
-  // // Check On going task
-  // let filterConditions = [
-  //   { key: 'volunteerID', operator: '==', value: volunteerID },
-  //   { key: 'status', operator: '==', value: STATUS_ONGOING },
-  // ];
-  
-  // let tasks = await getAllWithFilter("tasks", filterConditions);
-  // let tentativeDuration = 1; // This might be changed
-
-  
-  // tasks.forEach((task) => {
-
-  //   console.log(taskData.details.date);
-
-  //   let startTime = new Date(task.date, task.time);
-  //   console.log(startTime);
-  //   let endTime = new Date(task.date, task.time + tentativeDuration);
-  //   console.log(endTime);
-  //   let targetStartTime = new Date(targetDate, targetTime);
-  //   let targetEndTime = new Date(targetDate, targetTime + tentativeDuration);
-  
-  //   if (targetStartTime <= endTime || targetEndTime >= startTime) {
-  //     console.log("Schedule is conflicted");
-
-
-  //     // ToDo: Display conflict message popup
-  //     // Code here...
-
-  //     function scheduleConflictOn() {
-  //       document.getElementById("schedule-conflict").style.display = "block";
-  //     }
-    
-  //     return; 
-  //   }
-  // });
-  
 
   // Create updated task data object with the volunteer ID and status "On going"
   taskData.volunteerID = volunteerID;
@@ -283,25 +259,72 @@ document.getElementById("contactBtn").addEventListener("click", function () {
     });
 });
 
-// On "Favor Details"===============
+async function checkScheduleConflict(taskData) {
+  console.log(taskData);
 
-// To display "confirm-overlay" ON
-function confirmOn() {
-  document.getElementById("confirm-overlay").style.display = "block";
+  // Get the volunteer ID
+  const volunteerID = getCurrentUserID();
+
+  // Target task data
+  let targetDate = taskData.details.date
+  let targetTime = taskData.details.time
+  // Check On going task
+  let filterConditions = [
+    { key: 'volunteerID', operator: '==', value: volunteerID },
+    { key: 'status', operator: '==', value: STATUS_ONGOING },
+  ];
+  
+  let tasks = await getAllWithFilter("tasks", filterConditions);
+  let tentativeDuration = 60 * 60 * 1000; // This might be changed
+
+  let conflictFound = false;
+
+  
+  tasks.forEach((task) => {
+    let taskid = task[0];
+    let taskData = task[1];
+    console.log(task);
+    console.log(taskid);
+    console.log(taskData);
+    console.log(taskData.details.date);
+    console.log(taskData.details.time);
+
+    let startTime = new Date (`${taskData.details.date} ${taskData.details.time}`);
+    console.log(startTime);
+    let endTime = new Date (startTime.getTime() + tentativeDuration);
+    console.log(endTime);
+    
+    let targetStartTime = new Date(`${targetDate} ${targetTime}`);
+    console.log(targetStartTime);
+    let targetEndTime = new Date(targetStartTime.getTime() + tentativeDuration);
+    console.log(targetEndTime);
+  
+    if (targetStartTime < endTime && targetEndTime > startTime) {
+      console.log("Schedule is conflicted");
+
+
+      // ToDo: Display conflict message popup
+      // Code here...
+
+      // "schedule-conflict" ON
+      document.getElementById("schedule-conflict").style.display = "block";
+      conflictFound = true;
+      return; 
+    }
+  });
+
+  if (!conflictFound) {
+    document.getElementById("confirm-overlay").style.display = "block";
+  }
 }
 
 document.getElementById("acceptBtn").addEventListener("click", function () {
-  confirmOn();
+  checkScheduleConflict(taskData);
 });
 
-// To display "confirm-overlay" OFF
-function confirmOff() {
-  document.getElementById("confirm-overlay").style.display = "none";
-}
 
-document.getElementById("backBtn").addEventListener("click", function () {
-  confirmOff();
-});
+// On "Favor Details"===============
+
 
 // To display "accept-overlay" ON
 function acceptOn() {
@@ -314,6 +337,13 @@ document.getElementById("confirmBtn").addEventListener("click", async function (
   acceptOn();
 });
 
+document.getElementById("conflictConfirmBtn").addEventListener("click", async function () {
+  await acceptTask(taskID, taskData);
+  console.log(taskData);
+  acceptOn();
+});
+
+
 // To move back to "dashboard.html"
 function goHome() {
   window.location.href = "/dashboard.html";
@@ -324,9 +354,9 @@ function goMyFavors() {
   window.location.href = "/dashboard.html#myfavors";
 }
 
-document.getElementById("homeBtn").addEventListener("click", function () {
-  goHome();
-});
+// document.getElementById("homeBtn").addEventListener("click", function () {
+//   goHome();
+// });
 
 const declineBtn = document.getElementById("declineBtn");
 if(declineBtn) declineBtn.addEventListener("click", function () {
@@ -367,6 +397,11 @@ document.getElementById("exploreBtn").addEventListener("click", function () {
 });
 
 document.getElementById("cancelBtn").addEventListener("click", async function () {
+  document.getElementById("cancel-favor-overlay").style.display = "block";
+});
+
+
+document.getElementById("cancelFavorBtn").addEventListener("click", async function () {
   console.log(taskData);
   await cancelTask(taskID, taskData);
   exploreFavors();
@@ -391,4 +426,26 @@ if(thumsDownOverlay) thumsDownOverlay.addEventListener("click", function () {
 const thumsUpOverlay = document.getElementById("thumsUp-overlay");
 if(thumsUpOverlay) thumsUpOverlay.addEventListener("click", function () {
   exploreFavors();
+});
+
+// Close overlay display by clicking "x" icon
+document.getElementById("close-confirm").addEventListener("click", function () {
+  console.log("clicked!");
+});
+
+
+// // Create toggle for thums-up & down
+// const thumbsDownIcon = document.getElementById("thums-down-icon");
+const thumbsUpIcon = document.getElementById("thums-up-icon");
+const thumbsUpIconWhite = document.getElementById("thumbs-up-white-icon");
+
+// thumbsDownIcon.addEventListener("click", function() {
+//     thumbsDownIcon.classList.toggle("active");
+//     thumbsUpIcon.classList.remove("active");
+// });
+
+thumbsUpIcon.addEventListener("click", function() {
+  thumbsUpIcon.style.display = "none";
+  // thumbsUpIcon.style.display = "block";
+  thumbsUpIconWhite.style.display = "none";
 });
