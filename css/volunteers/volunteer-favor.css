@@ -97,7 +97,10 @@ img {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  font-size: 3rem;
+}
+
+#thumbs-up-white-icon {
+  display: none;
 }
 
 .user-profile-wrapper .set,
@@ -117,12 +120,13 @@ img {
   padding: 0.2rem 2rem;
   font-size: 1.2rem;
 }
-  
+
 #confirm-overlay,
 #accept-overlay,
 #schedule-conflict,
 #complete-confirm-overlay,
-#task-completed-overlay {
+#task-completed-overlay,
+#cancel-favor-overlay {
   display: grid;
   align-content: center;
   position: fixed; /* Sit on top of the page content */
@@ -162,7 +166,6 @@ main {
 
 .confirm-wrapper i {
   display: block;
-  /* width: 50.83px; */
 }
 
 .close-icon {
@@ -197,7 +200,6 @@ main {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  font-size: 3rem;
   margin-bottom: 1rem;
 }
 
@@ -214,4 +216,28 @@ main {
 
 #schedule-conflict .set {
   justify-content: center;
+}
+
+#cancel-favor-overlay #icons-overlay {
+  display: block;
+
+}
+
+form {
+  text-align: left;
+  margin: 1rem;
+
+}
+
+textarea {
+  width: calc(100% - 20px);
+  height: 60px;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#cancel-favor-overlay .set {
+  margin-left: 3rem;
 }

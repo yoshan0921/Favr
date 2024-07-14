@@ -724,16 +724,27 @@ main.loaded .loading-screen {
   content: url("../assets/icons/accepted.svg") !important;
 }
 .heart-icon::after {
-  content: url("../assets/icons/accepted.svg") !important;
+  content: url("../assets/icons/heart.svg") !important;
 }
-.thums-up-icon::after {
-  content: url("../assets/icons/thums-up.svg") !important;
+.thumbs-up-icon::after {
+  content: url("../assets/icons/thumbs-up.svg") !important;
+}
+.thumbs-up-white::after {
+  content: url("../assets/icons/thums-upWhite.svg") !important;
 }
 
-.thums-down-icon::after {
-  content: url("../assets/icons/thums-down.svg") !important;
+.thumbs-down-icon::after {
+  content: url("../assets/icons/thumbs-down.svg") !important;
 }
-
+.time-icon::after {
+  content: url("../assets/icons/time.svg") !important;
+}
+.location-icon::after {
+  content: url("../assets/icons/location.svg") !important;
+}
+.note-icon::after {
+  content: url("../assets/icons/note.svg") !important;
+}
 
 /*
 =========================

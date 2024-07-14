@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="../js/common.js"></script>
     <script type="module" src="../js/volunteers/volunteer-favor.js"></script>
+
+    <script type="module" src="../js/common.js"></script>
+
     <link rel="stylesheet" type="text/css" href="../css/styles.css">
     <link rel="stylesheet" type="text/css" href="../css/volunteers/volunteer-favor.css">
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
@@ -33,7 +36,7 @@
             <p id="elderAddress"></p>
           </div>
           <!-- <img src="../assets/icons/button_desktop.svg" alt="Contact"> -->
-          <button id="contactBtn">Contact&nbsp;&nbsp;&nbsp;&nbsp;></button>
+          <button class="rounded-btn" id="contactBtn">Contact&nbsp;&nbsp;&nbsp;&nbsp;></button>
         </section>
 
         <section class="schedule">
@@ -41,28 +44,28 @@
             <ul>
               <li>
                 <div class="content">
-                  <img src="../assets/icons/time.svg" alt="">
+                  <span><i class="time-icon"></i></span>
                   <a href="#">Time:</a>
                 </div>
                 <p id="taskTime"></p>
               </li>
               <li>
                 <div class="content">
-                  <img src="../assets/icons/location.svg" alt="">
+                  <span><i class="location-icon"></i></span>
                   <a href="#">From:</a>
                 </div>
                 <p id="startAddress"></p>
               </li>
               <li>
                 <div class="content">
-                  <img src="../assets/icons/location.svg" alt="">
+                  <span><i class="location-icon"></i></span>
                   <a href="#">End:</a>
                 </div>
                 <p id="endAddress"></p>
               </li>
               <li>
                 <div class="content">
-                  <img src="../assets/icons/note.svg" alt="">
+                  <span><i class="note-icon"></i></span>
                   <a href="#">Note:</a>
                 </div>
                 <p id="taskNote"></p>
@@ -72,21 +75,21 @@
         </section>
 
         <section class="icons" id="icons">
-            <img src="../assets/icons/thums-down.svg" alt="thums-down">
-            <img src="../assets/icons/thums-up.svg" alt="thums-up">
+          <span><i class="thumbs-down-icon" id="thumbs-down-icon"></i></span>
+          <span><i class="thumbs-up-icon" id="thumbs-up-icon"></i></span>
+          <span><i class="thumbs-up-white" id="thumbs-up-white-icon"></i></span>
+
         </section>
 
         <section class="set" id="acOrDecBtn">
-          <button id="declineBtn">Decline</button>
-          <button id="acceptBtn">Accept</button>
+          <!-- <button class="outlined-btn" id="declineBtn">Decline</button> -->
+          <button class="rounded-btn" id="acceptBtn">Accept</button>
         </section>
 
         <section class="set" id="comOrCanBtn">
-          <button id="cancelBtn">Cancel</button>
-          <button id="confirmCompleteBtn">Complete</button>
+          <button class="outlined-btn" id="cancelBtn">Cancel</button>
+          <button class="rounded-btn" id="confirmCompleteBtn">Complete</button>
         </section>
-
-
       </div>
 
 
@@ -95,8 +98,7 @@
       <!-- Confirm task Overlay Display=============== -->
       <div id="confirm-overlay">
         <div class="confirm-wrapper">
-
-            <span><i class="close-icon"></i></span>
+            <span><i class="close-icon closeModal" id="close-confirm"></i></span>
             <span><i class="question-icon"></i></span>
             <h2>Confirm Favor</h2>
 
@@ -113,7 +115,7 @@
 
 
           <section class="set">
-            <button id="confirmBtn">Confirm</button>
+            <button class="rounded-btn" id="confirmBtn">Confirm</button>
           </section>
         </div>
       </div>
@@ -121,16 +123,16 @@
       <!-- Schedule Conflict Overlay Display=============== -->
       <div id="schedule-conflict">
         <div class="confirm-wrapper">
+            <span><i class="close-icon" id="close-conflict"></i></span>
+            <span><i class="conflict-icon"></i></span>
           <section class="message">
-            <span><i class="close-icon"></i></span>
-            <img src="../assets/icons/schedule-conflict.svg" alt="schedule-conflict">
             <h2>Schedule Conflict!</h2>
               <p>You have another Favor going on during this time slot.</p>
               <p>Are you still willing to accept this Favor?</p>
           </section>
       
           <section class="set">
-            <button id="conflictConfirmBtn">Confirm</button>
+            <button class="rounded-btn" id="conflictConfirmBtn">Confirm</button>
             </section>
           </div>
       </div>
@@ -138,11 +140,10 @@
       <!-- Accept task Overlay Display=============== -->
       <div id="accept-overlay">
         <div class="confirm-wrapper">
+          <span><i class="close-icon" id="close-accept"></i></span>
+          <span><i class="accepted-icon"></i></span>
           <section class="message">
-            <span><i class="close-icon"></i></span>
-            <img src="../assets/icons/accepted.svg" alt="accepted">
             <h2>Favor Accepted</h2>
-
             <section class="user-profile">
               <img id="elderPhoto3">
               <div class="user-info">
@@ -156,43 +157,60 @@
 
           <section class="set">
             <!-- <button id="homeBtn">Home</button> -->
-            <button id="myFavorsBtn">My Favors</button>
+            <button class="rounded-btn" id="myFavorsBtn">My Favors</button>
           </section>
         </div>
       </div>
-
-
-
-      <!-- Schedule Conflict Overlay Display===============
-      <div id="cancell-confrim-overlay">
-        <div class="confirm-wrapper">
-          <section class="message">
-            <p>You are cancelling the Favor. Are you comfortable sharing the reason with us?</p>
-          </section>
-
-          <section class="set">
-            <button id="conflictConfirmBtn">Confirm</button>
-          </section>
-        </div>
-      </div> -->
-
       
 
       <!-- Confirm Task Complete Overlay Display=============== -->
       <div id="complete-confirm-overlay">
         <div class="confirm-wrapper">
+          <span><i class="close-icon" id="close-complete-confirm"></i></span>
           <section class="message">
-            <p>How do you rate this experience?</p>
             <h2>Confirm Favor has been delivered successfully</h2>
+            <p>How do you rate this experience?</p>
           </section>
 
           <section class="icons-overlay" id="icons-overlay">
-            <span><i class="close-icon"></i></span>
-            <img src="../assets/icons/thums-up.svg" alt="thums-up">
+            <span><i class="thumbs-down-icon"></i></span>
+            <span><i class="thumbs-up-icon"></i></span>
           </section>
 
           <section class="set">
-            <button id="completeBtn">Complete</button>
+            <button class="rounded-btn" id="completeBtn">Complete</button>
+          </section>
+        </div>
+      </div>
+
+      <!-- Conrim task cancel Overlay Display=============== -->
+      <div id="cancel-favor-overlay">
+        <div class="confirm-wrapper">
+          <span><i class="close-icon" id="cancel-favor"></i></span>
+          <section class="message">
+            <p>You are cancelling the Favor. Are you comfortable sharing the reason with us?</p>
+          </section>
+
+          <section class="icons-overlay" id="icons-overlay">
+            <form>
+              <label>
+                  <input type="checkbox" name="reason" value="schedule-conflict">
+                  I have a schedule conflict
+              </label><br>
+              <label>
+                  <input type="checkbox" name="reason" value="cannot-contact-senior">
+                  I cannot contact the senior
+              </label><br>
+              <label>
+                  <input type="checkbox" name="reason" value="not-comfortable">
+                  I am not comfortable to share
+              </label><br>
+              <textarea name="additional-info" placeholder="Additional information..."></textarea>
+            </form>
+          </section>
+
+          <section class="set">
+            <button class="rounded-btn" id="cancelFavorBtn">Cancel Favor</button>
           </section>
         </div>
       </div>
@@ -200,15 +218,16 @@
       <!-- Task Completed Overlay Display=============== -->
       <div id="task-completed-overlay">
         <div class="confirm-wrapper">
+          <span><i class="close-icon" id="close-task-completed"></i></span>
+          <span><i class="heart-icon"></i></span>
           <section class="message">
-            <img src="../assets/icons/heart.svg" alt="heart">
             <h2>Thank you for supporting <span id="completedElderName"></span> and our community!</h2>
             <p>Request for approval has been sent to <span id="approvedElderName"></span> and will be updated to you after approved.</p>
             <p>See more seniors you can help:</p>
           </section>
 
           <section class="set">
-            <button id="exploreBtn">Explore Favors</button>
+            <button class="rounded-btn" id="exploreBtn">Explore Favors</button>
           </section>
         </div>
       </div>

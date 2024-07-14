@@ -371,6 +371,11 @@ document.getElementById("exploreBtn").addEventListener("click", function () {
 });
 
 document.getElementById("cancelBtn").addEventListener("click", async function () {
+  document.getElementById("cancel-favor-overlay").style.display = "block";
+});
+
+
+document.getElementById("cancelFavorBtn").addEventListener("click", async function () {
   console.log(taskData);
   await cancelTask(taskID, taskData);
   exploreFavors();
@@ -391,4 +396,26 @@ document.getElementById("thumsDown-overlay").addEventListener("click", function 
 
 document.getElementById("thumsUp-overlay").addEventListener("click", function () {
   exploreFavors();
+});
+
+// Close overlay display by clicking "x" icon
+document.getElementById("close-confirm").addEventListener("click", function () {
+  console.log("clicked!");
+});
+
+
+// // Create toggle for thums-up & down
+// const thumbsDownIcon = document.getElementById("thums-down-icon");
+const thumbsUpIcon = document.getElementById("thums-up-icon");
+const thumbsUpIconWhite = document.getElementById("thumbs-up-white-icon");
+
+// thumbsDownIcon.addEventListener("click", function() {
+//     thumbsDownIcon.classList.toggle("active");
+//     thumbsUpIcon.classList.remove("active");
+// });
+
+thumbsUpIcon.addEventListener("click", function() {
+  thumbsUpIcon.style.display = "none";
+  // thumbsUpIcon.style.display = "block";
+  thumbsUpIconWhite.style.display = "none";
 });
