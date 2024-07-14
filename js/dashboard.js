@@ -72,6 +72,7 @@ async function loadEldersDashboard() {
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
   displayTaskListForElders().then(() => {
+    console.log("Tasks loaded successfully.");
     main.classList.add("loaded");
   });
 }
@@ -91,7 +92,7 @@ async function displayTaskListForElders() {
   // Listen for real-time updates with onSnapshot
   const unsubscribe = onSnapshot(
     q,
-    (querySnapshot) => {
+    async (querySnapshot) => {
       querySnapshot.docChanges().forEach((change) => {
         const task = {
           id: change.doc.id,
@@ -113,7 +114,7 @@ async function displayTaskListForElders() {
         }
       });
       console.log(allTasks);
-      createTaskListForElders(allTasks);
+      await createTaskListForElders(allTasks);
     },
     (error) => {
       console.error(error);
@@ -181,6 +182,15 @@ async function createTaskListForElders(allTasks) {
   // Wait for all tasks to be processed
   await Promise.all(tasksPromises);
 
+  // No items message
+  if (document.querySelectorAll("#taskList .taskCard").length === 0) {
+    document.querySelector("#taskList ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskList").classList.add("hide");
+  } else {
+    document.querySelector("#taskList ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskList").classList.remove("hide");
+  }
+
   // Apply lazy loading to images
   lazyLoadImages();
 
@@ -203,7 +213,7 @@ function createCardForElder(task) {
   card.setAttribute("data-date", `${task.taskDate} ${task.taskTime}`);
   card.setAttribute("data-address", task.taskAddress);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <p class="status"><span class="statusColor"></span>${task.taskStatus}</p>
   <p class="notes">${task.taskNotes}</p>
@@ -281,9 +291,8 @@ async function loadVolunteersDashboard() {
   // Filter button (Explore tab)
   const filterBtn = document.getElementById("openFilterBtn");
   const filterModal = document.getElementById("filterModal");
-  const closeFilterBtn = document.getElementById("cancelFilter");
   const applyFilterBtn = document.getElementById("applyFilter");
-  const cancelFilterBtn = document.getElementById("cancelFilter");
+  const resetFilterBtn = document.getElementById("resetFilter");
 
   // Switch between map and list view (toggle hidden class)
   if (taskViewSwitch) {
@@ -302,23 +311,18 @@ async function loadVolunteersDashboard() {
   if (filterBtn) {
     filterBtn.addEventListener("click", () => {
       openModal(filterModal);
-      readSavedPreference();
-    });
-  }
-  if (closeFilterBtn) {
-    closeFilterBtn.addEventListener("click", () => {
-      closeModal(filterModal);
     });
   }
   if (applyFilterBtn) {
     applyFilterBtn.addEventListener("click", () => {
-      applyFilter(false);
+      applyFilter();
       closeModal(filterModal);
     });
   }
-  if (cancelFilterBtn) {
-    cancelFilterBtn.addEventListener("click", () => {
-      console.log("Cancel Filter");
+  if (resetFilterBtn) {
+    resetFilterBtn.addEventListener("click", () => {
+      // Reset the filter conditions and apply filter
+      applyFilter(true);
       closeModal(filterModal);
     });
   }
@@ -367,9 +371,9 @@ async function displayTaskListForVolunteers() {
         console.error(error);
       }
 
-      // If the filter is already applied, reapply the filter to keep it
+      // If additional tasks are added, apply the filter again
       if (filterAppliedFlg) {
-        applyFilter(true);
+        applyFilter();
       }
     },
     (error) => {
@@ -392,6 +396,7 @@ async function createTaskListForVolunteers(allTasks) {
   const taskListMyFavor = document.getElementById("taskListMyFavor");
   taskListExplore.innerHTML = "";
   taskListMyFavor.innerHTML = "";
+  favorCount = 0;
 
   // Clear the task map
   const mapElement = document.getElementById("map");
@@ -461,13 +466,7 @@ async function createTaskListForVolunteers(allTasks) {
         let length = 1.0;
 
         // Set the link URL for the task card
-        if (taskDetails.status === STATUS_WAITING) {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else if (taskDetails.status === "On going") {
-          linkURL = "/tasks/volunteer-favor.html";
-        } else {
-          linkURL = "#";
-        }
+        linkURL = "/tasks/volunteer-favor.html";
 
         // Create task object for List & Map view
         let taskObj = {
@@ -512,10 +511,21 @@ async function createTaskListForVolunteers(allTasks) {
 
   // No items message
   if (document.querySelectorAll("#taskListExplore .taskCard").length === 0) {
-    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListExplore").classList.add("hide");
+    document.getElementById("taskMapExplore").classList.add("hide");
+  } else {
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListExplore").classList.remove("hide");
+    document.getElementById("taskMapExplore").classList.remove("hide");
   }
+
   if (document.querySelectorAll("#taskListMyFavor .taskCard").length === 0) {
-    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListMyFavor").classList.add("hide");
+  } else {
+    document.querySelector("#taskListMyFavor ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListMyFavor").classList.remove("hide");
   }
 
   // Apply lazy loading to images
@@ -541,7 +551,7 @@ function createCardForVolunteer(task) {
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
@@ -611,7 +621,7 @@ function createMapMarker(task, map, infoWindows) {
         card.setAttribute("data-distance", task.taskDistance);
         card.setAttribute("data-length", task.taskDuration);
         card.innerHTML = `
-        <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+        <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
         <h3 class="title">${task.taskName}</h3>
         <div class="statusColor"></div>
         <p class="date">${task.taskDate}, ${task.taskTime}</p>
@@ -691,9 +701,9 @@ function getCurrentPosition() {
  * It filters tasks by distance, length, favor type, and date.
  * After applying the filters, it hides the tasks that do not meet the filter conditions.
  *
- * @param {boolean} redo - A flag to indicate whether the filter is applied again.
+ * @param {boolean} resetFlg - A flag to indicate whether to reset the filter conditions.
  */
-function applyFilter(redo) {
+function applyFilter(resetFlg = false) {
   // Define the filter condition object
   let filterConditions = {
     distanceFilterValue: 10000,
@@ -707,13 +717,8 @@ function applyFilter(redo) {
     dateFilterValue: "newest",
   };
 
-  // Set the filterApplied flag to true
-  if (redo) {
-    filterConditions = readPreviousFilterSetting(filterConditions);
-  } else {
-    filterAppliedFlg = true;
-
-    // Get the specified filter conditions
+  // Get the specified filter values from the form if the reset flag is FALSE
+  if (!resetFlg) {
     filterConditions.distanceFilterValue = Number(document.getElementById("distanceFilter").value);
     filterConditions.lengthFilterValue = Number(document.getElementById("lengthFilter").value);
     filterConditions.groceryShopping = document.getElementById("groceryShopping").checked;
@@ -731,32 +736,6 @@ function applyFilter(redo) {
         filterConditions.dateFilterValue = radio.value;
         break;
       }
-    }
-
-    // For filter history:
-    // Store the filter conditions in sessionStorage
-    sessionStorage.setItem("distanceFilter", filterConditions.distanceFilterValue);
-    sessionStorage.setItem("lengthFilter", filterConditions.lengthFilterValue);
-    sessionStorage.setItem("groceryShopping", filterConditions.groceryShopping);
-    sessionStorage.setItem("mailPackages", filterConditions.mailPackages);
-    sessionStorage.setItem("medsPickup", filterConditions.medsPickup);
-    sessionStorage.setItem("techHelp", filterConditions.techHelp);
-    sessionStorage.setItem("petCare", filterConditions.petCare);
-    sessionStorage.setItem("transportation", filterConditions.transportation);
-    sessionStorage.setItem("dateFilter", filterConditions.dateFilterValue);
-
-    // For save preference checkbox:
-    // Store the filter conditions in localStorage
-    if (document.getElementById("savePreferenceCheckbox").checked) {
-      localStorage.setItem("distanceFilter", filterConditions.distanceFilterValue);
-      localStorage.setItem("lengthFilter", filterConditions.lengthFilterValue);
-      localStorage.setItem("groceryShopping", filterConditions.groceryShopping);
-      localStorage.setItem("mailPackages", filterConditions.mailPackages);
-      localStorage.setItem("medsPickup", filterConditions.medsPickup);
-      localStorage.setItem("techHelp", filterConditions.techHelp);
-      localStorage.setItem("petCare", filterConditions.petCare);
-      localStorage.setItem("transportation", filterConditions.transportation);
-      localStorage.setItem("dateFilter", filterConditions.dateFilterValue);
     }
   }
   console.log(filterConditions);
@@ -812,67 +791,17 @@ function applyFilter(redo) {
 
   // No items message
   if (document.querySelectorAll("#taskListExplore .taskCard:not(.hide)").length === 0) {
-    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("noResult");
-    document.getElementById("taskListExplore").classList.add("noResult");
-    document.getElementById("taskMapExplore").classList.add("noResult");
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListExplore").classList.add("hide");
+    document.getElementById("taskMapExplore").classList.add("hide");
   } else {
-    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("noResult");
-    document.getElementById("taskListExplore").classList.remove("noResult");
-    document.getElementById("taskMapExplore").classList.remove("noResult");
+    document.querySelector("#taskListExplore ~ .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListExplore").classList.remove("hide");
+    document.getElementById("taskMapExplore").classList.remove("hide");
   }
 
   // When inforWindow is open on the Google Map, close all infoWindows
   closeAllInfoWindows(infoWindows);
-
-  // Save the filter conditions in localStorage
-  let savePreferenceCheckbox = document.getElementById("savePreferenceCheckbox").checked;
-  localStorage.setItem("savePreferenceCheckbox", savePreferenceCheckbox);
-}
-
-/**
- * The `readPreference` function retrieves saved user settings from localStorage,
- * and sets the state of various fields in an HTML form based on these settings.
- */
-function readSavedPreference() {
-  // If there is a saved preference, get the filter conditions from localStorage
-  let dateFilterValue = localStorage.getItem("dateFilter");
-  let distanceFilterValue = localStorage.getItem("distanceFilter");
-  let lengthFilterValue = localStorage.getItem("lengthFilter");
-  let groceryShopping = localStorage.getItem("groceryShopping") === "true";
-  let mailPackages = localStorage.getItem("mailPackages") === "true";
-  let medsPickup = localStorage.getItem("medsPickup") === "true";
-  let techHelp = localStorage.getItem("techHelp") === "true";
-  let petCare = localStorage.getItem("petCare") === "true";
-  let transportation = localStorage.getItem("transportation") === "true";
-  let savePreferenceCheckbox = localStorage.getItem("savePreferenceCheckbox") === "true";
-
-  // Set the filter conditions
-  let dateSortFilters = document.getElementsByName("dateFilter");
-  dateSortFilters[0].checked = true; //the first option is always checked by default
-  if (dateSortFilters[1].getAttribute("id") == dateFilterValue) dateSortFilters[1].checked = true;
-  document.getElementById("distanceFilter").value = distanceFilterValue;
-  document.getElementById("lengthFilter").value = lengthFilterValue;
-  document.getElementById("groceryShopping").checked = groceryShopping;
-  document.getElementById("mailPackages").checked = mailPackages;
-  document.getElementById("medsPickup").checked = medsPickup;
-  document.getElementById("techHelp").checked = techHelp;
-  document.getElementById("petCare").checked = petCare;
-  document.getElementById("transportation").checked = transportation;
-  document.getElementById("savePreferenceCheckbox").checked = savePreferenceCheckbox;
-}
-
-function readPreviousFilterSetting(filterConditions) {
-  // If there is a saved preference, get the filter conditions from localStorage
-  filterConditions.distanceFilterValue = sessionStorage.getItem("distanceFilter");
-  filterConditions.lengthFilterValue = sessionStorage.getItem("lengthFilter");
-  filterConditions.groceryShopping = sessionStorage.getItem("groceryShopping") === "true";
-  filterConditions.mailPackages = sessionStorage.getItem("mailPackages") === "true";
-  filterConditions.medsPickup = sessionStorage.getItem("medsPickup") === "true";
-  filterConditions.techHelp = sessionStorage.getItem("techHelp") === "true";
-  filterConditions.petCare = sessionStorage.getItem("petCare") === "true";
-  filterConditions.transportation = sessionStorage.getItem("transportation") === "true";
-  filterConditions.dateFilterValue = sessionStorage.getItem("dateFilter");
-  return filterConditions;
 }
 
 /**

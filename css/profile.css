@@ -1,141 +1,156 @@
-.profile-header{
-    display: flex;
-    flex-flow: column wrap;
-    width: 100%;
-    align-content: center;
-    justify-content: space-between;
-    margin: 1rem 0;
-    gap: 2rem;
+.profile-header {
+  display: flex;
+  flex-flow: column wrap;
+  width: 100%;
+  align-content: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+  gap: 2rem;
 }
-.profile-header.edit-page{
-    max-width: 500px;
+.profile-header.edit-page {
+  max-width: 500px;
 }
-.profile-header.edit-page .edit-page-btns{
-    justify-content: space-between;
-    flex-grow: 1;
+.profile-header.edit-page .edit-page-btns {
+  justify-content: space-between;
+  flex-grow: 1;
+}
+.profile-header .buttons-wrapper {
+  display: flex;
+  gap: 0.5rem;
 }
 .profile-header > div {
-    flex-grow: 1;
-    width: 100%;
-    gap: .5rem;
+  flex-grow: 1;
+  width: 100%;
+  gap: 0.5rem;
 }
 .user-name-picture,
-.user-name-edit{
-    display: flex;
+.user-name-edit {
+  display: flex;
 }
-.user-name-picture{
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
+.user-name-picture {
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
 }
-.user-name-edit{
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
+.user-name-edit {
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
 }
-.edit-page-btns{
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+.edit-page-btns {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
-.edit-page-btns .rounded-btn{
-    border-width: 2px;
-    padding: .4rem .5rem;
-    min-width: 80px;
-    justify-content: center;
-    cursor: pointer;
+.edit-page-btns .rounded-btn {
+  border-width: 2px;
+  padding: 0.4rem 0.5rem;
+  min-width: 80px;
+  justify-content: center;
+  cursor: pointer;
 }
-.edit-page-btns #saveBtn{
-    color: white;
-    background-color: gray;
+.edit-page-btns #saveBtn {
+  color: white;
+  background-color: gray;
 }
-.user-name-picture h2{
-    text-align: left;
+.user-name-picture h2 {
+  text-align: left;
 }
-.user-picture-wrapper{
-    overflow: hidden;
-    border: 2px solid var(--lightBorder);
-    border-radius: 50%;
-    aspect-ratio: 1;
-    width: 120px;
-    align-self: center;
-    align-content: center;
+.user-picture-wrapper {
+  overflow: hidden;
+  border: 2px solid var(--lightBorder);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  width: 120px;
+  align-self: center;
+  align-content: center;
 }
-.user-picture-wrapper img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.user-picture-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-accomplishments,
-.save-btn-wrapper{
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
+.save-btn-wrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 }
-.user-accomplishments{
-    align-self: end;
-    justify-content: center;
+.user-accomplishments {
+  align-self: end;
+  justify-content: center;
 }
-.save-btn-wrapper{
-    align-items: flex-end;
-    justify-content: end;
+.save-btn-wrapper {
+  align-items: flex-end;
+  justify-content: end;
 }
-.accomplishment{
-    border-radius: 10px;
-    flex-grow: 1;
-    max-width: 200px !important;
-    padding: 1rem;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
+.accomplishment {
+  border-radius: 10px;
+  flex-grow: 1;
+  max-width: 200px !important;
+  padding: 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
 }
-.accomplishment *{
-    display: block;
+.accomplishment * {
+  display: block;
 }
-.accomplishment i{
-    color: var(--primary);
+.accomplishment i {
+  color: var(--primary);
+  font-size: 1.8rem;
 }
-.accomplishment .accomplishment-number{
-    font-size: 3rem;
-    font-weight: 800;
-    padding: 1rem 0;
-    color: var(--caringOrange);
-}
-
-.profile-details{
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    gap: 2rem;
-}
-.profile-details .info-group{
-    flex-basis: 100%;
-    
-}
-.profile-details .info-group caption{
-    width: max-content;
-    font-weight: 700;
-    font-size: 1.5rem;
-    text-align: left;
-    margin: 1.7rem 0;
+.accomplishment .accomplishment-number {
+  font-size: 3rem;
+  font-weight: 800;
+  padding: 1rem 0;
+  color: var(--caringOrange);
 }
 
-.profile-details .info-group table tr th{
-    text-align: left;
-    align-content: start;
-    min-width: 100px;
-    font-weight: 100;
+.profile-details {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  gap: 2rem;
 }
-.profile-details .info-group table{
-    border-collapse: collapse;
-    width: 100%;
+.profile-details .info-group {
+  flex-basis: 100%;
 }
-.profile-details .info-group table tr:not(:last-child){
-    border-bottom: 1px solid lightgray;
+.profile-details .info-group caption {
+  width: max-content;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: left;
+  margin: 1.7rem 0;
+}
+.profile-details .info-group table tr th {
+  text-align: left;
+  align-content: start;
+  min-width: 100px;
+  font-weight: 400;
+  width: 30%;
+  padding: 1rem 0;
+}
+.profile-details .info-group table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.profile-details .info-group table tr:not(:last-child) {
+  border-bottom: 1px solid lightgray;
+}
+#logoutBtn {
+  font-size: 16px;
+}
+
+.profile-details.reference-mode {
+  display: block;
+}
+.profile-details.reference-mode .provacy-item {
+  display: none;
 }
 
 /*
@@ -143,71 +158,67 @@
   Profile Edit
 ===================
 */
-form{
-    width: 100%;
-    max-width: 500px;
+form {
+  width: 100%;
+  max-width: 500px;
 }
-form > div:not(:last-child){
-    display: grid;
-    grid-template-columns: minmax(100px,1fr) 3fr;
-    grid-template-rows: auto;
+form > div:not(:last-child) {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) 3fr;
+  grid-template-rows: auto;
 }
-form .form-group:last-child{
-    display: flex;
-    justify-content: end;
-    margin: 1rem 0;
+form .form-group:last-child {
+  display: flex;
+  justify-content: end;
+  margin: 1rem 0;
 }
-button{
-    min-width: 80px;
-    min-height: 30px;
-    justify-content: center;
+button {
+  min-width: 80px;
+  min-height: 30px;
+  justify-content: center;
 }
 form input,
-form textarea{
-    padding: .5rem .2rem;
-    border-radius: 8px;
-    border: thin solid var(--lightBorder);
+form textarea {
+  padding: 0.5rem 0.2rem;
+  border-radius: 8px;
+  border: thin solid var(--lightBorder);
+  font-size: 16px;
 }
-.form-section{
-    grid-column: 1/-1;
-    display: grid;
-    grid-template-columns: subgrid;
-    gap: 1rem;
+.form-section {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: subgrid;
+  gap: 1rem;
 }
-.form-section h2{
-    grid-row: 1;
-    grid-column: 1/-1;
-    text-align: left;
+.form-section h2 {
+  grid-row: 1;
+  grid-column: 1/-1;
+  text-align: left;
 }
-.form-section .form-group{
-    grid-column: 1/-1;
+.form-section .form-group {
+  grid-column: 1/-1;
 }
 /*
 ====================
   Media queries
 ====================
 */
-@media screen and (min-width: 800px){
-    .profile-header{
-        flex-flow: row wrap;
-        justify-content: space-between;
-    }
-    .profile-header > div{
-        width: min-content;
-    }
-    .profile-details .info-group{
-        flex-basis: calc(50% - 2rem);
-        
-    }
-    .user-name-picture{
-        flex-flow: row nowrap;
-        justify-content: start;
-    }
-    .user-name-picture,
-    .user-name-edit{
-        gap: 1rem;
-    }
-    .user-name-edit{
-        align-items: start;
-    }
+@media screen and (min-width: 800px) {
+  .profile-header {
+    flex-flow: row wrap;
+    justify-content: space-between;
+  }
+  .profile-header > div {
+    width: min-content;
+  }
+  .profile-details .info-group {
+    flex-basis: calc(50% - 2rem);
+  }
+  .user-name-picture {
+    flex-flow: row nowrap;
+    justify-content: start;
+  }
+  .user-name-edit {
+    align-items: start;
+  }
 }

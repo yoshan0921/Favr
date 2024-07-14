@@ -17,7 +17,7 @@
   --primary: #156a85;
   --trustworthyBlue500: #156a85;
   --trustworthyBlue400: #44889d;
-  --trustworthyBlue300: #73a6b6;
+  --trustworthyBlue300: #030404;
   --trustworthyBlue200: #a1c3ce;
   --trustworthyBlue100: #d0e1e7;
 
@@ -50,9 +50,9 @@
   --warmRed100: #fad9d9;
 
   --pureWhite: #ffffff;
-  --statusYellow: #ffcd29;
-  --statusGreen: #44c451;
-  --statusBlue: #0d99ff;
+  --statusOngoing: #156a85;
+  --statusWaiting: #ffcd29;
+  --statusPending: #e43f3f;
 
   --hoverButtonBackground: color-mix(in hsl, var(--primary) 85%, var(--pureWhite));
   --hoverOutlinedButtonBackground: color-mix(in hsl, var(--primary) 20%, var(--background-gray));
@@ -72,6 +72,8 @@ html,
 body {
   padding: 0;
   margin: 0;
+  position: relative;
+  overflow-x: hidden;
 }
 
 /* -------------------------------------------------- */
@@ -103,7 +105,7 @@ body {
   min-height: 100vh;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   /* To avoid overlaying content to menubar in mobile layout */
-  padding-bottom: 100px;
+  padding-bottom: 85px;
 }
 body:has(.sidebar.disappear-mobile) {
   padding-bottom: 0;
@@ -168,9 +170,10 @@ button,
   padding: 0.5rem 1rem;
   line-height: 1.75em;
   font-weight: 600;
+  font-size: 16px;
 }
-:is(button:not(#logoutBtn), .link-btn):hover,
-:is(button:not(#logoutBtn), .link-btn):active {
+:is(button, .link-btn):hover,
+:is(button, .link-btn):active {
   background-color: var(--hoverButtonBackground);
   cursor: pointer;
 }
@@ -186,7 +189,7 @@ button a {
 .rounded-btn {
   border-radius: 50px;
   padding: 1px 8px;
-  height: max-content;
+  /* height: max-content; */ /* To align the button size in Flex Box */
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -404,8 +407,7 @@ main .page-header {
   filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
 }
 
-a,
-#logoutBtn {
+a {
   color: var(--disabledText);
   text-decoration: none;
   background-color: transparent;
@@ -437,6 +439,70 @@ footer small {
 }
 footer a {
   text-decoration: underline;
+}
+
+/* --------------------------------------------------*/
+/* Notification modal                                */
+/* --------------------------------------------------*/
+
+.notification {
+  transition: all 0.5s ease-in-out;
+  position: fixed;
+  min-width: 80px;
+  max-width: 90vw;
+  /*transform: translateX(-450px);*/
+  right: -100%;
+  bottom: 100px;
+  box-shadow: 1px 1px 10px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+.notification.modal-content {
+  padding: 20px 15px;
+  max-width: 380px;
+  margin-right: 0.5rem;
+}
+.notification a {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1rem;
+}
+.notification .icon-wrapper {
+  width: 50px;
+  height: 100%;
+  border-radius: 50px;
+}
+.notification h2 {
+  color: var(--primary);
+}
+.notification.show {
+  right: 0;
+  z-index: 999;
+}
+.has-updates {
+  position: relative;
+  overflow: visible;
+}
+.has-updates::after {
+  position: absolute;
+  content: " ";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  min-width: 10px;
+  min-height: 10px;
+  aspect-ratio: 1;
+  width: auto;
+  top: 0px;
+  right: 0px;
+  border-radius: 50px;
+  background-color: var(--warmRed);
+  color: white;
+}
+.chat-icon-wrapper .icon-wrapper.has-updates::after {
+  right: 10px !important;
+  top: 2px;
 }
 
 /* --------------------------------------------------*/
@@ -479,7 +545,7 @@ main.loaded .loading-screen {
   display: flex;
   justify-content: space-around;
   background-color: var(--background-gray);
-  padding: 10px;
+  padding: 10px !important; /* To prevent padding from being removed on the second layer page (Need to find the correct way to revise.) */
   z-index: 3; /* Bring sidebar front in mobile screen */
   border-top: 2px solid var(--disabledText);
 }
@@ -497,8 +563,7 @@ main.loaded .loading-screen {
 .sidebar ul li {
   display: flex;
 }
-.sidebar a,
-#logoutBtn {
+.sidebar a {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -510,13 +575,15 @@ main.loaded .loading-screen {
   font-size: clamp(0.5rem, 5vw, 0.8rem);
   font-weight: 700;
 }
+.sidebar .icon-wrapper {
+  display: flex;
+}
 .sidebar button {
   border: none;
 }
 
 .sidebar a.active,
-.sidebar a:hover,
-#logoutBtn:hover {
+.sidebar a:hover {
   color: var(--primary);
   cursor: pointer;
 }
@@ -553,25 +620,44 @@ main.loaded .loading-screen {
 .hide {
   display: none !important;
 }
-.noResult {
+/* .noResult {
   display: none !important;
+} */
+/*----------------------------------------------------
+Floating cards
+------------------------------------------------------*/
+.floating-card{
+  transition: all 0.2s ease-out;
+  box-shadow: 0px 12px 28px -6px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  position: relative;
+  padding: .5rem;
+  min-height: 102px;
+  border: thin solid var(--textBlack100);
 }
-
+.floating-card:hover{
+  transform: translateY(-2px);
+}
 /* -------------------------------------------------- */
 /* Task Card                                          */
 /* -------------------------------------------------- */
 .taskCard {
   transition: all 0.2s ease-out;
   background-color: var(--pureWhite);
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
   padding: 1rem;
   position: relative;
+
+  box-shadow: 0px 12px 28px -6px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px; */
 }
 .taskCard:hover {
   transform: translateY(-5px);
 }
-.taskCard a {
+.taskCard a.linkURL {
   border-radius: 10px;
   top: 0;
   left: 0;
@@ -612,7 +698,7 @@ main.loaded .loading-screen {
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  z-index: 2000; /* Sit on top */
   align-content: center;
   left: 0;
   top: 0;
@@ -626,21 +712,24 @@ main.loaded .loading-screen {
 .modal-content {
   background-color: var(--background-gray);
   margin: auto; /* centered */
-  padding: 20px;
   border: 1px solid var(--lightBorder);
   border-radius: 10px;
   width: 100%; /* Could be more or less, depending on screen size */
   max-width: 450px;
+  padding: 1rem;
 }
 
 /* The Close Button */
-.closeModal {
+.closeModal,
+.closeNotificationModal {
   color: var(--disabledText);
   float: right;
   text-align: right;
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
+  position: relative;
+  z-index: 1000;
 }
 
 .closeModal:hover,
@@ -673,6 +762,8 @@ main.loaded .loading-screen {
   text-rendering: auto;
   min-width: 20px;
   min-height: 20px;
+  display: flex;
+  justify-content: center;
 }
 .icon::after {
   filter: invert(65%) sepia(0%) saturate(1%) hue-rotate(197deg) brightness(97%) contrast(88%);
@@ -708,9 +799,13 @@ main.loaded .loading-screen {
 .add-icon::after {
   content: url("../assets/icons/add.svg") !important;
 }
+.send-icon::after {
+  content: url("../assets/icons/send.svg") !important;
+}
 .mic-icon::after {
   content: url("../assets/icons/mic.svg") !important;
 }
+
 .close-icon::after {
   content: url("../assets/icons/close.svg") !important;
 }
@@ -736,14 +831,25 @@ main.loaded .loading-screen {
 .thumbs-down-icon::after {
   content: url("../assets/icons/thumbs-down.svg") !important;
 }
+.date-icon::after {
+  content: url("../assets/icons/date.svg") !important;
+}
 .time-icon::after {
   content: url("../assets/icons/time.svg") !important;
 }
+
 .location-icon::after {
   content: url("../assets/icons/location.svg") !important;
 }
+.address-icon::after {
+  content: url("../assets/icons/address.svg") !important;
+}
 .note-icon::after {
   content: url("../assets/icons/note.svg") !important;
+}
+
+.favor-icon::after {
+  content: url("../assets/icons/favor.svg") !important;
 }
 
 /*
@@ -785,8 +891,7 @@ Media queries
     grid-row: 1/-1;
     grid-column: 1;
   }
-  .sidebar a,
-  #logoutBtn {
+  .sidebar a {
     font-size: 1rem;
   }
   .sidebar ul {
@@ -863,8 +968,7 @@ Media queries
     /* height: 100%; */
   }
 
-  .sidebar a,
-  #logoutBtn {
+  .sidebar a {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -880,14 +984,18 @@ Media queries
     */
   }
 
-  .sidebar a i,
-  #logoutBtn i {
+  .sidebar a i {
     font-size: 1rem;
     margin-right: 16px;
   }
 
-  .sidebar a span,
-  #logoutBtn span {
+  .sidebar a span {
     letter-spacing: 1px;
+  }
+  .notification {
+    bottom: 10px;
+  }
+  .has-updates::after {
+    right: 15px;
   }
 }

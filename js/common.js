@@ -1,6 +1,7 @@
 import { enableBackButton, redirect, signOut } from "./utils.js";
 import { getFile } from "./firebase/firestore.js";
-import { checkUserAuthorization } from "./firebase/authentication.js";
+import { checkUserAuthorization, getCurrentUserID } from "./firebase/authentication.js";
+import { listenToNotifications } from "./notification.js";
 
 /**
  * GLOBAL VARIABLES: Task Status
@@ -20,14 +21,16 @@ let pageTitles = {
   "profile.html": "Profile",
   "history.html": "History",
   "profile/edit.html": "Profile",
-  "tasks/create.html": "Request favor",
+  "tasks/create.html": "Create Favor",
   "tasks/elder-favor.html": "Favor Tracking",
   "tasks/accept.html": "Favor Details",
   "tasks/myfavr.html": "My Favor",
   "tasks/volunteer-favor.html": "My Favor",
   "updates.html": "Updates",
-  "support.html": "Get support",
+  "support.html": "Get Support",
   "chat.html": "Messages",
+  "complete.html": "Favor Tracking",
+  "cancel.html": "Favor Tracking",
 };
 const menuLinks = {
   "dashboard.html": "home-menu",
@@ -51,12 +54,16 @@ async function loadCommonContent() {
   Promise.all([loadPartial("_header", "header"), loadPartial("_sidebar", "leftside-column"), loadPartial("_footer", "footer")])
     .then(() => {
       loadPageTitle();
-      addListenerToLogoutButton();
       activateMenuLinkAndBackButton();
+      return Notification.requestPermission();
+    })
+    .then(permission => {
+      if(permission == 'granted'){
+        listenToNotifications();
+      }
     })
     .catch((error) => console.log(error));
 }
-
 /**
  *
  * @param {string} partial - the name of the partial file (without .html)
@@ -67,7 +74,8 @@ async function loadPartial(partial, destination) {
   const data = await response.text();
 
   return new Promise((resolve, reject) => {
-    const targetElement = document.getElementById(destination);
+    let targetElement = document.getElementById(destination);
+    if(!targetElement) targetElement = document.getElementsByTagName(destination)[0];
     if (targetElement) {
       const observer = new MutationObserver(() => {
         observer.disconnect();
@@ -75,9 +83,9 @@ async function loadPartial(partial, destination) {
       });
 
       observer.observe(targetElement, { childList: true });
-      targetElement.innerHTML = data;
+      targetElement.innerHTML+= data;
     } else {
-      reject(`Could not load "../partials/${partial}.html. There is no element with the id "${destination}"`);
+      reject(`Could not load "../partials/${partial}.html. There is no element with the id or tag name "${destination}"`);
     }
   });
 }
@@ -98,13 +106,6 @@ function loadPageTitle() {
   }
   const pageTitle = document.getElementById("page-title");
   pageTitle.innerText = title;
-}
-/**
- * Self explanatory
- */
-function addListenerToLogoutButton() {
-  const logoutBtn = document.getElementById("logoutBtn");
-  logoutBtn.addEventListener("click", signOut);
 }
 
 // Get the <span> element that closes the modal

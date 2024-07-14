@@ -1,5 +1,6 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { updateDocument, getDocument, getFile, getAllWithFilter} from "../firebase/firestore.js";
+import { sendNotification } from "../notification.js";
 
 let taskID;
 let taskData = {};
@@ -172,6 +173,13 @@ async function acceptTask(taskID, taskData) {
     .then(() => {
       console.log(taskData, taskID);
       console.log("Task accepted!");
+      sendNotification(
+        {
+          title: "Favor accepted!",
+          link: `../tasks/volunteer-favor.html?taskid=${taskID}`,
+          message: `A volunteer has accepted to help you with your ${taskData.name} favor!`
+        },
+        taskData.requesterID);
     })
     .catch((error) => {
       console.log(error);
@@ -192,8 +200,24 @@ async function completeTask(taskID, taskData) {
 
   // Update the task data on the Firestore
   updateDocument("tasks", taskID, taskData)
-    .then(() => {
-      console.log("Task accepted!");
+    .then(async () => {
+      console.log("Task completed!");
+      let url = "#";
+      const currentUser = await getDocument("users", getCurrentUserID());
+      if (currentUser.profilePictureURL) {
+        url = await getFile(`profile/${currentUser.profilePictureURL}`);
+      }
+      sendNotification(
+        {
+          title: "Approval Required",
+          message: `<span>${currentUser.firstName}</span> has completed your <span>${taskData.name}</span> favor. Click here to approve now`,
+          icon: url,
+          link: `/tasks/elder-favor.html?taskid=${taskID}`,
+          updateType: "danger",
+          senderID: currentUser.id
+        },
+        taskData.requesterID
+      )
     })
     .catch((error) => {
       console.log(error);
@@ -334,11 +358,13 @@ function goMyFavors() {
 //   goHome();
 // });
 
-document.getElementById("declineBtn").addEventListener("click", function () {
+const declineBtn = document.getElementById("declineBtn");
+if(declineBtn) declineBtn.addEventListener("click", function () {
   goHome();
 });
 
-document.getElementById("myFavorsBtn").addEventListener("click", function () {
+const myFavorsBtn = document.getElementById("myFavorsBtn")
+if(myFavorsBtn) myFavorsBtn.addEventListener("click", function () {
   goMyFavors();
 });
 
@@ -382,19 +408,23 @@ document.getElementById("cancelFavorBtn").addEventListener("click", async functi
 });
 
 // Create click events on each icons=============
-document.getElementById("thumsDown").addEventListener("click", function () {
+const thumsDown = document.getElementById("thumsDown");
+if(thumsDown) thumsDown.addEventListener("click", function () {
   exploreFavors();
 });
 
-document.getElementById("thumsUp").addEventListener("click", function () {
+const thumsUp = document.getElementById("thumsUp");
+if(thumsUp) thumsUp.addEventListener("click", function () {
   exploreFavors();
 });
 
-document.getElementById("thumsDown-overlay").addEventListener("click", function () {
+const thumsDownOverlay = document.getElementById("thumsDown-overlay");
+if(thumsDownOverlay) thumsDownOverlay.addEventListener("click", function () {
   exploreFavors();
 });
 
-document.getElementById("thumsUp-overlay").addEventListener("click", function () {
+const thumsUpOverlay = document.getElementById("thumsUp-overlay");
+if(thumsUpOverlay) thumsUpOverlay.addEventListener("click", function () {
   exploreFavors();
 });
 

@@ -6,8 +6,8 @@
   gap: 1rem;
   align-items: center;
   cursor: pointer;
-  border-bottom: solid 1px var(--lightBorder);
   padding: 1.5rem 0rem;
+  background-color: var(--background-gray);
 }
 
 .contact .photo {
@@ -15,11 +15,12 @@
   border-radius: 50%;
   width: 68px;
   height: 68px;
+  filter: grayscale(60%);
 }
 
 .contact .userInfo {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1 10px;
   flex-flow: row wrap;
   align-items: center;
 }
@@ -35,11 +36,29 @@
 
 .contact .userInfo .lastMessage {
   flex: 1 1 100%;
+  min-height: 28px;
 }
-
+.contact.has-updates{
+  background-color: var(--pureWhite);
+}
+.contact.has-updates{
+  font-weight: 600;
+}
+.contact.has-updates .photo{
+  filter: none;
+}
+.contact.has-updates::after{
+  top: 10px;
+  right: 10px;
+}
 /* -------------------------------------------------- */
 /* Chat                                               */
 /* -------------------------------------------------- */
+#chatWith{
+  display: flex;
+  flex-flow: column nowrap;
+  gap: .5rem;
+}
 #chat-content {
   display: flex;
   gap: 1rem;
@@ -95,7 +114,6 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   padding: 0.2rem 0.5rem;
   margin-bottom: 0.5rem;
-  margin-left: auto;
   width: fit-content;
 }
 
@@ -105,6 +123,7 @@
 }
 
 #messageHistory .message-right {
+  margin-left: auto;
   align-self: end;
   max-width: 90%;
 }
@@ -153,16 +172,21 @@
   justify-content: center;
 
   position: absolute;
-  top: 3px;
-  right: 0.5rem;
+  top: -7px;
+  right: -0.5rem;
 }
 
 #sendMessage .send:hover {
   background-color: transparent;
 }
 
-#sendMessage .send i {
-  filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
+#sendMessage .send i::after {
+  filter: none;
+  /* filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%); */
+}
+
+#sendingMsgNotAvailable {
+  color: var(--disabledText);
 }
 
 /* -------------------------------------------------- */

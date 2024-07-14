@@ -1,11 +1,18 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
-import { createDocument } from "../firebase/firestore.js";
+import { createDocument, updateProperty, deleteDocument, getDocument } from "../firebase/firestore.js";
 import { disableConfirmRedirectDialog, enableBackButton, enableConfirmRedirectDialog } from "../utils.js";
 import { openModal, closeModal } from "../common.js";
 
 const { Map } = await google.maps.importLibrary("maps");
 const { Autocomplete } = await google.maps.importLibrary("places");
 const { Marker } = await google.maps.importLibrary("marker");
+
+// Declare global variables
+let currentTaskID;
+let currentFavorName;
+let isEditFavor = false;
+let currentStep = 1;
+let currentStepDiv;
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
@@ -23,10 +30,10 @@ if (document.readyState === "loading") {
 function runFunction() {
   const favorSelectionOptions = document.getElementsByName("favorOption");
   favorSelectionOptions.forEach(option => option.addEventListener("change",enableConfirmRedirectDialog));
-  let currentStep = 1; // this counter keeps track of which step of the creation process the user is seeing at the moment. By default, it starts with 1
+  currentStep = 1; // this counter keeps track of which step of the creation process the user is seeing at the moment. By default, it starts with 1
   let selectionHistory = []; // this array will contain the strings that summarizes the user's selections on each step
 
-  let currentStepDiv = document.getElementById("step-1"); // this variable will reference to the div that has the current step the user is seeing. By default it will reference the first step
+  currentStepDiv = document.getElementById("step-1"); // this variable will reference to the div that has the current step the user is seeing. By default it will reference the first step
 
   const form = document.getElementById("createTaskForm");
   const previousStepBtn = document.getElementById("previousStepBtn");
@@ -63,7 +70,7 @@ function runFunction() {
   nextStepBtn.addEventListener("click", () => updateStep("add"));
   previousStepBtn.addEventListener("click", () => updateStep("subtract"));
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     // User inputs
@@ -80,12 +87,33 @@ function runFunction() {
         startAddress: document.getElementById("startAddress").value || null,
         startAddressLat: document.getElementById("startAddressLat").value || null,
         startAddressLng: document.getElementById("startAddressLng").value || null,
-        endAddress: document.getElementById("endAddress").value || null,
+        endAddress: document.getElementById("endAddress").value || "Not provided",
         startAddressLat: document.getElementById("startAddressLat").value || null,
         startAddressLng: document.getElementById("startAddressLng").value || null,
       },
     };
+
+    // Store the value of favor name
+    currentFavorName = task.name;
+
+    // Create the task
     createTask(task);
+
+    // This code block deletes a previous task before creating a new task
+    // TODO: This needs to be refactored to be a real edit
+    // Now it only creates a new document and deletes the old one
+    // if (isEditFavor && currentTaskID) {
+    //   try {
+    //     await deleteDocument("tasks", currentTaskID);
+    //     console.log("Task deleted successfully!");
+    //   } catch (error) {
+    //     console.error("Error deleting task:", error);
+    //   }
+
+    //   // Reset global variable
+    //   isEditFavor = false;
+    //   console.log(isEditFavor);
+    // }
   });
 
   // Function to format date as MonthName Day, Year
@@ -153,9 +181,13 @@ function runFunction() {
       // Capture selection based on current step
       switch (currentStep) {
         case 1:
-          const selectedOption = document.querySelector('input[name="favorOption"]:checked');
+          const selectedOption = document.querySelector(
+            'input[name="favorOption"]:checked'
+          );
           if (selectedOption) {
-            selectionHistory.push(`Favor Type Selected: ${selectedOption.value}`);
+            selectionHistory.push(
+              `Favor Type: <span>${selectedOption.value}</span>`
+            );
             canProceed = true;
           } else {
             showErrorMsg.innerHTML = "Please select an option";
@@ -169,8 +201,8 @@ function runFunction() {
           if (favorDate && favorTime) {
             // selectionHistory.push(`Date: ${favorDate}`);
             // Push formatted date to firebase
-            selectionHistory.push(`Date: ${formatDate(favorDate)}`);
-            selectionHistory.push(`Time: ${favorTime}`);
+            selectionHistory.push(`Date: <span>${formatDate(favorDate)}</span>`);
+            selectionHistory.push(`Time: <span>${favorTime}</span>`);
             // selectionHistory.push(`Favor Length: ${favorLength}`);
             canProceed = true;
           } else {
@@ -181,11 +213,12 @@ function runFunction() {
 
         case 3:
           const startAddress = document.getElementById("startAddress").value;
-          const endAddress = document.getElementById("endAddress").value || "None";
+          const endAddress =
+            document.getElementById("endAddress").value || "Not provided";
 
           if (startAddress) {
-            selectionHistory.push(`Start Address: ${startAddress}`);
-            selectionHistory.push(`End Address: ${endAddress}`);
+            selectionHistory.push(`Start Address: <span>${startAddress}</span>`);
+            selectionHistory.push(`End Address: <span>${endAddress}</span>`);
             canProceed = true;
           } else {
             showErrorMsg2.innerHTML = "Please enter a start address";
@@ -208,12 +241,23 @@ function runFunction() {
         previousStepBtn.disabled = false;
 
         // Add active classes to the current step number
-        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
-        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
-        document.querySelector(`.stepLine${currentStep}`).classList.add("stepLineActive");
+        document
+          .querySelector(`.step${currentStep} .stepNumber`)
+          .classList.add("stepActive");
+        document
+          .querySelector(`.step${currentStep} .stepText`)
+          .classList.add("textActive");
+        document
+          .querySelector(`.stepLine${currentStep}`)
+          .classList.add("stepLineActive");
+        document
+          .querySelector(`.step${currentStep}`)
+          .classList.add("stepAnimate");
 
         // Replace the previous step number with a check mark
-        document.querySelector(`.step${currentStep - 1} .stepNumber span`).textContent = "✔";
+        document.querySelector(
+          `.step${currentStep - 1} .stepNumber span`
+        ).textContent = "✔";
 
         // Update selection history
         updateSelectionHistory();
@@ -266,12 +310,23 @@ function runFunction() {
         }
 
         // Remove active classes from the current step number
-        document.querySelector(`.step${currentStep} .stepNumber`).classList.remove("stepActive");
-        document.querySelector(`.step${currentStep} .stepText`).classList.remove("textActive");
-        document.querySelector(`.stepLine${currentStep}`).classList.remove("stepLineActive");
+        document
+          .querySelector(`.step${currentStep} .stepNumber`)
+          .classList.remove("stepActive");
+        document
+          .querySelector(`.step${currentStep} .stepText`)
+          .classList.remove("textActive");
+        document
+          .querySelector(`.stepLine${currentStep}`)
+          .classList.remove("stepLineActive");
+        document
+          .querySelector(`.step${currentStep}`)
+          .classList.remove("stepAnimate");
 
         // Restore the original step number
-        document.querySelector(`.step${currentStep - 1} .stepNumber span`).textContent = `${currentStep - 1}`;
+        document.querySelector(
+          `.step${currentStep - 1} .stepNumber span`
+        ).textContent = `${currentStep - 1}`;
 
         currentStep -= 1;
         currentStepDiv.classList.add("hidden"); // hides current step
@@ -285,8 +340,12 @@ function runFunction() {
         }
 
         // Add active class to the current step number
-        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
-        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
+        document
+          .querySelector(`.step${currentStep} .stepNumber`)
+          .classList.add("stepActive");
+        document
+          .querySelector(`.step${currentStep} .stepText`)
+          .classList.add("textActive");
 
         // Replace the Submit button with Next Step button when going back to previous steps
         if (currentStep < 4) {
@@ -314,16 +373,46 @@ function runFunction() {
    *
    * @param {Object} task - object that represents the task that will be created on the database
    */
+  // function createTask(task) {
+  //   createDocument("tasks", task)
+  //     .then((docRef) => {
+
+  //       // Save document reference ID to global variable
+  //       currentTaskID = docRef.id;
+
+  //       displayTaskSummary(task);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
+
   function createTask(task) {
-    createDocument("tasks", task)
-      .then(() => {
-        displayTaskSummary(task);
+    // If the task is existing, use updateProperty to overwrite details of the current task
+    if (isEditFavor && currentTaskID) {
+      updateProperty("tasks", currentTaskID, task)
+        .then(() => {
+          console.log("Task updated successfully!");
+          displayTaskSummary(task);
+          isEditFavor = false; // Reset the edit flag
+        })
+        .catch((error) => {
+          console.log("Error updating task:", error);
+        });
+
+      // If task does not exist and being created for the first time, use createDocument
+    } else {
+      createDocument("tasks", task)
+        .then((docRef) => {
+          // Save document reference ID to global variable
+          currentTaskID = docRef.id;
+          displayTaskSummary(task);
         disableConfirmRedirectDialog();
-        // window.location.href = "/dashboard.html";
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   /**
@@ -335,7 +424,13 @@ function runFunction() {
       for (let item of selectionHistory) {
         // create a <li> element, add the item of the selection history to it, then append the <li> to the list (which is a <ul>)
         let li = document.createElement("li");
-        li.textContent = item;
+  
+        // Use innerHTML if the item contains HTML tags
+        if (item.includes('<span>')) {
+          li.innerHTML = item;
+        } else {
+          li.textContent = item;
+        }
         list.appendChild(li);
       }
     }
@@ -347,13 +442,13 @@ function runFunction() {
   function displayTaskSummary(task) {
     // Hide form and navigation buttons
     const form = document.getElementById("createTaskForm");
-    form.style.display = "none";
+    form.classList.add("hidden");
     const formNavigation = document.querySelector(".form-navigation");
-    formNavigation.style.display = "none";
+    formNavigation.classList.add("hidden");
 
     // Hide step wizard
     const hideStepsCounter = document.querySelector(".steps-counter");
-    hideStepsCounter.classList.add("hide-steps-counter");
+    hideStepsCounter.classList.add("hidden");
 
     // Show the task summary
     const summaryDiv = document.getElementById("summaryDiv");
@@ -367,20 +462,66 @@ function runFunction() {
 
     const summaryList = document.getElementById("summaryList");
     summaryList.innerHTML = `
-      <li>Favor Type Selected: ${task.name}</li>
-      <li>Date: ${task.details.date}</li>
-      <li>Time: ${task.details.time}</li>
-      <li>Start Address: ${task.details.startAddress}</li>
-      <li>End Address: ${task.details.endAddress}</li>
-      <li>Note: ${task.notes}</li>
+      <li><div><i class="favor-icon"></i>Favor Type:</div><div><span>${task.name}</span></div></li>
+      <li><div><i class="date-icon"></i>Date:</div><div><span>${task.details.date}</span></div></li>
+      <li><div><i class="time-icon"></i>Time:</div><div><span>${task.details.time}</span></div></li>
+      <li><div><i class="address-icon"></i>Start Address:</div><div><span>${task.details.startAddress}</span></div></li>
+      <li><div><i class="address-icon"></i>End Address:</div><div><span>${task.details.endAddress}</span></div></li>
+      <li><div><i class="note-icon"></i>Note:</div><div><span>${task.notes}</span></div></li>
     `;
     // Replace step4 number with check after submit
     document.querySelector(`.step4 .stepNumber span`).textContent = "✔";
   }
 
-  const backToHome = document.getElementById("backToHome");
-  backToHome.addEventListener("click", (e) => {
-    window.location.href = "/dashboard.html";
+  // Event listener for editFavor (opens popup)
+  // TODO: This needs to be refactored to be a real edit
+  // Now it only creates a new document and deletes the old one
+  const editFavor = document.getElementById("editFavor");
+  editFavor.addEventListener("click", () => {
+    const editModal = document.getElementById("editModal");
+    openModal(editModal); // Call openModal with modal element
+    const modalEditFavorName = document.getElementById("modalEditFavorName");
+    const modalEditFavorSpan = modalEditFavorName.querySelector("span");
+    modalEditFavorSpan.innerText = currentFavorName;
+  });
+
+  // Event listener for modal back button
+  const modalEditBack = document.getElementById("modalEditBack");
+  modalEditBack.addEventListener("click", () => {
+    const editModal = document.getElementById("editModal");
+    closeModal(editModal);
+  });
+
+  // Event listener for editModal
+  // TODO: This needs to be refactored to be a real edit
+  // Now it only creates a new document and deletes the old one
+  const modalEditFavor = document.getElementById("modalEditFavor");
+  modalEditFavor.addEventListener("click", () => {
+    // Close modal
+    const editModal = document.getElementById("editModal");
+    closeModal(editModal);
+
+    // Set global variable to true
+    isEditFavor = true;
+
+    // Simulate clicking previousStepBtn 3x to start from step 1
+    for (let i = 0; i < 3; i++) {
+      updateStep("subtract");
+    }
+
+    // Hide the task summary
+    const summaryDiv = document.getElementById("summaryDiv");
+    summaryDiv.classList.add("hidden");
+
+    // Show form and navigation buttons
+    const form = document.getElementById("createTaskForm");
+    form.classList.remove("hidden");
+    const formNavigation = document.querySelector(".form-navigation");
+    formNavigation.classList.remove("hidden");
+
+    // Show step wizard
+    const hideStepsCounter = document.querySelector(".steps-counter");
+    hideStepsCounter.classList.remove("hidden");
   });
 }
 
@@ -487,3 +628,85 @@ if (micForEndAddress) {
     recognition.start();
   });
 }
+
+// Event listener for cancelFavor button
+const cancelFavorBtn = document.getElementById("cancelFavor");
+cancelFavorBtn.addEventListener("click", () => {
+  const modal = document.getElementById("confirmModal");
+  openModal(modal); // Call openModal with modal element
+  const modalFavor = document.getElementById("modalFavor");
+  const modalFavorSpan = modalFavor.querySelector("span");
+  modalFavorSpan.innerText = currentFavorName;
+});
+
+// Event listener for modal back button
+const modalBackBtn = document.getElementById("modalBackBtn");
+if(modalBackBtn){
+  modalBackBtn.addEventListener("click", () => {
+    const modal = document.getElementById("confirmModal");
+    closeModal(modal);
+  });
+}
+
+
+// Event listener to go back to home
+const backToHome = document.getElementById("backToHome");
+backToHome.addEventListener("click", () => {
+  window.location.href = "../dashboard.html";
+});
+
+// Event listener to go back to home from modal
+const backToHomeModal = document.getElementById("backToHomeModal");
+backToHomeModal.addEventListener("click", () => {
+  window.location.href = "../dashboard.html";
+});
+
+// Update task status to cancelled
+const modalCancelFavorBtn = document.getElementById("modalCancelFavor");
+modalCancelFavorBtn.addEventListener("click", async () => {
+  try {
+    // Get the current date and time, formatted with international format
+    const now = new Date();
+    const cancelledDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    }).format(now);
+    const cancelledTime = now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    // Update task status to "Cancelled" in Firestore
+    await updateProperty("tasks", currentTaskID, {
+      status: "Cancelled",
+      "details.cancelledDate": cancelledDate,
+      "details.cancelledTime": cancelledTime,
+    });
+
+    // Display the success modal
+    // const successModal = document.getElementById("successModal");
+    // openModal(successModal);
+
+    // Display favor cancel page
+    window.location.href = "../tasks/cancel.html?taskid=" + currentTaskID;
+
+    // Close the modal after updating task status
+    const modal = document.getElementById("confirmModal");
+    closeModal(modal);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// Get current user's address to populate start address
+// TODO: If possible, autoclick the address result and display map
+const currentUser = await getDocument("users", getCurrentUserID());
+const homeAddressBtn = document.getElementById("homeAddressBtn");
+homeAddressBtn.addEventListener("click", async () => {
+  console.log(currentUser.address);
+  const startAddress = document.getElementById("startAddress");
+  startAddress.value = currentUser.address;
+  startAddress.focus();
+});

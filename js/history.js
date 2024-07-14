@@ -187,10 +187,18 @@ async function createTaskListForElders(allTasks) {
 
   // No items message
   if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
-    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListCompleted").classList.add("hide");
+  } else {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListCompleted").classList.remove("hide");
   }
   if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
-    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListCancelled").classList.add("hide");
+  } else {
+    document.querySelector("#taskListCancelled + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListCancelled").classList.remove("hide");
   }
 
   // Apply lazy loading to images
@@ -215,7 +223,7 @@ function createCardForElder(task) {
   card.setAttribute("data-date", task.taskDate);
   card.setAttribute("data-address", task.taskAddress);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <p class="notes">${task.taskNotes}</p>
   `;
@@ -259,9 +267,10 @@ async function loadVolunteersHistory() {
     document.getElementById("tab1").click();
   } else if (hash === "#completed") {
     document.getElementById("tab2").click();
-  } else if (hash === "#cancelled") {
-    document.getElementById("tab3").click();
   }
+  // else if (hash === "#cancelled") {
+  //   document.getElementById("tab3").click();
+  // }
 
   // Retrieve tasks from the database
   const main = document.getElementsByTagName("main")[0];
@@ -331,19 +340,19 @@ async function createTaskListForVolunteers(allTasks) {
   // Clear the task list
   const taskListPending = document.getElementById("taskListPending");
   const taskListCompleted = document.getElementById("taskListCompleted");
-  const taskListCancelled = document.getElementById("taskListCancelled");
+  // const taskListCancelled = document.getElementById("taskListCancelled");
   taskListPending.innerHTML = "";
   taskListCompleted.innerHTML = "";
-  taskListCancelled.innerHTML = "";
+  // taskListCancelled.innerHTML = "";
   const listMyFavorCountPending = document.getElementById("favorCountPending");
   const listMyFavorCountCompleted = document.getElementById("favorCountCompleted");
-  const listMyFavorCountCancelled = document.getElementById("favorCountCancelled");
+  // const listMyFavorCountCancelled = document.getElementById("favorCountCancelled");
   listMyFavorCountPending.textContent = 0;
   listMyFavorCountCompleted.textContent = 0;
-  listMyFavorCountCancelled.textContent = 0;
+  // listMyFavorCountCancelled.textContent = 0;
   favorCountPending = 0;
   favorCountCompleted = 0;
-  favorCountCancelled = 0;
+  // favorCountCancelled = 0;
 
   const tasksPromises = allTasks.map(async (task) => {
     // for (let task of allTasks) {
@@ -398,18 +407,30 @@ async function createTaskListForVolunteers(allTasks) {
   // Sort the task cards by date (newest to oldest)
   sortTasksByDate("newest", document.querySelectorAll("#taskListPending .taskCard"), taskListPending);
   sortTasksByDate("newest", document.querySelectorAll("#taskListCompleted .taskCard"), taskListCompleted);
-  sortTasksByDate("newest", document.querySelectorAll("#taskListCancelled .taskCard"), taskListCancelled);
+  // sortTasksByDate("newest", document.querySelectorAll("#taskListCancelled .taskCard"), taskListCancelled);
 
   // No items message
   if (document.querySelectorAll("#taskListPending .taskCard").length === 0) {
-    document.querySelector("#taskListPending + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListPending + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListPending").classList.add("hide");
+  } else {
+    document.querySelector("#taskListPending + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListPending").classList.remove("hide");
   }
   if (document.querySelectorAll("#taskListCompleted .taskCard").length === 0) {
-    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("noResult");
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.remove("hide");
+    document.getElementById("taskListCompleted").classList.add("hide");
+  } else {
+    document.querySelector("#taskListCompleted + .noItemsMessage").classList.add("hide");
+    document.getElementById("taskListCompleted").classList.remove("hide");
   }
-  if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
-    document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("noResult");
-  }
+  // if (document.querySelectorAll("#taskListCancelled .taskCard").length === 0) {
+  //   document.querySelector("#taskListCancelled + .noItemsMessage").classList.remove("hide");
+  //   document.getElementById("taskListCancelled").classList.add("hide");
+  // } else {
+  //   document.querySelector("#taskListCancelled + .noItemsMessage").classList.add("hide");
+  //   document.getElementById("taskListCancelled").classList.remove("hide");
+  // }
 
   // Apply lazy loading to images
   lazyLoadImages();
@@ -437,7 +458,7 @@ function createCardForVolunteers(task) {
   card.setAttribute("data-distance", task.taskDistance);
   card.setAttribute("data-length", task.taskDuration);
   card.innerHTML = `
-  <a href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
+  <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <div class="statusColor"></div>
   <p class="date">${task.taskDate}, ${task.taskTime}</p>
@@ -458,10 +479,11 @@ function createCardForVolunteers(task) {
   } else if ([STATUS_COMPLETED].includes(task.taskStatus)) {
     listCompleted.appendChild(card);
     listMyFavorCountCompleted.textContent = ++favorCountCompleted;
-  } else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
-    listCancelled.appendChild(card);
-    listMyFavorCountCancelled.textContent = ++favorCountCancelled;
   }
+  // else if ([STATUS_CANCELLED].includes(task.taskStatus)) {
+  //   listCancelled.appendChild(card);
+  //   listMyFavorCountCancelled.textContent = ++favorCountCancelled;
+  // }
 }
 
 /**
@@ -473,11 +495,12 @@ function setupDateRangePicker() {
   // Pending tab
   $(".dateRangeModal").daterangepicker({
     parentEl: "#filterModal",
-    applyButtonClasses: "applyBtnForPending",
-    cancelButtonClasses: "cancelBtnForPending",
+    // singleDatePicker: true,
+    applyButtonClasses: "applyBtn rounded-btn",
+    cancelButtonClasses: "resetBtn rounded-btn outlined-btn",
     startDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
     endDate: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
-    locale: { cancelLabel: "Clear" },
+    locale: { cancelLabel: "Reset" },
   });
 
   document.querySelectorAll(".dateRangeModal").forEach((drp) => {
@@ -486,7 +509,7 @@ function setupDateRangePicker() {
     });
   });
 
-  document.querySelectorAll(".applyBtnForPending").forEach((btn, index) => {
+  document.querySelectorAll(".applyBtn").forEach((btn, index) => {
     btn.addEventListener("click", function () {
       let targetTab;
       let dateRanges = document.querySelectorAll(".drp-selected");
@@ -502,7 +525,7 @@ function setupDateRangePicker() {
     });
   });
 
-  document.querySelectorAll(".cancelBtnForPending").forEach((btn, index) => {
+  document.querySelectorAll(".resetBtn").forEach((btn, index) => {
     btn.addEventListener("click", function () {
       let targetTab;
       if (index === 0) targetTab = document.getElementById("taskListPending");
@@ -520,10 +543,18 @@ function setupDateRangePicker() {
       const cards = targetTab.querySelectorAll(".taskCard");
       const startDate = new Date(start);
       const endDate = new Date(end);
+
+      clearDateRangeFilter(targetTab);
       cards.forEach((card) => {
         const date = new Date(card.getAttribute("data-date"));
         card.classList.toggle("hide", !(date >= startDate && date <= endDate));
       });
+
+      // Show No items message if needed
+      if (targetTab.querySelectorAll(".taskCard:not(.hide)").length === 0) {
+        targetTab.nextElementSibling.classList.remove("hide");
+        targetTab.classList.add("hide");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -535,6 +566,9 @@ function setupDateRangePicker() {
       cards.forEach((card) => {
         card.classList.remove("hide");
       });
+      // Clear No items message
+      targetTab.nextElementSibling.classList.add("hide");
+      targetTab.classList.remove("hide");
     } catch (error) {
       console.error(error);
     }

@@ -1,8 +1,9 @@
 import { lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
+import { getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
 import { database } from "./firebase/firebase.js";
-import { ref, child, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { ref, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { sendNotification, updateNotificationStatus } from "./notification.js";
 
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
@@ -13,6 +14,7 @@ let filterCondition;
 const contactList = document.getElementById("chatWith");
 const messageHistory = document.getElementById("messageHistory");
 const sendMessage = document.getElementById("sendMessage");
+const sendingMsgNotAvailable = document.getElementById("sendingMsgNotAvailable");
 const message = document.getElementById("message");
 const send = document.getElementById("send");
 
@@ -41,47 +43,48 @@ if (document.readyState === "loading") {
 async function runFunction() {
   // Get Login user information
   loginUserID = getCurrentUserID();
-
+  const currentUser = await getDocument("users", loginUserID);
+  var contactID = "";
+  var newMessagesByContact = {};
   // Get the current user role
   await getCurrentUserRole().then(async (currentUserRole) => {
     loginUserRole = currentUserRole;
-    console.log("Current User ID: " + loginUserID);
-    console.log("Current User Role: " + loginUserRole);
 
     // Load the dashboard based on the user's role
     if (currentUserRole === "volunteer") {
       // Set filter condition
-      filterCondition = [
-        {
-          key: "volunteerID",
-          operator: "==",
-          value: loginUserID,
-        },
-      ];
+      filterCondition = [{ key: "volunteerID", operator: "==", value: loginUserID }];
     } else if (currentUserRole === "elder") {
       // Set filter condition
       filterCondition = [
-        {
-          key: "status",
-          operator: "!=",
-          value: STATUS_WAITING,
-        },
-        {
-          key: "requesterID",
-          operator: "==",
-          value: loginUserID,
-        },
+        { key: "status", operator: "!=", value: STATUS_WAITING },
+        { key: "requesterID", operator: "==", value: loginUserID },
       ];
     }
   });
-
-  // Create user list
-  getAllWithFilter("tasks", filterCondition).then((collection) => {
+    // Create user list
+  getAllWithFilter("tasks", filterCondition).then(async (collection) => {
     let contactIDs = [];
-    let contactID = "";
     let promises = [];
-
-    collection.forEach((doc) => {
+    const updates = query(ref(database, loginUserID));
+    get(updates)
+    .then((snapshot)=>{
+        if(snapshot.exists()){
+            snapshot.forEach(element =>{
+                let update = element.val();
+                if(update.isNew && update.isMessage && update.senderID){
+                    if(update.senderID){
+                      if(update.senderID in newMessagesByContact){
+                        newMessagesByContact[update.senderID][0].push(update.id);
+                        newMessagesByContact[update.senderID][1] += 1;
+                      }else{
+                          newMessagesByContact[update.senderID] = [[update.id], 0];
+                      }
+                    }
+                }
+            })
+        }
+    collection.forEach(async (doc) => {
       if (loginUserRole === "volunteer") {
         contactID = doc[1].requesterID;
       } else if (loginUserRole === "elder") {
@@ -94,7 +97,7 @@ async function runFunction() {
 
       // Create contact list
       let contact = document.createElement("div");
-      contact.classList.add("contact");
+      contact.classList.add("contact","floating-card");
       contact.setAttribute("data-contactID", contactID);
 
       // Get the user's information
@@ -109,6 +112,10 @@ async function runFunction() {
           let requesterName = document.createElement("p");
           requesterName.classList.add("name");
           requesterName.textContent = `${user.firstName} ${user.lastName}`;
+          console.log(newMessagesByContact, user.id);
+          if(newMessagesByContact[user.id] && newMessagesByContact[user.id] > 0){
+            contact.classList.add("has-updates");
+          }
 
           let lastMessageTime = document.createElement("p");
           lastMessageTime.classList.add("lastMessageTime");
@@ -129,7 +136,7 @@ async function runFunction() {
                   // If month date is not equal to today, display the date + time
                   let now = new Date();
                   if (`${data[item].month} ${data[item].day}` !== `${now.toLocaleString("en-US", { month: "long" })} ${now.getDate()}`) {
-                    lastMessageTime.textContent = `${data[item].month} ${data[item].day}`;
+                    lastMessageTime.textContent = ` ${data[item].month} ${data[item].day}`;
                   } else {
                     lastMessageTime.textContent = data[item].time;
                   }
@@ -141,7 +148,6 @@ async function runFunction() {
             .catch((error) => {
               console.error(error);
             });
-          // lastMessage.textContent = `*** The last message here (under construction) ***`;
 
           let userInfo = document.createElement("div");
           userInfo.classList.add("userInfo");
@@ -172,56 +178,79 @@ async function runFunction() {
         showChatRoomTitle(chatRoomID);
       });
     });
+      // Wait for all getDocument calls to finish
+      Promise.all(promises).then(() => {
+        // If crid is specified in the URL, load the chat room
+        const urlParams = new URLSearchParams(window.location.search);
+        chatRoomID = urlParams.get("crid");
+        if (chatRoomID) {
+          loadChatRoom(chatRoomID);
+          checkChatRoomAvailability(chatRoomID);
+          showChatRoomTitle(chatRoomID);
+          return;
+        }
+  
+        // Show contact list and show message history
+        contactList.classList.remove("hide");
+  
+        // Load firebase storage images
+        lazyLoadImages();
+      });
+  
+      // Loading icon
+      const main = document.getElementsByTagName("main")[0];
+      main.classList.add("loaded");
+    })
 
-    // Wait for all getDocument calls to finish
-    Promise.all(promises).then(() => {
-      // If crid is specified in the URL, load the chat room
-      const urlParams = new URLSearchParams(window.location.search);
-      chatRoomID = urlParams.get("crid");
-      if (chatRoomID) {
-        loadChatRoom(chatRoomID);
-        checkChatRoomAvailability(chatRoomID);
-        showChatRoomTitle(chatRoomID);
-        return;
-      }
+  });
 
-      // Show contact list and show message history
-      contactList.classList.remove("hide");
+  // Send message
+  sendMessage.addEventListener("submit", function (event) {
+    // Prevent the form from submitting
+    event.preventDefault();
 
-      // Load firebase storage images
-      lazyLoadImages();
-    });
+    // Check if the message is empty
+    if (message.value === "") return;
 
-    // Loading icon
-    const main = document.getElementsByTagName("main")[0];
-    main.classList.add("loaded");
+    const now = new Date();
+    push(ref(database, chatRoomID), {
+      year: now.getFullYear(),
+      month: now.toLocaleString("en-US", { month: "long" }),
+      day: now.getDate(),
+      dayOfWeek: now.toLocaleString("en-US", { weekday: "long" }),
+      time: now.toTimeString().split(":")[0] + ":" + now.toTimeString().split(":")[1], // HH:MM
+      name: loginUserID,
+      message: message.value,
+    })
+      .then(async () => {
+        const header = document.getElementsByClassName("contactHeader")[0];
+        if (header) {
+          let receiverID = header.getAttribute("data-contactid");
+          let url = "#";
+          if (currentUser.profilePictureURL) {
+            url = await getFile(`profile/${currentUser.profilePictureURL}`);
+          }
+          sendNotification(
+            {
+              title: `${currentUser.firstName} ${currentUser.lastName}`,
+              icon: url,
+              isMessage: true,
+              updateType: "info",
+              link:`/chat.html?crid=${chatRoomID}`,
+              message: message.value,
+              senderID: currentUser.id
+            },
+            receiverID
+          );
+        }
+        // Clear the message balloon
+        message.value = "";
+      })
+      .catch((error) => {
+        console.error("Failed to save data:", error);
+      });
   });
 }
-
-// Send message
-sendMessage.addEventListener("submit", function (event) {
-  // Prevent the form from submitting
-  event.preventDefault();
-
-  // Check if the message is empty
-  if (message.value === "") return;
-
-  const now = new Date();
-  push(ref(database, chatRoomID), {
-    year: now.getFullYear(),
-    month: now.toLocaleString("en-US", { month: "long" }),
-    day: now.getDate(),
-    dayOfWeek: now.toLocaleString("en-US", { weekday: "long" }),
-    time: now.toTimeString().split(":")[0] + ":" + now.toTimeString().split(":")[1], // HH:MM
-    name: loginUserID,
-    message: message.value,
-  }).catch((error) => {
-    console.error("Failed to save data:", error);
-  });
-  // Clear the message balloon
-  message.value = "";
-});
-
 async function loadChatRoom(chatRoomID) {
   // Hide contact list and show message history
   contactList.classList.add("hide");
@@ -301,6 +330,11 @@ async function checkChatRoomAvailability(chatRoomID) {
   const collection = await getAllWithFilter("tasks", filterCondition);
   if (collection.length > 0) {
     sendMessage.classList.remove("hide");
+  } else {
+    sendingMsgNotAvailable.classList.remove("hide");
+    sendMessage.classList.remove("hide");
+    message.disabled = true;
+    send.disabled = true;
   }
 }
 
@@ -316,10 +350,11 @@ function showChatRoomTitle(chatRoomID) {
   } else {
     contactUserID = userID1;
   }
-
+  
   // Create chat room title
   let contact = document.createElement("div");
   contact.classList.add("contactHeader", "page-title");
+  contact.setAttribute("data-contactid", contactUserID);
 
   // Get the user's information
   getDocument("users", contactUserID)
@@ -346,6 +381,10 @@ function showChatRoomTitle(chatRoomID) {
       pageTitle.outerHTML = contact.outerHTML;
 
       lazyLoadImages();
+      let newMessages = newMessagesByContact[contactUserID][0];
+      newMessages.forEach((notificationID)=>{
+        updateNotificationStatus(currentUserID, notificationID);
+      })
     })
     .catch((error) => console.log(error));
 }

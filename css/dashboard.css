@@ -1,3 +1,30 @@
+body{
+  background-image: url('../assets/images/background-mobile.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  @media screen and (min-width: 800px) {
+    background-image: url('../assets/images/background-desktop.png');
+    background-position: 120px center;
+  }
+}
+/* -------------------------------------------------- */
+/* Common                                             */
+/* -------------------------------------------------- */
+#dashboard-content,
+#history-content {
+  background-image: url(/assets/images/background-mobile.png);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  @media screen and (min-width: 800px) {
+    background-image: url(/assets/images/background-desktop.png);
+    background-position: 120px center;
+  }
+}
+
 /* -------------------------------------------------- */
 /* Map                                                */
 /* -------------------------------------------------- */
@@ -104,6 +131,7 @@
   position: relative;
   top: 0px;
 }
+
 .elder h2 {
   padding: 0;
 }
@@ -113,6 +141,7 @@
   grid-gap: 1rem;
   grid-template-columns: repeat(1, 1fr);
   margin-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .elder .taskCard .duration .bold {
@@ -127,20 +156,34 @@
   margin-right: 0.5rem;
 }
 
+.taskCard .create-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
 .statusWaiting {
-  background-color: var(--statusYellow);
+  background-color: var(--statusWaiting);
 }
 
 .statusOngoing {
-  background-color: var(--statusBlue);
+  background-color: var(--statusOngoing);
 }
 
 .statusPending {
-  background-color: var(--warmRed);
+  background-color: var(--statusPending);
 }
 
 .statusOhers {
   background-color: var(--pureWhite);
+}
+
+.createTask {
+  border-top: 1px solid var(--primary);
+}
+
+.createTask .taskCard img {
+  margin: auto;
 }
 
 /* -------------------------------------------------- */
@@ -182,7 +225,7 @@
 #filterModal .modal-content {
   display: flex;
   flex-flow: column wrap;
-  min-height: 80vh;
+  /* min-height: 80vh; */
   width: 90%;
 
   @media screen and (min-width: 800px) {
@@ -190,6 +233,10 @@
     margin-top: 1vh;
     margin-right: 1rem;
   }
+}
+
+#filterForm {
+  gap: 1rem;
 }
 
 .modal-form,
@@ -275,6 +322,7 @@
   display: flex;
   flex-flow: row wrap;
   gap: 0.5rem;
+  padding-top: 1rem;
 }
 
 #savePreference {
@@ -288,10 +336,11 @@
 }
 
 button#applyFilter,
-button#cancelFilter {
+button#resetFilter {
   cursor: pointer;
   flex-grow: 1;
   font-size: 16px;
+  justify-content: center;
 }
 
 /* -------------------------------------------------- */
@@ -323,7 +372,7 @@ button#cancelFilter {
 }
 
 .volunteer.tab-content input[type="checkbox"] + label {
-  background-color: #cccccc;
+  background-color: var(--disabledText);
 }
 
 .volunteer.tab-content input[type="checkbox"] + label::before {
@@ -363,8 +412,16 @@ button#cancelFilter {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50vh;
-  color: var(--disabledText);
+  height: 55vh;
+  /* color: var(--disabledText); */
+  flex-flow: column nowrap;
+}
+
+.elder .noItemsMessage a,
+.volunteer .noItemsMessage a {
+  color: var(--primary);
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 /* -------------------------------------------------- */
@@ -378,15 +435,16 @@ button#cancelFilter {
   margin: auto !important;
   padding: 2rem !important;
   top: 50% !important;
-  left: 50% !important;
   transform: translate(-50%, -50%) !important;
+  left: 50% !important;
   margin: auto !important;
 
   @media screen and (min-width: 800px) {
+    top: 185px !important;
     width: 556px !important;
     left: unset !important;
     right: 2rem !important;
-    transform: translate(0, -50%) !important;
+    transform: translate(0, 0%) !important;
   }
 }
 
@@ -401,6 +459,10 @@ button#cancelFilter {
   font-weight: normal !important;
 }
 
+.daterangepicker .ranges {
+  display: none;
+}
+
 .daterangepicker .drp-calendar.left,
 .daterangepicker .drp-calendar.right {
   padding: 0.5rem !important;
@@ -413,31 +475,56 @@ button#cancelFilter {
 }
 
 .daterangepicker td.in-range {
-  background-color: var(--helpfulBlue300) !important;
+  background-color: var(--caringOrange100) !important;
 }
 
 .daterangepicker td.active {
-  background-color: var(--primary) !important;
+  background-color: var(--caringOrange500) !important;
 }
 
-.daterangepicker .drp-selected {
-  display: block !important;
-  padding: 1rem 0rem !important;
+.daterangepicker .drp-buttons {
+  display: flex !important;
+  gap: 1rem;
+  flex-flow: wrap;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (min-width: 800px) {
+    justify-content: end;
+  }
+}
+
+.daterangepicker .drp-buttons .drp-selected {
+  flex: 1 1 100% !important;
+  text-align: center !important;
+  padding: 0 !important;
+
+  @media screen and (min-width: 800px) {
+    text-align: right !important;
+  }
+}
+
+.daterangepicker .drp-buttons .btn {
+  flex: 0 1 calc(50% - 0.5rem) !important;
+  margin: 0 !important;
+
+  @media screen and (min-width: 800px) {
+    flex: 0 1 30% !important;
+  }
 }
 
 .daterangepicker button {
   font-weight: bold !important;
   display: inline-block !important;
   border: 2px solid var(--primary) !important;
-  padding: 0.5rem 1rem !important;
+  padding: 0rem 1rem !important;
 }
 
-.daterangepicker button.cancelBtn {
-  background-color: transparent !important;
+.daterangepicker button.resetBtn {
   color: var(--primary) !important;
 }
 
-.daterangepicker button.cancelBtn:hover {
+.daterangepicker button.resetBtn:hover {
   background-color: var(--hoverOutlinedButtonBackground) !important;
 }
 

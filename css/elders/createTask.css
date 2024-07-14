@@ -1,17 +1,15 @@
+body {
+  visibility: hidden;
+}
+
 /* -------------------------------------------------- */
 /* Styles for Step Wizard                             */
 /* -------------------------------------------------- */
-
 .steps-counter {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr auto 1fr auto;
   align-items: center;
-}
-
-.hide-steps-counter {
-  display: none;
+  padding: 1rem 4rem;
 }
 
 .step1,
@@ -21,37 +19,95 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: .3;
 }
+
 .stepNumber {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 30px;
   height: 30px;
-  background-color: #bfbfbf;
+  background-color: rgb(21, 106, 133);
   color: white;
   border-radius: 50%;
-  margin-right: 0.5rem;
 }
+
 .stepText {
   font-size: 1rem;
+  font-weight: bold;
   display: none;
+  color: rgb(21, 106, 133);
 }
+
 .stepLine2,
 .stepLine3,
 .stepLine4 {
   flex-grow: 1;
-  height: 2px;
-  background-color: #bfbfbf;
+  height: 10px;
+  background-color: rgb(21 106 133 / .2);
 }
+
 .stepLineActive {
   background-color: var(--primary);
+  left: 0;
+  width: 0;
+  animation: lineAnimate 1.2s ease-in-out forwards;
 }
+
 .stepActive {
   background-color: var(--primary);
 }
+
 .textActive {
-  font-weight: bold;
+  color: var(--text);
+}
+
+/* -------------------------------------------------- */
+/* Animation                                          */
+/* -------------------------------------------------- */
+
+@keyframes stepAnimate {
+
+  0% {
+    transform: scale(1);
+    opacity: .3;
+  }
+
+  50% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.stepAnimate {
+  animation: stepAnimate .75s 1.5s ease-in-out forwards;
+}
+
+@keyframes lineAnimate {
+
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }  
+}
+
+@keyframes fadeIn {
+  
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* -------------------------------------------------- */
@@ -67,6 +123,10 @@ ul.selection-list {
     padding-left: 0.5rem;
     margin-bottom: 0.75rem;
     font-weight: bold;
+
+    span {
+      font-weight: normal;
+    }
   }
 }
 
@@ -81,6 +141,12 @@ form {
   flex-flow: column wrap;
   gap: 2rem;
   box-sizing: border-box;
+}
+
+/* Change color of date and time input icon */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.25) sepia(1) saturate(3) hue-rotate(165deg);
 }
 
 .step {
@@ -144,11 +210,6 @@ form {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-#step-2 .form-group input:not(:placeholder-shown),
-#step-3 .form-group input:not(:placeholder-shown) {
-  /* background-color: #D0E1E7; */
-}
-
 #step-2 .form-group label,
 #step-3 .form-group label,
 #step-4 .form-group label {
@@ -162,13 +223,14 @@ form {
 #step-4 textarea {
   display: flex;
   width: 100%;
-  /* max-width: 400px; */
   height: 100px;
   margin-bottom: 1rem;
 }
 
 .summary {
   padding: 1rem;
+  display: grid;
+  justify-content: center;
 }
 
 .summary h2 {
@@ -181,6 +243,8 @@ form {
   margin: 2rem 0;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  max-width: 600px;
 }
 
 #statusList {
@@ -189,6 +253,10 @@ form {
   align-items: center;
   font-size: 1.1rem;
   font-weight: bold;
+
+  div:nth-of-type(2) {
+    font-weight: normal;
+  }
 }
 
 .status {
@@ -211,10 +279,33 @@ ul#summaryList {
 
   li {
     font-size: 1.1rem;
-    border-left: 4px solid var(--primary);
-    padding-left: 0.5rem;
-    margin-bottom: 0.75rem;
+    /* padding-left: 0.5rem; */
+    /* margin-bottom: 0.75rem; */
+    padding: .5rem 0 0 0;
     font-weight: bold;
+    /* border-bottom: 1px dotted var(--primary); */
+  }
+
+  div:nth-of-type(2) {
+    margin-left: 36px;
+    margin-top: -10px;
+    line-height: 1.2;
+  }
+
+  div {
+    display: flex;
+  }
+
+  i {
+    width: 30px;
+    margin-top: -.15rem;
+    text-align: center;
+    margin-right: 6px;
+  }
+
+  span {
+    font-weight: normal;
+    margin-top: 0;
   }
 }
 
@@ -251,8 +342,9 @@ ul#summaryList {
 }
 .favorOption:hover {
   cursor: pointer;
-  color: white;
-  background-color: var(--primary);
+  /* color: white; */
+  /* background-color: var(--primary); */
+  background-color: rgb(21 106 133 / .25);
 }
 
 .favor-buttons {
@@ -276,6 +368,11 @@ ul#summaryList {
   justify-content: center;
 }
 
+#backToHome {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 #errorMsg {
   text-align: center;
   color: red;
@@ -293,25 +390,28 @@ ul#summaryList {
   display: none;
 }
 
+.home-address {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+
+  #homeAddressBtn {
+    display: flex;
+    justify-self: end;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* -------------------------------------------------- */
+/* Desktop                                            */
+/* -------------------------------------------------- */
+
 @media only screen and (min-width: 800px) {
   #step-1 .form-group {
     flex-flow: row wrap;
     gap: 2rem;
-  }
-
-  #step-2 .form-group,
-  #step-3 .form-group {
-    /* flex-flow: row nowrap; */
-  }
-
-  #step-2 .form-group input,
-  #step-3 .form-group input {
-    /* margin-right: 2rem; */
-  }
-
-  #step-2 .form-group label,
-  #step-3 .form-group label {
-    /* margin-right: 0.5rem; */
   }
 
   .favorOption {
@@ -327,9 +427,50 @@ ul#summaryList {
     justify-content: space-evenly;
   }
 
-  .home-button {
-    justify-content: end;
+  ul#summaryList {
+    padding: 0 4rem;
+
+    li {
+      border-bottom: 1px dotted var(--primary);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    div:nth-of-type(2) {
+      justify-content: end;
+      text-align: right;
+      margin-top: 0;
+    }
+
+    span {
+      margin-top: 3px;
+      margin-bottom: .5rem;
+    }
   }
+
+  .stepNumber {
+    margin-right: .5rem;
+  }
+
+  .steps-counter {
+    gap: 0.5rem;
+  }
+
+  .stepLine2,
+  .stepLine3,
+  .stepLine4 {
+    height: 2px;
+  }
+
+  .steps-counter {
+    padding: 1rem;
+  }
+  
 }
 
 /* Cocoy, please adjust the folloeing CSS             */

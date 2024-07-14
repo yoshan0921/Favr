@@ -4,7 +4,7 @@
 
 import { getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument, getAllWithFilter } from "./firebase/firestore.js";
-import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, redirect } from "./utils.js";
+import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, redirect, signOut } from "./utils.js";
 import { closeModal, loadPartial, openModal } from "./common.js";
 
 if (document.readyState === "loading") {
@@ -24,10 +24,39 @@ async function runFunction() {
   if (partialPrefix == "edit") {
     currentUserRole = currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1); //capitalize
   }
-  // Wait for loadPartial to complete
-  if (document.getElementById("profile-content")) await loadPartial(`profile/_${partialPrefix + currentUserRole}Profile`, "profile-content");
 
-  const user = await getDocument("users", getCurrentUserID()); //gets the current user's info from the database as an object that will be used for filling the page with the user's info
+  // Gets the user's info from the database as an object that will be used for filling the page with the user's info
+  // If userid is specified in the URL, load the specified user's profile (In this case, some information will be hidden)
+  let referenceMode = false;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("userid")) {
+    referenceMode = true;
+  }
+  const userID = referenceMode ? urlParams.get("userid") : getCurrentUserID();
+
+  // Wait for loadPartial to complete
+  if (document.getElementById("profile-content")) {
+    // Determine the partial to load based on referenceMode
+    const partialToLoad = referenceMode ? `profile/_volunteerProfile` : `profile/_${partialPrefix + currentUserRole}Profile`;
+    await loadPartial(partialToLoad, "profile-content");
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) logoutBtn.addEventListener("click", signOut);
+
+    // If in reference mode, adjust the view accordingly
+    if (referenceMode) {
+      // Add the reference-mode class to the profile-details div if in reference mode
+      document.querySelector(".profile-details").classList.add("reference-mode");
+
+      // Delete the edit & logout button if in reference mode
+      document.getElementById("editBtn").remove();
+      document.getElementById("logoutBtn").remove();
+      document.querySelectorAll(".privacy-item").forEach((item) => item.remove());
+    }
+  }
+
+  const user = await getDocument("users", userID);
   loadUserInfo().then(() => {
     const main = document.getElementsByTagName("main")[0];
     main.classList.add("loaded");
@@ -63,14 +92,6 @@ async function runFunction() {
       };
     }
   }
-  /*
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-  */
 
   //================
   // File Upload
@@ -101,7 +122,8 @@ async function runFunction() {
     });
 
   /**
-   * Fills the fields with the appropriate information about the user based on the user object that this file loads (line 28). Depending on which page the user is requesting (edit or view profile), it will call specific funtions for each case
+   * Fills the fields with the appropriate information about the user based on the user object that this file loads (line 28).
+   * Depending on which page the user is requesting (edit or view profile), it will call specific funtions for each case
    */
   async function loadUserInfo() {
     if (user) {
@@ -153,14 +175,12 @@ async function runFunction() {
       if (role == "elder") {
         let emergencyName = document.getElementById("emergencyContactName");
         let emergencyPhone = document.getElementById("emergencyContactPhone");
-
         emergencyName.innerText = user.emergencyContactName ? user.emergencyContactName : "";
-
         emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
       }
     });
     const formInputs = Array.from(document.querySelectorAll("form :is(input, textarea)"));
-    formInputs.forEach(input => input.addEventListener("input",enableConfirmRedirectDialog))
+    formInputs.forEach((input) => input.addEventListener("input", enableConfirmRedirectDialog));
   }
   /**
    * Adds static information about the user on the profile view page
@@ -172,23 +192,26 @@ async function runFunction() {
     const email = document.getElementById("email");
     const address = document.getElementById("address");
 
-    birthday.innerText = user.birthday ? user.birthday : "";
-    bio.innerText = user.bio ? user.bio : "";
-    phone.innerText = user.phone ? user.phone : "";
-    email.innerText = user.email ? user.email : "";
-    address.innerText = user.address ? user.address : "";
+    if (birthday) birthday.innerText = user.birthday ? user.birthday : "";
+    if (bio) bio.innerText = user.bio ? user.bio : "";
+    if (phone) phone.innerText = user.phone ? user.phone : "";
+    if (email) email.innerText = user.email ? user.email : "";
+    if (address) address.innerText = user.address ? user.address : "";
 
     getCurrentUserRole().then((role) => {
-      if (role == "elder") {
+      if (role == "elder" && !referenceMode) {
         let emergencyName = document.getElementById("emergencyContactName");
         let emergencyPhone = document.getElementById("emergencyContactPhone");
-
         emergencyName.innerText = user.emergencyContactName ? user.emergencyContactName : "";
-
         emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
       } else {
+        let institution = document.getElementById("institution");
+        let languages = document.getElementById("languages");
+        institution.innerText = user.institution ? user.institution : "";
+        languages.innerText = user.languages ? user.languages : "";
+
         // Display past achievement
-        displayVolunteerRecords();
+        displayVolunteerRecords(userID);
       }
     });
   }
@@ -202,6 +225,8 @@ async function runFunction() {
     const lastName = document.getElementById("lastName");
     const birthday = document.getElementById("birthday");
     const bio = document.getElementById("bio");
+    const institution = document.getElementById("institution");
+    const languages = document.getElementById("languages");
     const phone = document.getElementById("phone");
     const email = document.getElementById("email");
     const address = document.getElementById("address");
@@ -213,6 +238,8 @@ async function runFunction() {
       (user.lastName = lastName.value),
       (user.birthday = birthday.value),
       (user.bio = bio.value),
+      (user.institution = institution ? institution.value : null),
+      (user.languages = languages ? languages.value : null),
       (user.phone = phone.value),
       (user.email = email.value),
       (user.address = address.value),
@@ -255,48 +282,44 @@ async function runFunction() {
  * Option1: Aggregate achievement values from task data each time the profile screen is accessed.
  * Option2: Have a property dedicated to the USER collection and update its value each time a task is completed.
  */
-async function displayVolunteerRecords() {
+async function displayVolunteerRecords(userID) {
   try {
-    getCurrentUserRole().then(async (role) => {
-      let currentUserId = getCurrentUserID();
-      let filterCondition = [];
-      let allTasks = [];
-      let seniorsHelped = [];
-      if (role == "volunteer") {
-        // Count the completed favors
-        filterCondition = [
-          {
-            key: "volunteerID",
-            operator: "==",
-            value: currentUserId,
-          },
-          {
-            key: "status",
-            operator: "==",
-            value: STATUS_COMPLETED,
-          },
-        ];
-        allTasks = await getAllWithFilter("tasks", filterCondition);
+    let currentUserId = userID;
+    let filterCondition = [];
+    let allTasks = [];
+    let seniorsHelped = [];
 
-        // Count the seniors helped
-        for (let task of allTasks) {
-          if (!seniorsHelped.includes(task.requesterID)) {
-            seniorsHelped.push(task.requesterID);
-          }
-        }
+    // Count the completed favors
+    filterCondition = [
+      {
+        key: "volunteerID",
+        operator: "==",
+        value: currentUserId,
+      },
+      {
+        key: "status",
+        operator: "==",
+        value: STATUS_COMPLETED,
+      },
+    ];
+    allTasks = await getAllWithFilter("tasks", filterCondition);
 
-        // Cound the time spend on the tasks
-        // -> This is not implemented yet
-
-        let seniors = document.getElementById("accomplishmentElder");
-        let favors = document.getElementById("accomplishmentHours");
-        let hours = document.getElementById("accomplishmentFavors");
-
-        hours.innerText = allTasks.length;
-        seniors.innerText = seniorsHelped.length;
-        favors.innerText = allTasks.length;
+    // Count the seniors helped
+    for (let task of allTasks) {
+      if (!seniorsHelped.includes(task.requesterID)) {
+        seniorsHelped.push(task.requesterID);
       }
-    });
+    }
+
+    // Cound the time spend on the tasks
+    // -> This is not implemented yet
+    let seniors = document.getElementById("accomplishmentElder");
+    let favors = document.getElementById("accomplishmentHours");
+    let hours = document.getElementById("accomplishmentFavors");
+
+    hours.innerText = allTasks.length;
+    seniors.innerText = seniorsHelped.length;
+    favors.innerText = allTasks.length;
   } catch (error) {
     console.log(error);
   }

@@ -2,7 +2,7 @@
 <div class="tabs">
   <div class="tab active" id="tab1">Pending (<span id="favorCountPending">0</span>)</div>
   <div class="tab" id="tab2">Completed (<span id="favorCountCompleted">0</span>)</div>
-  <div class="tab" id="tab3">Cancelled (<span id="favorCountCancelled">0</span>)</div>
+  <!-- <div class="tab" id="tab3">Cancelled (<span id="favorCountCancelled">0</span>)</div> -->
 </div>
 
 <div class="volunteer tab-content">
@@ -20,7 +20,7 @@
           <i class="fa-solid fa-spinner fa-spin-pulse"></i>
         </div>
       </div>
-      <div class="noItemsMessage noResult">No pending Favors to show</div>
+      <div class="noItemsMessage hide">No pending Favors to show</div>
     </div>
   </div>
   <div id="tab2-content" class="tab-content-item hidden">
@@ -34,21 +34,20 @@
           <i class="fa-solid fa-spinner fa-spin-pulse"></i>
         </div>
       </div>
-      <div class="noItemsMessage noResult">No completed Favors to show</div>
+      <div class="noItemsMessage hide">No completed Favors to show</div>
     </div>
   </div>
-  <div id="tab3-content" class="tab-content-item hidden">
+  <!-- <div id="tab3-content" class="tab-content-item hidden">
     <div class="viewSwitcher">
       <i class="icon filter-icon dateRangeModal" aria-label="Filter" id="dateRangeModalForCancelled"></i>
     </div>
-    <!-- taskinfo containers (List) -->
     <div class="volunteer">
       <div id="taskListCancelled" class="gridContainer">
         <div class="loading-screen">
           <i class="fa-solid fa-spinner fa-spin-pulse"></i>
         </div>
       </div>
-      <div class="noItemsMessage noResult">No cancelled Favors to show</div>
+      <div class="noItemsMessage hide">No cancelled Favors to show</div>
     </div>
-  </div>
+  </div> -->
 </div>
