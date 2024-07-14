@@ -413,7 +413,7 @@ button#resetFilter {
   align-items: center;
   justify-content: center;
   height: 55vh;
-  color: var(--disabledText);
+  /* color: var(--disabledText); */
   flex-flow: column nowrap;
 }
 
