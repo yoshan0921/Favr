@@ -236,8 +236,9 @@ async function completeTask(taskID, taskData) {
           title: "Approval Required",
           message: `<span>${currentUser.firstName}</span> has completed your <span>${taskData.name}</span> favor. Click here to approve now`,
           icon: url,
-          link: "#",
-          updateType: "danger"
+          link: `/tasks/elder-favor.html?taskid=${taskID}`,
+          updateType: "danger",
+          senderID: currentUser.id
         },
         taskData.requesterID
       )

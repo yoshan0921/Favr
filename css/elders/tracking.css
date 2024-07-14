@@ -78,13 +78,6 @@
     }
 }
 
-.buttonRow {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-
-}
-
 /* Volunteer Information */
 .requester {
     display: flex;
@@ -119,16 +112,61 @@
 }
   
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--background-gray);
     padding: 2rem;
     width: 80%;
     max-width: 600px;
     border-radius: 8px;
     position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
 
     h2 {
         text-align: center;
     }
+}
+
+.reason-content {
+    background-color: var(--pureWhite);
+    border: 1px solid var(--textBlack300);
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+    flex-flow: column nowrap;
+    width: 300px;
+    margin-bottom: 1.5rem;
+}
+
+#confirmModal {
+
+    input[type="radio"] {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--primary);
+        cursor: pointer;
+    }
+
+    label {
+        color: var(--primary);
+        cursor: pointer;
+        font-weight: 500;
+    }
+}
+
+.reason-item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.buttonRow {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+
 }
 
 .modal button {

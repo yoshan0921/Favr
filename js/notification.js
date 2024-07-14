@@ -1,7 +1,7 @@
 import { loadPartial } from "./common.js";
 import { getCurrentUserID } from "./firebase/authentication.js";
 import { database } from "./firebase/firebase.js";
-import { ref, push, onChildAdded, update, onValue,orderByKey } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { ref, push, onChildAdded, update, query, equalTo, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const currentUserID = getCurrentUserID();
 
@@ -96,7 +96,8 @@ async function sendNotification(data,receiverID){
         isMessage: (data.isMessage) ? data.isMessage : false,
         time: (new Date()).toLocaleString(),
         isNew: true,
-        wasSent: false
+        wasSent: false,
+        senderID: data.senderID ? data.senderID : ""
     }
     const notificationID = push(ref(database, receiverID)).key;
     const updateObj = {};
@@ -131,6 +132,7 @@ function alreadyOnChatPage(notification){
     }
     return false;
 }
+
 export {
     listenToNotifications,
     sendNotification,
