@@ -57,8 +57,8 @@ async function loadCommonContent() {
       activateMenuLinkAndBackButton();
       return Notification.requestPermission();
     })
-    .then(permission => {
-      if(permission == 'granted'){
+    .then((permission) => {
+      if (permission == "granted") {
         listenToNotifications();
       }
     })
@@ -75,7 +75,7 @@ async function loadPartial(partial, destination) {
 
   return new Promise((resolve, reject) => {
     let targetElement = document.getElementById(destination);
-    if(!targetElement) targetElement = document.getElementsByTagName(destination)[0];
+    if (!targetElement) targetElement = document.getElementsByTagName(destination)[0];
     if (targetElement) {
       const observer = new MutationObserver(() => {
         observer.disconnect();
@@ -83,7 +83,15 @@ async function loadPartial(partial, destination) {
       });
 
       observer.observe(targetElement, { childList: true });
-      targetElement.innerHTML+= data;
+
+      // Create a temporary container to hold the fetched HTML
+      const tempContainer = document.createElement("div");
+      tempContainer.innerHTML = data;
+
+      // Append the children of the temporary container to the target element
+      while (tempContainer.firstChild) {
+        targetElement.appendChild(tempContainer.firstChild);
+      }
     } else {
       reject(`Could not load "../partials/${partial}.html. There is no element with the id or tag name "${destination}"`);
     }
