@@ -1,5 +1,5 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
-import { updateDocument, getDocument, getFile, getAllWithFilter} from "../firebase/firestore.js";
+import { updateDocument, getDocument, getFile, getAllWithFilter } from "../firebase/firestore.js";
 import { sendNotification } from "../notification.js";
 
 let taskID;
@@ -59,30 +59,27 @@ function runFunction() {
       // Save the task data to a global variable
       taskData = task;
       getDocument("users", task.requesterID).then((user) => {
-        // ToDo: Display task data on the page
-        // Code here...
-
-        // Retrieve Task name====================
+        // Retrieve Task name
         taskName.innerHTML = taskData.name;
 
-        // Retrieve Elder's name and address=====================
+        // Retrieve Elder's name and address
         console.log(user.firstName);
         elderName.innerHTML = `${user.firstName} ${user.lastName}`;
         elderAddress.innerHTML = user.address;
 
-        // On Confirm task Overlay Display========
+        // On Confirm task Overlay Display
         confirmTaskName.innerHTML = taskData.name;
         confirmWrapperElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         confirmElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         confirmElderAddress.innerHTML = user.address;
 
-        // On Accept task Overlay Display========
+        // On Accept task Overlay Display
         acceptTaskName.innerHTML = taskData.name;
         acceptWrapperElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         acceptElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         acceptElderAddress.innerHTML = user.address;
 
-        // On Task Completed Overlay Display===========
+        // On Task Completed Overlay Display
         completedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
         approvedElderName.innerHTML = `${user.firstName} ${user.lastName}`;
 
@@ -97,250 +94,227 @@ function runFunction() {
             document.getElementById("elderPhoto").src = placeholderImage;
             document.getElementById("elderPhoto2").src = placeholderImage;
             document.getElementById("elderPhoto3").src = placeholderImage;
-
-
           });
 
-          // getFile("profile/" + user.profilePictureURL)
-          // .then((url) => {
-          //   document.getElementById("elderPhoto2").src = url;
-          // })
-          // .catch((error) => {
-          //   console.log(error);
-          //   document.getElementById("elderPhoto2").src = placeholderImage;
-          // });
-
-
-        // Retrieve Task address, date and note=====================
+        // Retrieve Task address, date and note
         startAddress.innerHTML = taskData.details.startAddress;
         endAddress.innerHTML = taskData.details.endAddress;
         taskTime.innerHTML = `${taskData.details.date} ${taskData.details.time}`;
         taskNote.innerHTML = taskData.notes;
 
-        // To display buttons and icons depending on task.status================
+        // To display buttons and icons depending on task.status
         let acOrDecBtn = document.getElementById("acOrDecBtn");
         let comOrCanBtn = document.getElementById("comOrCanBtn");
         let icons = document.getElementById("icons");
         let contactBtn = document.getElementById("contactBtn");
 
-        if (task.status === "Waiting to be accepted") {
+        if (task.status === STATUS_WAITING) {
           acOrDecBtn.style.visibility = "visible";
           contactBtn.remove();
           comOrCanBtn.remove();
           icons.remove();
         }
 
-        if (task.status === "On going") {
+        if (task.status === STATUS_ONGOING) {
           contactBtn.style.visibility = "visible";
           comOrCanBtn.style.visibility = "visible";
           acOrDecBtn.remove();
           icons.remove();
         }
 
-        if (task.status === "Pending approval") {
+        if (task.status === STATUS_PENDING) {
           contactBtn.style.visibility = "visible";
           icons.style.visibility = "visible";
         }
 
-        if (task.status === "Completed") {
+        if (task.status === STATUS_COMPLETED) {
           contactBtn.remove();
           icons.style.visibility = "visible";
         }
 
-        if (task.status === "Cancelled") {
+        if (task.status === STATUS_CANCELLED) {
           contactBtn.remove();
           icons.style.visibility = "visible";
         }
       });
+
+      // Add the link to the chat room to the contact button
+      const contactBtn = document.getElementById("contactBtn");
+      if (contactBtn) {
+        contactBtn.addEventListener("click", async function () {
+          try {
+            const task = await getDocument("tasks", taskID);
+            const loginUserID = getCurrentUserID();
+            const requesterID = task.requesterID;
+            const chatRoomID = [loginUserID, requesterID].sort().join("-");
+            window.location.href = `/chat.html?crid=${chatRoomID}`;
+          } catch (error) {
+            console.log(error);
+          }
+        });
+      }
     })
     .catch((error) => {
       console.log(error);
     });
 }
-
 
 async function acceptTask(taskID, taskData) {
-  console.log(taskData);
-  const volunteerID = getCurrentUserID();
+  try {
+    // Get the volunteer ID
+    const volunteerID = getCurrentUserID();
 
-  // Create updated task data object with the volunteer ID and status "On going"
-  taskData.volunteerID = volunteerID;
-  taskData.status = STATUS_ONGOING;
-  console.log(taskData);
-
-  // Update the task data on the Firestore
-  await updateDocument("tasks", taskID, taskData)
-    .then(() => {
-      console.log(taskData, taskID);
-      console.log("Task accepted!");
-      sendNotification(
-        {
-          title: "Favor accepted!",
-          link: `../tasks/volunteer-favor.html?taskid=${taskID}`,
-          message: `A volunteer has accepted to help you with your ${taskData.name} favor!`
-        },
-        taskData.requesterID);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  console.log(taskData);
-}
-
-async function completeTask(taskID, taskData) {
-  console.log(taskData);
-
-  // Get the volunteer ID
-  const volunteerID = getCurrentUserID();
-
-  // Create updated task data object with the volunteer ID and status "On going"
-  taskData.volunteerID = volunteerID;
-  taskData.status = STATUS_PENDING;
-  console.log(taskData);
-
-  // Update the task data on the Firestore
-  updateDocument("tasks", taskID, taskData)
-    .then(async () => {
-      console.log("Task completed!");
-      let url = "#";
-      const currentUser = await getDocument("users", getCurrentUserID());
-      if (currentUser.profilePictureURL) {
-        url = await getFile(`profile/${currentUser.profilePictureURL}`);
-      }
-      sendNotification(
-        {
-          title: "Approval Required",
-          message: `<span>${currentUser.firstName}</span> has completed your <span>${taskData.name}</span> favor. Click here to approve now`,
-          icon: url,
-          link: `/tasks/elder-favor.html?taskid=${taskID}`,
-          updateType: "danger",
-          senderID: currentUser.id
-        },
-        taskData.requesterID
-      )
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-async function cancelTask(taskID, taskData) {
-  console.log(taskData);
-
-  // Get the volunteer ID
-  const volunteerID = getCurrentUserID();
-
-  // Create updated task data object with the volunteer ID and status "On going"
-  taskData.volunteerID = volunteerID;
-  taskData.status = "Waiting to be accepted";
-  console.log(taskData);
-
-  // Update the task data on the Firestore
-  await updateDocument("tasks", taskID, taskData)
-    .then(() => {
-      console.log("Task accepted!");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-// Link to chat room
-document.getElementById("contactBtn").addEventListener("click", function () {
-  getDocument("tasks", taskID)
-    .then((task) => {
-      let loginUserID = getCurrentUserID();
-      let requesterID = task.requesterID;
-      let chatRoomID = [loginUserID, requesterID].sort().join("-");
-      window.location.href = `/chat.html?crid=${chatRoomID}`;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
-
-async function checkScheduleConflict(taskData) {
-  console.log(taskData);
-
-  // Get the volunteer ID
-  const volunteerID = getCurrentUserID();
-
-  // Target task data
-  let targetDate = taskData.details.date
-  let targetTime = taskData.details.time
-  // Check On going task
-  let filterConditions = [
-    { key: 'volunteerID', operator: '==', value: volunteerID },
-    { key: 'status', operator: '==', value: STATUS_ONGOING },
-  ];
-  
-  let tasks = await getAllWithFilter("tasks", filterConditions);
-  let tentativeDuration = 60 * 60 * 1000; // This might be changed
-
-  let conflictFound = false;
-
-  
-  tasks.forEach((task) => {
-    let taskid = task[0];
-    let taskData = task[1];
-    console.log(task);
-    console.log(taskid);
+    // Create updated task data object with the volunteer ID and status "On going"
+    taskData.volunteerID = volunteerID;
+    taskData.status = STATUS_ONGOING;
     console.log(taskData);
-    console.log(taskData.details.date);
-    console.log(taskData.details.time);
 
-    let startTime = new Date (`${taskData.details.date} ${taskData.details.time}`);
-    console.log(startTime);
-    let endTime = new Date (startTime.getTime() + tentativeDuration);
-    console.log(endTime);
-    
-    let targetStartTime = new Date(`${targetDate} ${targetTime}`);
-    console.log(targetStartTime);
-    let targetEndTime = new Date(targetStartTime.getTime() + tentativeDuration);
-    console.log(targetEndTime);
-  
-    if (targetStartTime < endTime && targetEndTime > startTime) {
-      console.log("Schedule is conflicted");
+    // Update the task data on the Firestore
+    await updateDocument("tasks", taskID, taskData);
+    console.log("Task accepted!", taskID.taskData);
 
-
-      // ToDo: Display conflict message popup
-      // Code here...
-
-      // "schedule-conflict" ON
-      document.getElementById("schedule-conflict").style.display = "block";
-      conflictFound = true;
-      return; 
-    }
-  });
-
-  if (!conflictFound) {
-    document.getElementById("confirm-overlay").style.display = "block";
+    // Send a notification to the requester
+    sendNotification(
+      {
+        title: "Favor accepted!",
+        link: `../tasks/volunteer-favor.html?taskid=${taskID}`,
+        message: `A volunteer has accepted to help you with your ${taskData.name} favor!`,
+      },
+      taskData.requesterID
+    );
+  } catch (error) {
+    console.error("Failed to accept the task:", error);
   }
 }
 
-document.getElementById("acceptBtn").addEventListener("click", function () {
-  checkScheduleConflict(taskData);
-});
+async function completeTask(taskID, taskData) {
+  try {
+    // Get the volunteer ID
+    const volunteerID = getCurrentUserID();
 
+    // To complete the task, set the status to "Pending approval"
+    taskData.volunteerID = volunteerID;
+    taskData.status = STATUS_PENDING;
+
+    // Update the task data on the Firestore
+    updateDocument("tasks", taskID, taskData);
+
+    // Get the current user data
+    const currentUser = await getDocument("users", getCurrentUserID());
+
+    // Get the current user's profile picture for the notification
+    const url = currentUser.profilePictureURL ? await getFile(`profile/${currentUser.profilePictureURL}`) : "#";
+
+    // Send a notification to the requester
+    sendNotification(
+      {
+        title: "Approval Required",
+        message: `<span>${currentUser.firstName}</span> has completed your <span>${taskData.name}</span> favor. Click here to approve now`,
+        icon: url,
+        link: `/tasks/elder-favor.html?taskid=${taskID}`,
+        updateType: "danger",
+        senderID: currentUser.id,
+      },
+      taskData.requesterID
+    );
+  } catch (error) {
+    console.error("Failed to complete the task:", error);
+  }
+}
+
+async function cancelTask(taskID, taskData) {
+  try {
+    // Get the volunteer ID
+    const volunteerID = getCurrentUserID();
+
+    // To cancel the task, remove the volunteer ID and set the status to "Waiting to be accepted"
+    taskData.volunteerID = null;
+    taskData.status = STATUS_WAITING;
+
+    // Update the task data on the Firestore
+    await updateDocument("tasks", taskID, taskData);
+  } catch (error) {
+    console.error("Failed to cancel the task:", error);
+  }
+}
+
+async function checkScheduleConflict(taskData) {
+  try {
+    // Get the volunteer ID
+    const volunteerID = getCurrentUserID();
+
+    // Target task data
+    let targetDate = taskData.details.date;
+    let targetTime = taskData.details.time;
+
+    // Calculate the task duration (Tentative duration is 1 hour)
+    let tentativeDuration = 60 * 60 * 1000;
+
+    // Calculate the target task's start and end time
+    let conflictFound = false;
+    let targetStartTime = new Date(`${targetDate} ${targetTime}`);
+    let targetEndTime = new Date(targetStartTime.getTime() + tentativeDuration);
+    console.log(`Target task: ${targetStartTime} - ${targetEndTime}`);
+
+    // Retrieve all tasks with the volunteer ID and status "On going"
+    let filterConditions = [
+      { key: "volunteerID", operator: "==", value: volunteerID },
+      { key: "status", operator: "==", value: STATUS_ONGOING },
+    ];
+    let tasks = await getAllWithFilter("tasks", filterConditions);
+
+    // Check if there is a schedule conflict in the accepted tasks
+    for (const [taskid, taskData] of tasks) {
+      let startTime = new Date(`${taskData.details.date} ${taskData.details.time}`);
+      let endTime = new Date(startTime.getTime() + tentativeDuration);
+      console.log(`Existing task ${startTime} - ${endTime}`);
+
+      if (targetStartTime < endTime && targetEndTime > startTime) {
+        // "Schedule-conflict" ON
+        document.getElementById("schedule-conflict").style.display = "block";
+
+        // Set the conflictFound flag to true
+        conflictFound = true;
+        console.log("Schedule is conflicted");
+        return;
+      }
+    }
+
+    // If no schedule conflict is found, display the confirm overlay
+    if (!conflictFound) {
+      document.getElementById("confirm-overlay").style.display = "block";
+    }
+  } catch (error) {
+    console.error("Failed to check the task confliction:", error);
+  }
+}
+
+const acceptBtn = document.getElementById("acceptBtn");
+if (acceptBtn)
+  acceptBtn.addEventListener("click", function () {
+    checkScheduleConflict(taskData);
+  });
 
 // On "Favor Details"===============
-
 
 // To display "accept-overlay" ON
 function acceptOn() {
   document.getElementById("accept-overlay").style.display = "block";
 }
 
-document.getElementById("confirmBtn").addEventListener("click", async function () {
-  await acceptTask(taskID, taskData);
-  console.log(taskData);
-  acceptOn();
-});
+const confirmBtn = document.getElementById("confirmBtn");
+if (confirmBtn)
+  confirmBtn.addEventListener("click", async function () {
+    await acceptTask(taskID, taskData);
+    console.log(taskData);
+    acceptOn();
+  });
 
-document.getElementById("conflictConfirmBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
-  exploreFavors();
-});
+const conflictConfirmBtn = document.getElementById("conflictConfirmBtn");
+if (conflictConfirmBtn)
+  conflictConfirmBtn.addEventListener("click", function () {
+    exploreFavors();
+  });
 
 // To move back to "dashboard.html"
 function goHome() {
@@ -352,19 +326,17 @@ function goMyFavors() {
   window.location.href = "/dashboard.html#myfavors";
 }
 
-// document.getElementById("homeBtn").addEventListener("click", function () {
-//   goHome();
-// });
-
 const declineBtn = document.getElementById("declineBtn");
-if(declineBtn) declineBtn.addEventListener("click", function () {
-  goHome();
-});
+if (declineBtn)
+  declineBtn.addEventListener("click", function () {
+    goHome();
+  });
 
-const myFavorsBtn = document.getElementById("myFavorsBtn")
-if(myFavorsBtn) myFavorsBtn.addEventListener("click", function () {
-  goMyFavors();
-});
+const myFavorsBtn = document.getElementById("myFavorsBtn");
+if (myFavorsBtn)
+  myFavorsBtn.addEventListener("click", function () {
+    goMyFavors();
+  });
 
 // On "My Favor"===============
 function completeConfirmOn() {
@@ -372,7 +344,6 @@ function completeConfirmOn() {
 }
 
 document.getElementById("confirmCompleteBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
   completeConfirmOn();
 });
 
@@ -390,7 +361,6 @@ function exploreFavors() {
 }
 
 document.getElementById("exploreBtn").addEventListener("click", function () {
-  //   acceptTask(taskID, taskData);
   exploreFavors();
 });
 
@@ -398,18 +368,14 @@ document.getElementById("cancelBtn").addEventListener("click", async function ()
   document.getElementById("cancel-favor-overlay").style.display = "block";
 });
 
-
 function cancelCompletedOn() {
   document.getElementById("cancel-complete-overlay").style.display = "block";
   document.getElementById("cancel-favor-overlay").style.display = "none";
-
 }
 
 document.getElementById("cancelFavorBtn").addEventListener("click", function () {
   cancelCompletedOn();
 });
-
-
 
 document.getElementById("cancel-completeBtn").addEventListener("click", async function () {
   console.log(taskData);
@@ -417,27 +383,30 @@ document.getElementById("cancel-completeBtn").addEventListener("click", async fu
   exploreFavors();
 });
 
-
 // Create click events on each icons=============
 const thumsDown = document.getElementById("thumsDown");
-if(thumsDown) thumsDown.addEventListener("click", function () {
-  exploreFavors();
-});
+if (thumsDown)
+  thumsDown.addEventListener("click", function () {
+    exploreFavors();
+  });
 
 const thumsUp = document.getElementById("thumsUp");
-if(thumsUp) thumsUp.addEventListener("click", function () {
-  exploreFavors();
-});
+if (thumsUp)
+  thumsUp.addEventListener("click", function () {
+    exploreFavors();
+  });
 
 const thumsDownOverlay = document.getElementById("thumsDown-overlay");
-if(thumsDownOverlay) thumsDownOverlay.addEventListener("click", function () {
-  exploreFavors();
-});
+if (thumsDownOverlay)
+  thumsDownOverlay.addEventListener("click", function () {
+    exploreFavors();
+  });
 
 const thumsUpOverlay = document.getElementById("thumsUp-overlay");
-if(thumsUpOverlay) thumsUpOverlay.addEventListener("click", function () {
-  exploreFavors();
-});
+if (thumsUpOverlay)
+  thumsUpOverlay.addEventListener("click", function () {
+    exploreFavors();
+  });
 
 // Close overlay display by clicking "x" icon
 document.getElementById("close-confirm").addEventListener("click", function () {
