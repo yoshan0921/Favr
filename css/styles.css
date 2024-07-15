@@ -821,15 +821,14 @@ Floating cards
 .heart-icon::after {
   content: url("../assets/icons/heart.svg") !important;
 }
-.thumbs-up-icon::after {
-  content: url("../assets/icons/thumbs-up.svg") !important;
+.heart-brake-icon::after {
+  content: url("../assets/icons/heart-brake.svg") !important;
 }
-.thumbs-up-white::after {
-  content: url("../assets/icons/thums-upWhite.svg") !important;
+.like::after {
+  content: url("../assets/icons/like.svg") !important;
 }
-
-.thumbs-down-icon::after {
-  content: url("../assets/icons/thumbs-down.svg") !important;
+.dislike::after {
+  content: url("../assets/icons/dislike.svg") !important;
 }
 .date-icon::after {
   content: url("../assets/icons/date.svg") !important;
@@ -837,7 +836,6 @@ Floating cards
 .time-icon::after {
   content: url("../assets/icons/time.svg") !important;
 }
-
 .location-icon::after {
   content: url("../assets/icons/location.svg") !important;
 }
@@ -847,7 +845,6 @@ Floating cards
 .note-icon::after {
   content: url("../assets/icons/note.svg") !important;
 }
-
 .favor-icon::after {
   content: url("../assets/icons/favor.svg") !important;
 }

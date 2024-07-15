@@ -75,11 +75,13 @@
         </section>
 
         <section class="icons" id="icons">
-          <span><i class="thumbs-down-icon" id="thumbs-down-icon"></i></span>
-          <span><i class="thumbs-up-icon" id="thumbs-up-icon"></i></span>
-          <span><i class="thumbs-up-white" id="thumbs-up-white-icon"></i></span>
-
+          <input type="checkbox" id="colorToggle">
+          <div class="good-bad">
+            <label for="colorToggle" class="like" id="like"></label>
+            <label for="colorToggle" class="dislike" id="dislike"></label>
+          </div>
         </section>
+
 
         <section class="set" id="acOrDecBtn">
           <!-- <button class="outlined-btn" id="declineBtn">Decline</button> -->
@@ -137,7 +139,7 @@
           </section>
       
           <section class="set">
-            <button class="rounded-btn" id="conflictConfirmBtn">Confirm</button>
+            <button class="rounded-btn" id="conflictConfirmBtn">Explore Favors</button>
             </section>
           </div>
       </div>
@@ -178,8 +180,11 @@
           </section>
 
           <section class="icons-overlay" id="icons-overlay">
-            <span><i class="thumbs-down-icon"></i></span>
-            <span><i class="thumbs-up-icon"></i></span>
+            <input type="checkbox" id="colorToggle">
+            <div class="good-bad">
+              <label for="colorToggle" class="like" id="like"></label>
+              <label for="colorToggle" class="dislike" id="dislike"></label>
+            </div>
           </section>
 
           <section class="set">
@@ -219,6 +224,23 @@
           </section>
         </div>
       </div>
+
+      <!-- Cancel Complete Overlay Display=============== -->
+      <div id="cancel-complete-overlay">
+        <div class="confirm-wrapper">
+          <span><i class="heart-brake-icon"></i></span>
+          <section class="message">
+            <h2>We are so sorry that you can't support this Favor!</h2>
+            <p>See more seniors you can help:</p>
+          </section>
+      
+          <section class="set">
+            <button class="rounded-btn" id="cancel-completeBtn">Explore Favors</button>
+          </section>
+        </div>
+      </div>
+
+
 
       <!-- Task Completed Overlay Display=============== -->
       <div id="task-completed-overlay" class="modal">
