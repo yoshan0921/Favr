@@ -119,8 +119,9 @@
     border-radius: 8px;
     position: relative;
     display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
+    flex-flow: column wrap;
+    justify-items: center;
+    align-items: center;
 
     h2 {
         text-align: center;
@@ -136,8 +137,9 @@
     justify-content: center;
     gap: .5rem;
     flex-flow: column nowrap;
-    width: 300px;
     margin-bottom: 1.5rem;
+    width: 100%;
+    max-width: 400px;
 }
 
 #confirmModal {

@@ -76,7 +76,7 @@ function runFunction() {
     // User inputs
     const task = {
       name: document.querySelector('input[name="favorOption"]:checked').value,
-      notes: document.getElementById("notes").value,
+      notes: document.getElementById("notes").value || "No details given",
       requesterID: getCurrentUserID(),
       status: "Waiting to be accepted",
       details: {
@@ -311,17 +311,13 @@ function runFunction() {
 
         // Remove active classes from the current step number
         document
-          .querySelector(`.step${currentStep} .stepNumber`)
-          .classList.remove("stepActive");
+          .querySelector(`.step${currentStep} .stepNumber`).classList.remove("stepActive");
         document
-          .querySelector(`.step${currentStep} .stepText`)
-          .classList.remove("textActive");
+          .querySelector(`.step${currentStep} .stepText`).classList.remove("textActive");
         document
-          .querySelector(`.stepLine${currentStep}`)
-          .classList.remove("stepLineActive");
+          .querySelector(`.stepLine${currentStep}`).classList.remove("stepLineActive");
         document
-          .querySelector(`.step${currentStep}`)
-          .classList.remove("stepAnimate");
+          .querySelector(`.step${currentStep}`).classList.remove("stepAnimate");
 
         // Restore the original step number
         document.querySelector(
