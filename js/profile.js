@@ -306,8 +306,8 @@ async function displayVolunteerRecords(userID) {
 
     // Count the seniors helped
     for (let task of allTasks) {
-      if (!seniorsHelped.includes(task.requesterID)) {
-        seniorsHelped.push(task.requesterID);
+      if (!seniorsHelped.includes(task[1].requesterID)) {
+        seniorsHelped.push(task[1].requesterID);
       }
     }
 
