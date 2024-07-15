@@ -337,12 +337,10 @@ document.getElementById("confirmBtn").addEventListener("click", async function (
   acceptOn();
 });
 
-document.getElementById("conflictConfirmBtn").addEventListener("click", async function () {
-  await acceptTask(taskID, taskData);
-  console.log(taskData);
-  acceptOn();
+document.getElementById("conflictConfirmBtn").addEventListener("click", function () {
+  //   acceptTask(taskID, taskData);
+  exploreFavors();
 });
-
 
 // To move back to "dashboard.html"
 function goHome() {
@@ -401,11 +399,24 @@ document.getElementById("cancelBtn").addEventListener("click", async function ()
 });
 
 
-document.getElementById("cancelFavorBtn").addEventListener("click", async function () {
+function cancelCompletedOn() {
+  document.getElementById("cancel-complete-overlay").style.display = "block";
+  document.getElementById("cancel-favor-overlay").style.display = "none";
+
+}
+
+document.getElementById("cancelFavorBtn").addEventListener("click", function () {
+  cancelCompletedOn();
+});
+
+
+
+document.getElementById("cancel-completeBtn").addEventListener("click", async function () {
   console.log(taskData);
   await cancelTask(taskID, taskData);
   exploreFavors();
 });
+
 
 // Create click events on each icons=============
 const thumsDown = document.getElementById("thumsDown");
@@ -431,21 +442,4 @@ if(thumsUpOverlay) thumsUpOverlay.addEventListener("click", function () {
 // Close overlay display by clicking "x" icon
 document.getElementById("close-confirm").addEventListener("click", function () {
   console.log("clicked!");
-});
-
-
-// // Create toggle for thums-up & down
-// const thumbsDownIcon = document.getElementById("thums-down-icon");
-const thumbsUpIcon = document.getElementById("thums-up-icon");
-const thumbsUpIconWhite = document.getElementById("thumbs-up-white-icon");
-
-// thumbsDownIcon.addEventListener("click", function() {
-//     thumbsDownIcon.classList.toggle("active");
-//     thumbsUpIcon.classList.remove("active");
-// });
-
-thumbsUpIcon.addEventListener("click", function() {
-  thumbsUpIcon.style.display = "none";
-  // thumbsUpIcon.style.display = "block";
-  thumbsUpIconWhite.style.display = "none";
 });
