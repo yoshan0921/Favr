@@ -76,9 +76,9 @@ async function runFunction() {
                     if(update.senderID){
                       if(update.senderID in newMessagesByContact){
                         newMessagesByContact[update.senderID][0].push(update.id);
-                        newMessagesByContact[update.senderID][1] += 1;
+                        newMessagesByContact[update.senderID][1].push(update) ;
                       }else{
-                          newMessagesByContact[update.senderID] = [[update.id], 0];
+                          newMessagesByContact[update.senderID] = [[update.id], [update]];
                       }
                     }
                 }
@@ -113,7 +113,7 @@ async function runFunction() {
           requesterName.classList.add("name");
           requesterName.textContent = `${user.firstName} ${user.lastName}`;
           console.log(newMessagesByContact, user.id);
-          if(newMessagesByContact[user.id] && newMessagesByContact[user.id] > 0){
+          if(newMessagesByContact[user.id] && newMessagesByContact[user.id].length > 0){
             contact.classList.add("has-updates");
           }
 
@@ -169,7 +169,8 @@ async function runFunction() {
         console.log("Chat Room ID: " + chatRoomID);
 
         // Load chat room
-        loadChatRoom(chatRoomID, this);
+       // loadChatRoom(chatRoomID, this, newMessagesByContact);
+       loadChatRoom(chatRoomID, newMessagesByContact);
 
         // Check if chat message is allowed to sent.
         checkChatRoomAvailability(chatRoomID);
@@ -251,21 +252,25 @@ async function runFunction() {
       });
   });
 }
-async function loadChatRoom(chatRoomID) {
+async function loadChatRoom(chatRoomID,newMessagesByContact) {
   // Hide contact list and show message history
   contactList.classList.add("hide");
   messageHistory.classList.remove("hide");
 
   // Load chat room messages
-  loadChatRoomMessages(chatRoomID);
+  loadChatRoomMessages(chatRoomID,newMessagesByContact);
 }
 
-function loadChatRoomMessages(chatRoomID) {
+function loadChatRoomMessages(chatRoomID,newMessagesByContact) {
   // Clear the message history area
   messageHistory.innerHTML = "";
 
   let previousDate = "";
-
+  let contactID = chatRoomID.split("-")[1];
+  newMessagesByContact.filter(updates => updates[0] == contactID).forEach(message =>{
+    console.log(message);
+    updateNotificationStatus(loginUserID,message[1]);
+  })
   // Load chat room messages
   onChildAdded(ref(database, chatRoomID), function (data) {
     const v = data.val();
@@ -381,10 +386,6 @@ function showChatRoomTitle(chatRoomID) {
       pageTitle.outerHTML = contact.outerHTML;
 
       lazyLoadImages();
-      let newMessages = newMessagesByContact[contactUserID][0];
-      newMessages.forEach((notificationID)=>{
-        updateNotificationStatus(currentUserID, notificationID);
-      })
     })
     .catch((error) => console.log(error));
 }
