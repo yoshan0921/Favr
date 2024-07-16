@@ -260,7 +260,7 @@ button a {
   box-shadow: 0 0 1px var(--primary);
 }
 .viewSwitcher .filter-icon {
-  filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
+  /* filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%); */
   height: 28px;
   cursor: pointer;
   align-self: end;
@@ -323,7 +323,7 @@ header {
   position: relative;
 }
 main.content {
-  margin-top: 85px;
+  margin-top: 86px;
 }
 main {
   padding: 0.5rem;
@@ -345,7 +345,7 @@ header .container div {
 }
 header .container > div {
   padding: 0.5rem;
-  background-color: var(--background);
+  background-color: var(--pureWhite);
 }
 header .container .logo-wrapper,
 header .container .logo-wrapper a {
@@ -595,6 +595,27 @@ main.loaded .loading-screen {
 /* -------------------------------------------------- */
 /* Tab Menu                                           */
 /* -------------------------------------------------- */
+
+.tab-menu-container {
+  margin-top: -0.5rem;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  background-color: var(--background);
+  position: fixed;
+
+  left: 0rem;
+  right: 0px;
+  width: 100%;
+
+  z-index: 10;
+
+  @media screen and (min-width: 800px) {
+    margin-top: -1rem;
+    padding: 1rem 2rem 0.5rem 2rem;
+    left: 240px;
+    right: 0px;
+    width: calc(100% - 240px);
+  }
+}
 .tabs {
   display: flex;
   margin-bottom: 1rem;
@@ -604,8 +625,6 @@ main.loaded .loading-screen {
   cursor: pointer;
   padding-bottom: 0.5rem;
   text-align: center;
-}
-.tabs .tab {
   border-bottom: 2px solid var(--disabledText);
   color: var(--disabledText);
 }
@@ -620,9 +639,7 @@ main.loaded .loading-screen {
 .hide {
   display: none !important;
 }
-/* .noResult {
-  display: none !important;
-} */
+
 /*----------------------------------------------------
 Floating cards
 ------------------------------------------------------*/
@@ -904,7 +921,7 @@ Media queries
     grid-column: 1 / 2;
   }
   header {
-    background-color: transparent;
+    background-color: var(--pureWhite);
     grid-column: 1 / 4;
   }
   footer {

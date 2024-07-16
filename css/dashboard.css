@@ -1,27 +1,16 @@
-body{
-  background-image: url('../assets/images/background-mobile.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-
-  @media screen and (min-width: 800px) {
-    background-image: url('../assets/images/background-desktop.png');
-    background-position: 120px center;
-  }
-}
 /* -------------------------------------------------- */
 /* Common                                             */
 /* -------------------------------------------------- */
-#dashboard-content,
-#history-content {
-  background-image: url(/assets/images/background-mobile.png);
+body {
+  background-image: url("/assets/images/background-mobile.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  background-position: 0 185px;
 
   @media screen and (min-width: 800px) {
-    background-image: url(/assets/images/background-desktop.png);
-    background-position: 120px center;
+    background-image: url("/assets/images/background-desktop.png");
+    background-position: 120px 185px;
   }
 }
 
@@ -141,7 +130,11 @@ body{
   grid-gap: 1rem;
   grid-template-columns: repeat(1, 1fr);
   margin-top: 1rem;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
+}
+
+.tab-menu-container ~ .tab-content .elder .gridContainer {
+  margin-top: 79px;
 }
 
 .elder .taskCard .duration .bold {
@@ -189,14 +182,13 @@ body{
 /* -------------------------------------------------- */
 /* Volunteer: Favor List View                         */
 /* -------------------------------------------------- */
-.volunteer .viewSwitcher {
+.viewSwitcher {
   display: flex;
   gap: 1rem;
-  /* justify-content: space-between; */
   justify-content: end;
 }
 
-.volunteer .viewSwitcher button {
+.viewSwitcher button {
   border: none;
   border-radius: 30px;
   cursor: pointer;
@@ -208,7 +200,8 @@ body{
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(1, 1fr);
-  margin-top: 1rem;
+  margin-top: 107px;
+  padding-bottom: 2rem;
 
   @media (min-width: 600px) {
     grid-template-columns: repeat(2, 1fr);

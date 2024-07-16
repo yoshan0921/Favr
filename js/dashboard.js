@@ -54,6 +54,8 @@ async function runFunction() {
     // Load the dashboard based on the user's role
     if (currentUserRole === "volunteer") {
       await loadVolunteersDashboard();
+      // Show the tab menu for volunteers
+      document.querySelector(".tab-menu-container").classList.remove("hide");
     } else if (currentUserRole === "elder") {
       await loadEldersDashboard();
     }

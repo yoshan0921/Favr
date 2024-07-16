@@ -1,8 +1,20 @@
-<!-- Tab Contents --->
-<div class="volunteer tabs">
-    <div class="tab active" id="tab1">Explore</div>
-    <div class="tab" id="tab2">My Favors (<span id="favorCount">0</span>)</div>
-    <!-- <div class="tab" id="tab3">History</div> -->
+<!-- Tab Container *** ONLY FORVOLUNTEER SCREEN *** --->
+<div class="tab-menu-container hide">
+    <div class="tabs">
+        <div class="tab active" id="tab1">Explore</div>
+        <div class="tab" id="tab2">My Favors (<span id="favorCount">0</span>)</div>
+    </div>
+    <div class="viewSwitcher">
+        <div class="switch-wrapper">
+            <label for="view" id="listView">List</label>
+            <label class="switch">
+                <input type="checkbox" id="taskViewSwitch" name="view">
+                <span class="slider round"></span>
+            </label>
+            <label for="view" id="mapView">Map</label>
+        </div>
+        <i class="icon filter-icon" aria-label="Filter" id="openFilterBtn"></i>
+    </div>
 </div>
 
 <div class="volunteer tab-content">
@@ -10,18 +22,6 @@
         <i class="fa-solid fa-spinner fa-spin-pulse"></i>
     </div>
     <div id="tab1-content" class="tab-content-item">
-        <div class="viewSwitcher">
-            <div class="switch-wrapper">
-                <label for="view" id="listView">List</label>
-                <label class="switch">
-                    <input type="checkbox" id="taskViewSwitch" name="view">
-                    <span class="slider round"></span>
-                </label>
-                <label for="view" id="mapView">Map</label>
-            </div>
-            <i class="icon filter-icon" aria-label="Filter" id="openFilterBtn"></i>
-            <!-- <button type="button" id="openFilterBtn"><i class="fa-solid fa-sliders"></i></button> -->
-        </div>
         <!-- taskinfo containers (List) -->
         <div id="taskListExplore" class="gridContainer"></div>
         <!-- taskinfo containers (Map) -->

@@ -52,6 +52,18 @@ async function runFunction() {
     } else if (currentUserRole === "elder") {
       await loadEldersHistory();
     }
+
+    // Display & Hide dateRange Filter Icon
+    const dateRangeModalForPending = document.getElementById("dateRangeModalForPending");
+    const dateRangeModalForCompleted = document.getElementById("dateRangeModalForCompleted");
+    document.getElementById("tab1").addEventListener("click", function () {
+      dateRangeModalForPending.classList.remove("hide");
+      dateRangeModalForCompleted.classList.add("hide");
+    });
+    document.getElementById("tab2").addEventListener("click", function () {
+      dateRangeModalForCompleted.classList.remove("hide");
+      dateRangeModalForPending.classList.add("hide");
+    });
   });
 }
 

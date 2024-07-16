@@ -1,8 +1,15 @@
 <!-- Tab Contents --->
-<div class="tabs">
-  <div class="tab active" id="tab1">Pending (<span id="favorCountPending">0</span>)</div>
-  <div class="tab" id="tab2">Completed (<span id="favorCountCompleted">0</span>)</div>
-  <!-- <div class="tab" id="tab3">Cancelled (<span id="favorCountCancelled">0</span>)</div> -->
+<div class="tab-menu-container">
+  <div class="tabs">
+    <div class="tab active" id="tab1">Pending (<span id="favorCountPending">0</span>)</div>
+    <div class="tab" id="tab2">Completed (<span id="favorCountCompleted">0</span>)</div>
+  </div>
+  <div class="viewSwitcher">
+    <i class="icon filter-icon dateRangeModal" aria-label="Filter" id="dateRangeModalForPending"></i>
+  </div>
+  <div class="viewSwitcher">
+    <i class="icon filter-icon dateRangeModal hide" aria-label="Filter" id="dateRangeModalForCompleted"></i>
+  </div>
 </div>
 
 <div class="volunteer tab-content">
@@ -10,9 +17,6 @@
     <i class="fa-solid fa-spinner fa-spin-pulse"></i>
   </div>
   <div id="tab1-content" class="tab-content-item">
-    <div class="viewSwitcher">
-      <i class="icon filter-icon dateRangeModal" aria-label="Filter" id="dateRangeModalForPending"></i>
-    </div>
     <!-- taskinfo containers (List) -->
     <div class="volunteer">
       <div id="taskListPending" class="gridContainer">
@@ -24,9 +28,6 @@
     </div>
   </div>
   <div id="tab2-content" class="tab-content-item hidden">
-    <div class="viewSwitcher">
-      <i class="icon filter-icon dateRangeModal" aria-label="Filter" id="dateRangeModalForCompleted"></i>
-    </div>
     <!-- taskinfo containers (List) -->
     <div class="volunteer">
       <div id="taskListCompleted" class="gridContainer">
