@@ -19,9 +19,11 @@
   gap: 0.5rem;
 }
 .profile-header > div {
-  flex-grow: 1;
   width: 100%;
   gap: 0.5rem;
+  @media screen and (min-width: 800px) {
+    flex: 1 1 350px;
+  }
 }
 .user-name-picture,
 .user-name-edit {
