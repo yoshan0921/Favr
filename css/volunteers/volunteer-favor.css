@@ -3,26 +3,26 @@ img {
   height: auto;
   display: block;
 }
-  
+
 #elderPhoto,
 #elderPhoto2,
 #elderPhoto3 {
   border-radius: 50%;
 }
-  
+
 #backBtn,
 #cancelBtn,
 #acceptBtn,
 #confirmBtn {
   cursor: pointer;
 }
-  
+
 .user-profile-wrapper {
   display: block;
   /* margin: auto; */
   width: 100%;
 }
-  
+
 .user-profile-wrapper .user-profile {
   display: grid;
   grid-template-columns: 3.5rem 8rem 5rem 1fr;
@@ -34,44 +34,54 @@ img {
 .user-profile-wrapper .user-profile .user-info {
   grid-column: 2 / -1;
 }
-  
+
 .user-profile-wrapper .user-profile button {
   grid-column: 2 / 3;
   justify-content: center;
-  font-size: 1.2rem;
+  /* font-size: 1.2rem; */
 }
-    
-  
+
 .user-profile-wrapper .user-profile #contactBtn {
   visibility: hidden;
-  padding: .1rem 1.3rem;
+  padding: 0.1rem 1.3rem;
   margin-top: 0;
   margin-bottom: 1rem;
   border-radius: 20px;
   border: none;
 }
-  
+
 .schedule nav {
   margin: 1.5rem 0;
 }
 
 .schedule nav ul {
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  /* display: grid;
+  grid-template-rows: repeat(4, 1fr); */
 }
 
 .schedule nav li {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* display: grid; */
+  display: flex;
+  flex: 1 1 auto;
+
+  /* grid-template-columns: repeat(5, 1fr); */
   align-items: center;
-  border-top: 0.2rem solid var(--background-gray);
+  /* border-top: 0.2rem solid var(--background-gray); */
+  border-top: 1px solid var(--primary);
   padding: 1rem;
   padding-left: 0;
   gap: 1rem;
 }
 
+.schedule nav li div {
+  flex: 0 0 100px;
+  align-items: center;
+  padding: 0rem;
+}
+
 .schedule nav li:last-child {
-  border-bottom: 0.2rem solid var(--background-gray);
+  /* border-bottom: 0.2rem solid var(--background-gray); */
+  border-bottom: 1px solid var(--primary);
 }
 
 .schedule .content {
@@ -80,17 +90,16 @@ img {
 }
 
 .schedule nav li p {
-  display: grid;
-  grid-column: 2 / 3;
-  text-align: end;
+  /* display: grid; */
+  /* grid-column: 2 / 3; */
+  /* text-align: end; */
 }
 
 .user-profile-wrapper #icons,
 .user-profile-wrapper #acOrDecBtn,
-.user-profile-wrapper #comOrCanBtn
- {
+.user-profile-wrapper #comOrCanBtn {
   visibility: hidden;
-} 
+}
 
 .set {
   display: flex;
@@ -99,24 +108,23 @@ img {
   gap: 5rem;
 }
 
-  
 .user-profile-wrapper .set button,
 .confirm-wrapper .set button {
   border-radius: 50px;
   border: none;
   padding: 0.2rem 2rem;
-  font-size: 1.2rem;
+  /* font-size: 1.2rem; */
 }
 
 main {
   margin-top: 10rem;
-  
+
   /* @media screen and (min-width: 800px) {
     margin-left: auto;
     margin-right: auto;
   } */
 }
-  
+
 .confirm-wrapper {
   flex-shrink: 0;
   margin: auto;
@@ -148,7 +156,7 @@ main {
     text-align: left;
   }
 }
-  
+
 .confirm-wrapper .user-profile i {
   grid-column: 1 / 2;
   align-content: center;
@@ -209,7 +217,6 @@ textarea {
   display: block;
 }
 
-
 /* BUTTONS COLOR=============== */
 #acceptBtn,
 #confirmCompleteBtn,
@@ -225,7 +232,7 @@ textarea {
 
 #cancelBtn {
   color: var(--caringOrange) !important;
-  border-color: var(--caringOrange) !important;;
+  border-color: var(--caringOrange) !important;
 }
 
 /* TEXT ON TIME, FROM, END and NOTE============= */
