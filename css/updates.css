@@ -60,7 +60,7 @@
 }
 #updates .icon-wrapper.warning::after {
     content: "\2716";
-    background-color: var(--statusYellow);
+    background-color: var(--statusWaiting);
 }
 #updates .icon-wrapper.danger::after {
     content: "\0021";
