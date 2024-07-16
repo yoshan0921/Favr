@@ -92,19 +92,13 @@ img {
   visibility: hidden;
 } 
 
-#thumbs-up-white-icon {
-  display: none;
-}
-
-.user-profile-wrapper .set,
-#confirm-overlay .set,
-#accept-overlay .set,
-#schedule-conflict .set {
+.set {
   display: flex;
   justify-content: center;
+  padding-top: 1rem;
   gap: 5rem;
-  margin-top: 1rem;
 }
+
   
 .user-profile-wrapper .set button,
 .confirm-wrapper .set button {
@@ -112,28 +106,6 @@ img {
   border: none;
   padding: 0.2rem 2rem;
   font-size: 1.2rem;
-}
-
-#confirm-overlay,
-#accept-overlay,
-#schedule-conflict,
-#complete-confirm-overlay,
-#task-completed-overlay,
-#cancel-favor-overlay,
-#cancel-complete-overlay {
-  display: grid;
-  align-content: center;
-  position: fixed; /* Sit on top of the page content */
-  display: none; /* Hidden by default */
-  width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
-  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer; /* Add a pointer on hover */
 }
 
 main {
@@ -166,9 +138,6 @@ main {
   text-align: right;
 }
 
-
-
-  
 .confirm-wrapper .user-profile {
   display: grid;
   grid-template-columns: 3.5rem 1fr;
@@ -190,37 +159,13 @@ main {
   flood-color: white;
 }
 
-#icons-overlay {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1rem;
-}
-
-#icons-overlay img {
-  margin: 0;
-}
-
-#complete-confirm-overlay .set,
-#task-completed-overlay .set {
-  display: flex;
-  justify-content: center;
-  padding-top: 1rem;
-}
-
 #schedule-conflict .set {
   justify-content: center;
-}
-
-#cancel-favor-overlay #icons-overlay {
-  display: block;
-
 }
 
 form {
   text-align: left;
   margin: 1rem;
-
 }
 
 textarea {
@@ -232,15 +177,11 @@ textarea {
   border-radius: 5px;
 }
 
-#cancel-favor-overlay .set {
-  margin-left: 3rem;
-}
-
-
 /* CREATE TOGGLE FOR GOOD&BAD ICONS COLOR CHANGE======== */
 
 .good-bad {
   text-align: center;
+  margin: 1rem;
 }
 
 .like,

@@ -103,7 +103,7 @@
 
 
       <!-- Confirm task Overlay Display=============== -->
-      <div id="confirm-overlay">
+      <div class="modal" id="confirm-overlay">
         <div class="confirm-wrapper">
             <span><i class="close-icon closeModal" id="close-confirm"></i></span>
             <span><i class="question-icon"></i></span>
@@ -128,9 +128,9 @@
       </div>
 
       <!-- Schedule Conflict Overlay Display=============== -->
-      <div id="schedule-conflict">
+      <div class="modal" id="schedule-conflict">
         <div class="confirm-wrapper">
-            <span><i class="close-icon" id="close-conflict"></i></span>
+            <span><i class="close-icon closeModal" id="close-conflict"></i></span>
             <span><i class="conflict-icon"></i></span>
           <section class="message">
             <h2>Schedule Conflict!</h2>
@@ -145,9 +145,9 @@
       </div>
 
       <!-- Accept task Overlay Display=============== -->
-      <div id="accept-overlay">
+      <div class="modal" id="accept-overlay">
         <div class="confirm-wrapper">
-          <span><i class="close-icon" id="close-accept"></i></span>
+          <span><i class="close-icon closeModal" id="close-accept"></i></span>
           <span><i class="accepted-icon"></i></span>
           <section class="message">
             <h2>Favor Accepted</h2>
@@ -171,9 +171,9 @@
       
 
       <!-- Confirm Task Complete Overlay Display=============== -->
-      <div id="complete-confirm-overlay">
+      <div class="modal" id="complete-confirm-overlay">
         <div class="confirm-wrapper">
-          <span><i class="close-icon" id="close-complete-confirm"></i></span>
+          <span><i class="close-icon closeModal" id="close-complete-confirm"></i></span>
           <section class="message">
             <h2>Confirm Favor has been delivered successfully</h2>
             <p>How do you rate this experience?</p>
@@ -194,14 +194,14 @@
       </div>
 
       <!-- Conrim task cancel Overlay Display=============== -->
-      <div id="cancel-favor-overlay">
+      <div class="modal" id="cancel-favor-overlay">
         <div class="confirm-wrapper">
-          <span><i class="close-icon" id="cancel-favor"></i></span>
+          <span><i class="close-icon closeModal" id="cancel-favor"></i></span>
           <section class="message">
             <p>You are cancelling the Favor. Are you comfortable sharing the reason with us?</p>
           </section>
 
-          <section class="icons-overlay" id="icons-overlay">
+          <section class="icons-overlay">
             <form>
               <label>
                   <input type="checkbox" name="reason" value="schedule-conflict">
@@ -226,8 +226,9 @@
       </div>
 
       <!-- Cancel Complete Overlay Display=============== -->
-      <div id="cancel-complete-overlay">
+      <div class="modal" id="cancel-complete-overlay">
         <div class="confirm-wrapper">
+          <span><i class="close-icon closeModal" id="close-task-completed"></i></span>
           <span><i class="heart-brake-icon"></i></span>
           <section class="message">
             <h2>We are so sorry that you can't support this Favor!</h2>
@@ -243,9 +244,9 @@
 
 
       <!-- Task Completed Overlay Display=============== -->
-      <div id="task-completed-overlay" class="modal">
+      <div class="modal" id="task-completed-overlay">
         <div class="confirm-wrapper">
-          <span><i class="close-icon" id="close-task-completed"></i></span>
+          <span><i class="close-icon closeModal" id="close-task-completed"></i></span>
           <span><i class="heart-icon"></i></span>
           <section class="message">
             <h2>Thank you for supporting <span id="completedElderName"></span> and our community!</h2>
