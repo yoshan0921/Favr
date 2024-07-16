@@ -326,12 +326,6 @@ function goMyFavors() {
   window.location.href = "/dashboard.html#myfavors";
 }
 
-const declineBtn = document.getElementById("declineBtn");
-if (declineBtn)
-  declineBtn.addEventListener("click", function () {
-    goHome();
-  });
-
 const myFavorsBtn = document.getElementById("myFavorsBtn");
 if (myFavorsBtn)
   myFavorsBtn.addEventListener("click", function () {
@@ -383,32 +377,9 @@ document.getElementById("cancel-completeBtn").addEventListener("click", async fu
   exploreFavors();
 });
 
-// Create click events on each icons=============
-const thumsDown = document.getElementById("thumsDown");
-if (thumsDown)
-  thumsDown.addEventListener("click", function () {
-    exploreFavors();
-  });
-
-const thumsUp = document.getElementById("thumsUp");
-if (thumsUp)
-  thumsUp.addEventListener("click", function () {
-    exploreFavors();
-  });
-
-const thumsDownOverlay = document.getElementById("thumsDown-overlay");
-if (thumsDownOverlay)
-  thumsDownOverlay.addEventListener("click", function () {
-    exploreFavors();
-  });
-
-const thumsUpOverlay = document.getElementById("thumsUp-overlay");
-if (thumsUpOverlay)
-  thumsUpOverlay.addEventListener("click", function () {
-    exploreFavors();
-  });
 
 // Close overlay display by clicking "x" icon
-document.getElementById("close-confirm").addEventListener("click", function () {
-  console.log("clicked!");
-});
+// document.getElementById("close-confirm").addEventListener("click", function () {
+//   console.log("clicked!");
+// });
+
