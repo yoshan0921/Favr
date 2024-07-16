@@ -172,13 +172,19 @@ async function acceptTask(taskID, taskData) {
     // Update the task data on the Firestore
     await updateDocument("tasks", taskID, taskData);
     console.log("Task accepted!", taskID.taskData);
+    // Get the current user data
+    const currentUser = await getDocument("users", getCurrentUserID());
 
+    // Get the current user's profile picture for the notification
+    const url = currentUser.profilePictureURL ? await getFile(`profile/${currentUser.profilePictureURL}`) : "#";
     // Send a notification to the requester
     sendNotification(
       {
         title: "Favor accepted!",
         link: `../tasks/volunteer-favor.html?taskid=${taskID}`,
-        message: `A volunteer has accepted to help you with your ${taskData.name} favor!`,
+        icon: url,
+        message: `<span>${currentUser.firstName}</span> has accepted to help you with your ${taskData.name} favor!`,
+        senderID: currentUser.id
       },
       taskData.requesterID
     );
