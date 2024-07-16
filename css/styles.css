@@ -880,6 +880,9 @@ Floating cards
 .seniors-icon::after {
   content: url("../assets/icons/seniors.svg") !important;
 }
+.reason-icon::after {
+  content: url("../assets/icons/reason.svg") !important;
+}
 
 /*
 =========================

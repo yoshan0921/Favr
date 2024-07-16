@@ -122,8 +122,8 @@ async function displayTaskSummary(taskID) {
       // Display cancel reason
       cancelReason.innerHTML = task.details.cancelReason || "No reason given";
       // Change the Date and Time labels
-      dateLabel.innerText = "Cancelled Date";
-      timeLabel.innerText = "Cancelled Time";
+      dateLabel.innerHTML = `<span class="date-icon"></span>Cancelled Date:`;
+      timeLabel.innerHTML = `<span class="time-icon"></span>Cancelled Time:`;
       // Hide cancelFavor button if a favor is cancelled
       hideCancelFavor.classList.add("hidden");
       // Hide approve button
@@ -138,8 +138,8 @@ async function displayTaskSummary(taskID) {
       dateData.innerHTML = task.details.completedDate;
       timeData.innerHTML = task.details.completedTime;
       // Change the Date and Time labels
-      dateLabel.innerText = "Completed Date";
-      timeLabel.innerText = "Completed Time";
+      dateLabel.innerHTML = `<span class="date-icon"></span>Completed Date:`;
+      timeLabel.innerHTML = `<span class="time-icon"></span>Completed Time:`;
       // Hide cancel reason
       parentLi.classList.add("hidden");
       // Hide cancelFavor button if a favor is completed
