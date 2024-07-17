@@ -264,6 +264,9 @@ async function loadVolunteersDashboard() {
     document.getElementById("tab1").click();
   } else if (hash === "#myfavors") {
     document.getElementById("tab2").click();
+    // When My Favors tab is clicked, hide the switcher
+    document.querySelector(".switch-wrapper").classList.add("hidden");
+    document.querySelector(".filter-icon").classList.add("invisible");
   }
 
   // Get current location (If it's not first time in the session, get the location from sessionStorage)
@@ -314,10 +317,12 @@ async function loadVolunteersDashboard() {
   document.getElementById("tab1").addEventListener("click", () => {
     // When Explore tab is clicked, show the switcher
     document.querySelector(".switch-wrapper").classList.remove("hidden");
+    document.querySelector(".filter-icon").classList.remove("invisible");
   });
   document.getElementById("tab2").addEventListener("click", () => {
     // When My Favors tab is clicked, hide the switcher
     document.querySelector(".switch-wrapper").classList.add("hidden");
+    document.querySelector(".filter-icon").classList.add("invisible");
   });
 
   // Filter modal on the Explore tab
