@@ -569,11 +569,11 @@ main.loaded .loading-screen {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--disabledText);
+  color: var(--primary);
+  /* color: var(--disabledText); */
   text-decoration: none;
   padding: 0 10px;
   font-size: clamp(0.5rem, 5vw, 0.8rem);
-  font-weight: 700;
 }
 .sidebar .icon-wrapper {
   display: flex;
@@ -584,8 +584,8 @@ main.loaded .loading-screen {
 
 .sidebar a.active,
 .sidebar a:hover {
-  color: var(--primary);
   cursor: pointer;
+  font-weight: 700;
 }
 /* .sidebar a.active .icon::after,
 .sidebar a:hover .icon::after {
@@ -791,37 +791,37 @@ Floating cards
   height: 0;
   overflow: hidden;
   z-index: -1;
-  background-image: url("../assets/icons/home-off.png"), url("../assets/icons/home-on.png"), url("../assets/icons/profile-off.png"), url("../assets/icons/profile-on.png"),
-    url("../assets/icons/updates-off.png"), url("../assets/icons/updates-on.png"), url("../assets/icons/history-off.png"), url("../assets/icons/history-on.png");
+  background-image: url("../assets/icons/home-off.svg"), url("../assets/icons/home-on.svg"), url("../assets/icons/profile-off.svg"), url("../assets/icons/profile-on.svg"),
+    url("../assets/icons/updates-off.svg"), url("../assets/icons/updates-on.svg"), url("../assets/icons/history-off.svg"), url("../assets/icons/history-on.svg");
 }
 /* SIDE BAR ICONS */
 .home-icon::after {
-  content: url("../assets/icons/home-off.png") !important;
+  content: url("../assets/icons/home-off.svg") !important;
 }
 .sidebar a:hover .home-icon::after,
 .sidebar a.active .home-icon::after {
-  content: url("../assets/icons/home-on.png") !important;
+  content: url("../assets/icons/home-on.svg") !important;
 }
 .profile-icon::after {
-  content: url("../assets/icons/profile-off.png") !important;
+  content: url("../assets/icons/profile-off.svg") !important;
 }
 .sidebar a:hover .profile-icon::after,
 .sidebar a.active .profile-icon::after {
-  content: url("../assets/icons/profile-on.png") !important;
+  content: url("../assets/icons/profile-on.svg") !important;
 }
 .updates-icon::after {
-  content: url("../assets/icons/updates-off.png") !important;
+  content: url("../assets/icons/updates-off.svg") !important;
 }
 .sidebar a:hover .updates-icon::after,
 .sidebar a.active .updates-icon::after {
-  content: url("../assets/icons/updates-on.png") !important;
+  content: url("../assets/icons/updates-on.svg") !important;
 }
 .history-icon::after {
-  content: url("../assets/icons/history-off.png") !important;
+  content: url("../assets/icons/history-off.svg") !important;
 }
 .sidebar a:hover .history-icon::after,
 .sidebar a.active .history-icon::after {
-  content: url("../assets/icons/history-on.png") !important;
+  content: url("../assets/icons/history-on.svg") !important;
 }
 /* OTHER ICONS */
 .filter-icon::after {

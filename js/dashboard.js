@@ -257,6 +257,7 @@ function createCardForElder(task) {
 async function loadVolunteersDashboard() {
   // Tab menu
   showTabmenu();
+
   // Link to each tasb in the dashboard
   let hash = window.location.hash;
   if (hash === "#explore") {
@@ -308,6 +309,16 @@ async function loadVolunteersDashboard() {
       { passive: false }
     );
   }
+
+  // Hide List/Map switcher on the My Favors tab
+  document.getElementById("tab1").addEventListener("click", () => {
+    // When Explore tab is clicked, show the switcher
+    document.querySelector(".switch-wrapper").classList.remove("hidden");
+  });
+  document.getElementById("tab2").addEventListener("click", () => {
+    // When My Favors tab is clicked, hide the switcher
+    document.querySelector(".switch-wrapper").classList.add("hidden");
+  });
 
   // Filter modal on the Explore tab
   if (filterBtn) {
