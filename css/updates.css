@@ -7,21 +7,10 @@
     border: none;
     background-color: var(--pureWhite);
 }
-.update.new .icon-wrapper img{
-    filter: none;
-}
+
 .update{
     display: flex;
     gap: 1rem;
-    /*
-    transition: all 0.2s ease-out;
-    position: relative;
-    padding: .5rem;
-    border-radius: 12px;
-    min-height: 102px;
-    border: thin solid var(--textBlack100);
-    box-shadow: 0px 12px 28px -6px rgba(0, 0, 0, 0.2);
-    */
     background-color: var(--background-gray);
 }
 .update:hover{
@@ -68,7 +57,6 @@
 }
 .icon-wrapper img{
     border-radius: 50px;
-    filter: grayscale(60%);
 }
 .update .notification-content{
     flex-grow: 1;

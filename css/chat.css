@@ -15,7 +15,6 @@
   border-radius: 50%;
   width: 68px;
   height: 68px;
-  filter: grayscale(60%);
 }
 
 .contact .userInfo {
@@ -43,9 +42,6 @@
 }
 .contact.has-updates {
   font-weight: 600;
-}
-.contact.has-updates .photo {
-  filter: none;
 }
 .contact.has-updates::after {
   top: 10px;
