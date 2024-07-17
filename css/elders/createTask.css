@@ -31,6 +31,10 @@ body {
   background-color: rgb(21, 106, 133);
   color: white;
   border-radius: 50%;
+
+  .check-white-icon {
+    margin-top: 4px;
+  }
 }
 
 .stepText {
@@ -396,7 +400,8 @@ ul#summaryList {
   justify-content: space-between;
   align-items: center;
 
-  #homeAddressBtn {
+  #homeAddressBtn,
+  #homeAddressBtnEnd {
     display: flex;
     justify-self: end;
     padding-left: 1rem;

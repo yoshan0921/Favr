@@ -903,6 +903,9 @@ Floating cards
 .reason-icon::after {
   content: url("../assets/icons/reason.svg") !important;
 }
+.check-white-icon::after {
+  content: url("../assets/icons/check-white.svg") !important;
+}
 
 /*
 =========================
