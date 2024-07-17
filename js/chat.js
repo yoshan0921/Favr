@@ -62,123 +62,122 @@ async function runFunction() {
       ];
     }
   });
-    // Create user list
+  // Create user list
   getAllWithFilter("tasks", filterCondition).then(async (collection) => {
     let contactIDs = [];
     let promises = [];
     const updates = query(ref(database, loginUserID));
-    get(updates)
-    .then((snapshot)=>{
-        if(snapshot.exists()){
-            snapshot.forEach(element =>{
-                let update = element.val();
-                if(update.isNew && update.isMessage && update.senderID){
-                    if(update.senderID){
-                      if(update.senderID in newMessagesByContact){
-                        newMessagesByContact[update.senderID][0].push(update.id);
-                        newMessagesByContact[update.senderID][1].push(update) ;
-                      }else{
-                          newMessagesByContact[update.senderID] = [[update.id], [update]];
-                      }
-                    }
-                }
-            })
-        }
-    collection.forEach(async (doc) => {
-      if (loginUserRole === "volunteer") {
-        contactID = doc[1].requesterID;
-      } else if (loginUserRole === "elder") {
-        contactID = doc[1].volunteerID;
-      }
-
-      // Prevent duplicate contact
-      if (contactIDs.includes(contactID)) return;
-      contactIDs.push(contactID);
-
-      // Create contact list
-      let contact = document.createElement("div");
-      contact.classList.add("contact","floating-card");
-      contact.setAttribute("data-contactID", contactID);
-
-      // Get the user's information
-      let promise = getDocument("users", contactID)
-        .then((user) => {
-          let profileImage = document.createElement("img");
-          profileImage.classList.add("photo");
-          profileImage.setAttribute("src", `${placeholderImage}`);
-          profileImage.setAttribute("data-storage-path", `profile/${user.profilePictureURL}`);
-          contact.appendChild(profileImage);
-
-          let requesterName = document.createElement("p");
-          requesterName.classList.add("name");
-          requesterName.textContent = `${user.firstName} ${user.lastName}`;
-          console.log(newMessagesByContact, user.id);
-          if(newMessagesByContact[user.id] && newMessagesByContact[user.id].length > 0){
-            contact.classList.add("has-updates");
-          }
-
-          let lastMessageTime = document.createElement("p");
-          lastMessageTime.classList.add("lastMessageTime");
-
-          let lastMessage = document.createElement("p");
-          lastMessage.classList.add("lastMessage");
-
-          // Get the last message in the chat room
-          const chatRef = ref(database, `${[loginUserID, user.id].sort().join("-")}`);
-          const queryConstraints = query(chatRef, orderByKey(), limitToLast(1));
-          get(queryConstraints)
-            .then((snapshot) => {
-              if (snapshot.exists()) {
-                const key = snapshot.key;
-                const data = snapshot.val();
-                for (let item in data) {
-                  lastMessage.textContent = data[item].message;
-                  // If month date is not equal to today, display the date + time
-                  let now = new Date();
-                  if (`${data[item].month} ${data[item].day}` !== `${now.toLocaleString("en-US", { month: "long" })} ${now.getDate()}`) {
-                    lastMessageTime.textContent = ` ${data[item].month} ${data[item].day}`;
-                  } else {
-                    lastMessageTime.textContent = data[item].time;
-                  }
-                }
+    get(updates).then((snapshot) => {
+      if (snapshot.exists()) {
+        snapshot.forEach((element) => {
+          let update = element.val();
+          if (update.isNew && update.isMessage && update.senderID) {
+            if (update.senderID) {
+              if (update.senderID in newMessagesByContact) {
+                newMessagesByContact[update.senderID][0].push(update.id);
+                newMessagesByContact[update.senderID][1].push(update);
               } else {
-                console.log("No message found.");
+                newMessagesByContact[update.senderID] = [[update.id], [update]];
               }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+            }
+          }
+        });
+      }
+      collection.forEach(async (doc) => {
+        if (loginUserRole === "volunteer") {
+          contactID = doc[1].requesterID;
+        } else if (loginUserRole === "elder") {
+          contactID = doc[1].volunteerID;
+        }
 
-          let userInfo = document.createElement("div");
-          userInfo.classList.add("userInfo");
-          userInfo.appendChild(requesterName);
-          userInfo.appendChild(lastMessageTime);
-          userInfo.appendChild(lastMessage);
-          contact.appendChild(userInfo);
-          contactList.appendChild(contact);
-        })
-        .catch((error) => console.log(error));
+        // Prevent duplicate contact
+        if (contactIDs.includes(contactID)) return;
+        contactIDs.push(contactID);
 
-      // Add the promise to the array
-      promises.push(promise);
+        // Create contact list
+        let contact = document.createElement("div");
+        contact.classList.add("contact", "floating-card");
+        contact.setAttribute("data-contactID", contactID);
 
-      // Add event listener to each contact
-      contact.addEventListener("click", async function () {
-        // Create chat room name from sorted two user IDs
-        chatRoomID = [loginUserID, this.getAttribute("data-contactID")].sort().join("-");
-        console.log("Chat Room ID: " + chatRoomID);
+        // Get the user's information
+        let promise = getDocument("users", contactID)
+          .then((user) => {
+            let profileImage = document.createElement("img");
+            profileImage.classList.add("photo");
+            profileImage.setAttribute("src", `${placeholderImage}`);
+            profileImage.setAttribute("data-storage-path", `profile/${user.profilePictureURL}`);
+            contact.appendChild(profileImage);
 
-        // Load chat room
-       // loadChatRoom(chatRoomID, this, newMessagesByContact);
-       loadChatRoom(chatRoomID, newMessagesByContact);
+            let requesterName = document.createElement("p");
+            requesterName.classList.add("name");
+            requesterName.textContent = `${user.firstName} ${user.lastName}`;
+            console.log(newMessagesByContact, user.id);
+            if (newMessagesByContact[user.id] && newMessagesByContact[user.id].length > 0) {
+              contact.classList.add("has-updates");
+            }
 
-        // Check if chat message is allowed to sent.
-        checkChatRoomAvailability(chatRoomID);
+            let lastMessageTime = document.createElement("p");
+            lastMessageTime.classList.add("lastMessageTime");
 
-        // Replace h1#page-title with the selected elder/colunteer information
-        showChatRoomTitle(chatRoomID);
+            let lastMessage = document.createElement("p");
+            lastMessage.classList.add("lastMessage");
+
+            // Get the last message in the chat room
+            const chatRef = ref(database, `${[loginUserID, user.id].sort().join("-")}`);
+            const queryConstraints = query(chatRef, orderByKey(), limitToLast(1));
+            get(queryConstraints)
+              .then((snapshot) => {
+                if (snapshot.exists()) {
+                  const key = snapshot.key;
+                  const data = snapshot.val();
+                  for (let item in data) {
+                    lastMessage.textContent = data[item].message;
+                    // If month date is not equal to today, display the date + time
+                    let now = new Date();
+                    if (`${data[item].month} ${data[item].day}` !== `${now.toLocaleString("en-US", { month: "long" })} ${now.getDate()}`) {
+                      lastMessageTime.textContent = ` ${data[item].month} ${data[item].day}`;
+                    } else {
+                      lastMessageTime.textContent = data[item].time;
+                    }
+                  }
+                } else {
+                  console.log("No message found.");
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+
+            let userInfo = document.createElement("div");
+            userInfo.classList.add("userInfo");
+            userInfo.appendChild(requesterName);
+            userInfo.appendChild(lastMessageTime);
+            userInfo.appendChild(lastMessage);
+            contact.appendChild(userInfo);
+            contactList.appendChild(contact);
+          })
+          .catch((error) => console.log(error));
+
+        // Add the promise to the array
+        promises.push(promise);
+
+        // Add event listener to each contact
+        contact.addEventListener("click", async function () {
+          // Create chat room name from sorted two user IDs
+          chatRoomID = [loginUserID, this.getAttribute("data-contactID")].sort().join("-");
+          console.log("Chat Room ID: " + chatRoomID);
+
+          // Load chat room
+          // loadChatRoom(chatRoomID, this, newMessagesByContact);
+          loadChatRoom(chatRoomID, newMessagesByContact);
+
+          // Check if chat message is allowed to sent.
+          checkChatRoomAvailability(chatRoomID);
+
+          // Replace h1#page-title with the selected elder/colunteer information
+          showChatRoomTitle(chatRoomID);
+        });
       });
-    });
       // Wait for all getDocument calls to finish
       Promise.all(promises).then(() => {
         // If crid is specified in the URL, load the chat room
@@ -190,19 +189,18 @@ async function runFunction() {
           showChatRoomTitle(chatRoomID);
           return;
         }
-  
+
         // Show contact list and show message history
         contactList.classList.remove("hide");
-  
+
         // Load firebase storage images
         lazyLoadImages();
       });
-  
+
       // Loading icon
       const main = document.getElementsByTagName("main")[0];
       main.classList.add("loaded");
-    })
-
+    });
   });
 
   // Send message
@@ -237,9 +235,9 @@ async function runFunction() {
               icon: url,
               isMessage: true,
               updateType: "info",
-              link:`/chat.html?crid=${chatRoomID}`,
+              link: `/chat.html?crid=${chatRoomID}`,
               message: message.value,
-              senderID: currentUser.id
+              senderID: currentUser.id,
             },
             receiverID
           );
@@ -252,25 +250,25 @@ async function runFunction() {
       });
   });
 }
-async function loadChatRoom(chatRoomID,newMessagesByContact) {
+async function loadChatRoom(chatRoomID, newMessagesByContact) {
   // Hide contact list and show message history
   contactList.classList.add("hide");
   messageHistory.classList.remove("hide");
 
   // Load chat room messages
-  loadChatRoomMessages(chatRoomID,newMessagesByContact);
+  loadChatRoomMessages(chatRoomID, newMessagesByContact);
 }
 
-function loadChatRoomMessages(chatRoomID,newMessagesByContact) {
+function loadChatRoomMessages(chatRoomID, newMessagesByContact) {
   // Clear the message history area
   messageHistory.innerHTML = "";
 
   let previousDate = "";
   let contactID = chatRoomID.split("-")[1];
-  newMessagesByContact.filter(updates => updates[0] == contactID).forEach(message =>{
-    console.log(message);
-    updateNotificationStatus(loginUserID,message[1]);
-  })
+  // newMessagesByContact.filter(updates => updates[0] == contactID).forEach(message =>{
+  //   console.log(message);
+  //   updateNotificationStatus(loginUserID,message[1]);
+  // })
   // Load chat room messages
   onChildAdded(ref(database, chatRoomID), function (data) {
     const v = data.val();
@@ -355,7 +353,7 @@ function showChatRoomTitle(chatRoomID) {
   } else {
     contactUserID = userID1;
   }
-  
+
   // Create chat room title
   let contact = document.createElement("div");
   contact.classList.add("contactHeader", "page-title");
