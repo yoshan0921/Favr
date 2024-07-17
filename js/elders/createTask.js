@@ -241,23 +241,16 @@ function runFunction() {
         previousStepBtn.disabled = false;
 
         // Add active classes to the current step number
-        document
-          .querySelector(`.step${currentStep} .stepNumber`)
-          .classList.add("stepActive");
-        document
-          .querySelector(`.step${currentStep} .stepText`)
-          .classList.add("textActive");
-        document
-          .querySelector(`.stepLine${currentStep}`)
-          .classList.add("stepLineActive");
-        document
-          .querySelector(`.step${currentStep}`)
-          .classList.add("stepAnimate");
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
+        document.querySelector(`.stepLine${currentStep}`).classList.add("stepLineActive");
+        document.querySelector(`.step${currentStep}`).classList.add("stepAnimate");
 
         // Replace the previous step number with a check mark
-        document.querySelector(
-          `.step${currentStep - 1} .stepNumber span`
-        ).textContent = "✔";
+        // document.querySelector(`.step${currentStep - 1} .stepNumber span`).textContent = "✔";
+        const checkIcon = document.querySelector(`.step${currentStep - 1} .stepNumber span`);
+        checkIcon.textContent = "";
+        checkIcon.classList.add("check-white-icon");
 
         // Update selection history
         updateSelectionHistory();
@@ -310,19 +303,14 @@ function runFunction() {
         }
 
         // Remove active classes from the current step number
-        document
-          .querySelector(`.step${currentStep} .stepNumber`).classList.remove("stepActive");
-        document
-          .querySelector(`.step${currentStep} .stepText`).classList.remove("textActive");
-        document
-          .querySelector(`.stepLine${currentStep}`).classList.remove("stepLineActive");
-        document
-          .querySelector(`.step${currentStep}`).classList.remove("stepAnimate");
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.remove("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.remove("textActive");
+        document.querySelector(`.stepLine${currentStep}`).classList.remove("stepLineActive");
+        document.querySelector(`.step${currentStep}`).classList.remove("stepAnimate");
 
         // Restore the original step number
-        document.querySelector(
-          `.step${currentStep - 1} .stepNumber span`
-        ).textContent = `${currentStep - 1}`;
+        document.querySelector(`.step${currentStep - 1} .stepNumber span`).textContent = `${currentStep - 1}`;
+        document.querySelector(`.step${currentStep - 1} .stepNumber span`).classList.remove("check-white-icon");
 
         currentStep -= 1;
         currentStepDiv.classList.add("hidden"); // hides current step
@@ -336,12 +324,8 @@ function runFunction() {
         }
 
         // Add active class to the current step number
-        document
-          .querySelector(`.step${currentStep} .stepNumber`)
-          .classList.add("stepActive");
-        document
-          .querySelector(`.step${currentStep} .stepText`)
-          .classList.add("textActive");
+        document.querySelector(`.step${currentStep} .stepNumber`).classList.add("stepActive");
+        document.querySelector(`.step${currentStep} .stepText`).classList.add("textActive");
 
         // Replace the Submit button with Next Step button when going back to previous steps
         if (currentStep < 4) {
@@ -466,7 +450,10 @@ function runFunction() {
       <li><div><i class="note-icon"></i>Note:</div><div><span>${task.notes}</span></div></li>
     `;
     // Replace step4 number with check after submit
-    document.querySelector(`.step4 .stepNumber span`).textContent = "✔";
+    // document.querySelector(`.step4 .stepNumber span`).textContent = "✔";
+    const checkIcon = document.querySelector(`.step${currentStep - 1} .stepNumber span`);
+    checkIcon.textContent = "";
+    checkIcon.classList.add("check-white-icon");
   }
 
   // Event listener for editFavor (opens popup)
@@ -592,6 +579,7 @@ const startAddress = document.getElementById("startAddress");
 const endAddress = document.getElementById("endAddress");
 const micForStartAddress = document.getElementById("micForStartAddress");
 const micForEndAddress = document.getElementById("micForEndAddress");
+const micForNote = document.getElementById("micForNote");
 
 if (micForStartAddress) {
   micForStartAddress.addEventListener("click", () => {
@@ -620,6 +608,22 @@ if (micForEndAddress) {
     recognition.onresult = ({ results }) => {
       endAddress.value = results[0][0].transcript;
       endAddress.focus();
+    };
+    recognition.start();
+  });
+}
+
+if (micForNote) {
+  micForNote.addEventListener("click", () => {
+    console.log("click");
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    notes.value = "";
+
+    recognition.onresult = ({ results }) => {
+      notes.value = results[0][0].transcript;
+      notes.focus();
     };
     recognition.start();
   });
@@ -700,9 +704,18 @@ modalCancelFavorBtn.addEventListener("click", async () => {
 // TODO: If possible, autoclick the address result and display map
 const currentUser = await getDocument("users", getCurrentUserID());
 const homeAddressBtn = document.getElementById("homeAddressBtn");
+const homeAddressBtnEnd = document.getElementById("homeAddressBtnEnd");
+
 homeAddressBtn.addEventListener("click", async () => {
   console.log(currentUser.address);
   const startAddress = document.getElementById("startAddress");
   startAddress.value = currentUser.address;
   startAddress.focus();
+});
+
+homeAddressBtnEnd.addEventListener("click", async () => {
+  console.log(currentUser.address);
+  const startAddress = document.getElementById("endAddress");
+  endAddress.value = currentUser.address;
+  endAddress.focus();
 });
