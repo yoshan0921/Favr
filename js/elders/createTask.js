@@ -47,8 +47,10 @@ function runFunction() {
   const timePickers = document.querySelectorAll("input[type=time]");
   timePickers.forEach((input) => {
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0"); // Ensure 2 digits
-    const minutes = String(now.getMinutes()).padStart(2, "0"); // Ensure 2 digits
+    // const hours = String(now.getHours()).padStart(2, "0");
+    const hours = String(now.getHours() + 1).padStart(2, "0"); // FOR DEMO, add 1 hr to current time
+    // const minutes = String(now.getMinutes()).padStart(2, "0");
+    const minutes = "00"; // FOR DEMO, set minutes to 00
     input.value = `${hours}:${minutes}`;
   });
 
