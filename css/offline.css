@@ -16,3 +16,6 @@ main{
 button{
     padding: .5rem 1rem !important;
 }
+p{
+    font-size: clamp(.5rem,5vh,1.1rem);
+}
