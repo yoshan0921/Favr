@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/offline.css">
     <title>No Network Connection</title>
 </head>
 <body>
     <main>
-        <h1>You are currently offline</h1>
-        <p>Please check for internet connection</p>
-        <button onclick="window.location.reload()">Reload</button>
+        <div class="img-wrapper"><img src="./assets/images/offline.png" alt="Offline illustration"></div>
+        <div class="message-wrapper">
+            <h1>You are offline!</h1>
+            <p>Your device is unable to connect to the Internet.</p>
+            <p>Please press <b>“Try again”</b> to reload the page.</p>
+        </div>
+        <div class="button-wrapper"><button onclick="window.location.reload()" class="rounded-btn">Try Again</button></div>
     </main>
     
 </body>
