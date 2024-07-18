@@ -559,12 +559,13 @@ main.loaded .loading-screen {
   list-style: none;
   padding-left: 0;
   display: flex;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
   align-self: center;
   flex-grow: 1;
 }
 .sidebar ul li {
   display: flex;
+  flex: 1 1 calc(25% - 5px);
 }
 .sidebar a {
   flex: 1;
@@ -573,10 +574,10 @@ main.loaded .loading-screen {
   align-items: center;
   justify-content: center;
   color: var(--primary);
-  /* color: var(--disabledText); */
   text-decoration: none;
-  padding: 0 10px;
-  font-size: clamp(0.5rem, 5vw, 0.8rem);
+  /* padding: 0 10px; */
+  /* font-size: clamp(0.5rem, 5vw, 0.8rem); */
+  font-size: clamp(0.875rem, 0.784rem + 0.45vw, 1.125rem);
 }
 .sidebar .icon-wrapper {
   display: flex;
@@ -604,12 +605,10 @@ main.loaded .loading-screen {
   padding: 1rem 0.5rem 0.5rem 0.5rem;
   background-color: var(--background);
   position: fixed;
-
   left: 0rem;
   right: 0px;
   width: 100%;
-
-  z-index: 10;
+  z-index: 2;
 
   @media screen and (min-width: 800px) {
     margin-top: -1rem;
@@ -1016,13 +1015,10 @@ Media queries
     align-self: start;
     margin-top: 75px;
   }
-
   .content {
     position: relative;
     padding: 1rem 2rem;
-    /* height: 100%; */
   }
-
   .sidebar a {
     display: flex;
     flex-direction: row;
@@ -1030,15 +1026,10 @@ Media queries
     height: 65px;
     width: 100%;
     line-height: 65px;
-    padding-left: 30px;
+    padding-left: 20px;
     box-sizing: border-box;
-    /*
-    border-bottom: 1px solid var(--background-dark);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: 5px solid transparent;
-    */
+    font-size: 20px;
   }
-
   .sidebar a i {
     font-size: 1rem;
     margin-right: 16px;

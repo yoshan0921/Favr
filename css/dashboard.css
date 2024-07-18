@@ -6,7 +6,6 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  background-position: 0 185px;
 
   @media screen and (min-width: 800px) {
     background-image: url("/assets/images/background-desktop.png");
@@ -177,6 +176,7 @@ body {
 
 .createTask .taskCard img {
   margin: auto;
+  border-radius: 12px;
 }
 
 /* -------------------------------------------------- */

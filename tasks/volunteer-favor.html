@@ -1,261 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="../js/common.js"></script>
-    <script type="module" src="../js/volunteers/volunteer-favor.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="../js/common.js"></script>
+  <script type="module" src="../js/volunteers/volunteer-favor.js"></script>
 
-    <script type="module" src="../js/common.js"></script>
+  <script type="module" src="../js/common.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="../css/styles.css">
-    <link rel="stylesheet" type="text/css" href="../css/volunteers/volunteer-favor.css">
-    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <title>Pending History</title>
-  </head>
+  <link rel="stylesheet" type="text/css" href="../css/styles.css">
+  <link rel="stylesheet" type="text/css" href="../css/volunteers/volunteer-favor.css">
+  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <title>Pending History</title>
+</head>
 
-  <body>
-    <!-- Left Column -->
-    <div id="leftside-column"></div>
+<body>
+  <!-- Left Column -->
+  <div id="leftside-column"></div>
 
-    <!-- Header -->
-    <header id="header"></header>
-
-
-    <!-- Main Content -->
-    <main class="content">
-      <h1 id="taskName"></h1>
-      <div class="user-profile-wrapper">
-
-        <section class="user-profile">
-          <img id="elderPhoto">
-          <div class="user-info">
-            <h3 id="elderName" class="name"></h3>
-            <p id="elderAddress"></p>
-          </div>
-          <!-- <img src="../assets/icons/button_desktop.svg" alt="Contact"> -->
-          <button class="rounded-btn" id="contactBtn">Contact&nbsp;&nbsp;&nbsp;&nbsp;></button>
-        </section>
-
-        <section class="schedule">
-          <nav>
-            <ul>
-              <li>
-                <div class="content">
-                  <span><i class="time-icon"></i></span>
-                  <a href="#">Time:</a>
-                </div>
-                <p id="taskTime"></p>
-              </li>
-              <li>
-                <div class="content">
-                  <span><i class="location-icon"></i></span>
-                  <a href="#">From:</a>
-                </div>
-                <p id="startAddress"></p>
-              </li>
-              <li>
-                <div class="content">
-                  <span><i class="location-icon"></i></span>
-                  <a href="#">End:</a>
-                </div>
-                <p id="endAddress"></p>
-              </li>
-              <li>
-                <div class="content">
-                  <span><i class="note-icon"></i></span>
-                  <a href="#">Note:</a>
-                </div>
-                <p id="taskNote"></p>
-              </li>
-            </ul>
-          </nav>
-        </section>
-
-        <section class="icons" id="icons">
-          <input type="checkbox" id="colorToggle">
-          <div class="good-bad">
-            <label for="colorToggle" class="like" id="like"></label>
-            <label for="colorToggle" class="dislike" id="dislike"></label>
-          </div>
-        </section>
+  <!-- Header -->
+  <header id="header"></header>
 
 
-        <section class="set" id="acOrDecBtn">
-          <!-- <button class="outlined-btn" id="declineBtn">Decline</button> -->
-          <button class="rounded-btn" id="acceptBtn">Accept</button>
-        </section>
+  <!-- Main Content -->
+  <main class="content">
+    <h2 id="taskName"></h2>
+    <div class="user-profile-wrapper">
 
-        <section class="set" id="comOrCanBtn">
-          <button class="outlined-btn" id="cancelBtn">Cancel</button>
-          <button class="rounded-btn" id="confirmCompleteBtn">Complete</button>
-        </section>
-      </div>
-    </main>
+      <section class="user-profile">
+        <img id="elderPhoto">
+        <div class="user-info">
+          <h3 id="elderName" class="name"></h3>
+          <p id="elderAddress"></p>
+        </div>
+        <!-- <img src="../assets/icons/button_desktop.svg" alt="Contact"> -->
+        <button class="rounded-btn" id="contactBtn">Contact&nbsp;&nbsp;&nbsp;&nbsp;></button>
+      </section>
 
-    <!-- Footer -->
-    <footer id="footer"></footer>
-  </body>
-  
-
-
-
-      <!-- Confirm task Overlay Display=============== -->
-      <div class="modal" id="confirm-overlay">
-        <div class="confirm-wrapper">
-            <span><i class="close-icon closeModal" id="close-confirm"></i></span>
-            <span><i class="question-icon"></i></span>
-            <h2>Confirm Favor</h2>
-
-            <section class="user-profile">
-              <img id="elderPhoto2">
-              <div class="user-info">
-                <h3 id="confirmElderName" class="name"></h3>
-                <p id="confirmElderAddress"></p>
+      <section class="schedule">
+        <nav>
+          <ul>
+            <li>
+              <div class="content">
+                <span><i class="time-icon"></i></span>
+                <a href="#">Time:</a>
               </div>
-            </section>
-  
-            <p>Are you willing to help <span id="confirmWrapperElderName"></span> with this <span id="confirmTaskName"></span> Favor?</p>
-          </section>
-
-
-          <section class="set">
-            <button class="rounded-btn" id="confirmBtn">Confirm</button>
-          </section>
-        </div>
-      </div>
-
-      <!-- Schedule Conflict Overlay Display=============== -->
-      <div class="modal" id="schedule-conflict">
-        <div class="confirm-wrapper">
-            <span><i class="close-icon closeModal" id="close-conflict"></i></span>
-            <span><i class="conflict-icon"></i></span>
-          <section class="message">
-            <h2>Schedule Conflict!</h2>
-              <p>You have another Favor going on during this time slot.</p>
-              <p>Are you still willing to accept this Favor?</p>
-          </section>
-      
-          <section class="set">
-            <button class="rounded-btn" id="conflictConfirmBtn">Explore Favors</button>
-            </section>
-          </div>
-      </div>
-
-      <!-- Accept task Overlay Display=============== -->
-      <div class="modal" id="accept-overlay">
-        <div class="confirm-wrapper">
-          <span><i class="close-icon closeModal" id="close-accept"></i></span>
-          <span><i class="accepted-icon"></i></span>
-          <section class="message">
-            <h2>Favor Accepted</h2>
-            <section class="user-profile">
-              <img id="elderPhoto3">
-              <div class="user-info">
-                <h3 id="acceptElderName" class="name"></h3>
-                <p id="acceptElderAddress"></p>
+              <p id="taskTime"></p>
+            </li>
+            <li>
+              <div class="content">
+                <span><i class="location-icon"></i></span>
+                <a href="#">From:</a>
               </div>
-            </section>
+              <p id="startAddress"></p>
+            </li>
+            <li>
+              <div class="content">
+                <span><i class="location-icon"></i></span>
+                <a href="#">End:</a>
+              </div>
+              <p id="endAddress"></p>
+            </li>
+            <li>
+              <div class="content">
+                <span><i class="note-icon"></i></span>
+                <a href="#">Note:</a>
+              </div>
+              <p id="taskNote"></p>
+            </li>
+          </ul>
+        </nav>
+      </section>
 
-            <p>You have successfully accepted <span id="acceptWrapperElderName"></span>'s <span id="acceptTaskName"></span> Favor!</p>
-          </section>
-
-          <section class="set">
-            <!-- <button id="homeBtn">Home</button> -->
-            <button class="rounded-btn" id="myFavorsBtn">My Favors</button>
-          </section>
+      <section class="icons" id="icons">
+        <input type="checkbox" id="colorToggle">
+        <div class="good-bad">
+          <label for="colorToggle" class="like" id="like"></label>
+          <label for="colorToggle" class="dislike" id="dislike"></label>
         </div>
+      </section>
+
+
+      <section class="set" id="acOrDecBtn">
+        <!-- <button class="outlined-btn" id="declineBtn">Decline</button> -->
+        <button class="rounded-btn" id="acceptBtn">Accept</button>
+      </section>
+
+      <section class="set" id="comOrCanBtn">
+        <button class="rounded-btn outlined-btn" id="cancelBtn">Cancel</button>
+        <button class="rounded-btn" id="confirmCompleteBtn">Complete</button>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer"></footer>
+</body>
+
+
+
+
+<!-- Confirm task Overlay Display=============== -->
+<div class="modal" id="confirm-overlay">
+  <div class="confirm-wrapper">
+    <span><i class="close-icon closeModal" id="close-confirm"></i></span>
+    <span><i class="question-icon"></i></span>
+    <h2>Confirm Favor</h2>
+
+    <section class="user-profile">
+      <img id="elderPhoto2">
+      <div class="user-info">
+        <h3 id="confirmElderName" class="name"></h3>
+        <p id="confirmElderAddress"></p>
       </div>
-      
+    </section>
 
-      <!-- Confirm Task Complete Overlay Display=============== -->
-      <div class="modal" id="complete-confirm-overlay">
-        <div class="confirm-wrapper">
-          <span><i class="close-icon closeModal" id="close-complete-confirm"></i></span>
-          <section class="message">
-            <h2>Confirm Favor has been delivered successfully</h2>
-            <p>How do you rate this experience?</p>
-          </section>
+    <p>Are you willing to help <span id="confirmWrapperElderName"></span> with this <span id="confirmTaskName"></span> Favor?</p>
+    </section>
 
-          <section class="icons-overlay" id="icons-overlay">
-            <input type="checkbox" id="colorToggle">
-            <div class="good-bad">
-              <label for="colorToggle" class="like" id="like"></label>
-              <label for="colorToggle" class="dislike" id="dislike"></label>
-            </div>
-          </section>
 
-          <section class="set">
-            <button class="rounded-btn" id="completeBtn">Complete</button>
-          </section>
+    <section class="set">
+      <button class="rounded-btn" id="confirmBtn">Confirm</button>
+    </section>
+  </div>
+</div>
+
+<!-- Schedule Conflict Overlay Display=============== -->
+<div class="modal" id="schedule-conflict">
+  <div class="confirm-wrapper">
+    <span><i class="close-icon closeModal" id="close-conflict"></i></span>
+    <span><i class="conflict-icon"></i></span>
+    <section class="message">
+      <h2>Schedule Conflict!</h2>
+      <p>You have another Favor going on during this time slot.</p>
+      <p>Are you still willing to accept this Favor?</p>
+    </section>
+
+    <section class="set">
+      <button class="rounded-btn" id="conflictConfirmBtn">Explore Favors</button>
+    </section>
+  </div>
+</div>
+
+<!-- Accept task Overlay Display=============== -->
+<div class="modal" id="accept-overlay">
+  <div class="confirm-wrapper">
+    <span><i class="close-icon closeModal" id="close-accept"></i></span>
+    <span><i class="accepted-icon"></i></span>
+    <section class="message">
+      <h2>Favor Accepted</h2>
+      <section class="user-profile">
+        <img id="elderPhoto3">
+        <div class="user-info">
+          <h3 id="acceptElderName" class="name"></h3>
+          <p id="acceptElderAddress"></p>
         </div>
+      </section>
+
+      <p>You have successfully accepted <span id="acceptWrapperElderName"></span>'s <span id="acceptTaskName"></span> Favor!</p>
+    </section>
+
+    <section class="set">
+      <!-- <button id="homeBtn">Home</button> -->
+      <button class="rounded-btn" id="myFavorsBtn">My Favors</button>
+    </section>
+  </div>
+</div>
+
+
+<!-- Confirm Task Complete Overlay Display=============== -->
+<div class="modal" id="complete-confirm-overlay">
+  <div class="confirm-wrapper">
+    <span><i class="close-icon closeModal" id="close-complete-confirm"></i></span>
+    <section class="message">
+      <h2>Confirm Favor has been delivered successfully</h2>
+      <p>How do you rate this experience?</p>
+    </section>
+
+    <section class="icons-overlay" id="icons-overlay">
+      <input type="checkbox" id="colorToggle">
+      <div class="good-bad">
+        <label for="colorToggle" class="like" id="like"></label>
+        <label for="colorToggle" class="dislike" id="dislike"></label>
       </div>
+    </section>
 
-      <!-- Conrim task cancel Overlay Display=============== -->
-      <div class="modal" id="cancel-favor-overlay">
-        <div class="confirm-wrapper">
-          <span><i class="close-icon closeModal" id="cancel-favor"></i></span>
-          <section class="message">
-            <p>You are cancelling the Favor. Are you comfortable sharing the reason with us?</p>
-          </section>
+    <section class="set">
+      <button class="rounded-btn" id="completeBtn">Complete</button>
+    </section>
+  </div>
+</div>
 
-          <section class="icons-overlay">
-            <form>
-              <label>
-                  <input type="checkbox" name="reason" value="schedule-conflict">
-                  I have a schedule conflict
-              </label><br>
-              <label>
-                  <input type="checkbox" name="reason" value="cannot-contact-senior">
-                  I cannot contact the senior
-              </label><br>
-              <label>
-                  <input type="checkbox" name="reason" value="not-comfortable">
-                  I am not comfortable to share
-              </label><br>
-              <textarea name="additional-info" placeholder="Additional information..."></textarea>
-            </form>
-          </section>
+<!-- Conrim task cancel Overlay Display=============== -->
+<div class="modal" id="cancel-favor-overlay">
+  <div class="confirm-wrapper">
+    <span><i class="close-icon closeModal" id="cancel-favor"></i></span>
+    <section class="message">
+      <p>You are cancelling the Favor. Are you comfortable sharing the reason with us?</p>
+    </section>
 
-          <section class="set">
-            <button class="rounded-btn" id="cancelFavorBtn">Cancel Favor</button>
-          </section>
-        </div>
-      </div>
+    <section class="icons-overlay">
+      <form>
+        <label>
+          <input type="checkbox" name="reason" value="schedule-conflict">
+          I have a schedule conflict
+        </label><br>
+        <label>
+          <input type="checkbox" name="reason" value="cannot-contact-senior">
+          I cannot contact the senior
+        </label><br>
+        <label>
+          <input type="checkbox" name="reason" value="not-comfortable">
+          I am not comfortable to share
+        </label><br>
+        <textarea name="additional-info" placeholder="Additional information..."></textarea>
+      </form>
+    </section>
 
-      <!-- Cancel Complete Overlay Display=============== -->
-      <div class="modal" id="cancel-complete-overlay">
-        <div class="confirm-wrapper">
-          <span><i class="close-icon closeModal" id="close-task-completed"></i></span>
-          <span><i class="heart-brake-icon"></i></span>
-          <section class="message">
-            <h2>We are so sorry that you can't support this Favor!</h2>
-            <p>See more seniors you can help:</p>
-          </section>
-      
-          <section class="set">
-            <button class="rounded-btn" id="cancel-completeBtn">Explore Favors</button>
-          </section>
-        </div>
-      </div>
+    <section class="set">
+      <button class="rounded-btn" id="cancelFavorBtn">Cancel Favor</button>
+    </section>
+  </div>
+</div>
+
+<!-- Cancel Complete Overlay Display=============== -->
+<div class="modal" id="cancel-complete-overlay">
+  <div class="confirm-wrapper">
+    <span><i class="close-icon closeModal" id="close-task-completed"></i></span>
+    <span><i class="heart-brake-icon"></i></span>
+    <section class="message">
+      <h2>We are so sorry that you can't support this Favor!</h2>
+      <p>See more seniors you can help:</p>
+    </section>
+
+    <section class="set">
+      <button class="rounded-btn" id="cancel-completeBtn">Explore Favors</button>
+    </section>
+  </div>
+</div>
 
 
 
-      <!-- Task Completed Overlay Display=============== -->
-      <div class="modal" id="task-completed-overlay">
-        <div class="confirm-wrapper">
-          <span><i class="close-icon closeModal" id="close-task-completed"></i></span>
-          <span><i class="heart-icon"></i></span>
-          <section class="message">
-            <h2>Thank you for supporting <span id="completedElderName"></span> and our community!</h2>
-            <p>Request for approval has been sent to <span id="approvedElderName"></span> and will be updated to you after approved.</p>
-            <p>See more seniors you can help:</p>
-          </section>
+<!-- Task Completed Overlay Display=============== -->
+<div class="modal" id="task-completed-overlay">
+  <div class="confirm-wrapper">
+    <span><i class="close-icon closeModal" id="close-task-completed"></i></span>
+    <span><i class="heart-icon"></i></span>
+    <section class="message">
+      <h2>Thank you for supporting <span id="completedElderName"></span> and our community!</h2>
+      <p>Request for approval has been sent to <span id="approvedElderName"></span> and will be updated to you after approved.</p>
+      <p>See more seniors you can help:</p>
+    </section>
 
-          <section class="set">
-            <button class="rounded-btn" id="exploreBtn">Explore Favors</button>
-          </section>
-        </div>
-      </div>
+    <section class="set">
+      <button class="rounded-btn" id="exploreBtn">Explore Favors</button>
+    </section>
+  </div>
+</div>
