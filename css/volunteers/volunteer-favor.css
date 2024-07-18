@@ -51,7 +51,7 @@ img {
 }
 
 .schedule nav {
-  margin: 1.5rem 0;
+  /* margin: 1.5rem 0; */
 }
 
 .schedule nav ul {
@@ -68,8 +68,8 @@ img {
   align-items: center;
   /* border-top: 0.2rem solid var(--background-gray); */
   border-top: 1px solid var(--primary);
-  padding: 1rem;
-  padding-left: 0;
+  padding: 1rem 0;
+  /* padding-left: 0; */
   gap: 1rem;
 }
 
@@ -93,6 +93,12 @@ img {
   /* display: grid; */
   /* grid-column: 2 / 3; */
   /* text-align: end; */
+  flex: 1 1 auto;
+  text-align: right;
+
+  @media screen and (min-width: 800px) {
+    text-align: left;
+  }
 }
 
 .user-profile-wrapper #icons,
@@ -104,15 +110,17 @@ img {
 .set {
   display: flex;
   justify-content: center;
-  padding-top: 1rem;
-  gap: 5rem;
+  padding-top: 2rem;
+  /* gap: 5rem; */
+  gap: 2rem;
 }
 
 .user-profile-wrapper .set button,
 .confirm-wrapper .set button {
   border-radius: 50px;
   border: none;
-  padding: 0.2rem 2rem;
+  /* padding: 0.2rem 2rem; */
+  padding: 0rem 2rem;
   /* font-size: 1.2rem; */
 }
 
