@@ -534,7 +534,7 @@ body.loaded .loading-screen {
   background-image: url("/assets/images/background-desktop.png");
   background-size: cover;
   background-repeat: no-repeat;
-  transition: all .5s ease-out;
+  transition: all 0.5s ease-out;
   display: none;
 }
 .loading-screen i {
@@ -578,7 +578,7 @@ body.loaded .loading-screen {
   align-items: center;
   justify-content: center;
   color: var(--primary);
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   text-decoration: none;
   /* padding: 0 10px; */
   /* font-size: clamp(0.5rem, 5vw, 0.8rem); */
@@ -789,9 +789,9 @@ Floating cards
   display: flex;
   justify-content: center;
 }
-/* .icon::after {
+.icon::after {
   filter: invert(65%) sepia(0%) saturate(1%) hue-rotate(197deg) brightness(97%) contrast(88%);
-} */
+}
 .preload-icons {
   position: absolute;
   width: 0;
@@ -804,31 +804,39 @@ Floating cards
 /* SIDE BAR ICONS */
 .home-icon::after {
   content: url("../assets/icons/home-off.svg") !important;
+  filter: unset;
 }
 .sidebar a:hover .home-icon::after,
 .sidebar a.active .home-icon::after {
   content: url("../assets/icons/home-on.svg") !important;
+  filter: unset;
 }
 .profile-icon::after {
   content: url("../assets/icons/profile-off.svg") !important;
+  filter: unset;
 }
 .sidebar a:hover .profile-icon::after,
 .sidebar a.active .profile-icon::after {
   content: url("../assets/icons/profile-on.svg") !important;
+  filter: unset;
 }
 .updates-icon::after {
   content: url("../assets/icons/updates-off.svg") !important;
+  filter: unset;
 }
 .sidebar a:hover .updates-icon::after,
 .sidebar a.active .updates-icon::after {
   content: url("../assets/icons/updates-on.svg") !important;
+  filter: unset;
 }
 .history-icon::after {
   content: url("../assets/icons/history-off.svg") !important;
+  filter: unset;
 }
 .sidebar a:hover .history-icon::after,
 .sidebar a.active .history-icon::after {
   content: url("../assets/icons/history-on.svg") !important;
+  filter: unset;
 }
 /* OTHER ICONS */
 .filter-icon::after {
@@ -855,6 +863,11 @@ Floating cards
 }
 .mic-icon::after {
   content: url("../assets/icons/mic.svg") !important;
+  filter: unset;
+}
+.active .mic-icon::after {
+  content: url("../assets/icons/mic.svg") !important;
+  filter: unset;
 }
 .close-icon::after {
   content: url("../assets/icons/close.svg") !important;
@@ -911,6 +924,18 @@ Floating cards
   content: url("../assets/icons/check-white.svg") !important;
 }
 
+/* For mic icon (When it's active) */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 /*
 =========================
 Media queries

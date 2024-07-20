@@ -29,7 +29,7 @@ if (document.readyState === "loading") {
 
 function runFunction() {
   const favorSelectionOptions = document.getElementsByName("favorOption");
-  favorSelectionOptions.forEach(option => option.addEventListener("change",enableConfirmRedirectDialog));
+  favorSelectionOptions.forEach((option) => option.addEventListener("change", enableConfirmRedirectDialog));
   currentStep = 1; // this counter keeps track of which step of the creation process the user is seeing at the moment. By default, it starts with 1
   let selectionHistory = []; // this array will contain the strings that summarizes the user's selections on each step
 
@@ -183,13 +183,9 @@ function runFunction() {
       // Capture selection based on current step
       switch (currentStep) {
         case 1:
-          const selectedOption = document.querySelector(
-            'input[name="favorOption"]:checked'
-          );
+          const selectedOption = document.querySelector('input[name="favorOption"]:checked');
           if (selectedOption) {
-            selectionHistory.push(
-              `Favor Type: <span>${selectedOption.value}</span>`
-            );
+            selectionHistory.push(`Favor Type: <span>${selectedOption.value}</span>`);
             canProceed = true;
           } else {
             showErrorMsg.innerHTML = "Please select an option";
@@ -215,8 +211,7 @@ function runFunction() {
 
         case 3:
           const startAddress = document.getElementById("startAddress").value;
-          const endAddress =
-            document.getElementById("endAddress").value || "Not provided";
+          const endAddress = document.getElementById("endAddress").value || "Not provided";
 
           if (startAddress) {
             selectionHistory.push(`Start Address: <span>${startAddress}</span>`);
@@ -389,7 +384,7 @@ function runFunction() {
           // Save document reference ID to global variable
           currentTaskID = docRef.id;
           displayTaskSummary(task);
-        disableConfirmRedirectDialog();
+          disableConfirmRedirectDialog();
         })
         .catch((error) => {
           console.log(error);
@@ -406,9 +401,9 @@ function runFunction() {
       for (let item of selectionHistory) {
         // create a <li> element, add the item of the selection history to it, then append the <li> to the list (which is a <ul>)
         let li = document.createElement("li");
-  
+
         // Use innerHTML if the item contains HTML tags
-        if (item.includes('<span>')) {
+        if (item.includes("<span>")) {
           li.innerHTML = item;
         } else {
           li.textContent = item;
@@ -591,10 +586,23 @@ if (micForStartAddress) {
     recognition.continuous = false;
     startAddress.value = "";
 
+    micForStartAddress.style.animation = "pulse 1s infinite";
+    micForStartAddress.classList.add("active");
+    startAddress.focus();
+
     recognition.onresult = ({ results }) => {
+      startAddress.blur(); // This is required for Google Map Autocomplete to work
       startAddress.value = results[0][0].transcript;
       startAddress.focus();
+      micForStartAddress.style.animation = "none";
+      micForStartAddress.classList.remove("active");
     };
+
+    recognition.onend = () => {
+      micForStartAddress.style.animation = "none";
+      micForStartAddress.classList.remove("active");
+    };
+
     recognition.start();
   });
 }
@@ -607,10 +615,23 @@ if (micForEndAddress) {
     recognition.continuous = false;
     endAddress.value = "";
 
+    micForEndAddress.style.animation = "pulse 1s infinite";
+    micForEndAddress.classList.add("active");
+    endAddress.focus();
+
     recognition.onresult = ({ results }) => {
+      endAddress.blur(); // This is required for Google Map Autocomplete to work
       endAddress.value = results[0][0].transcript;
       endAddress.focus();
+      micForEndAddress.style.animation = "none";
+      micForEndAddress.classList.remove("active");
     };
+
+    recognition.onend = () => {
+      micForEndAddress.style.animation = "none";
+      micForEndAddress.classList.remove("active");
+    };
+
     recognition.start();
   });
 }
@@ -623,10 +644,22 @@ if (micForNote) {
     recognition.continuous = false;
     notes.value = "";
 
+    micForNote.style.animation = "pulse 1s infinite";
+    micForNote.classList.add("active");
+    notes.focus();
+
     recognition.onresult = ({ results }) => {
       notes.value = results[0][0].transcript;
       notes.focus();
+      micForNote.style.animation = "none";
+      micForNote.classList.remove("active");
     };
+
+    recognition.onend = () => {
+      micForNote.style.animation = "none";
+      micForNote.classList.remove("active");
+    };
+
     recognition.start();
   });
 }
@@ -643,13 +676,12 @@ cancelFavorBtn.addEventListener("click", () => {
 
 // Event listener for modal back button
 const modalBackBtn = document.getElementById("modalBackBtn");
-if(modalBackBtn){
+if (modalBackBtn) {
   modalBackBtn.addEventListener("click", () => {
     const modal = document.getElementById("confirmModal");
     closeModal(modal);
   });
 }
-
 
 // Event listener to go back to home
 const backToHome = document.getElementById("backToHome");
