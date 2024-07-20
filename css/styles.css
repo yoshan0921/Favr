@@ -260,7 +260,7 @@ button a {
   box-shadow: 0 0 1px var(--primary);
 }
 .viewSwitcher .filter-icon {
-  /* filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%); */
+  filter: invert(18%) sepia(93%) saturate(7001%) hue-rotate(185deg) brightness(75%) contrast(84%);
   height: 28px;
   cursor: pointer;
   align-self: end;
