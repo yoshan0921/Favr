@@ -134,7 +134,7 @@ ul.selection-list {
 form {
   /* border: thin solid gray; */
   margin: auto;
-  min-width: 400px;
+  /* min-width: 400px; */
   min-height: 50vh;
   width: 100%;
   /* max-width: 90vw; */
