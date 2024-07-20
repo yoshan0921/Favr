@@ -3,7 +3,7 @@ import { onSnapshot, collection, query, where } from "https://www.gstatic.com/fi
 import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getDocument, getFile } from "./firebase/firestore.js";
-import { redirect } from "./utils.js";
+import { finishLoading, redirect } from "./utils.js";
 
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 const { Map } = await google.maps.importLibrary("maps");
@@ -56,8 +56,10 @@ async function runFunction() {
       await loadVolunteersDashboard();
       // Show the tab menu for volunteers
       document.querySelector(".tab-menu-container").classList.remove("hide");
+      finishLoading();
     } else if (currentUserRole === "elder") {
       await loadEldersDashboard();
+      finishLoading();
     }
   });
 }
@@ -72,10 +74,8 @@ async function runFunction() {
  */
 async function loadEldersDashboard() {
   // Retrieve tasks from the database
-  const main = document.getElementsByTagName("main")[0];
   displayTaskListForElders().then(() => {
     console.log("Tasks loaded successfully.");
-    main.classList.add("loaded");
   });
 }
 
@@ -285,10 +285,8 @@ async function loadVolunteersDashboard() {
   }
 
   // Retrieve tasks from the database
-  const main = document.getElementsByTagName("main")[0];
   displayTaskListForVolunteers().then(() => {
     console.log("Tasks loaded successfully.");
-    main.classList.add("loaded");
   });
 
   // View switcher radio buttons

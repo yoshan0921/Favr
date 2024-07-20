@@ -512,27 +512,30 @@ footer a {
 /* --------------------------------------------------*/
 /* Loading Screen                                    */
 /* --------------------------------------------------*/
-main.loaded .loading-screen {
-  display: none;
+body.loaded .loading-screen {
+  opacity: 0;
 }
 /*
 #dashboard-content:has(.volunteer) .loading-screen{
   top: 120px;
 }*/
 .loading-screen {
-  z-index: 2;
-  position: absolute;
+  z-index: 999;
+  position: fixed;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   right: 0;
   bottom: 0;
   left: 0;
-  padding-top: 10vh;
   top: 0px;
   text-align: center;
   align-items: center;
   align-content: center;
-  background-color: rgba(241, 243, 243, 0.8);
+  background-image: url("/assets/images/background-desktop.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: all .5s ease-out;
+  display: none;
 }
 .loading-screen i {
   font-size: 3.5rem;

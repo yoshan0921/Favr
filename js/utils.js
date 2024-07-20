@@ -82,6 +82,16 @@ function enableDialog(e){
 function disableConfirmRedirectDialog(){
     window.removeEventListener("beforeunload", enableDialog);
 }
+function finishLoading(){
+    setTimeout(()=>{
+        document.body.classList.add("loaded");
+        setTimeout(() => {
+            const loadingAnimation = document.querySelector(".loading-screen");
+            loadingAnimation.style.display = "none";
+        }, 1000);
+    }, 1000);
+    
+}
 export {
     signOut,
     redirect,
@@ -90,5 +100,6 @@ export {
     enableBackButton,
     installServiceWorkers,
     enableConfirmRedirectDialog,
-    disableConfirmRedirectDialog
+    disableConfirmRedirectDialog,
+    finishLoading
 }
