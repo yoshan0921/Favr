@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/error.css">
+    <link rel="stylesheet" href="./css/styles.css">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <title>Not Found</title>
 </head>
 <body>
-    <main class="min-height-100vh align-content-center text-center">
-        <h1>Error 404 Not Found</h1>
+    <main>
+        <div class="message-wrapper">
+            <h1>404 Error</h1>
+            <p>The page you are trying to access does not exist</p>
+        </div>
+        <div class="button-wrapper"><button onclick="window.location.pathname=`dashboard.html`" class="rounded-btn">Go to Home</button></div>
     </main>
 </body>
 </html>

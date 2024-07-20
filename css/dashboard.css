@@ -23,6 +23,7 @@ body {
 .tab-content .map {
   height: calc(100vh - 85px - 13.5rem);
   width: 100%;
+  border-radius: 10px;
 }
 
 .tab-content .map iframe {

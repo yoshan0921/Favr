@@ -265,10 +265,13 @@ function loadChatRoomMessages(chatRoomID, newMessagesByContact) {
 
   let previousDate = "";
   let contactID = chatRoomID.split("-")[1];
-  Array.from(newMessagesByContact).filter(updates => updates[0] == contactID).forEach(message =>{
-     console.log(message);
-     updateNotificationStatus(loginUserID,message[1]);
-   })
+  if(newMessagesByContact){
+    Array.from(newMessagesByContact).filter(updates => updates[0] == contactID).forEach(message =>{
+      console.log(message);
+      updateNotificationStatus(loginUserID,message[1]);
+    })
+    }
+    
   // Load chat room messages
   onChildAdded(ref(database, chatRoomID), function (data) {
     const v = data.val();

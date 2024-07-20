@@ -3,7 +3,7 @@ main{
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    grid-column: 1/-1;
+    grid-column: 1/-1 !important;
 }
 
 :is(.message-wrapper, .button-wrapper){

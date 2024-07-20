@@ -57,6 +57,8 @@
 }
 .icon-wrapper img{
     border-radius: 50px;
+    object-fit: cover;
+    aspect-ratio: 1;
 }
 .update .notification-content{
     flex-grow: 1;

@@ -54,7 +54,7 @@ window.addEventListener("load", function (event) {
           <h2 class="notification-title">${notification.title}</h2>
           <p class="notification-text">${notification.message}</p>
           <span class="notification-time">${notification.time}</span>
-          <a id="link-${notification.id}" href="${notification.link} class="visually-hidden"></a>
+          <a id="link-${notification.id}" href="${notification.link}" class="visually-hidden"></a>
           `;
 
           card.appendChild(notificationIcon)
