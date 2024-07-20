@@ -219,7 +219,6 @@ body {
 #filterModal .modal-content {
   display: flex;
   flex-flow: column wrap;
-  /* min-height: 80vh; */
   width: 90%;
 
   @media screen and (min-width: 800px) {
@@ -406,8 +405,7 @@ button#resetFilter {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 55vh;
-  /* color: var(--disabledText); */
+  height: 60vh;
   flex-flow: column nowrap;
 }
 

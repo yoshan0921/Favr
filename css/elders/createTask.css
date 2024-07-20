@@ -19,7 +19,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: .3;
+  opacity: 0.3;
 }
 
 .stepNumber {
@@ -49,7 +49,7 @@ body {
 .stepLine4 {
   flex-grow: 1;
   height: 10px;
-  background-color: rgb(21 106 133 / .2);
+  background-color: rgb(21 106 133 / 0.2);
 }
 
 .stepLineActive {
@@ -72,10 +72,9 @@ body {
 /* -------------------------------------------------- */
 
 @keyframes stepAnimate {
-
   0% {
     transform: scale(1);
-    opacity: .3;
+    opacity: 0.3;
   }
 
   50% {
@@ -89,22 +88,20 @@ body {
 }
 
 .stepAnimate {
-  animation: stepAnimate .75s 1.5s ease-in-out forwards;
+  animation: stepAnimate 0.75s 1.5s ease-in-out forwards;
 }
 
 @keyframes lineAnimate {
-
   0% {
     width: 0;
   }
 
   100% {
     width: 100%;
-  }  
+  }
 }
 
 @keyframes fadeIn {
-  
   0% {
     opacity: 0;
   }
@@ -229,6 +226,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   width: 100%;
   height: 100px;
   margin-bottom: 1rem;
+  resize: vertical;
 }
 
 .summary {
@@ -285,7 +283,7 @@ ul#summaryList {
     font-size: 1.1rem;
     /* padding-left: 0.5rem; */
     /* margin-bottom: 0.75rem; */
-    padding: .5rem 0 0 0;
+    padding: 0.5rem 0 0 0;
     font-weight: bold;
     /* border-bottom: 1px dotted var(--primary); */
   }
@@ -302,7 +300,7 @@ ul#summaryList {
 
   i {
     width: 30px;
-    margin-top: -.15rem;
+    margin-top: -0.15rem;
     text-align: center;
     margin-right: 6px;
   }
@@ -348,7 +346,7 @@ ul#summaryList {
   cursor: pointer;
   /* color: white; */
   /* background-color: var(--primary); */
-  background-color: rgb(21 106 133 / .25);
+  background-color: rgb(21 106 133 / 0.25);
 }
 
 .favor-buttons {
@@ -454,12 +452,12 @@ ul#summaryList {
 
     span {
       margin-top: 3px;
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
   }
 
   .stepNumber {
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
 
   .steps-counter {
@@ -475,7 +473,6 @@ ul#summaryList {
   .steps-counter {
     padding: 1rem;
   }
-  
 }
 
 /* Cocoy, please adjust the folloeing CSS             */
@@ -483,9 +480,10 @@ ul#summaryList {
 /* Map                                                */
 /* -------------------------------------------------- */
 
-#startAddress,
-#endAddress {
+#step-3 .form-group input#startAddress,
+#step-3 .form-group input#endAddress {
   font-size: 1em;
+  padding: 0.5rem 3.5rem 0.5rem 0.5rem;
 }
 
 #startMap,
@@ -518,6 +516,11 @@ ul#summaryList {
   position: relative;
 }
 
+#step-4 .form-group textarea#notes {
+  font-size: 1em;
+  padding: 0.5rem 3.5rem 0.5rem 0.5rem;
+}
+
 .mic {
   background: none;
   border: none;
@@ -528,6 +531,20 @@ ul#summaryList {
   justify-content: center;
 
   position: absolute;
-  top: 78px;
+  top: 73px;
+  right: 0.5rem;
+}
+
+.mic-notes {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  bottom: 20px;
   right: 0.5rem;
 }
