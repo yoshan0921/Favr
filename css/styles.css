@@ -855,6 +855,9 @@ Floating cards
 .email-icon::after {
   content: url("../assets/icons/email.svg") !important;
 }
+.email-outline-icon::after {
+  content: url("../assets/icons/email-outline.svg") !important;
+}
 .add-icon::after {
   content: url("../assets/icons/add.svg") !important;
 }
@@ -922,6 +925,9 @@ Floating cards
 }
 .check-white-icon::after {
   content: url("../assets/icons/check-white.svg") !important;
+}
+.password-icon::after {
+  content: url("../assets/icons/password.svg") !important;
 }
 
 /* For mic icon (When it's active) */

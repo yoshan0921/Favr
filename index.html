@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -10,78 +11,84 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/index.css">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-    <link  rel="manifest"  href="./app.webmanifest">
+    <link rel="manifest" href="./app.webmanifest">
     <title>Index</title>
 </head>
+
 <body id="indexBody">
     <main class="align-content-center min-height-100vh">
-        <div class="container rounded border-danger text-danger">
+        <div class="container">
             <div class="error-messages border border-danger bg-danger-subtle rounded p-3 mx-auto my-2 hidden" id="errorsContainer">
             </div>
         </div>
-        <div  class="container" id="login">
-            <form action="#" method="post" class="border rounded p-3  m-auto">
-                <h2>Login</h2>
-                <div class="form-group py-3">
-                    <label for="loginEmail">Email</label>
-                    <input type="text" name="loginEmail" id="loginEmail" class="form-control" required>
+        <div class="container" id="login">
+            <h2>Welcome to Favr</h2>
+            <div class="logo">
+                <img src="/assets/logo-mobile.png" alt="Favr logo">
+            </div>
+            <form action="#" method="post" class="login">
+                <div class="form-group">
+                    <label for="loginEmail"><i class="icon email-outline-icon"></i>Email</label>
+                    <input type="text" name="loginEmail" id="loginEmail" class="" placeholder="Please type in Email" required>
                 </div>
-                <div class="form-group py-3">
-                    <label for="login-password">Password</label>
-                    <input type="password" name="loginPassword" id="loginPassword" class="form-control" required>
+                <div class="form-group">
+                    <label for="login-password"><i class="icon password-icon"></i>Password</label>
+                    <input type="password" name="loginPassword" id="loginPassword" class="" placeholder="Please type in Password" required>
                 </div>
-                <div class="form-group py-4">
-                    <button type="submit" class="btn btn-primary d-block w-100">Login</button>
-                </div>
-                <div class="form-group text-center py-1">
-                    <small><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></small>
+                <div class="form-group">
+                    <button type="submit" class="rounded-btn">Login</button>
                 </div>
             </form>
+            <div class="menu">
+                <button class="rounded-btn outlined-btn"><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></button>
+                <button class="rounded-btn outlined-btn"><a href="#" id="restPassword" rel="noopener noreferrer">Reset password</a></button>
+            </div>
         </div>
         <div class="container hidden" id="signup">
-            <form action="#" method="post" class="border rounded p-3 m-auto">
+            <form action="#" method="post" class="signup">
                 <h2>Sign Up</h2>
-                <div class="form-group py-3">
+                <div class="form-group">
                     <label for="signUpFirstName">First name</label>
-                    <input type="text" name="signUpFirstName" id="signUpFirstName" class="form-control" required>
+                    <input type="text" name="signUpFirstName" id="signUpFirstName" class="" required>
                 </div>
-                <div class="form-group py-3">
+                <div class="form-group">
                     <label for="signUpLastName">Last name</label>
-                    <input type="text" name="signUpLastName" id="signUpLastName" class="form-control" required>
+                    <input type="text" name="signUpLastName" id="signUpLastName" class="" required>
                 </div>
-                <div class="form-group py-3">
+                <div class="form-group">
                     <label for="signUpAge">Age</label>
-                    <input type="number" name="signUpAge" id="signUpAge" class="form-control" min="0" max="120"required>
+                    <input type="number" name="signUpAge" id="signUpAge" class="" min="0" max="120" required>
                 </div>
-                <div class="form-group py-3">
+                <div class="form-group">
                     <label for="signUpEmail">Email</label>
-                    <input type="text" name="signUpEmail" id="signUpEmail" class="form-control" required>
+                    <input type="text" name="signUpEmail" id="signUpEmail" class="" required>
                 </div>
-                <div class="form-group py-3">
+                <div class="form-group">
                     <label for="signUpPassword">Password</label>
-                    <input type="password" name="signUpPassword" id="signUpPassword" class="form-control" required>
+                    <input type="password" name="signUpPassword" id="signUpPassword" class="" required>
                 </div>
-                <div class="py-3">
+                <div class="form-group">
                     <span>Role</span>
-                    <div>
-                        <div class="custom-control custom-radio d-inline w-auto">
-                            <input type="radio" id="elderRole" name="userrole" class="custom-control-input" value="elder" checked>
-                            <label class="custom-control-label" for="elderRole">Elder</label>
+                    <div class="role">
+                        <div>
+                            <input type="radio" id="elderRole" name="userrole" class="" value="elder" checked>
+                            <label class="" for="elderRole">Elder</label>
                         </div>
-                        <div class="custom-control custom-radio d-inline w-auto">
-                            <input type="radio" id="volunteerRole" name="userrole" class="custom-control-input" value="volunteer">
-                            <label class="custom-control-label" for="volunteerRole">Volunteer</label>
+                        <div>
+                            <input type="radio" id="volunteerRole" name="userrole" class="" value="volunteer">
+                            <label class="" for="volunteerRole">Volunteer</label>
                         </div>
                     </div>
                 </div>
-                <div class="form-group py-4">
-                    <button type="submit" class="btn btn-primary d-block w-100">Create Account</button>
+                <div class="form-group">
+                    <button id="createAccount" type="submit" class="rounded-btn">Create Account</button>
                 </div>
-                <div class="form-group text-center py-1">
-                    <small><a href="#login" id="switchSignIn" rel="noopener noreferrer">Login</a></small>
+                <div class="form-group">
+                    <button id="moveToLogin" class="rounded-btn outlined-btn"><a href="#login" id="switchSignIn" rel="noopener noreferrer">Login</a></button>
                 </div>
             </form>
         </div>
     </main>
 </body>
+
 </html>
