@@ -198,8 +198,8 @@ function runFunction() {
           const startSubheading = document.getElementById("startSubheading");
           const endSubheading = document.getElementById("endSubheading");
           if (selectedOption.value === "Grocery Shopping") {
-            startSubheading.innerHTML = "Where do you want to buy your groceries?";
-            endSubheading.innerHTML = "Where do you want your groceries delivered?";
+            startSubheading.innerHTML = "Where do you like to shop for groceries?";
+            endSubheading.innerHTML = "Where do you like your groceries delivered?";
           } else {
             startSubheading.innerHTML = "Where should we begin this favor?";
             endSubheading.innerHTML = "Where should we finish this favor?";
@@ -533,8 +533,9 @@ async function initMap() {
    * Sets up the autocomplete functionality for a given input field and map.
    * @param {string} inputId - The ID of the input element for address autocomplete.
    * @param {string} mapId - The ID of the map element where the address will be displayed.
+   * @param {boolean} isEndAddress - Add flag to determine if there is an end address.
    */
-  function setupAutocomplete(inputId, mapId) {
+  function setupAutocomplete(inputId, mapId, isEndAddress = false) { // Initially set endAddress to false
     let map = new Map(document.getElementById(mapId), {
       zoom: 6,
       center: { lat: 53.7267, lng: -127.6476 }, // Center on British Columbia
@@ -579,12 +580,16 @@ async function initMap() {
 
         // Clear error message
         document.getElementById("errorMsg2").innerHTML = "";
+
+        // Manually adjust position of Mic Button for Start Address
         micForStartAddressPosition.classList.remove("mic-adjust-error-msg");
         micForStartAddressPosition.classList.add("mic-adjust-map-start-show");
 
-        // TODO: Make this fireup only when an end address is set
-        // micForEndAddressPosition.classList.remove("mic-adjust");
-        // micForEndAddressPosition.classList.add("mic-adjust-map-end-show");
+        // Manually adjust position of Mic Button for End Address if True
+        if (isEndAddress) {
+          micForEndAddressPosition.classList.remove("mic-adjust");
+          micForEndAddressPosition.classList.add("mic-adjust-map-end-show");
+        }
 
       } catch (error) {
         console.log(error);
@@ -592,7 +597,7 @@ async function initMap() {
     });
   }
   setupAutocomplete("startAddress", "startMap");
-  setupAutocomplete("endAddress", "endMap");
+  setupAutocomplete("endAddress", "endMap", true);
 }
 
 /**
