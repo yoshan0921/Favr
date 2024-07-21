@@ -13,6 +13,8 @@ let currentFavorName;
 let isEditFavor = false;
 let currentStep = 1;
 let currentStepDiv;
+let micForStartAddressPosition = document.getElementById("micForStartAddress");
+let micForEndAddressPosition = document.getElementById("micForEndAddress");
 
 /**
  * This adds an event listener to the page that triggers once everything is done downloading.
@@ -180,6 +182,7 @@ function runFunction() {
       let canProceed = false;
       let showErrorMsg = document.getElementById("errorMsg");
       let showErrorMsg2 = document.getElementById("errorMsg2");
+
       // Capture selection based on current step
       switch (currentStep) {
         case 1:
@@ -190,11 +193,25 @@ function runFunction() {
           } else {
             showErrorMsg.innerHTML = "Please select an option";
           }
+
+          // Change the start and end subheading depending on favor type
+          const startSubheading = document.getElementById("startSubheading");
+          const endSubheading = document.getElementById("endSubheading");
+          if (selectedOption.value === "Grocery Shopping") {
+            startSubheading.innerHTML = "Where do you want to buy your groceries?";
+            endSubheading.innerHTML = "Where do you want your groceries delivered?";
+          } else {
+            startSubheading.innerHTML = "Where should we begin this favor?";
+            endSubheading.innerHTML = "Where should we finish this favor?";
+          }
+
           break;
 
         case 2:
           const favorDate = document.getElementById("favorDate").value;
           const favorTime = document.getElementById("favorTime").value;
+          
+
           // const favorLength = document.getElementById("favorLength").value;
           if (favorDate && favorTime) {
             // selectionHistory.push(`Date: ${favorDate}`);
@@ -217,8 +234,10 @@ function runFunction() {
             selectionHistory.push(`Start Address: <span>${startAddress}</span>`);
             selectionHistory.push(`End Address: <span>${endAddress}</span>`);
             canProceed = true;
+
           } else {
             showErrorMsg2.innerHTML = "Please enter a start address";
+            micForStartAddressPosition.classList.add("mic-adjust-error-msg");
           }
           break;
 
@@ -560,6 +579,13 @@ async function initMap() {
 
         // Clear error message
         document.getElementById("errorMsg2").innerHTML = "";
+        micForStartAddressPosition.classList.remove("mic-adjust-error-msg");
+        micForStartAddressPosition.classList.add("mic-adjust-map-start-show");
+
+        // TODO: Make this fireup only when an end address is set
+        // micForEndAddressPosition.classList.remove("mic-adjust");
+        // micForEndAddressPosition.classList.add("mic-adjust-map-end-show");
+
       } catch (error) {
         console.log(error);
       }
