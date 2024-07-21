@@ -272,7 +272,9 @@ async function loadVolunteersDashboard() {
   // Get current location (If it's not first time in the session, get the location from sessionStorage)
   position = sessionStorage.getItem("currentPosition");
   if (!position) {
+    console.log("Get current location start");
     let geoPosition = await getCurrentPosition();
+    console.log("Get current location end");
     position = {
       latitude: geoPosition.coords.latitude,
       longitude: geoPosition.coords.longitude,
@@ -706,7 +708,6 @@ function closeAllInfoWindows(infoWindows) {
  * or rejects with a PositionError object on failure.
  */
 function getCurrentPosition() {
-  //console.log("Get Current Position");
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
