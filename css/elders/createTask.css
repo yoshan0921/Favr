@@ -222,7 +222,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 #step-3 .form-group {
-  
   label {
     font-size: 1.15rem;
     line-height: 1.2;
@@ -431,7 +430,7 @@ ul#summaryList {
   }
 
   .favorOption {
-    flex: 1 0 25%;
+    flex: 1 0 calc(33% - 1.33rem);
   }
 
   .stepText {

@@ -8,6 +8,8 @@ img {
 #elderPhoto2,
 #elderPhoto3 {
   border-radius: 50%;
+  width: 100px;
+  height: 100px;
 }
 
 #backBtn,
@@ -19,35 +21,34 @@ img {
 
 .user-profile-wrapper {
   display: block;
-  /* margin: auto; */
   width: 100%;
 }
 
 .user-profile-wrapper .user-profile {
-  display: grid;
-  grid-template-columns: 3.5rem 8rem 5rem 1fr;
-  /* grid-template-rows: 5rem 40%; */
+  display: flex;
   gap: 1rem;
   margin: 1rem 0;
+  align-items: center;
 }
 
 .user-profile-wrapper .user-profile .user-info {
-  grid-column: 2 / -1;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.2rem;
 }
 
 .user-profile-wrapper .user-profile button {
   grid-column: 2 / 3;
   justify-content: center;
-  /* font-size: 1.2rem; */
 }
 
 .user-profile-wrapper .user-profile #contactBtn {
   visibility: hidden;
   padding: 0.1rem 1.3rem;
   margin-top: 0;
-  margin-bottom: 1rem;
   border-radius: 20px;
   border: none;
+  align-self: start;
 }
 
 .schedule nav {
