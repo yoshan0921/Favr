@@ -212,13 +212,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 #step-2 .form-group label,
-#step-3 .form-group label,
+/* #step-3 .form-group label, */
 #step-4 .form-group label {
   display: block;
   margin-right: 0.5rem;
   font-size: 1.2rem;
   font-weight: bold;
   margin: 1rem 0;
+}
+
+#step-3 .form-group {
+  
+  label {
+    font-size: 1.15rem;
+    line-height: 1.2;
+  }
+
+  h3.margin-top {
+    margin-top: 1rem;
+  }
 }
 
 #step-4 textarea {
@@ -396,7 +408,7 @@ ul#summaryList {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
 
   #homeAddressBtn,
   #homeAddressBtnEnd {
@@ -404,6 +416,7 @@ ul#summaryList {
     justify-self: end;
     padding-left: 1rem;
     padding-right: 1rem;
+    white-space: nowrap;
   }
 }
 
@@ -475,7 +488,6 @@ ul#summaryList {
   }
 }
 
-/* Cocoy, please adjust the folloeing CSS             */
 /* -------------------------------------------------- */
 /* Map                                                */
 /* -------------------------------------------------- */
@@ -508,7 +520,6 @@ ul#summaryList {
   flex: 0 0 100%;
 }
 
-/* Cocoy, please adjust the folloeing CSS             */
 /* -------------------------------------------------- */
 /* Mic                                                */
 /* -------------------------------------------------- */
@@ -531,7 +542,7 @@ ul#summaryList {
   justify-content: center;
 
   position: absolute;
-  top: 73px;
+  bottom: 26px;
   right: 0.5rem;
 }
 
@@ -544,7 +555,25 @@ ul#summaryList {
   align-items: center;
   justify-content: center;
 
+  /* Changed position anchor to bottom */
   position: absolute;
   bottom: 20px;
   right: 0.5rem;
+}
+
+/* Need to adjust slightly the mic for end address */
+.mic-adjust {
+  bottom: 18px;
+}
+
+.mic-adjust-error-msg {
+  bottom: 54px;
+}
+
+.mic-adjust-map-start-show {
+  bottom: 284px;
+}
+
+.mic-adjust-map-end-show {
+  bottom: 276px;
 }

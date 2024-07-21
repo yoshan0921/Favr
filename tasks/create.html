@@ -118,8 +118,9 @@
                     </ul>
                 </div>
                 <div class="form-group">
+                    <h3 class="margin-top">Start address:</h3>
                     <div class="home-address">
-                        <label for="startAddress">Start Address</label>
+                        <label for="startAddress" id="startSubheading">Where do you want to buy your groceries?</label>
                         <a id="homeAddressBtn" class="rounded-btn link-btn">Use Home Address</a>
                     </div>
                     <input id="startAddress" name="startAddress" placeholder="Unit/apartment number, street name" type="text" class="address"></input>
@@ -132,12 +133,13 @@
                     <input type="hidden" id="startAddressLng" name="startAddressLng"></input>
                 </div>
                 <div class="form-group">
+                    <h3>End address (optional):</h3>
                     <div class="home-address">
-                        <label for="endAddress">End Address (Optional)</label>
+                        <label for="endAddress" id="endSubheading">Where do you want your groceries delivered?</label>
                         <a id="homeAddressBtnEnd" class="rounded-btn link-btn">Use Home Address</a>
                     </div>
                     <input id="endAddress" name="endAddress" placeholder="Unit/apartment number, street name" type="text" class="address"></input>
-                    <a id="micForEndAddress" class="mic" href="#"><i class="icon mic-icon" aria-hidden="true"></i></a>
+                    <a id="micForEndAddress" class="mic mic-adjust" href="#"><i class="icon mic-icon" aria-hidden="true"></i></a>
                     <div id="endMap" class="map mapHidden"></div>
 
                     <!-- Hidden input field for the coordinate data -->
