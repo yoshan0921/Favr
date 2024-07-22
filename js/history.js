@@ -2,8 +2,8 @@ import { firestore } from "./firebase/firebase.js";
 import { onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { loadPartial, showTabmenu, lazyLoadImages, openModal, closeModal } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
-import { getAllWithFilter, getDocument } from "./firebase/firestore.js";
-import { redirect } from "./utils.js";
+import { getDocument } from "./firebase/firestore.js";
+import { finishLoading, redirect } from "./utils.js";
 
 // TODO: Need to define placeholder image properly
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
@@ -49,8 +49,10 @@ async function runFunction() {
     // Load the dashboard based on the user's role
     if (currentUserRole === "volunteer") {
       await loadVolunteersHistory();
+      finishLoading();
     } else if (currentUserRole === "elder") {
       await loadEldersHistory();
+      finishLoading();
     }
 
     // Display & Hide dateRange Filter Icon
