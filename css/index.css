@@ -8,6 +8,40 @@ body {
     background-image: url(/assets/images/background-login-desktop.png);
   }
 }
+main{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.img-wrapper{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 1% 20%;
+  z-index: 2;
+  place-content: center;
+}
+img {
+  max-width: 450px;
+  height: auto;
+  display: block;
+}
+main .flex-child{
+  flex: 1;
+  position: relative;
+  min-height: 20vh;
+}
+main .flex-child:first-of-type{
+  flex-grow: 2;
+ }
+main .flex-child:first-of-type div{
+  position: absolute;
+  inset: 0 !important;
+}
+main .flex-child:nth-of-type(2){
+  padding: 0 1.2rem;
+ }
 .error-messages {
   width: 100%;
 }
@@ -77,7 +111,8 @@ form span {
 }
 .form-group input {
   border: 2px solid var(--primary);
-  padding: 0.2rem;
+  border-radius: 50px;
+  padding: 0.2rem .8rem;
   width: 100%;
 }
 .form-group input:focus {
@@ -123,4 +158,17 @@ button a {
 #moveToLogin {
   justify-content: center;
   width: 100%;
+}
+
+#banner{
+  background: url('../assets/images/login.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: grayscale(30%) brightness(0.5);
+}
+@media screen and (min-width: 800px){
+  main {
+    flex-flow: row nowrap;
+  }
 }

@@ -16,77 +16,80 @@
 </head>
 
 <body id="indexBody">
-    <main class="align-content-center min-height-100vh">
-        <div class="container">
-            <div class="error-messages border border-danger bg-danger-subtle rounded p-3 mx-auto my-2 hidden" id="errorsContainer">
-            </div>
+    <main class="min-height-100vh">
+        <div class="flex-child">
+            <div class="background" id="banner"></div>
+            <div class="img-wrapper"><img src="./assets/images/favr-logo-tagline.svg" alt="Favr logo and tagline"></div>
         </div>
-        <div class="container" id="login">
-            <h2>Welcome to Favr</h2>
-            <div class="logo">
-                <img src="/assets/logo-mobile.png" alt="Favr logo">
+        <div class="flex-child">
+            <div class="container hidden">
+                <div class="error-messages border border-danger bg-danger-subtle rounded p-3 mx-auto my-2 hidden" id="errorsContainer">
+                </div>
             </div>
-            <form action="#" method="post" class="login">
-                <div class="form-group">
-                    <label for="loginEmail"><i class="icon email-outline-icon"></i>Email</label>
-                    <input type="text" name="loginEmail" id="loginEmail" class="" placeholder="Please type in Email" required>
+            <div class="container" id="login">
+                <h2>Login</h2>
+                <form action="#" method="post" class="login">
+                    <div class="form-group">
+                        <label for="loginEmail"><i class="icon email-outline-icon"></i>Email</label>
+                        <input type="text" name="loginEmail" id="loginEmail" class="" placeholder="Please type in Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password"><i class="icon password-icon"></i>Password</label>
+                        <input type="password" name="loginPassword" id="loginPassword" class="" placeholder="Please type in Password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="rounded-btn">Login</button>
+                    </div>
+                </form>
+                <div class="menu">
+                    <button class="rounded-btn outlined-btn"><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></button>
+                    <button class="rounded-btn outlined-btn"><a href="#" id="restPassword" rel="noopener noreferrer">Reset password</a></button>
                 </div>
-                <div class="form-group">
-                    <label for="login-password"><i class="icon password-icon"></i>Password</label>
-                    <input type="password" name="loginPassword" id="loginPassword" class="" placeholder="Please type in Password" required>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="rounded-btn">Login</button>
-                </div>
-            </form>
-            <div class="menu">
-                <button class="rounded-btn outlined-btn"><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></button>
-                <button class="rounded-btn outlined-btn"><a href="#" id="restPassword" rel="noopener noreferrer">Reset password</a></button>
             </div>
-        </div>
-        <div class="container hidden" id="signup">
-            <form action="#" method="post" class="signup">
-                <h2>Sign Up</h2>
-                <div class="form-group">
-                    <label for="signUpFirstName">First name</label>
-                    <input type="text" name="signUpFirstName" id="signUpFirstName" class="" required>
-                </div>
-                <div class="form-group">
-                    <label for="signUpLastName">Last name</label>
-                    <input type="text" name="signUpLastName" id="signUpLastName" class="" required>
-                </div>
-                <div class="form-group">
-                    <label for="signUpAge">Age</label>
-                    <input type="number" name="signUpAge" id="signUpAge" class="" min="0" max="120" required>
-                </div>
-                <div class="form-group">
-                    <label for="signUpEmail">Email</label>
-                    <input type="text" name="signUpEmail" id="signUpEmail" class="" required>
-                </div>
-                <div class="form-group">
-                    <label for="signUpPassword">Password</label>
-                    <input type="password" name="signUpPassword" id="signUpPassword" class="" required>
-                </div>
-                <div class="form-group">
-                    <span>Role</span>
-                    <div class="role">
-                        <div>
-                            <input type="radio" id="elderRole" name="userrole" class="" value="elder" checked>
-                            <label class="" for="elderRole">Elder</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="volunteerRole" name="userrole" class="" value="volunteer">
-                            <label class="" for="volunteerRole">Volunteer</label>
+            <div class="container hidden" id="signup">
+                <form action="#" method="post" class="signup">
+                    <h2>Sign Up</h2>
+                    <div class="form-group">
+                        <label for="signUpFirstName">First name</label>
+                        <input type="text" name="signUpFirstName" id="signUpFirstName" class="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpLastName">Last name</label>
+                        <input type="text" name="signUpLastName" id="signUpLastName" class="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpAge">Age</label>
+                        <input type="number" name="signUpAge" id="signUpAge" class="" min="0" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpEmail">Email</label>
+                        <input type="text" name="signUpEmail" id="signUpEmail" class="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpPassword">Password</label>
+                        <input type="password" name="signUpPassword" id="signUpPassword" class="" required>
+                    </div>
+                    <div class="form-group">
+                        <span>Role</span>
+                        <div class="role">
+                            <div>
+                                <input type="radio" id="elderRole" name="userrole" class="" value="elder" checked>
+                                <label class="" for="elderRole">Elder</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="volunteerRole" name="userrole" class="" value="volunteer">
+                                <label class="" for="volunteerRole">Volunteer</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <button id="createAccount" type="submit" class="rounded-btn">Create Account</button>
-                </div>
-                <div class="form-group">
-                    <button id="moveToLogin" class="rounded-btn outlined-btn"><a href="#login" id="switchSignIn" rel="noopener noreferrer">Login</a></button>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <button id="createAccount" type="submit" class="rounded-btn">Create Account</button>
+                    </div>
+                    <div class="form-group">
+                        <button id="moveToLogin" class="rounded-btn outlined-btn"><a href="#login" id="switchSignIn" rel="noopener noreferrer">Login</a></button>
+                    </div>
+                </form>
+            </div>
         </div>
     </main>
 </body>
