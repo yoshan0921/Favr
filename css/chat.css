@@ -154,7 +154,7 @@
   flex: 1 1 auto;
   border-radius: 50px;
   border: solid 0.5px #ccc;
-  padding: 0.2rem 3rem 0.2rem 1rem;
+  padding: 0.5rem 3rem 0.5rem 1rem;
 }
 
 #sendMessage .message:focus {
