@@ -237,7 +237,6 @@ function runFunction() {
 
           } else {
             showErrorMsg2.innerHTML = "Please enter a start address";
-            micForStartAddressPosition.classList.add("mic-adjust-error-msg");
           }
           break;
 
@@ -580,16 +579,6 @@ async function initMap() {
 
         // Clear error message
         document.getElementById("errorMsg2").innerHTML = "";
-
-        // Manually adjust position of Mic Button for Start Address
-        micForStartAddressPosition.classList.remove("mic-adjust-error-msg");
-        micForStartAddressPosition.classList.add("mic-adjust-map-start-show");
-
-        // Manually adjust position of Mic Button for End Address if True
-        if (isEndAddress) {
-          micForEndAddressPosition.classList.remove("mic-adjust");
-          micForEndAddressPosition.classList.add("mic-adjust-map-end-show");
-        }
 
       } catch (error) {
         console.log(error);

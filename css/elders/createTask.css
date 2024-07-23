@@ -177,14 +177,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 #step-2 .form-group input,
-#step-3 .form-group input,
-#step-2 .form-group select,
-#step-3 .form-group select {
-  margin-bottom: 1rem;
-  flex-grow: 1;
-}
-
-#step-2 .form-group input,
 #step-2 .form-group select,
 #step-3 .form-group input,
 #step-3 .form-group select {
@@ -193,6 +185,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   font-size: 1.2rem;
   border-radius: 6px;
   border: 1px solid var(--primary);
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+#step-3 .form-group input,
+#step-3 .form-group select {
+  margin-bottom: 0;
 }
 
 #step-4 .form-group textarea {
@@ -212,7 +211,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 #step-2 .form-group label,
-/* #step-3 .form-group label, */
 #step-4 .form-group label {
   display: block;
   margin-right: 0.5rem;
@@ -396,7 +394,7 @@ ul#summaryList {
 #errorMsg2 {
   color: red;
   position: relative;
-  top: -20px;
+  /* top: -20px; */
 }
 
 .mapHidden {
@@ -541,7 +539,6 @@ ul#summaryList {
   justify-content: center;
 
   position: absolute;
-  bottom: 26px;
   right: 0.5rem;
 }
 
@@ -560,19 +557,9 @@ ul#summaryList {
   right: 0.5rem;
 }
 
-/* Need to adjust slightly the mic for end address */
-.mic-adjust {
-  bottom: 18px;
-}
-
-.mic-adjust-error-msg {
-  bottom: 54px;
-}
-
-.mic-adjust-map-start-show {
-  bottom: 313px;
-}
-
-.mic-adjust-map-end-show {
-  bottom: 304px;
+.input-address {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
