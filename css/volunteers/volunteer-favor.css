@@ -4,13 +4,19 @@ img {
   display: block;
 }
 
-#elderPhoto,
-#elderPhoto2,
-#elderPhoto3 {
+#elderPhoto {
   border-radius: 50%;
   width: 100px;
   height: 100px;
 }
+
+#elderPhoto2,
+#elderPhoto3 {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
 
 #backBtn,
 #cancelBtn,
@@ -147,6 +153,10 @@ main {
   }
 }
 
+.confirm-message {
+  color: var(--primary) !important;
+}
+
 .confirm-wrapper i {
   display: block;
 }
@@ -157,9 +167,9 @@ main {
 
 .confirm-wrapper .user-profile {
   display: grid;
-  grid-template-columns: 3.5rem 1fr;
+  grid-template-columns: 4rem 1fr;
   margin-bottom: 1rem;
-  gap: 1rem;
+  gap: .5rem;
 
   .user-info {
     text-align: left;
