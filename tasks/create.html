@@ -123,8 +123,10 @@
                         <label for="startAddress" id="startSubheading">Where do you like to shop for groceries?</label>
                         <a id="homeAddressBtn" class="rounded-btn link-btn">Use Home Address</a>
                     </div>
-                    <input id="startAddress" name="startAddress" placeholder="Unit/apartment number, street name" type="text" class="address"></input>
-                    <a id="micForStartAddress" class="mic" href="#"><i class="icon mic-icon" aria-hidden="true"></i></a>
+                    <div class="input-address">
+                        <input id="startAddress" name="startAddress" placeholder="Unit/apartment number, street name" type="text" class="address"></input>
+                        <a id="micForStartAddress" class="mic" href="#"><i class="icon mic-icon" aria-hidden="true"></i></a>
+                    </div>
                     <div id="errorMsg2"></div>
                     <div id="startMap" class="map mapHidden"></div>
 
@@ -138,8 +140,10 @@
                         <label for="endAddress" id="endSubheading">Where do you like your groceries delivered?</label>
                         <a id="homeAddressBtnEnd" class="rounded-btn link-btn">Use Home Address</a>
                     </div>
-                    <input id="endAddress" name="endAddress" placeholder="Unit/apartment number, street name" type="text" class="address"></input>
-                    <a id="micForEndAddress" class="mic mic-adjust" href="#"><i class="icon mic-icon" aria-hidden="true"></i></a>
+                    <div class="input-address">
+                        <input id="endAddress" name="endAddress" placeholder="Unit/apartment number, street name" type="text" class="address"></input>
+                        <a id="micForEndAddress" class="mic" href="#"><i class="icon mic-icon" aria-hidden="true"></i></a>
+                    </div>
                     <div id="endMap" class="map mapHidden"></div>
 
                     <!-- Hidden input field for the coordinate data -->
