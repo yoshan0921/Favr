@@ -26,7 +26,14 @@
 
     <!-- Task updates -->
     <div id="updates">
-      <h3>You don't have any updates</h3>
+      <div class="noItemsMessage hide">
+        <!-- <img src="/assets/images/nofavors-desktop.png" alt="No Favors" /> -->
+        <picture>
+            <source srcset="./assets/images/nofavors-desktop.png" media="(min-width: 800px)" type="image/png">
+            <img src="./assets/images/nofavors-mobile.png" alt="No Favors">
+        </picture>
+        <div>No updates for now</div>
+    </div>
     </div>
   </main>
 

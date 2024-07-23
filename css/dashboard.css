@@ -398,25 +398,6 @@ button#resetFilter {
 }
 
 /* -------------------------------------------------- */
-/* Volunteer: No Task Message                         */
-/* -------------------------------------------------- */
-.elder .noItemsMessage,
-.volunteer .noItemsMessage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60vh;
-  flex-flow: column nowrap;
-}
-
-.elder .noItemsMessage a,
-.volunteer .noItemsMessage a {
-  color: var(--primary);
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-/* -------------------------------------------------- */
 /* Date Range Picker *Library Customize               */
 /* -------------------------------------------------- */
 .daterangepicker {

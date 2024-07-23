@@ -14,6 +14,7 @@ const currentUserID = getCurrentUserID();
  * old updates, the notification document has a isNew field
  */
 function listenToNotifications(){
+    console.log("listening to notifications");
     onChildAdded(ref(database, currentUserID), async function (data) {
         const v = data.val();
         if(v.isNew){
@@ -54,7 +55,7 @@ function listenToNotifications(){
                         notificationCard.classList.remove("show");
                         setTimeout(()=>document.body.removeChild(notificationCard),1000);
                     },
-                    5000)
+                    50000)
                 }
                 ,500)
                 

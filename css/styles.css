@@ -443,7 +443,24 @@ footer small {
 footer a {
   text-decoration: underline;
 }
+/* -------------------------------------------------- */
+/* Nothing to show Message                            */
+/* -------------------------------------------------- */
+.noItemsMessage,
+.noItemsMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  flex-flow: column nowrap;
+}
 
+.noItemsMessage a,
+.noItemsMessage a {
+  color: var(--primary);
+  font-weight: bold;
+  text-decoration: underline;
+}
 /* --------------------------------------------------*/
 /* Notification modal                                */
 /* --------------------------------------------------*/
@@ -471,7 +488,8 @@ footer a {
   gap: 1rem;
 }
 .notification .icon-wrapper {
-  width: 50px;
+  width: 25%;
+  aspect-ratio: 1;
   height: 100%;
   border-radius: 50px;
   overflow: hidden;
