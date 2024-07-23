@@ -1,8 +1,12 @@
+*{
+  box-sizing: border-box;
+}
 body {
-  background-image: url(/assets/images/background-login-desktop.png);
+  background: url(/assets/images/background-login-desktop.png);
   background-position: center;
   background-size: cover;
   padding-bottom: 0;
+  backdrop-filter: brightness(110%) grayscale(40%);
 
   @media screen and (min-width: 800px) {
     background-image: url(/assets/images/background-login-desktop.png);
@@ -41,12 +45,22 @@ main .flex-child:first-of-type div{
 }
 main .flex-child:nth-of-type(2){
   padding: 0 1.2rem;
+  display: flex;
+  flex-flow: column wrap;
+  place-content: center;
  }
 .error-messages {
   width: 100%;
 }
 .container {
   max-width: 400px;
+  place-self: center;
+}
+.container .row{
+  display: flex;
+}
+.container .row .form-group{
+  flex: 1;
 }
 h2 {
   color: var(--primary);
@@ -111,7 +125,7 @@ form span {
 }
 .form-group input {
   border: 2px solid var(--primary);
-  border-radius: 50px;
+  border-radius: 5px;
   padding: 0.2rem .8rem;
   width: 100%;
 }
