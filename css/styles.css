@@ -474,6 +474,7 @@ footer a {
   right: -100%;
   bottom: 100px;
   box-shadow: 1px 1px 10px 5px rgba(0, 0, 0, 0.3);
+  background-color: var(--pureWhite);
   border-radius: 10px;
 }
 .notification.modal-content {
