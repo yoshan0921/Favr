@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,7 @@
 <body>
   <!-- Left Column -->
   <div id="leftside-column"></div>
-  
+
   <!--Header-->
   <header id="header"></header>
 
@@ -23,16 +24,16 @@
   <main class="content">
     <div class="loading-screen">
       <i class="fa-solid fa-spinner fa-spin-pulse"></i>
-  </div>
+    </div>
     <div class="profile-header edit-page">
-        <div class="user-name-picture">
-          <div class="img-wrapper user-picture-wrapper">
-            <img src="#" id="profilePic">
-          </div>
-          <div class="edit-page-btns">
-            <button type="button" class="rounded-btn" id="uploadBtn">Upload Photo</a>
-          </div>
-        </div>   
+      <div class="user-name-picture">
+        <div class="img-wrapper user-picture-wrapper">
+          <img src="#" id="profilePic">
+        </div>
+        <div class="edit-page-btns">
+          <button type="button" class="rounded-btn" id="uploadBtn">Upload Photo</a>
+        </div>
+      </div>
     </div>
     <div class="profile-details">
       <form method="post" id="profileEditForm" action="#">
@@ -48,24 +49,24 @@
   </main>
 
   <footer id="footer"></footer>
-  
+
   <div id="uploadPictureModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
       <span class="closeModal">&times;</span>
       <div class="modal-form">
         <form action="#" method="post" enctype="multipart/form-data" id="uploadPictureForm">
-            <div class="form-group">
-                <label for="uploadField">Upload picture</label>
-                <input type="file" id="uploadField" accept="image/*" required>
-            </div>
-            <div class="form-group">
-                <button type="submit">Upload</button>
-            </div>
+          <div class="form-group">
+            <label for="uploadField">Upload picture</label>
+            <input type="file" id="uploadField" accept="image/*" required>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="rounded-btn">Upload</button>
+          </div>
         </form>
       </div>
     </div>
-  
+
   </div>
   <div id="confirmChangesModal" class="modal">
     <!-- Modal content -->
@@ -74,11 +75,11 @@
       <div class="modal-form">
         <h2>Confirm to update profile</h2>
         <div class="form-group">
-            <button type="submit" id="saveBtn" class="rounded-btn">Confirm</button>
+          <button type="submit" id="saveBtn" class="rounded-btn">Confirm</button>
         </div>
       </div>
     </div>
-  
+
   </div>
   <div id="savedMessageModal" class="modal">
     <!-- Modal content -->
@@ -86,12 +87,12 @@
       <span class="closeModal">&times;</span>
       <div>
         <div class="icon-wrapper">
-          <i class="fa-regular fa-circle-check"></i>
+          <i class="accepted-blue-icon"></i>
         </div>
-        <h2>Profile update is saved</h2>
+        <h2>Your updates have been saved</h2>
       </div>
     </div>
-  
+
   </div>
 </body>
 

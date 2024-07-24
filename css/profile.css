@@ -46,7 +46,7 @@
 }
 .edit-page-btns .rounded-btn {
   border-width: 2px;
-  padding: 0.4rem 0.5rem;
+  /* padding: 0.4rem 0.5rem; */
   min-width: 80px;
   justify-content: center;
   cursor: pointer;
@@ -176,7 +176,7 @@ form .form-group:last-child {
 }
 button {
   min-width: 80px;
-  min-height: 30px;
+  /* min-height: 30px; */
   justify-content: center;
 }
 form input,
@@ -199,6 +199,15 @@ form textarea {
 }
 .form-section .form-group {
   grid-column: 1/-1;
+}
+/*
+====================
+  Modal
+====================
+*/
+#confirmChangesModal,
+#savedMessageModal {
+  text-align: center;
 }
 /*
 ====================
