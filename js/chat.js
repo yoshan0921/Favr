@@ -4,6 +4,7 @@ import { getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js"
 import { database } from "./firebase/firebase.js";
 import { ref, query, push, get, onChildAdded, orderByKey, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { sendNotification, updateNotificationStatus } from "./notification.js";
+import { finishLoading } from "./utils.js";
 
 const placeholderImage = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
@@ -180,6 +181,7 @@ async function runFunction() {
       });
       // Wait for all getDocument calls to finish
       Promise.all(promises).then(() => {
+        finishLoading();
         // If crid is specified in the URL, load the chat room
         const urlParams = new URLSearchParams(window.location.search);
         chatRoomID = urlParams.get("crid");
