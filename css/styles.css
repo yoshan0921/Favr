@@ -547,32 +547,33 @@ body.loaded .loading-screen {
   background-image: url("/assets/images/background-desktop.png");
   background-size: cover;
   background-repeat: no-repeat;
-  transition: all 0.5s ease-out;
+  transition: all .5s ease-out;
   padding: 0 10%;
 }
-.loading-screen img{
-  max-width: 100px;
+.loading-screen object{
+  max-width: 150px;
   margin: auto;
   animation: pulsing 1.8s infinite both;
+  filter: brightness(0) saturate(100%) invert(19%) sepia(91%) saturate(2420%) hue-rotate(176deg) brightness(96%) contrast(84%);
   transition: all .5s ease-in-out;
 }
 @keyframes pulsing {
   25%{
-    width:100px;
+    width:150px;
     opacity: 1;
   }
   35%{
-    width:60px;
+    width:110px;
     opacity: .6;
   }
   65%{
-    width: 70px;
+    width: 120px;
   }
   75%{
-    width:60px;
+    width:110px;
   }
   90%{
-    width: 100px;
+    width: 150px;
     opacity: 1;
   }
 }

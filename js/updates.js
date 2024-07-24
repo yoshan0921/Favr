@@ -2,7 +2,7 @@ import { getCurrentUserID, monitorAuthenticationState } from "./firebase/authent
 import { updateNotificationStatus } from "./notification.js";
 import { database } from "./firebase/firebase.js";
 import { ref, child, query, push, get, onChildAdded, onValue, orderByKey, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { redirect } from "./utils.js";
+import { finishLoading, redirect } from "./utils.js";
 
 window.addEventListener("load", function (event) {
     // Check if the user is logged in
@@ -70,6 +70,7 @@ window.addEventListener("load", function (event) {
           })
         }
       }
+      finishLoading();
     }, {
       onlyOnce: true
     });

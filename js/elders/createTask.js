@@ -1,6 +1,6 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { createDocument, updateProperty, deleteDocument, getDocument } from "../firebase/firestore.js";
-import { disableConfirmRedirectDialog, enableBackButton, enableConfirmRedirectDialog } from "../utils.js";
+import { disableConfirmRedirectDialog, enableBackButton, enableConfirmRedirectDialog, finishLoading } from "../utils.js";
 import { openModal, closeModal } from "../common.js";
 
 const { Map } = await google.maps.importLibrary("maps");
@@ -76,6 +76,7 @@ function runFunction() {
   nextStepBtn.addEventListener("click", () => updateStep("add"));
   previousStepBtn.addEventListener("click", () => updateStep("subtract"));
 
+  finishLoading();
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 

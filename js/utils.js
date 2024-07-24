@@ -87,7 +87,7 @@ function finishLoading(){
         document.body.classList.add("loaded");
         setTimeout(() => {
             const loadingAnimation = document.querySelector(".loading-screen");
-            loadingAnimation.style.display = "none";
+            document.body.removeChild(loadingAnimation);
         }, 1000);
     }, 1000);
     
