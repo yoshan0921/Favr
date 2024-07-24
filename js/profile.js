@@ -175,8 +175,8 @@ async function runFunction() {
       if (role == "elder") {
         let emergencyName = document.getElementById("emergencyContactName");
         let emergencyPhone = document.getElementById("emergencyContactPhone");
-        emergencyName.innerText = user.emergencyContactName ? user.emergencyContactName : "";
-        emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
+        emergencyName.value = user.emergencyContactName ? user.emergencyContactName : "";
+        emergencyPhone.value = user.emergencyContactNumber ? user.emergencyContactNumber : "";
       }
     });
     const formInputs = Array.from(document.querySelectorAll("form :is(input, textarea)"));
@@ -203,7 +203,7 @@ async function runFunction() {
         let emergencyName = document.getElementById("emergencyContactName");
         let emergencyPhone = document.getElementById("emergencyContactPhone");
         emergencyName.innerText = user.emergencyContactName ? user.emergencyContactName : "";
-        emergencyPhone.innerText = user.emergencyContactPhone ? user.emergencyContactPhone : "";
+        emergencyPhone.innerText = user.emergencyContactNumber ? user.emergencyContactNumber : "";
       } else {
         let institution = document.getElementById("institution");
         let languages = document.getElementById("languages");
@@ -244,7 +244,7 @@ async function runFunction() {
       (user.email = email.value),
       (user.address = address.value),
       (user.emergencyContactName = emergencyName ? emergencyName.value : user.emergencyContactName),
-      (user.emergencyContactPhone = emergencyPhone ? emergencyPhone.value : user.emergencyContactPhone);
+      (user.emergencyContactNumber = emergencyPhone ? emergencyPhone.value : user.emergencyContactNumber);
 
     updateDocument("users", getCurrentUserID(), user)
       .then((response) => {

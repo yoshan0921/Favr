@@ -902,6 +902,9 @@ Floating cards
 .accepted-icon::after {
   content: url("../assets/icons/accepted.svg") !important;
 }
+.accepted-blue-icon::after {
+  content: url("../assets/icons/accepted-blue.svg") !important;
+}
 .heart-icon::after {
   content: url("../assets/icons/heart.svg") !important;
 }
