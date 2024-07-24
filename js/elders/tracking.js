@@ -1,6 +1,6 @@
 import { getDocument, updateProperty, getFile } from "../firebase/firestore.js";
 import { openModal, closeModal, lazyLoadImages } from "../common.js";
-import { enableBackButton, redirect } from "../utils.js";
+import { enableBackButton, finishLoading, redirect } from "../utils.js";
 import { sendNotification } from "../notification.js";
 import { getCurrentUserID } from "../firebase/authentication.js";
 
@@ -34,9 +34,6 @@ function runFunction() {
       console.log(task);
       // Save the task data to a global variable
       taskData = task;
-
-      // ToDo: Display task data on the page
-      // Code here...
     })
     .catch((error) => {
       console.log(error);
@@ -215,6 +212,7 @@ async function displayTaskSummary(taskID) {
 
     // Apply lazy loading to images
     lazyLoadImages();
+    finishLoading();
   } catch (error) {
     console.log("Error fetching task:", error);
   }

@@ -155,6 +155,7 @@ function runFunction() {
           }
         });
       }
+      finishLoading();
     })
     .catch((error) => {
       console.log(error);
