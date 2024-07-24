@@ -38,13 +38,8 @@ const menuLinks = {
   "history.html": "history-menu",
   "profile.html": "profile-menu",
 };
-document.getElementsByTagName("body")[0].style.visibility = "hidden";
 checkUserAuthorization()
-  .then(() => {
-    loadCommonContent().then(() => {
-      document.getElementsByTagName("body")[0].style.visibility = "visible";
-    });
-  })
+  .then(() => loadCommonContent())
   .catch((error) => redirect("403.html"));
 
 /**

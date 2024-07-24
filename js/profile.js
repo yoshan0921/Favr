@@ -4,7 +4,7 @@
 
 import { getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument, getAllWithFilter } from "./firebase/firestore.js";
-import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, redirect, signOut } from "./utils.js";
+import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, finishLoading, redirect, signOut } from "./utils.js";
 import { closeModal, loadPartial, openModal } from "./common.js";
 
 if (document.readyState === "loading") {
@@ -40,6 +40,7 @@ async function runFunction() {
     // Determine the partial to load based on referenceMode
     const partialToLoad = referenceMode ? `profile/_volunteerProfile` : `profile/_${partialPrefix + currentUserRole}Profile`;
     await loadPartial(partialToLoad, "profile-content");
+    finishLoading();
 
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) logoutBtn.addEventListener("click", signOut);
