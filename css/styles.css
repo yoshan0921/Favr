@@ -534,10 +534,6 @@ footer a {
 body.loaded .loading-screen {
   opacity: 0;
 }
-/*
-#dashboard-content:has(.volunteer) .loading-screen{
-  top: 120px;
-}*/
 .loading-screen {
   box-sizing: border-box;
   z-index: 999;
@@ -554,9 +550,31 @@ body.loaded .loading-screen {
   transition: all 0.5s ease-out;
   padding: 0 10%;
 }
-.loading-screen i {
-  font-size: 3.5rem;
-  color: var(--primary);
+.loading-screen img{
+  max-width: 100px;
+  margin: auto;
+  animation: pulsing 1.8s infinite both;
+  transition: all .5s ease-in-out;
+}
+@keyframes pulsing {
+  25%{
+    width:100px;
+    opacity: 1;
+  }
+  35%{
+    width:60px;
+    opacity: .6;
+  }
+  65%{
+    width: 70px;
+  }
+  75%{
+    width:60px;
+  }
+  90%{
+    width: 100px;
+    opacity: 1;
+  }
 }
 
 /* -------------------------------------------------- */
