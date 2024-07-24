@@ -13,6 +13,7 @@ const CACHE_ASSETS = [
     '/css/styles.css',
     '/css/dashboard.css',
     '/css/profile.css',
+    '/css/error.css',
     //js
     '/js/dashboard.js',
     '/js/common.js',
@@ -20,7 +21,10 @@ const CACHE_ASSETS = [
     '/js/utils.js',
     '/js/firebase/authentication.js',
     '/js/firebase/firebase.js',
-    '/js/firebase/firestore.js'
+    '/js/firebase/firestore.js',
+    //assets
+    '/assets/images/offline.svg'
+
 ]
 
 const OFFLINE_PAGE = "offline.html";
