@@ -50,9 +50,11 @@ function runFunction() {
   timePickers.forEach((input) => {
     const now = new Date();
     // const hours = String(now.getHours()).padStart(2, "0");
-    const hours = String(now.getHours() + 1).padStart(2, "0"); // FOR DEMO, add 1 hr to current time
+    const hours = String((now.getHours() + 1) % 24).padStart(2, "0"); // FOR DEMO, add 1 hr to current time
     // const minutes = String(now.getMinutes()).padStart(2, "0");
     const minutes = "00"; // FOR DEMO, set minutes to 00
+    console.log(hours);
+    console.log(minutes);
     input.value = `${hours}:${minutes}`;
   });
 
@@ -210,7 +212,6 @@ function runFunction() {
         case 2:
           const favorDate = document.getElementById("favorDate").value;
           const favorTime = document.getElementById("favorTime").value;
-          
 
           // const favorLength = document.getElementById("favorLength").value;
           if (favorDate && favorTime) {
@@ -234,7 +235,6 @@ function runFunction() {
             selectionHistory.push(`Start Address: <span>${startAddress}</span>`);
             selectionHistory.push(`End Address: <span>${endAddress}</span>`);
             canProceed = true;
-
           } else {
             showErrorMsg2.innerHTML = "Please enter a start address";
           }
@@ -534,7 +534,8 @@ async function initMap() {
    * @param {string} mapId - The ID of the map element where the address will be displayed.
    * @param {boolean} isEndAddress - Add flag to determine if there is an end address.
    */
-  function setupAutocomplete(inputId, mapId, isEndAddress = false) { // Initially set endAddress to false
+  function setupAutocomplete(inputId, mapId, isEndAddress = false) {
+    // Initially set endAddress to false
     let map = new Map(document.getElementById(mapId), {
       zoom: 6,
       center: { lat: 53.7267, lng: -127.6476 }, // Center on British Columbia
@@ -579,7 +580,6 @@ async function initMap() {
 
         // Clear error message
         document.getElementById("errorMsg2").innerHTML = "";
-
       } catch (error) {
         console.log(error);
       }
