@@ -30,10 +30,13 @@
     <div id="sendingMsgNotAvailable" class="hide">
       <p>Sending message is not available because there is no "Ongoing" / "Pending Approval" Favors.</p>
     </div>
-    <form id="sendMessage" class="hide">
-      <input id="message" class="message" placeholder="Type a message"></input>
-      <button id="send" class="send" type="submit"><i class="icon send-icon" aria-hidden="true"></i></button>
-    </form>
+    <div id="sendMessageWrapper">
+      <form id="sendMessage" class="hide">
+        <input id="message" class="message" placeholder="Type a message"></input>
+        <button id="mic" class="mic" type="button"><i class="icon mic-icon" aria-hidden="true"></i></button>
+        <button id="send" class="send hide" type="submit"><i class="icon send-icon" aria-hidden="true"></i></button>
+      </form>
+    </div>
   </main>
 
   <!-- Footer -->

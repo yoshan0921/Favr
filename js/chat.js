@@ -244,14 +244,68 @@ async function runFunction() {
             receiverID
           );
         }
-        // Clear the message balloon
+        // Clear the message input filed
         message.value = "";
+        send.classList.add("hide");
+        mic.classList.remove("hide");
       })
       .catch((error) => {
         console.error("Failed to save data:", error);
       });
   });
+
+  /**
+   * Speech to Text for message fields
+   */
+  const mic = document.getElementById("mic");
+  const send = document.getElementById("send");
+  const message = document.getElementById("message");
+  if (mic && message && send) {
+    mic.addEventListener("click", () => {
+      console.log("click");
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.continuous = false;
+      message.value = "";
+
+      mic.style.animation = "pulse 1s infinite";
+      mic.classList.add("active");
+      message.focus();
+
+      recognition.onresult = ({ results }) => {
+        message.blur();
+        message.value = results[0][0].transcript;
+        message.focus();
+        mic.style.animation = "none";
+        mic.classList.remove("active");
+
+        if (message.value.length > 0) {
+          send.classList.remove("hide");
+          mic.classList.add("hide");
+        }
+      };
+
+      recognition.onend = () => {
+        mic.style.animation = "none";
+        mic.classList.remove("active");
+      };
+
+      recognition.start();
+    });
+
+    message.addEventListener("input", () => {
+      console.log("change");
+      if (message.value.length > 0) {
+        send.classList.remove("hide");
+        mic.classList.add("hide");
+      } else {
+        mic.classList.remove("hide");
+        send.classList.add("hide");
+      }
+    });
+  }
 }
+
 async function loadChatRoom(chatRoomID, newMessagesByContact) {
   // Hide contact list and show message history
   contactList.classList.add("hide");
@@ -259,6 +313,8 @@ async function loadChatRoom(chatRoomID, newMessagesByContact) {
 
   // Load chat room messages
   loadChatRoomMessages(chatRoomID, newMessagesByContact);
+  // Hide footer
+  document.getElementById("footer").classList.add("hide");
 }
 
 function loadChatRoomMessages(chatRoomID, newMessagesByContact) {
@@ -268,14 +324,14 @@ function loadChatRoomMessages(chatRoomID, newMessagesByContact) {
   let previousDate = "";
   let contactID = chatRoomID.split("-")[1];
 
-  for(let id in newMessagesByContact){
-    if(id == contactID){
-      newMessagesByContact[contactID].forEach(message => {
-        updateNotificationStatus(loginUserID,message[0]);
-      })
+  for (let id in newMessagesByContact) {
+    if (id == contactID) {
+      newMessagesByContact[contactID].forEach((message) => {
+        updateNotificationStatus(loginUserID, message[0]);
+      });
     }
   }
-    
+
   // Load chat room messages
   onChildAdded(ref(database, chatRoomID), function (data) {
     const v = data.val();
