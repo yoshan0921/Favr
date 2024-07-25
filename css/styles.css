@@ -171,6 +171,7 @@ button,
   line-height: 1.75em;
   font-weight: 600;
   font-size: 16px;
+  min-height: 35px;
 }
 :is(button, .link-btn):hover,
 :is(button, .link-btn):active {
@@ -964,7 +965,16 @@ Floating cards
 .password-icon::after {
   content: url("../assets/icons/password.svg") !important;
 }
-
+.right-arrow-icon::after {
+  content: url("../assets/icons/right-arrow.png") !important;
+}
+.right-arrow-white-icon::after {
+  content: url("../assets/icons/right-arrow-white.png") !important;
+  filter: unset;
+  position: relative;
+  top: 2px;
+  width: 40%;
+}
 /* For mic icon (When it's active) */
 @keyframes pulse {
   0% {
