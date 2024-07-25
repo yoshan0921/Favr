@@ -18,6 +18,7 @@ const sendMessage = document.getElementById("sendMessage");
 const sendingMsgNotAvailable = document.getElementById("sendingMsgNotAvailable");
 const message = document.getElementById("message");
 const send = document.getElementById("send");
+const mic = document.getElementById("mic");
 
 window.addEventListener("load", function (event) {
   // Check if the user is logged in
@@ -257,9 +258,6 @@ async function runFunction() {
   /**
    * Speech to Text for message fields
    */
-  const mic = document.getElementById("mic");
-  const send = document.getElementById("send");
-  const message = document.getElementById("message");
   if (mic && message && send) {
     mic.addEventListener("click", () => {
       console.log("click");
@@ -400,6 +398,7 @@ async function checkChatRoomAvailability(chatRoomID) {
     sendingMsgNotAvailable.classList.remove("hide");
     sendMessage.classList.remove("hide");
     message.disabled = true;
+    mic.disabled = true;
     send.disabled = true;
   }
 }
