@@ -234,14 +234,10 @@ button a {
 }
 .slider:before {
   position: absolute;
-  content: "\f0c9";
-  font-family: "FontAwesome";
-  font-size: 12px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--disabledText);
+  content: "";
+  background-image: url("/assets/icons/list.svg");
+  background-repeat: no-repeat;
+  background-position: center;
   height: 22px;
   width: 22px;
   left: 2px;
@@ -254,7 +250,7 @@ button a {
   background-color: var(--primary);
 }
 .switch input:checked + .slider::before {
-  content: "\f276";
+  background-image: url("/assets/icons/pin.svg");
 }
 .switch input:focus + .slider {
   box-shadow: 0 0 1px var(--primary);
