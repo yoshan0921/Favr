@@ -1,7 +1,7 @@
 import { getCurrentUserID } from "../firebase/authentication.js";
 import { updateDocument, getDocument, getFile, getAllWithFilter } from "../firebase/firestore.js";
 import { sendNotification } from "../notification.js";
-import { redirect } from "../utils.js";
+import { finishLoading, redirect } from "../utils.js";
 
 let taskID;
 let taskData = {};
@@ -57,7 +57,7 @@ function runFunction() {
   getDocument("tasks", taskID)
     .then((task) => {
       console.log(task);
-      if(!task) redirect("../../404.html");
+      if (!task) redirect("../../404.html");
       // Save the task data to a global variable
       taskData = task;
       getDocument("users", task.requesterID).then((user) => {
@@ -187,7 +187,7 @@ async function acceptTask(taskID, taskData) {
         link: `../tasks/elder-favor.html?taskid=${taskID}`,
         icon: url,
         message: `<span>${currentUser.firstName}</span> has accepted to help you with your ${taskData.name} favor!`,
-        senderID: currentUser.id
+        senderID: currentUser.id,
       },
       taskData.requesterID
     );
@@ -386,9 +386,7 @@ document.getElementById("cancel-completeBtn").addEventListener("click", async fu
   exploreFavors();
 });
 
-
 // Close overlay display by clicking "x" icon
 // document.getElementById("close-confirm").addEventListener("click", function () {
 //   console.log("clicked!");
 // });
-
