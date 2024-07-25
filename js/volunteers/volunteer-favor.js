@@ -138,6 +138,7 @@ function runFunction() {
           contactBtn.remove();
           icons.style.visibility = "visible";
         }
+        finishLoading();
       });
 
       // Add the link to the chat room to the contact button
@@ -155,7 +156,6 @@ function runFunction() {
           }
         });
       }
-      finishLoading();
     })
     .catch((error) => {
       console.log(error);
