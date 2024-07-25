@@ -223,4 +223,45 @@ async function lazyLoadImages() {
   }
 }
 
-export { loadPartial, openModal, closeModal, showTabmenu, lazyLoadImages };
+/**
+ * Sorts the given task cards based on the provided date filter value.
+ *
+ * @param {string} dateFilterValue - The value of the date filter. It can be 'newest' or 'oldest'.
+ * @param {NodeList} taskCards - The task cards to be sorted. Each task card is a DOM node.
+ *
+ * If the date filter value is 'newest', the task cards are sorted from newest to oldest.
+ * If the date filter value is 'oldest', the task cards are sorted from oldest to newest.
+ */
+function sortTasksByDate(dateFilterValue, taskCards, target) {
+  // Convert NodeList to Array
+  let taskCardsArray = Array.from(taskCards);
+
+  // Sort the array based on the date
+  taskCardsArray.sort((a, b) => {
+    let dateA = new Date(a.getAttribute("data-date"));
+    let dateB = new Date(b.getAttribute("data-date"));
+
+    // Check if dateA or dateB is invalid and sort accordingly
+    if (isNaN(dateA)) return 1; // Place dateA at the end if invalid
+    if (isNaN(dateB)) return -1; // Place dateB at the end if invalid
+
+    // For newest to oldest
+    if (dateFilterValue === "newest") {
+      return dateB - dateA;
+    }
+
+    // For oldest to newest
+    if (dateFilterValue === "oldest") {
+      return dateA - dateB;
+    }
+
+    return 0; // If no sorting is needed
+  });
+
+  // Replace the old NodeList with the sorted array
+  taskCardsArray.forEach((card) => {
+    target.appendChild(card);
+  });
+}
+
+export { loadPartial, openModal, closeModal, showTabmenu, lazyLoadImages, sortTasksByDate };
