@@ -1,6 +1,6 @@
 import { firestore } from "./firebase/firebase.js";
 import { onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages } from "./common.js";
+import { closeModal, loadPartial, openModal, showTabmenu, lazyLoadImages, sortTasksByDate } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getDocument, getFile } from "./firebase/firestore.js";
 import { finishLoading, redirect } from "./utils.js";
@@ -218,6 +218,7 @@ function createCardForElder(task) {
   <a class="linkURL" href="${task.taskLinkURL}?taskid=${task.taskID}"></a>
   <h3 class="title">${task.taskName}</h3>
   <p class="status"><span class="statusColor"></span>${task.taskStatus}</p>
+  <p class="date">${task.taskDate}, ${task.taskTime}</p>
   <p class="notes">${task.taskNotes}</p>
   `;
   if (task.taskStatus != STATUS_WAITING) {
@@ -820,43 +821,3 @@ function applyFilter(resetFlg = false) {
   // When inforWindow is open on the Google Map, close all infoWindows
   closeAllInfoWindows(infoWindows);
 }
-
-/**
- * Sorts the given task cards based on the provided date filter value.
- *
- * @param {string} dateFilterValue - The value of the date filter. It can be 'newest' or 'oldest'.
- * @param {NodeList} taskCards - The task cards to be sorted. Each task card is a DOM node.
- *
- * If the date filter value is 'newest', the task cards are sorted from newest to oldest.
- * If the date filter value is 'oldest', the task cards are sorted from oldest to newest.
- */
-function sortTasksByDate(dateFilterValue, taskCards, target) {
-  // Convert NodeList to Array
-  let taskCardsArray = Array.from(taskCards);
-
-  // Sort the array based on the date
-  taskCardsArray.sort((a, b) => {
-    let dateA = new Date(a.getAttribute("data-date"));
-    let dateB = new Date(b.getAttribute("data-date"));
-
-    // For newest to oldest
-    if (dateFilterValue === "newest") {
-      return dateB - dateA;
-    }
-
-    // For oldest to newest
-    if (dateFilterValue === "oldest") {
-      return dateA - dateB;
-    }
-
-    return 0; // If no sorting is needed
-  });
-
-  // Replace the old NodeList with the sorted array
-  // let taskListExplore = document.querySelector("#taskListExplore");
-  taskCardsArray.forEach((card) => {
-    target.appendChild(card);
-  });
-}
-
-export { sortTasksByDate };

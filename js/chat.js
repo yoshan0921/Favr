@@ -1,4 +1,4 @@
-import { lazyLoadImages } from "./common.js";
+import { lazyLoadImages, sortTasksByDate } from "./common.js";
 import { getCurrentUserID, getCurrentUserRole, monitorAuthenticationState } from "./firebase/authentication.js";
 import { getAllWithFilter, getDocument, getFile } from "./firebase/firestore.js";
 import { database } from "./firebase/firebase.js";
@@ -48,23 +48,23 @@ async function runFunction() {
   const currentUser = await getDocument("users", loginUserID);
   var contactID = "";
   var newMessagesByContact = {};
-  // Get the current user role
-  await getCurrentUserRole().then(async (currentUserRole) => {
-    loginUserRole = currentUserRole;
 
-    // Load the dashboard based on the user's role
-    if (currentUserRole === "volunteer") {
-      // Set filter condition
-      filterCondition = [{ key: "volunteerID", operator: "==", value: loginUserID }];
-    } else if (currentUserRole === "elder") {
-      // Set filter condition
-      filterCondition = [
-        { key: "status", operator: "!=", value: STATUS_WAITING },
-        { key: "requesterID", operator: "==", value: loginUserID },
-      ];
-    }
-  });
-  // Create user list
+  // Get the current user role
+  loginUserRole = await getCurrentUserRole();
+
+  // Load the dashboard based on the user's role
+  if (loginUserRole === "volunteer") {
+    // Set filter condition
+    filterCondition = [{ key: "volunteerID", operator: "==", value: loginUserID }];
+  } else if (loginUserRole === "elder") {
+    // Set filter condition
+    filterCondition = [
+      { key: "status", operator: "!=", value: STATUS_WAITING },
+      { key: "requesterID", operator: "==", value: loginUserID },
+    ];
+  }
+
+  // Create user contact list
   getAllWithFilter("tasks", filterCondition).then(async (collection) => {
     let contactIDs = [];
     let promises = [];
@@ -85,6 +85,7 @@ async function runFunction() {
           }
         });
       }
+
       collection.forEach(async (doc) => {
         if (loginUserRole === "volunteer") {
           contactID = doc[1].requesterID;
@@ -103,7 +104,7 @@ async function runFunction() {
 
         // Get the user's information
         let promise = getDocument("users", contactID)
-          .then((user) => {
+          .then(async (user) => {
             let profileImage = document.createElement("img");
             profileImage.classList.add("photo");
             profileImage.setAttribute("src", `${placeholderImage}`);
@@ -118,6 +119,7 @@ async function runFunction() {
               contact.classList.add("has-updates");
             }
 
+            let lastMessageTimeAttr = "";
             let lastMessageTime = document.createElement("p");
             lastMessageTime.classList.add("lastMessageTime");
 
@@ -127,35 +129,34 @@ async function runFunction() {
             // Get the last message in the chat room
             const chatRef = ref(database, `${[loginUserID, user.id].sort().join("-")}`);
             const queryConstraints = query(chatRef, orderByKey(), limitToLast(1));
-            get(queryConstraints)
-              .then((snapshot) => {
-                if (snapshot.exists()) {
-                  const key = snapshot.key;
-                  const data = snapshot.val();
-                  for (let item in data) {
-                    lastMessage.textContent = data[item].message;
-                    // If month date is not equal to today, display the date + time
-                    let now = new Date();
-                    if (`${data[item].month} ${data[item].day}` !== `${now.toLocaleString("en-US", { month: "long" })} ${now.getDate()}`) {
-                      lastMessageTime.textContent = ` ${data[item].month} ${data[item].day}`;
-                    } else {
-                      lastMessageTime.textContent = data[item].time;
-                    }
-                  }
+            const snapshot = await get(queryConstraints);
+            if (snapshot.exists()) {
+              const key = snapshot.key;
+              const data = snapshot.val();
+              for (let item in data) {
+                lastMessage.textContent = data[item].message;
+                // If month date is not equal to today, display the date + time
+                let now = new Date();
+                if (`${data[item].month} ${data[item].day}` !== `${now.toLocaleString("en-US", { month: "long" })} ${now.getDate()}`) {
+                  lastMessageTime.textContent = ` ${data[item].month} ${data[item].day}`;
                 } else {
-                  console.log("No message found.");
+                  lastMessageTime.textContent = data[item].time;
                 }
-              })
-              .catch((error) => {
-                console.error(error);
-              });
+                // For Data attribute
+                lastMessageTimeAttr = `${data[item].month} ${data[item].day} ,${data[item].year} ${data[item].time}`;
+              }
+            } else {
+              console.log("No message found.");
+            }
 
+            // Create user contact information card (element)
             let userInfo = document.createElement("div");
             userInfo.classList.add("userInfo");
             userInfo.appendChild(requesterName);
             userInfo.appendChild(lastMessageTime);
             userInfo.appendChild(lastMessage);
             contact.appendChild(userInfo);
+            contact.setAttribute("data-date", lastMessageTimeAttr);
             contactList.appendChild(contact);
           })
           .catch((error) => console.log(error));
@@ -170,7 +171,6 @@ async function runFunction() {
           console.log("Chat Room ID: " + chatRoomID);
 
           // Load chat room
-          // loadChatRoom(chatRoomID, this, newMessagesByContact);
           loadChatRoom(chatRoomID, newMessagesByContact);
 
           // Check if chat message is allowed to sent.
@@ -196,6 +196,9 @@ async function runFunction() {
         // Show contact list and show message history
         contactList.classList.remove("hide");
 
+        // Sort the contact list by the last message time
+        sortTasksByDate("newest", contactList.children, contactList);
+
         // Load firebase storage images
         lazyLoadImages();
       });
@@ -206,7 +209,7 @@ async function runFunction() {
     });
   });
 
-  // Send message
+  // EventListener for Send message
   sendMessage.addEventListener("submit", function (event) {
     // Prevent the form from submitting
     event.preventDefault();
@@ -255,9 +258,7 @@ async function runFunction() {
       });
   });
 
-  /**
-   * Speech to Text for message fields
-   */
+  // EventListener for Speech to Text for message fields
   if (mic && message && send) {
     mic.addEventListener("click", () => {
       console.log("click");
