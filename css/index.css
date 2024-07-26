@@ -1,4 +1,4 @@
-*{
+* {
   box-sizing: border-box;
 }
 body {
@@ -12,13 +12,13 @@ body {
     background-image: url(/assets/images/background-login-desktop.png);
   }
 }
-main{
+main {
   margin: 0;
   padding: 0;
   display: flex;
   flex-flow: column nowrap;
 }
-.img-wrapper{
+.img-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
@@ -27,28 +27,29 @@ main{
   place-content: center;
 }
 img {
-  max-width: 450px;
+  width: 450px;
+  max-width: 100%;
   height: auto;
   display: block;
 }
-main .flex-child{
+main .flex-child {
   flex: 1;
   position: relative;
   min-height: 20vh;
 }
-main .flex-child:first-of-type{
+main .flex-child:first-of-type {
   flex-grow: 2;
- }
-main .flex-child:first-of-type div{
+}
+main .flex-child:first-of-type div {
   position: absolute;
   inset: 0 !important;
 }
-main .flex-child:nth-of-type(2){
+main .flex-child:nth-of-type(2) {
   padding: 0 1.2rem;
   display: flex;
   flex-flow: column wrap;
   place-content: center;
- }
+}
 .error-messages {
   width: 100%;
 }
@@ -56,10 +57,10 @@ main .flex-child:nth-of-type(2){
   max-width: 400px;
   place-self: center;
 }
-.container .row{
+.container .row {
   display: flex;
 }
-.container .row .form-group{
+.container .row .form-group {
   flex: 1;
 }
 h2 {
@@ -126,7 +127,7 @@ form span {
 .form-group input {
   border: 2px solid var(--primary);
   border-radius: 5px;
-  padding: 0.2rem .8rem;
+  padding: 0.2rem 0.8rem;
   width: 100%;
 }
 .form-group input:focus {
@@ -174,14 +175,14 @@ button a {
   width: 100%;
 }
 
-#banner{
-  background: url('../assets/images/login.jpeg');
+#banner {
+  background: url("../assets/images/login.jpeg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   filter: grayscale(30%) brightness(0.5);
 }
-@media screen and (min-width: 800px){
+@media screen and (min-width: 800px) {
   main {
     flex-flow: row nowrap;
   }
