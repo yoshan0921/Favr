@@ -130,6 +130,11 @@ form span {
   padding: 0.2rem 0.8rem;
   width: 100%;
 }
+.form-group input[type="radio"] {
+  width: auto;
+  margin: 0 0.5rem;
+  transform: scale(1.5);
+}
 .form-group input:focus {
   outline: none;
 }
@@ -167,6 +172,7 @@ button a {
   display: flex;
   text-align: center;
   flex: 1 1 40%;
+  align-items: center;
   width: 100%;
 }
 #createAccount,
