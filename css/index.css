@@ -125,13 +125,14 @@ form span {
   align-items: center;
 }
 .form-group input {
-  border: 2px solid var(--primary);
+  border: 2px solid var(--trustworthyBlue200);
   border-radius: 5px;
   padding: 0.2rem 0.8rem;
   width: 100%;
 }
 .form-group input:focus {
   outline: none;
+  border-color: var(--primary);
 }
 .form-group button {
   padding: 0.2rem 2rem;
