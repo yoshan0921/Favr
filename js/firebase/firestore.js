@@ -15,6 +15,7 @@ class User {
     this.middleName = obj.middleName;
     this.lastName = obj.lastName;
     this.institution = obj.institution; //the school they go to
+    this.languages = obj.languages;
     (this.profilePictureURL = obj.profilePictureURL), (this.birthday = obj.birthday);
     this.bio = obj.bio;
     this.address = obj.address;
@@ -66,6 +67,7 @@ const userConverter = {
       profilePictureURL: user.profilePictureURL ? user.profilePictureURL : null,
       birthday: user.birthday ? user.birthday : null,
       bio: user.bio ? user.bio : null,
+      languages: user.languages ? user.languages : null,
       phone: user.phone ? user.phone : null,
       email: user.email ? user.email : null,
       address: user.address ? user.address : null,
@@ -90,6 +92,7 @@ const userConverter = {
       profilePictureURL: data.profilePictureURL,
       birthday: data.birthday,
       bio: data.bio,
+      languages: data.languages,
       phone: data.phone,
       email: data.email,
       address: data.address,
@@ -116,7 +119,7 @@ const taskConverter = {
       closedDate: obj.closedDate ? obj.closedDate : null,
       completionTime: obj.completionTime ? obj.completionTime : null,
       notes: obj.notes ? obj.notes : null,
-      duration: obj.duration ? obj.duration : 0
+      duration: obj.duration ? obj.duration : 0,
     };
   },
   fromFirestore: (snapshot, options) => {
@@ -132,7 +135,7 @@ const taskConverter = {
       closedDate: data.closedDate,
       completionTime: data.completionTime,
       notes: data.notes,
-      duration: data.duration
+      duration: data.duration,
     });
   },
 };

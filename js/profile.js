@@ -159,6 +159,8 @@ async function runFunction() {
     const lastName = document.getElementById("lastName");
     const birthday = document.getElementById("birthday");
     const bio = document.getElementById("bio");
+    // const languages = document.getElementById("languages");
+    // const institution = document.getElementById("institution");
     const phone = document.getElementById("phone");
     const email = document.getElementById("email");
     const address = document.getElementById("address");
@@ -178,6 +180,11 @@ async function runFunction() {
         let emergencyPhone = document.getElementById("emergencyContactPhone");
         emergencyName.value = user.emergencyContactName ? user.emergencyContactName : "";
         emergencyPhone.value = user.emergencyContactNumber ? user.emergencyContactNumber : "";
+      } else if (role == "volunteer") {
+        let institution = document.getElementById("institution");
+        let languages = document.getElementById("languages");
+        institution.value = user.institution ? user.institution : "";
+        languages.value = user.languages ? user.languages : "";
       }
     });
     const formInputs = Array.from(document.querySelectorAll("form :is(input, textarea)"));
