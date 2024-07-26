@@ -52,6 +52,13 @@ main .flex-child:nth-of-type(2) {
 }
 .error-messages {
   width: 100%;
+  display: flex;
+  gap: .5rem;
+  transition: all .5s ease-in-out;
+}
+.error-messages #message{
+  color: var(--warmRed);
+  font-weight: 400;
 }
 .container {
   max-width: 400px;
@@ -90,7 +97,6 @@ form {
   align-items: center;
   max-width: 400px;
   margin: auto;
-  padding: 1.5rem 0;
   gap: 1.5rem;
   width: 100%;
 }

@@ -66,12 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return getCurrentUserRole();
         })
         .then((currentUserRole)=>{
-            console.log(currentUserRole);
             redirect("/dashboard.html");
         })
         .catch((error)=>{
+            console.log(error);
             errorsContainer.classList.remove("hidden");
-            errorsContainer.innerText = error.message;
+            errorsContainer.querySelector("#message").innerText = "Invalid email or password";
         })
     }
     

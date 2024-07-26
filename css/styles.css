@@ -975,6 +975,9 @@ Floating cards
   top: 2px;
   width: 40%;
 }
+.error-icon::after{
+  content: url("../assets/icons/exclamation-circle.svg") !important;
+}
 /* For mic icon (When it's active) */
 @keyframes pulse {
   0% {

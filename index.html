@@ -22,13 +22,13 @@
             <div class="img-wrapper"><img src="./assets/images/favr-logo-tagline.svg" alt="Favr logo and tagline"></div>
         </div>
         <div class="flex-child">
-            <div class="container hidden">
-                <div class="error-messages border border-danger bg-danger-subtle rounded p-3 mx-auto my-2 hidden" id="errorsContainer">
-                </div>
-            </div>
             <div class="container" id="login">
                 <h2>Login</h2>
                 <form action="#" method="post" class="login">
+                    <div class="error-messages border border-danger bg-danger-subtle rounded p-3 mx-auto my-2 hidden" id="errorsContainer">
+                        <i class="icon error-icon"></i>
+                        <span id="message"></span>
+                    </div>
                     <div class="form-group">
                         <label for="loginEmail"><i class="icon email-outline-icon"></i>Email</label>
                         <input type="text" name="loginEmail" id="loginEmail" class="" placeholder="Please type in Email" required>
