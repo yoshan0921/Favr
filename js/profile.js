@@ -4,7 +4,7 @@
 
 import { getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument, getAllWithFilter } from "./firebase/firestore.js";
-import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, finishLoading, redirect, signOut } from "./utils.js";
+import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, finishLoading, formatPhoneNumber, redirect, signOut } from "./utils.js";
 import { closeModal, loadPartial, openModal } from "./common.js";
 
 if (document.readyState === "loading") {
@@ -195,7 +195,10 @@ async function runFunction() {
 
     if (birthday) birthday.innerText = user.birthday ? user.birthday : "";
     if (bio) bio.innerText = user.bio ? user.bio : "";
-    if (phone) phone.innerText = user.phone ? user.phone : "";
+    if (phone) {
+      phone.innerText = formatPhoneNumber(user.phone ? user.phone : "");
+      phone.href = `tel:${user.phone ? user.phone : ""}`;
+    }
     if (email) email.innerText = user.email ? user.email : "";
     if (address) address.innerText = user.address ? user.address : "";
 
@@ -204,7 +207,8 @@ async function runFunction() {
         let emergencyName = document.getElementById("emergencyContactName");
         let emergencyPhone = document.getElementById("emergencyContactPhone");
         emergencyName.innerText = user.emergencyContactName ? user.emergencyContactName : "";
-        emergencyPhone.innerText = user.emergencyContactNumber ? user.emergencyContactNumber : "";
+        emergencyPhone.innerText = formatPhoneNumber(user.emergencyContactNumber ? user.emergencyContactNumber : "");
+        emergencyPhone.href = `tel:${formatPhoneNumber(user.emergencyContactNumber ? user.emergencyContactNumber : "")}`;
       } else {
         let institution = document.getElementById("institution");
         let languages = document.getElementById("languages");

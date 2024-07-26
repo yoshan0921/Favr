@@ -367,7 +367,7 @@ header .container .page-title-wrapper {
   display: flex;
 }
 header .container .page-title-wrapper h1 {
-  font-size: clamp(1.6rem, 5vw, 2rem);
+  font-size: clamp(1.6rem, 5vw, 40px);
 }
 header .container .page-title-wrapper .back-btn-wrapper {
   display: none;

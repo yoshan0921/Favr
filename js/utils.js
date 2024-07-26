@@ -82,6 +82,9 @@ function enableDialog(e){
 function disableConfirmRedirectDialog(){
     window.removeEventListener("beforeunload", enableDialog);
 }
+/**
+ * 
+ */
 function finishLoading(){
     setTimeout(()=>{
         document.body.classList.add("loaded");
@@ -92,6 +95,32 @@ function finishLoading(){
     }, 1000);
     
 }
+/**
+ * 
+ * @param {*} phoneNumberString 
+ * @returns 
+ */
+function formatPhoneNumber(phoneNumberString) {
+    const regex = /\d/;
+    let parts = ['','','']
+    let count = 0;
+    let chars = phoneNumberString.split("");
+    for(let i of chars){
+        if(regex.test(i)){
+            if(count<3){
+                parts[0] += i;
+                count++;
+            }else if(count < 6){
+                parts[1] += i;
+                count++;
+            }else{
+                parts[2] += i;
+                count++;
+            }
+        }
+    }
+    return `(${parts[0]}) ${parts[1]}-${parts[2]}`;
+  }
 export {
     signOut,
     redirect,
@@ -101,5 +130,6 @@ export {
     installServiceWorkers,
     enableConfirmRedirectDialog,
     disableConfirmRedirectDialog,
-    finishLoading
+    finishLoading,
+    formatPhoneNumber
 }

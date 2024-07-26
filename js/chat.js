@@ -326,6 +326,7 @@ function loadChatRoomMessages(chatRoomID, newMessagesByContact) {
   for (let id in newMessagesByContact) {
     if (id == contactID) {
       newMessagesByContact[contactID].forEach((message) => {
+        console.log(message);
         updateNotificationStatus(loginUserID, message[0]);
       });
     }
