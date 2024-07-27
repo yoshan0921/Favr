@@ -146,6 +146,9 @@
 .profile-details .info-group table tr:not(:last-child) {
   border-bottom: 1px solid lightgray;
 }
+.profile-details .info-group a#phone {
+  color: var(--text);
+}
 #logoutBtn {
   font-size: 16px;
 }
