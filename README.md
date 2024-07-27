@@ -4,6 +4,7 @@
 Favr is a progressive web app that improves the life quality of senior citizens by connecting them with volunteer students to help them complete tasks that have become more inconvenient for the elderly.
 
 ## Features
+<img src="https://github.com/user-attachments/assets/991b56b9-85ba-48f1-8daf-7b5c1fadcb7a" />
 
 ## Screens
 <table>  
@@ -44,4 +45,5 @@ Favr is a progressive web app that improves the life quality of senior citizens 
         </td>
     </tr>
 </table>
+
 ## Team 
