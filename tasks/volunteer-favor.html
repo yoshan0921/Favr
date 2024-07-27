@@ -106,19 +106,18 @@
   <div class="confirm-wrapper">
     <span><i class="close-icon closeModal" id="close-confirm"></i></span>
     <span><i class="question-icon"></i></span>
-    <h2 class="confirm-message">Confirm Favor</h2>
 
-    <section class="user-profile">
-      <img id="elderPhoto2">
-      <div class="user-info">
-        <h3 id="confirmElderName" class="name"></h3>
-        <p id="confirmElderAddress"></p>
-      </div>
+    <section class="message">
+      <h2 class="confirm-message">Confirm Favor</h2>
+      <section class="user-profile">
+        <img id="elderPhoto2">
+        <div class="user-info">
+          <h3 id="confirmElderName" class="name"></h3>
+          <p id="confirmElderAddress"></p>
+        </div>
+      </section>
+      <p>Are you willing to help <span id="confirmWrapperElderName"></span> with this <span id="confirmTaskName"></span> Favor?</p>
     </section>
-
-    <p>Are you willing to help <span id="confirmWrapperElderName"></span> with this <span id="confirmTaskName"></span> Favor?</p>
-    </section>
-
 
     <section class="set">
       <button class="rounded-btn" id="confirmBtn">Confirm</button>
@@ -131,6 +130,7 @@
   <div class="confirm-wrapper">
     <span><i class="close-icon closeModal" id="close-conflict"></i></span>
     <span><i class="conflict-icon"></i></span>
+
     <section class="message">
       <h2 class="confirm-message">Schedule Conflict!</h2>
       <p>You have another Favor going on during this time slot.</p>
@@ -148,6 +148,7 @@
   <div class="confirm-wrapper">
     <span><i class="close-icon closeModal" id="close-accept"></i></span>
     <span><i class="accepted-icon"></i></span>
+
     <section class="message">
       <h2 class="confirm-message">Favor Accepted</h2>
       <section class="user-profile">
@@ -157,7 +158,6 @@
           <p id="acceptElderAddress"></p>
         </div>
       </section>
-
       <p>You have successfully accepted <span id="acceptWrapperElderName"></span>'s <span id="acceptTaskName"></span> Favor!</p>
     </section>
 
@@ -239,8 +239,6 @@
     </section>
   </div>
 </div>
-
-
 
 <!-- Task Completed Overlay Display=============== -->
 <div class="modal" id="task-completed-overlay">
