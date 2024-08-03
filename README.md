@@ -11,13 +11,46 @@ Favr is a progressive web app that improves the life quality of senior citizens 
   <img src="https://github.com/user-attachments/assets/6f753f2d-9cd2-4dde-b5e1-543eeac6a1cf" style="width: 49%; border: none;"/>
 </div>
 
-## Main Features
-TBD
+## Features
+<div style="width: 100%;">
+<table>
+    <tr>
+      <th>Senior</th>
+      <th>Volnteer</th>
+      <th>Common</th>
+    </tr>
+    <tr>
+        <td>
+            <ul>
+                <li>Create Task</li>
+                <li>Track Task Status</li>
+                <li>Approve Task</li>
+                <li>View History</li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li>Explore Task</li>
+                <li>Accept Task</li>
+                <li>Update Task Status</li>
+                <li>View History</li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li>Notification</li>
+                <li>Chat</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+</div>
 
 ## Demo
 TBD
 
 ## Screens
+### Login Screen
 <table>  
     <th>Login Desktop</th>
     <th>Login Mobile</th>
@@ -27,6 +60,33 @@ TBD
         </td>
         <td>
             <img src="https://github.com/user-attachments/assets/c6643a28-b3ab-4481-8161-24cf6daa5e60" />
+        </td>
+    </tr>
+</table>
+
+### Senior's Screen
+<table>  
+    <th>Home Desktop</th>
+    <th>Home Mobile</th>
+    <tr>
+        <td>
+            <img src="https://github.com/user-attachments/assets/72f41722-0704-424f-9226-69ec5a11af44"/>
+        </td>
+        <td>
+            <img src="https://github.com/user-attachments/assets/d22ee5b6-02b9-4159-845d-672c30af11e5"/>
+        </td>
+    </tr>
+</table>
+
+<table>  
+    <th>Create Task Desktop</th>
+    <th>Create Task Mobile</th>
+    <tr>
+        <td>
+            <img src="https://github.com/user-attachments/assets/5e2ca7f6-ba3d-4342-b80d-a1e23072e5b7"/>
+        </td>
+        <td>
+            <img src="https://github.com/user-attachments/assets/0aeffe01-7138-4fa6-96b1-e7b9b36ca7a4"/>
         </td>
     </tr>
 </table>
@@ -54,33 +114,6 @@ TBD
         </td>
         <td>
             <img src="https://github.com/user-attachments/assets/5004828e-2096-487d-b996-5a0849426413"/>
-        </td>
-    </tr>
-</table>
-
-### Elder's Screen
-<table>  
-    <th>Home Desktop</th>
-    <th>Home Mobile</th>
-    <tr>
-        <td>
-            <img src="https://github.com/user-attachments/assets/72f41722-0704-424f-9226-69ec5a11af44"/>
-        </td>
-        <td>
-            <img src="https://github.com/user-attachments/assets/d22ee5b6-02b9-4159-845d-672c30af11e5"/>
-        </td>
-    </tr>
-</table>
-
-<table>  
-    <th>Create Task Desktop</th>
-    <th>Create Task Mobile</th>
-    <tr>
-        <td>
-            <img src="https://github.com/user-attachments/assets/5e2ca7f6-ba3d-4342-b80d-a1e23072e5b7"/>
-        </td>
-        <td>
-            <img src="https://github.com/user-attachments/assets/0aeffe01-7138-4fa6-96b1-e7b9b36ca7a4"/>
         </td>
     </tr>
 </table>
