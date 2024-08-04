@@ -53,10 +53,10 @@ TBD
     <th>Login Mobile</th>
     <tr>
         <td>
-            <img src="https://github.com/user-attachments/assets/c24346ac-1bed-4819-aa27-1f3f75645049" />
+            <img src="https://github.com/user-attachments/assets/8bd2f01d-43cb-4ae9-b273-88b8b6a4a360" />
         </td>
         <td>
-            <img src="https://github.com/user-attachments/assets/c6643a28-b3ab-4481-8161-24cf6daa5e60" />
+            <img src="https://github.com/user-attachments/assets/9f46b634-29a6-4ba2-9508-02ba8e304b53" />
         </td>
     </tr>
 </table>
