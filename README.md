@@ -129,19 +129,21 @@ TBD
 </table>
 
 ## Quick Start
-1. Clone the Repository
+
+1. Set Up Firebase (js/firebase/firebase.js)
 ```
-TBD
+// TODO: Replace the following with your app's Firebase project configuration
+
+const firebaseConfig = {
+    // ...
+};
 ```
 
-2. Set Up Firebase (js/firebase/firebase.js)
+2. Configure Google Maps API (dashboard.html)
 ```
-TBD
-```
+// TODO: Replace the following with your Google Map API with DOMAIN or IP RESTRICTION
 
-3. Configure Google Maps API (dashboard.html)
-```
-TBD
+key: "your_api_key_here"
 ```
 
 ## Tech Stack
