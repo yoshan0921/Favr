@@ -37,6 +37,7 @@ Favr is a progressive web app that improves the life quality of senior citizens 
             <ul>
                 <li>Notification</li>
                 <li>Chat</li>
+                <li>Speech to Text</li>
             </ul>
         </td>
     </tr>
@@ -127,8 +128,21 @@ TBD
     </tr>
 </table>
 
-## quick Start
+## Quick Start
+1. Clone the Repository
+```
 TBD
+```
+
+2. Set Up Firebase (js/firebase/firebase.js)
+```
+TBD
+```
+
+3. Configure Google Maps API (dashboard.html)
+```
+TBD
+```
 
 ## Tech Stack
 * HTML
