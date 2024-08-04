@@ -10,12 +10,11 @@ Favr is a progressive web app that improves the life quality of senior citizens 
 <img src="https://github.com/user-attachments/assets/6f753f2d-9cd2-4dde-b5e1-543eeac6a1cf" />
 
 ## Features
-<div style="width: 100%;">
-<table>
+<table style="width:100%;">
     <tr>
-      <th>Senior</th>
-      <th>Volnteer</th>
-      <th>Common</th>
+        <th>Senior</th>
+        <th>Volnteer</th>
+        <th>Common</th>
     </tr>
     <tr>
         <td>
@@ -42,7 +41,6 @@ Favr is a progressive web app that improves the life quality of senior citizens 
         </td>
     </tr>
 </table>
-</div>
 
 ## Demo
 TBD
@@ -128,6 +126,9 @@ TBD
         </td>
     </tr>
 </table>
+
+## quick Start
+TBD
 
 ## Tech Stack
 * HTML
