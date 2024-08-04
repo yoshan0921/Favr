@@ -118,6 +118,19 @@ TBD
     </tr>
 </table>
 
+<table>  
+    <th>Task Detail Desktop</th>
+    <th>Task Detail Mobile</th>
+    <tr>
+        <td>
+            <img src="https://github.com/user-attachments/assets/c9b13912-313b-46f4-9928-7109fd0936a1"/>
+        </td>
+        <td>
+            <img src="https://github.com/user-attachments/assets/47886985-caa7-4b63-8b21-729185a33af7"/>
+        </td>
+    </tr>
+</table>
+
 ## Tech Stack
 * HTML
 * CSS
