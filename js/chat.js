@@ -80,6 +80,7 @@ async function runFunction() {
         }
       }
     });
+    console.log(newMessagesByContact);
   }
 
   // Retrieve all tasks based on the filter condition
@@ -106,7 +107,6 @@ async function runFunction() {
     let promise = getDocument("users", contactID)
       .then(async (user) => {
         // Check if there are new messages and add has-updates mark (red circle)
-        console.log(newMessagesByContact, user.id);
         if (newMessagesByContact[user.id] && newMessagesByContact[user.id].length > 0) {
           contact.classList.add("has-updates");
         }
@@ -155,8 +155,6 @@ async function runFunction() {
     contact.addEventListener("click", async function () {
       // Create chat room name from sorted two user IDs
       chatRoomID = [loginUserID, this.getAttribute("data-contactID")].sort().join("-");
-      console.log("Chat Room ID: " + chatRoomID);
-
       // Load chat room
       loadChatRoom(chatRoomID, newMessagesByContact);
 
@@ -336,16 +334,7 @@ function loadChatRoomMessages(chatRoomID, newMessagesByContact) {
   messageHistory.innerHTML = "";
 
   let previousDate = "";
-  let contactID = chatRoomID.split("-")[1];
-
-  for (let id in newMessagesByContact) {
-    if (id == contactID) {
-      newMessagesByContact[contactID].forEach((message) => {
-        console.log(message);
-        updateNotificationStatus(loginUserID, message[0]);
-      });
-    }
-  }
+  let contactID = chatRoomID.split("-")[0];
 
   // Load chat room messages
   onChildAdded(ref(database, chatRoomID), function (data) {
@@ -381,6 +370,14 @@ function loadChatRoomMessages(chatRoomID, newMessagesByContact) {
 
     window.scrollTo(0, document.body.scrollHeight);
   });
+  for (let id in newMessagesByContact) {
+    if (id == contactID) {
+      newMessagesByContact[contactID].forEach(async (message) => {
+        console.log(message, message.isNew);
+        await updateNotificationStatus(loginUserID, message[0]);
+      });
+    }
+  }
 }
 
 // If there are the tasks with "On going" or "Pending approval" between the two users,

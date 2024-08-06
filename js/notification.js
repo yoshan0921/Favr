@@ -114,12 +114,17 @@ async function sendNotification(data,receiverID){
  * @param {Object} notification - an object containing the notification (it should have ALL the expected fields for a notification, as in lines 65-73 of this file)
  */
 function updateNotificationStatus(receiverID, notification){
-    if(notification.isNew){
-        const updateObj = {};
-        notification.isNew = false;
-        updateObj[`/${receiverID}/${notification.id}`] = notification;
-        update(ref(database),updateObj);
-    }
+    return Promise(async (resolve, reject)=>{
+        if(notification.isNew){
+            const updateObj = {};
+            notification.isNew = false;
+            updateObj[`/${receiverID}/${notification.id}`] = notification;
+            await update(ref(database),updateObj);
+            resolve();
+        }else{
+            reject();
+        }
+    })
 }
 
 /**
