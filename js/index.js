@@ -1,8 +1,10 @@
 import{
     authenticateUser,
     createUserWithEmail,
+    anonymousSignIn,
     getCurrentUserID,
-    getCurrentUserRole
+    getCurrentUserRole,
+    setCurrentUserRole
 } from "./firebase/authentication.js";
 import{
     createDocument,
@@ -29,9 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
     /*Getting all the important HTML elements */
     const signInForm = document.getElementById("login");
     const signUpForm = document.getElementById("signup");
+    const chooseFlowForm = document.getElementById("chooseFlowForm");
+    const chooseFlow = document.getElementById("chooseFlow");
     const switchSignInBtn = document.getElementById("switchSignIn");
     const switchSignUpBtn = document.getElementById("switchSignUp");
     const errorsContainer = document.getElementById("errorsContainer");
+    const signInGuestBtn = document.getElementById("signInGuestBtn");
 
     /**
      * Adding the functionality of switching forms
@@ -44,9 +49,16 @@ document.addEventListener('DOMContentLoaded', function() {
         signInForm.classList.add("hidden");
         signUpForm.classList.remove("hidden");
     })
+    signInGuestBtn.addEventListener("click",()=>{
+        signInForm.classList.add("hidden");
+        chooseFlow.classList.remove("hidden");
+    })
 
     signInForm.addEventListener("submit",(e)=>signIn(e));
     signUpForm.addEventListener("submit",(e)=>signUp(e));
+    chooseFlowForm.addEventListener("submit", (e)=> signInAnonymously(e));
+
+
 
     /**
      * Function that perfoms basic signing in with the provided email and password
@@ -115,5 +127,25 @@ document.addEventListener('DOMContentLoaded', function() {
             errorsContainer.classList.remove("hidden");
             errorsContainer.innerText = error.message;
         }
+    }
+    /**
+     * 
+     * @param {*} e 
+     */
+    async function signInAnonymously(e){
+        e.preventDefault();
+        if(!errorsContainer.classList.contains("hidden")) errorsContainer.classList.add("hidden");
+        let selectedUserRole = document.querySelector('input[name="flowOption"]:checked').value
+        anonymousSignIn()
+        .then(()=>{
+            getCurrentUserID();
+            setCurrentUserRole(selectedUserRole);
+            redirect("/dashboard.html");
+        })
+        .catch((error)=>{
+            console.log(error);
+            errorsContainer.classList.remove("hidden");
+            errorsContainer.querySelector("#message").innerText = error.message;
+        })
     }
 });

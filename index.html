@@ -42,8 +42,13 @@
                     </div>
                 </form>
                 <div class="menu">
-                    <button class="rounded-btn outlined-btn"><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></button>
-                    <button class="rounded-btn outlined-btn"><a href="#" id="restPassword" rel="noopener noreferrer">Reset password</a></button>
+                    <div class="row">
+                        <button class="rounded-btn outlined-btn" id="signInGuestBtn"><i class="fa-regular fa-user"></i>&nbsp; Sign In as Guest</button>
+                    </div>
+                    <div class="row">
+                        <button class="rounded-btn outlined-btn"><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></button>
+                        <button class="rounded-btn outlined-btn"><a href="#" id="restPassword" rel="noopener noreferrer">Reset password</a></button>
+                    </div>
                 </div>
             </div>
             <div class="container hidden" id="signup">
@@ -91,6 +96,27 @@
                         <button id="moveToLogin" class="rounded-btn outlined-btn"><a href="#login" id="switchSignIn" rel="noopener noreferrer">Login</a></button>
                     </div>
                 </form>
+            </div>
+            <div class="container hidden" id="chooseFlow">
+                <p>What flow would you like to try Favr with?</p>
+                <form action="#" id="chooseFlowForm">
+                    <div class="form-group">
+                        <label for="role1" class="roleOption">
+                            <div>Volunteer</div><input type="radio" id="role1" name="flowOption" value="volunteer" hidden>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="role2" class="roleOption">
+                            <div>Elder</div><input type="radio" id="role2" name="flowOption" value="elder" hidden>
+                        </label>
+                    </div>
+                    <div class="menu">
+                        <div class="row">
+                            <div class="form-group"><button type="submit">Next</button></div>
+                        </div>
+                    </div>
+                </form>
+                
             </div>
         </div>
     </main>

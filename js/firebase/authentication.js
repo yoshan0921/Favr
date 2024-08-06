@@ -2,7 +2,7 @@ import { redirect } from "../utils.js";
 
 import { auth } from "./firebase.js";
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signInAnonymously} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import { getDocument } from "./firestore.js";
 
@@ -14,7 +14,8 @@ import { getDocument } from "./firestore.js";
  */
 const pagesWithRestrictedAccess = {
   "tasks/create.html": "elder",
-  // "/history.html": "elder"
+  "tasks/elder-favor.html":"elder",
+  "tasks/volunteer-favor.html":"volunteer"
 };
 
 /**
@@ -149,5 +150,27 @@ async function getCurrentUserRole() {
     }
   });
 }
+/**
+ * 
+ * @param {*} role 
+ */
+function setCurrentUserRole(role){
+    localStorage.setItem("currentUserRole", role);
+}
+/**
+ * 
+ * @returns 
+ */
+async function anonymousSignIn(){
+  return new Promise((resolve, reject) => {
+    signInAnonymously(auth)
+    .then(() => {
+      resolve();
+    })
+    .catch((error) => {
+      reject(error);
+    });
+  })
+}
 
-export { createUserWithEmail, authenticateUser, monitorAuthenticationState, checkUserAuthorization, getCurrentUserID, getCurrentUserRole };
+export { createUserWithEmail, authenticateUser, monitorAuthenticationState, checkUserAuthorization, getCurrentUserID, getCurrentUserRole,anonymousSignIn, setCurrentUserRole };

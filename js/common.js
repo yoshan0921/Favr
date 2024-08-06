@@ -1,6 +1,6 @@
 import { enableBackButton, redirect, signOut } from "./utils.js";
 import { getFile } from "./firebase/firestore.js";
-import { checkUserAuthorization, getCurrentUserID } from "./firebase/authentication.js";
+import { checkUserAuthorization, getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import { listenToNotifications } from "./notification.js";
 
 /**
@@ -38,10 +38,14 @@ const menuLinks = {
   "history.html": "history-menu",
   "profile.html": "profile-menu",
 };
+/*
 checkUserAuthorization()
   .then(() => loadCommonContent())
-  .catch((error) => redirect("403.html"));
-
+  .catch((error) => {
+    redirect("403.html")
+  });
+  */
+loadCommonContent();
 /**
  * Loads the header, the menu and the footer
  */

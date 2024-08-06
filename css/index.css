@@ -162,13 +162,24 @@ button a {
 .menu {
   padding-top: 2rem;
   display: flex;
+  flex-flow: column nowrap;
   justify-content: space-between;
   gap: 2rem;
   width: 100%;
 }
-.menu button {
+.menu .row{
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.menu .row button {
   text-align: center;
   flex: 1 1 40%;
+}
+#signInGuestBtn{
+  flex: 1;
+  max-width: max-content;
+  justify-content: center;
 }
 .role {
   display: flex;
@@ -201,3 +212,38 @@ button a {
     flex-flow: row nowrap;
   }
 }
+.roleOption:has(input[type="radio"]:checked) {
+  color: white;
+  background-color: var(--primary);
+}
+.roleOption {
+  flex: 1;
+  box-sizing: border-box;
+  text-align: center;
+  /* border: thin solid gray; */
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  transition: 0.25s;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  font-size: 1.2rem;
+  font-weight: bold;
+
+  /* Center text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.roleOption input {
+  visibility: hidden;
+}
+.roleOption:hover {
+  cursor: pointer;
+  /* color: white; */
+  /* background-color: var(--primary); */
+  background-color: rgb(21 106 133 / 0.25);
+}
+#chooseFlowForm .form-group:last-child{
+  align-items: end;
+}
+

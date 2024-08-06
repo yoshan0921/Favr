@@ -145,8 +145,6 @@ async function runFunction() {
       } else {
         loadViewPage();
       }
-    } else {
-      redirect("/500.html");
     }
   }
 
