@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script type="module" src="./js/login.js"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="./app.webmanifest">
+    <title>Favr - Login or Sign Up</title>
+</head>
+
+<body id="indexBody">
+    <main class="min-height-100vh">
+        <div class="flex-child">
+            <div class="background" id="banner"></div>
+            <div class="img-wrapper"><img src="./assets/images/favr-logo-tagline.svg" alt="Favr logo and tagline"></div>
+        </div>
+        <div class="flex-child">
+            <div class="container" id="login">
+                <h2>Login</h2>
+                <form action="#" method="post" class="login">
+                    <div class="error-messages border border-danger bg-danger-subtle rounded p-3 mx-auto my-2 hidden" id="errorsContainer">
+                        <i class="icon error-icon"></i>
+                        <span id="message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginEmail"><i class="icon email-outline-icon"></i>Email</label>
+                        <input type="text" name="loginEmail" id="loginEmail" class="" placeholder="Please type in Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password"><i class="icon password-icon"></i>Password</label>
+                        <input type="password" name="loginPassword" id="loginPassword" class="" placeholder="Please type in Password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="rounded-btn">Login</button>
+                    </div>
+                </form>
+                <div class="menu">
+                    <div class="row">
+                        <button class="rounded-btn outlined-btn" id="signInGuestBtn"><i class="fa-regular fa-user"></i>&nbsp; Sign In as Guest</button>
+                    </div>
+                    <div class="row">
+                        <button class="rounded-btn outlined-btn"><a href="#signup" id="switchSignUp" rel="noopener noreferrer">Sign up</a></button>
+                        <button class="rounded-btn outlined-btn"><a href="#" id="restPassword" rel="noopener noreferrer">Reset password</a></button>
+                    </div>
+                </div>
+            </div>
+            <div class="container hidden" id="signup">
+                <form action="#" method="post" class="signup">
+                    <h2>Sign Up</h2>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="signUpFirstName">First name</label>
+                            <input type="text" name="signUpFirstName" id="signUpFirstName" class="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signUpLastName">Last name</label>
+                            <input type="text" name="signUpLastName" id="signUpLastName" class="" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpAge">Age</label>
+                        <input type="number" name="signUpAge" id="signUpAge" class="" min="0" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpEmail">Email</label>
+                        <input type="text" name="signUpEmail" id="signUpEmail" class="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpPassword">Password</label>
+                        <input type="password" name="signUpPassword" id="signUpPassword" class="" required>
+                    </div>
+                    <div class="form-group">
+                        <span>Role</span>
+                        <div class="role">
+                            <div>
+                                <input type="radio" id="elderRole" name="userrole" class="" value="elder" checked>
+                                <label class="" for="elderRole">Elder</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="volunteerRole" name="userrole" class="" value="volunteer">
+                                <label class="" for="volunteerRole">Volunteer</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="createAccount" type="submit" class="rounded-btn">Create Account</button>
+                    </div>
+                    <div class="form-group">
+                        <button id="moveToLogin" class="rounded-btn outlined-btn"><a href="#login" id="switchSignIn" rel="noopener noreferrer">Login</a></button>
+                    </div>
+                </form>
+            </div>
+            <div class="container hidden" id="chooseFlow">
+                <p>What flow would you like to try Favr with?</p>
+                <form action="#" id="chooseFlowForm">
+                    <div class="form-group">
+                        <label for="role1" class="roleOption">
+                            <div>Volunteer</div><input type="radio" id="role1" name="flowOption" value="volunteer" hidden>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="role2" class="roleOption">
+                            <div>Elder</div><input type="radio" id="role2" name="flowOption" value="elder" hidden>
+                        </label>
+                    </div>
+                    <div class="menu">
+                        <div class="row">
+                            <div class="form-group"><button type="submit">Next</button></div>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

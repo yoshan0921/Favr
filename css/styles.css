@@ -172,6 +172,7 @@ button,
   font-weight: 600;
   font-size: 16px;
   min-height: 35px;
+  width: max-content;
 }
 :is(button, .link-btn):hover,
 :is(button, .link-btn):active {
