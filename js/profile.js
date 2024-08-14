@@ -4,7 +4,7 @@
 
 import { getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import { getDocument, uploadFile, getFile, updateDocument, getAllWithFilter } from "./firebase/firestore.js";
-import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, finishLoading, formatPhoneNumber, redirect, signOut } from "./utils.js";
+import { disableConfirmRedirectDialog, enableConfirmRedirectDialog, finishLoading, formatPhoneNumber, getGuestUser, redirect, signOut } from "./utils.js";
 import { closeModal, loadPartial, openModal } from "./common.js";
 
 if (document.readyState === "loading") {
@@ -58,7 +58,7 @@ async function runFunction() {
   }
 
   const user = await getDocument("users", userID);
-  loadUserInfo().then(() => {
+  loadUserInfo(user).then(() => {
     const main = document.getElementsByTagName("main")[0];
     main.classList.add("loaded");
   });
@@ -126,7 +126,11 @@ async function runFunction() {
    * Fills the fields with the appropriate information about the user based on the user object that this file loads (line 28).
    * Depending on which page the user is requesting (edit or view profile), it will call specific funtions for each case
    */
-  async function loadUserInfo() {
+  async function loadUserInfo(user) {
+    if(!user){
+      user = await getGuestUser();
+    }
+    console.log(user);
     if (user) {
       let username = document.getElementById("username");
       let profileImg = document.getElementById("profilePic");
@@ -141,9 +145,9 @@ async function runFunction() {
       profileImg.setAttribute("src", url);
 
       if (window.location.pathname.endsWith("edit.html")) {
-        loadEditPage();
+        loadEditPage(user.isGuest);
       } else {
-        loadViewPage();
+        loadViewPage(user.isGuest);
       }
     }
   }
@@ -151,7 +155,8 @@ async function runFunction() {
   /**
    * Fills the input fields of the edit page
    */
-  function loadEditPage() {
+  function loadEditPage(isGuest) {
+    if(isGuest) redirect('403.html');
     const firstName = document.getElementById("firstName");
     const middleName = document.getElementById("middleName");
     const lastName = document.getElementById("lastName");
@@ -191,12 +196,14 @@ async function runFunction() {
   /**
    * Adds static information about the user on the profile view page
    */
-  function loadViewPage() {
+  function loadViewPage(isGuest) {
     const birthday = document.getElementById("birthday");
     const bio = document.getElementById("bio");
     const phone = document.getElementById("phone");
     const email = document.getElementById("email");
     const address = document.getElementById("address");
+    const editButton = document.getElementById("editBtn");
+    if(isGuest) editButton.style.display = "none";
 
     if (birthday) birthday.innerText = user.birthday ? user.birthday : "";
     if (bio) bio.innerText = user.bio ? user.bio : "";

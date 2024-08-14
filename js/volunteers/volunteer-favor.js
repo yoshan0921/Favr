@@ -177,6 +177,7 @@ async function acceptTask(taskID, taskData) {
     console.log("Task accepted!", taskID.taskData);
     // Get the current user data
     const currentUser = await getDocument("users", getCurrentUserID());
+    if(!currentUser) currentUser = await getGuestUser();
 
     // Get the current user's profile picture for the notification
     const url = currentUser.profilePictureURL ? await getFile(`profile/${currentUser.profilePictureURL}`) : "#";
@@ -210,6 +211,7 @@ async function completeTask(taskID, taskData) {
 
     // Get the current user data
     const currentUser = await getDocument("users", getCurrentUserID());
+    if(!currentUser) currentUser = await getGuestUser();
 
     // Get the current user's profile picture for the notification
     const url = currentUser.profilePictureURL ? await getFile(`profile/${currentUser.profilePictureURL}`) : "#";

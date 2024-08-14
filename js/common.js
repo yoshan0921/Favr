@@ -38,14 +38,12 @@ const menuLinks = {
   "history.html": "history-menu",
   "profile.html": "profile-menu",
 };
-/*
+
 checkUserAuthorization()
   .then(() => loadCommonContent())
   .catch((error) => {
     redirect("403.html")
   });
-  */
-loadCommonContent();
 /**
  * Loads the header, the menu and the footer
  */

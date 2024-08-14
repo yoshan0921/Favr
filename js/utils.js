@@ -1,3 +1,4 @@
+import { getCurrentUserID, getCurrentUserRole } from "./firebase/authentication.js";
 import {
     auth
 } from "./firebase/firebase.js";
@@ -121,6 +122,17 @@ function formatPhoneNumber(phoneNumberString) {
     }
     return `(${parts[0]}) ${parts[1]}-${parts[2]}`;
   }
+
+  async function getGuestUser(){
+    let role = await getCurrentUserRole();
+    let id = getCurrentUserID();
+    return {
+        id: id,
+        firstName:"Guest",
+        lastName: role.charAt(0).toUpperCase() + role.slice(1),
+        isGuest: true
+      }
+  }
 export {
     signOut,
     redirect,
@@ -131,5 +143,6 @@ export {
     enableConfirmRedirectDialog,
     disableConfirmRedirectDialog,
     finishLoading,
-    formatPhoneNumber
+    formatPhoneNumber,
+    getGuestUser
 }

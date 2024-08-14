@@ -94,10 +94,8 @@ async function checkUserAuthorization() {
               break;
             }
           }
-          resolve();
-        } else {
-          throw new Error("User has no info on the database");
         }
+        resolve();
       })
       .catch((error) => {
         console.log(error);
