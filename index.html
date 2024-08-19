@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script type="module" src="./js/index.js"></script>
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/index.css">
@@ -28,8 +26,7 @@
             <nav id="menu">
                 <ul>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#competitors">Competitors</a></li>
+                    <li><a href="#demo">Demo</a></li>
                     <li><a href="#contact">Contact</a></li>
                     <li><a href="./login.html">Sign In</a></li>
                 </ul>
@@ -40,29 +37,148 @@
     <main>
         <section id="hero">
             <div id="heroContent">
-                <h2>Hero Section</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit veniam officia, tempora rem repellendus consequatur eos animi expedita dignissimos numquam.</p>
-                <a href="#about" class="link-btn">Learn more</a>
+                <h2>Welcome to Favr</h2>
+                <p>Favr is a progressive web app that improves the life quality of senior citizens by connecting them with volunteer students to help them complete tasks that have become more inconvenient for the elderly.</p>
+                <a href="./login.html" class="link-btn">Try Favr</a>
+            </div>
+            <div class="img-wrapper">
+                <img src="./assets/images/header-mockups.png" alt="">
             </div>
         </section>
         <section id="about">
-            <h2>About</h2>
+            <h2>What Favr Offer</h2>
+            <div class="features-grid">
+                <div class="grid-item">
+                    <div class="row">
+                        <h3>Seniors</h3>
+                        <h4>65+</h4>
+                        <p>Need support with small tasks/errands: “favor”</p>
+                    </div>
+                    <div class="row">
+                        <ul>
+                            <li>Create favors</li>
+                            <li>Track favors</li>
+                            <li>View history</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <div class="row">
+                        <h3>Volunteers</h3>
+                        <h4>18+</h4>
+                        <p>Willing to help the seniors complete the “favor”</p>
+                    </div>
+                    <div class="row">
+                        <ul>
+                            <li>Accept favors</li>
+                            <li>Update favors</li>
+                            <li>Track volunteer impact</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </section>
-        <section id="features">
-            <h2>Features</h2>
-        </section>
-        <section id="competitors">
-            <h2>Competitors</h2>
+        <section id="demo">
+            <h2>Know More About Favr</h2>
+            <div class="content-wrapper">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/XPOMzlS9v58?si=e38a2E4wPQoKLC_v&amp;start=133" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
         </section>
         <section id="contact">
-            <h2>Contact Us</h2>
+            <h2>Meet the Team</h2>
+            <div class="gallery-grid">
+                <div class="designers">
+                    <figure>
+                        <a href="https://www.linkedin.com/in/trang-nguyen-thuy-18b2b1107/" target="_blank">
+                            <div class="img-wrapper"><img src="./assets/images/Tara.png" alt="Tara"></div>
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                        <figcaption>
+                            <h3><span>Trang</span> Nguyen</h3>
+                            <p>Project Manager/Designer</p>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <a href="https://www.linkedin.com/in/jasonyang21656/" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <div class="img-wrapper"><img src="./assets/images/JASON-CheWei-Yang 1.png" alt="Jason"></div>
+                        </a>
+                        <figcaption>
+                            <h3><span>Jason</span> Yang</h3>
+                            <p>Lead Designer</p>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <a href="#" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <div class="img-wrapper"><img src="./assets/images/Calvin.png" alt="Calvin"></div>
+                        </a>
+                        <figcaption>
+                            <h3><span>Calvin</span> Tsai</h3>
+                            <p>Designer</p>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <a href="https://www.linkedin.com/in/viola-sun-29a2902ab/" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <div class="img-wrapper"><img src="./assets/images/Viola.png" alt="Viola"></div>
+                        </a>
+                        <figcaption>
+                            <h3><span>Viola</span> Sun</h3>
+                            <p>Designer</p>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="developers">
+                    <figure>
+                        <a href="https://www.linkedin.com/in/yosuke-hanaoka/" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <div class="img-wrapper"><img src="./assets/images/Yosuke.png" alt="Yosuke"></div>
+                        </a>
+                        <figcaption>
+                            <h3><span>Yosuke</span> Hanaoka</h3>
+                            <p>Developer Lead</p>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <a href="https://www.linkedin.com/in/cocoysg/" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <div class="img-wrapper"><img src="./assets/images/cocoy.png" alt="Cocoy"></div>
+                        </a>
+                        <figcaption>
+                            <h3><span>Cocoy</span> Suguitan</h3>
+                            <p>Developer</p>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <a href="https://www.linkedin.com/in/vinicius-abner/" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <div class="img-wrapper"><img src="./assets/images/Vin.png" alt="Vinicius"></div>
+                        </a>
+                        <figcaption>
+                            <h3><span>Vinicius</span> Souza</h3>
+                            <p>Developer</p>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <a href="https://www.linkedin.com/in/terumori/" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <div class="img-wrapper"><img src="./assets/images/Teru.png" alt="Teru"></div>
+                        </a>
+                        <figcaption>
+                            <h3><span>Terumasa</span> Mori</h3>
+                            <p>Developer</p>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
         </section>
     </main>
     <footer>
-        <div><small><a href="#">Privacy Policy</a></small></div>
-        <div><small><a href="#">Terms of Service</a></small></div>
-        <div><small>Version 1.0.0</small></div>
-        <div><small>&copy; Favr2024</small></div>
+        <div class="img-wrapper">
+            <img src="./assets/images/favr-logo-tagline-colored.svg" alt="Favr">
+        </div>
+        <small>&copy; All right reserved by Favr 2024</small>
     </footer>
 </body>
 
