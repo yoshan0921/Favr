@@ -32,6 +32,9 @@ nav ul li a:hover{
   text-decoration: underline;
   text-underline-offset: 5px;
 }
+#githubLink{
+  font-size: 1.2rem;
+}
 section:not(:first-of-type){
   min-height: 80vh;
   margin: 5vh 0;
