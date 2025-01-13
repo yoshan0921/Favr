@@ -43,8 +43,8 @@ Favr is a progressive web app that improves the life quality of senior citizens 
     </tr>
 </table>
 
-## Demo
-https://youtu.be/XPOMzlS9v58?si=LPyTzjqXNMBa1Man&t=149
+## [Demo Video](https://youtu.be/XPOMzlS9v58?si=LPyTzjqXNMBa1Man&t=149)
+[![Demo Video](https://img.youtube.com/vi/XPOMzlS9v58/0.jpg)](https://youtu.be/XPOMzlS9v58)
 
 ## Screens
 ### Login Screen
